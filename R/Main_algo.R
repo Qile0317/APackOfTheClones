@@ -1,8 +1,7 @@
 #To do list:
 # - since R doesnt allow mutation, i need to redo the functions where I append to a vector to save memory.
 # - cluster repulsion
-# - package publication
-# - incorporation and relation to scRNAseq pipeline. 
+# - incorporation and relation to scRNAseq pipeline.
 
 library(cli)
 library(tidyverse)
@@ -27,7 +26,7 @@ areaFromRad <- function(c){
 }
 
 #function to convert list to the circular doubly linked list.
-init_boundary <- function(a){ 
+init_boundary <- function(a){
   for(i in 1:(length(a)-1)){
     a[[i+1]]$prv <- a[[i]]
     a[[i]]$nxt <- a[[i+1]]}
@@ -51,7 +50,7 @@ fwd_dist <- function(c,d){
 
 #print(fwd_dist(C1,C4)) #3. works!!!!!
 
-#initializing/inserting 3 circles (?) 
+#initializing/inserting 3 circles (?)
 insert_circle <- function(c,d,e){
   if((identical(c$nxt, d) == FALSE) | (identical(d$prv, c) == FALSE)){
     stop("Two circles not adjacent")
@@ -75,17 +74,17 @@ fwd_remove <- function(c,d){
     while(identical(circ,d)==FALSE){
       circ$prv$nxt <- circ$nxt
       circ$nxt$prv <- circ$prv
-      circ <- circ$nxt 
+      circ <- circ$nxt
     }
   }
 }
 
 #Functions related to the geometry of circles###############################
 
-#distance from the centre of a circle to the origin. Works. 
+#distance from the centre of a circle to the origin. Works.
 centre_dist <- function(c){
   sqrt((c$val[[2]])^2 + (c$val[[3]])^2)
-} 
+}
 
 #fit tangent circle function
 fit_tang_circle <- function(C1,C2,C3){
@@ -96,18 +95,18 @@ fit_tang_circle <- function(C1,C2,C3){
   r1 = C1$val$rad
   r2 = C2$val$rad
   r = C3$val$rad
-  
+
   distance = sqrt((x1 - x2)^2 + (y1 - y2)^2)
-  
+
   if (distance > (r1 + r2 + 2*r)){
     stop("Gap too large.")}
   else{distance}
-  
+
   cos_sig = (x2 - x1)/distance
   sin_sig = (y2 - y1)/distance
   cos_gam = (distance^2 + (r + r1)^2 - (r + r2)^2)/(2*distance*(r + r1))
   sin_gam = sqrt(1 - (cos_gam)^2)
-  
+
   C3$val[[2]] = x1 + (r + r1)*(cos_sig*cos_gam - sin_sig*sin_gam)
   C3$val[[3]] = y1 + (r + r1)*(cos_sig*sin_gam + sin_sig*cos_gam)
   C3
@@ -116,16 +115,16 @@ fit_tang_circle <- function(C1,C2,C3){
 place_starting_three <- function(C1,C2,C3){
   C1$val[[2]] = -1*(C1$val[[6]])
   C2$val[[2]] = C2$val[[6]]
-  
+
   fit_tang_circle(C1,C2,C3) #Dr. Murrell's original note: it seems like it might be necessary to initialise with opposite orientation
-  
+
   centroid_x <- (C1$val[[2]]+C2$val[[2]]+C3$val[[2]])/3
   centroid_y <- (C1$val[[3]]+C2$val[[3]]+C3$val[[3]])/3
-  
+
   C1$val[[2]] <- C1$val[[2]] - centroid_x
   C2$val[[2]] <- C2$val[[2]] - centroid_x
   C3$val[[2]] <- C3$val[[2]] - centroid_x
-  
+
   C1$val[[3]] <- C1$val[[3]] - centroid_y
   C2$val[[3]] <- C2$val[[3]] - centroid_y
   C3$val[[3]] <- C3$val[[3]] - centroid_y
@@ -139,14 +138,14 @@ closest <- function(c, showProcess=FALSE){
   circ <- c$nxt
   if(showProcess){print("--------------")}
   while(identical(circ,c)==FALSE){
-    
+
     if(showProcess){
       print(closest$val$label)
       print(centre_dist(closest))
       print(circ$val$label)
       print(centre_dist(circ))
       print("--------------")}
-    
+
     if(centre_dist(closest) > centre_dist(circ)){
       closest <- circ}
     circ <- circ$nxt
@@ -172,7 +171,7 @@ closest_place <- function(c,d){
 }
 
 #Checking for overlaps between a fitted circle and others on the boundary.
-do_intersect <- function(c,d){ 
+do_intersect <- function(c,d){
   xdif <- (c$val$x-d$val$x)^2
   ydif <- (c$val$y-d$val$y)^2
   dista <- sqrt(xdif+ydif)
@@ -180,7 +179,7 @@ do_intersect <- function(c,d){
 }
 
 #convenience function to tidy up overlap_check
-geod_dist <- function(Cm,Cn,C){ 
+geod_dist <- function(Cm,Cn,C){
   min(fwd_dist(Cn,C), fwd_dist(C,Cm))
 }
 
@@ -189,7 +188,7 @@ overlap_check <- function(Cm,Cn,C){
   C_em <- Cm
   C_en <- Cn
   obstruct <- list()
-  
+
   #collect circles that C intersects, if any by adding intersectors to an 'obstruct' list.
   circ <- Cn$nxt
   while(identical(circ,Cm)==FALSE){
@@ -198,9 +197,9 @@ overlap_check <- function(Cm,Cn,C){
     }
     circ <- circ$nxt
   }
-  
+
   LenObs <- length(obstruct)  #if there are any intersectiosn
-  
+
   if(LenObs > 0){             #find the one closest to {Cm, Cn}, where distance is in number of steps
     nearest <- obstruct[[1]]
     for(i in 1:LenObs){
@@ -214,11 +213,11 @@ overlap_check <- function(Cm,Cn,C){
       C_em <- nearest
     }
   }
-  
+
   if((identical(C_em,Cm))&(identical(C_en,Cn))){
     return("clear")
   }else{
-    return(c(C_em, C_en)) 
+    return(c(C_em, C_en))
   }
 }
 
@@ -251,16 +250,16 @@ est_rad <- function(coords){
 
 circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_place=TRUE, progbar=TRUE, print_BL=FALSE){
   if(ORDER){input_rad_vec <- rev(sort(input_rad_vec))}
-  
+
   # Initialise the circles with radii (not areas) as specified in input_rad_vec, and no boundary relations.
   circles = list() #not sure if list of vector is better/faster here
   for(i in 1:length(input_rad_vec)){
     currN <- paste("Circle",as.character(i),sep="_")
-    currCirc <- node$new(val=list(area=NULL,x=0,y=0,color=NULL,label=currN,rad=input_rad_vec[i])) 
+    currCirc <- node$new(val=list(area=NULL,x=0,y=0,color=NULL,label=currN,rad=input_rad_vec[i]))
     circles <- append(circles,currCirc)
   }
   lenCirc = length(circles)
-  
+
   #Taking care of "degenerate" cases when there are one or two circles (btw im pretty sure it doesnt work lol)
   if(lenCirc==1){
     return(c(circles[[1]]$val[[2]],circles[[1]]$val[[3]],circles[[1]]$val[[6]]))
@@ -269,45 +268,45 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
     circles[[2]]$val[[2]] = circles[[2]]$val[[6]]
     return(c(circles[[1]]$val,circles[[2]]$val))
   }
-  
+
   # Place the first three circles to be mutually tangent, with centroid the origin.
   place_starting_three(circles[[1]], circles[[2]], circles[[3]])
-  
+
   # Initialise the boundary
   init_boundary(list(circles[[1]],circles[[2]],circles[[3]]))
-  
+
   #if(progbar){
   #for(i in 1:length(circles)){print(paste(circles[[i]]$val$label,":",circles[[i]]$val$rad,sep=""))}
   #}
-  
+
   #Loop through the remaining circles,fitting them
   j <- 4
-  while(j<=lenCirc){ 
+  while(j<=lenCirc){
     if(try_place==TRUE){
       cl <- closest_place(circles[[j-1]],circles[[j]])
     }else {
       cl <- closest(circles[[j-1]])
     }
-    
+
     fit_tang_circle(cl,cl$nxt,circles[[j]])
-    
+
     # Check for overlaps and update, refit and recheck until "clear"
     check <- overlap_check(cl, cl$nxt, circles[[j]])
     if(identical(check,"clear")){
       insert_circle(cl,cl$nxt,circles[[j]])
       j <- j + 1
-      if(progbar){progress_bar(j,lenCirc)} 
+      if(progbar){progress_bar(j,lenCirc)}
     }else{
       while(!identical(check,"clear")){
         Cm <- check[[1]]
         Cn <- check[[2]]
-      
+
         fwd_remove(Cm,Cn)
-      
+
         fit_tang_circle(Cm,Cn,circles[[j]]) #not sure abt what happens if a thing is returned? havent checked anything yet.
-      
+
         check <- overlap_check(Cm,Cn,circles[[j]])
-      
+
         if(identical(check,"clear")){
           insert_circle(Cm,Cn,circles[[j]])
           j <- j + 1
@@ -316,13 +315,13 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
     }
     if(print_BL==TRUE){print(clength(circles[[j-1]]))} #this is for debugging only!
   }
-  
-  ans <- list() #in the future i can put the colors in the prior functions. 
+
+  ans <- list() #in the future i can put the colors in the prior functions.
   cc <- 1
   Rvec <- c()
   Xvec <- c()
   Yvec <- c()
-  
+
   for(c in circles){
       Rvec <- c(Rvec,c$val[[6]])
       Xvec <- c(Xvec,c$val[[2]])
@@ -333,6 +332,6 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
   return(ans)
 }
 
-#the packing algo for a SINGLE cluster is now done. 
+#the packing algo for a SINGLE cluster is now done.
 #the list returned is essentional for repulsion IN THAT ORDER!
 #the cluster_API takes care of all clusters AND plotting.

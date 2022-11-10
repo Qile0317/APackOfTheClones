@@ -15,3 +15,9 @@ License: MIT
 Encoding: UTF-8
 Language: en-US
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
