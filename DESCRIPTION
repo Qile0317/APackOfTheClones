@@ -1,0 +1,17 @@
+Package: scballpack
+Type: Package
+Title: Visualization Of T-cell Clonal Clusters
+Version: 0.0.1
+Author: Qile Yang, Ben Murrell
+Authors@R: c(
+    person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut")),
+    person("Ben", "Murrell", email = "benjamin.murrell@ki.se", role = "aut"))
+Maintainer: Qile Yang <qile0317@gmail.com>
+Description: A simple, customizable plotting API to visualize T-cell clonal expansion within sc-RNAseq clusters, 
+    loosely based on delaunay trianglulation, improved from an original julia script by Ben Murrell APackOfTheClones.jl. 
+    Imput data consists of a Seurat object with readily avaliable UMAP and cluster information, and an integrated T-cell repertoire.
+    Additional manual labelling is possible of each cluster, and accepted overlap between clusters is also customizable.
+License: MIT
+Encoding: UTF-8
+Language: en-US
+LazyData: true
