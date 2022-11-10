@@ -12,9 +12,6 @@ library(ggplot2)
 library(ggraph)
 library(ggforce)
 
-#Testing data of 4 simple circles are in the testpacking.R script.
-#Clones <- list(C1,C1.1,C2,C3,C4)
-
 #area from radii vector
 areaFromRad <- function(c){
   ans <- c()
@@ -48,9 +45,7 @@ fwd_dist <- function(c,d){
   count
 }
 
-#print(fwd_dist(C1,C4)) #3. works!!!!!
-
-#initializing/inserting 3 circles (?)
+#initializing/inserting 3 circles
 insert_circle <- function(c,d,e){
   if((identical(c$nxt, d) == FALSE) | (identical(d$prv, c) == FALSE)){
     stop("Two circles not adjacent")
@@ -237,7 +232,7 @@ est_rad <- function(coords){
 }
 
 #The circle layout function.###################################
-#It takes an input vector (NOT LIST, BUT I CAN ACCOMODATE IT IN THE FUTURE)of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
+#It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
 #Optional arguments are:
 #"order": default = true
 #if true it sorts the input vector in descending order before packing

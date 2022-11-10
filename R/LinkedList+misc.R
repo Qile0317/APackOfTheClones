@@ -1,4 +1,5 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
+#The user doesn't need to access any of these functions.
 
 #simple progress bar. In the future it should be possible to include ETA
 progress_bar <- function (x, max = 100) {
@@ -16,10 +17,10 @@ mut_list_el <- function(x) {
   globalenv()[[nx]][[1]][1] = 1
 }
 test()
-a 
+a
 
-#function to mutate a list in place which doesnt work bc r 
-mutate_list <- function(x, el, value, env = globalenv()) { 
+#function to mutate a list in place which doesnt work bc r
+mutate_list <- function(x, el, value, env = globalenv()) {
   nx <- deparse(substitute(x))
   if (!exists(nx, env, mode = "list")) {
     stop("There is no list in ", sQuote("env"), " named ", sQuote(nx), ".")
@@ -32,7 +33,7 @@ mutate_list <- function(x, el, value, env = globalenv()) {
 }
 
 #mutate an element in the list.
-mutate_list_el <- function(x, el, ind, value, env = globalenv()) { 
+mutate_list_el <- function(x, el, ind, value, env = globalenv()) {
   nx <- deparse(substitute(x))
   if (!exists(nx, env, mode = "list")) {
     stop("There is no list in ", sQuote("env"), " named ", sQuote(nx), ".")
@@ -73,11 +74,11 @@ node <- R6Class("Node",
 )
 
 ################ unnecessary functions ##############################################
-#traverse and print every element of the list.
+#traverse and print every element of the list. (its useful for debuggin the circular list)
 traverse <- function(node){
   OV <- node$val[[5]]
   node$val[[5]] <- "ORIGIN"
-  
+
   trav <- function(nd){
     if(nd$nxt$val[[5]]=="ORIGIN"){
       nd$nxt$val[[5]] <- OV
@@ -98,7 +99,7 @@ clength <- function(node, showRT = FALSE){
   ccc <- 1
   node$val$label <- "PKNBVDFGYHJNBVCXSDFGHJB" #if this is one of the names of the labels then RIP
   current <- node
-  
+
   while(!identical(current$nxt$val$label,"PKNBVDFGYHJNBVCXSDFGHJB")){
     ccc <- ccc + 1
     current <- current[['nxt']]
