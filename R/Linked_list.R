@@ -1,51 +1,6 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
 #The user doesn't need to access any of these functions.
 
-#simple progress bar. In the future it should be possible to include ETA
-progress_bar <- function (x, max = 100) {
-  percent <- x / max * 100
-  cat(sprintf('\r[%-50s] %d%%',
-              paste(rep('=', percent / 2), collapse = ''),
-              floor(percent)))
-  if (x == max)
-    cat('\n')
-}
-
-mut_list_el <- function(x) {
-  nx <- as.character(deparse(substitute(x)))
-  print(nx)
-  globalenv()[[nx]][[1]][1] = 1
-}
-test()
-a
-
-#function to mutate a list in place which doesnt work bc r
-mutate_list <- function(x, el, value, env = globalenv()) {
-  nx <- deparse(substitute(x))
-  if (!exists(nx, env, mode = "list")) {
-    stop("There is no list in ", sQuote("env"), " named ", sQuote(nx), ".")
-  }
-  if (!is.null(x[[el]])) {
-    nv <- deparse(substitute(value))
-    #cat("replacing value of", sQuote(el), "in", sQuote(nx), "with", sQuote(nv), "\n")
-    env[[nx]][[el]] <- nv
-  }
-}
-
-#mutate an element in the list.
-mutate_list_el <- function(x, el, ind, value, env = globalenv()) {
-  nx <- deparse(substitute(x))
-  if (!exists(nx, env, mode = "list")) {
-    stop("There is no list in ", sQuote("env"), " named ", sQuote(nx), ".")
-  }
-  if (!is.null(x[[el]])) {
-    nv <- deparse(substitute(value))
-    nind <- deparse(substitute(ind))
-    env[[nx]][[el]][nind] <- value
-  }
-}
-
-#############################################################################################
 # Node constructor
 node <- R6Class("Node",
                 list(
@@ -73,8 +28,8 @@ node <- R6Class("Node",
                 )
 )
 
-################ unnecessary functions ##############################################
-#traverse and print every element of the list. (its useful for debuggin the circular list)
+################ debugging functions ##############################################
+#traverse and print every element of the list recursively.
 traverse <- function(node){
   OV <- node$val[[5]]
   node$val[[5]] <- "ORIGIN"
@@ -92,7 +47,6 @@ traverse <- function(node){
 
 #getting length of circular linked list iteratively
 #note! does not work if its not circularly linked!! will run forever
-
 clength <- function(node, showRT = FALSE){
   starting <- Sys.time()
   OV <- node$val$label

@@ -1,7 +1,6 @@
-#To do list:
-# - since R doesnt allow mutation, i need to redo the functions where I append to a vector to save memory.
-# - cluster repulsion
-# - incorporation and relation to scRNAseq pipeline.
+#This script is functions to mathematically form a SINGLE cluster from an array
+#of numbers that represent radii of circles, Of course, this radii array is
+#generated from the integrated sc-RNAseq and TCR library.
 
 library(cli)
 library(tidyverse)
@@ -12,16 +11,6 @@ library(ggplot2)
 library(ggraph)
 library(ggforce)
 
-#area from radii vector
-areaFromRad <- function(c){
-  ans <- c()
-  for(i in c){
-    area <- pi*(i^2)
-    ans <- c(ans,area)
-  }
-  return(ans)
-}
-
 #function to convert list to the circular doubly linked list.
 init_boundary <- function(a){
   for(i in 1:(length(a)-1)){
@@ -30,9 +19,6 @@ init_boundary <- function(a){
   a[[length(a)]]$nxt <- a[[1]]
   a[[1]]$prv = a[[length(a)]]
 }
-
-#init_boundary(Clones) #worked
-#print(Clones)
 
 #function to find "distance" between 2 elements of linked list
 fwd_dist <- function(c,d){
@@ -74,9 +60,9 @@ fwd_remove <- function(c,d){
   }
 }
 
-#Functions related to the geometry of circles###############################
+# Functions related to the geometry of circles ###############################
 
-#distance from the centre of a circle to the origin. Works.
+#distance from the centre of a circle to the origin.
 centre_dist <- function(c){
   sqrt((c$val[[2]])^2 + (c$val[[3]])^2)
 }
@@ -111,7 +97,7 @@ place_starting_three <- function(C1,C2,C3){
   C1$val[[2]] = -1*(C1$val[[6]])
   C2$val[[2]] = C2$val[[6]]
 
-  fit_tang_circle(C1,C2,C3) #Dr. Murrell's original note: it seems like it might be necessary to initialise with opposite orientation
+  fit_tang_circle(C1,C2,C3) #BM's original note: it seems like it might be necessary to initialise with opposite orientation
 
   centroid_x <- (C1$val[[2]]+C2$val[[2]]+C3$val[[2]])/3
   centroid_y <- (C1$val[[3]]+C2$val[[3]]+C3$val[[3]])/3
@@ -125,7 +111,7 @@ place_starting_three <- function(C1,C2,C3){
   C3$val[[3]] <- C3$val[[3]] - centroid_y
 }
 
-################## actual circle packing algos #############################################
+################## circle packing algos #############################################
 
 #finds the closest circle to the origin in the linked list containing c
 closest <- function(c, showProcess=FALSE){
@@ -152,7 +138,7 @@ closest <- function(c, showProcess=FALSE){
 #successive circles on the boundary, this pair minimizes distance from the center of d to the origin, when d is
 #fitted tangent to this pair.
 
-#im nto sure if returning closest modifies the contents of the original imputs. this might be part of the issue? Nvm.
+
 closest_place <- function(c,d){
   closest = c
   circ = c$nxt
@@ -214,21 +200,6 @@ overlap_check <- function(Cm,Cn,C){
   }else{
     return(c(C_em, C_en))
   }
-}
-
-#Cluster radius estimator that assumes imput is a list of x,y,r. Runs in linear time by 1 scan as list isnt sorted
-#the x or y MUST BE the first in the list, and assumes centeroid at 0,0
-est_rad <- function(coords){
-  cc <- 0
-  max <- 0
-  for(i in 1:length(coords[[1]])){ #$x
-    if(coords[[1]][i] > max){ #$if term in x is bigger than max
-      max <- coords[[1]][i]
-      cc <- i
-    }
-  }
-  maxr <- coords[[3]][cc] #the third should be radius
-  return(max+maxr) #+coords[[4]][1] fourth should be centroid
 }
 
 #The circle layout function.###################################
@@ -308,7 +279,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
         }
       }
     }
-    if(print_BL==TRUE){print(clength(circles[[j-1]]))} #this is for debugging only!
+    if(print_BL==TRUE){print(clength(circles[[j-1]]))} #for debugging
   }
 
   ans <- list() #in the future i can put the colors in the prior functions.
@@ -323,10 +294,6 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
       Yvec <- c(Yvec,c$val[[3]])
   }
   ans <- list(x=Xvec,y=Yvec,rad=Rvec,centroid=centroid)
-  ans[["clRad"]] <- est_rad(ans) #estimated radius of cluster
+  ans[["clRad"]] <- est_rad(ans) #estimated radius of cluster, function found in utils.r
   return(ans)
 }
-
-#the packing algo for a SINGLE cluster is now done.
-#the list returned is essentional for repulsion IN THAT ORDER!
-#the cluster_API takes care of all clusters AND plotting.
