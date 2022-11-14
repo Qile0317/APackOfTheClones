@@ -36,3 +36,16 @@ est_rad <- function(coords){
   maxr <- coords[[3]][cc] #the third should be radius
   return(max+maxr) #+coords[[4]][1] fourth should be centroid
 }
+
+#full join a list of lists into a dataframe with generated labels. memory inefficient
+df_full_join <- function(clstr_list){ #i need option to put custom labels
+  df <- data.frame(label="cluster 1", x=clstr_list[[1]]$x,
+                   y=clstr_list[[1]]$y,r=clstr_list[[1]]$rad)
+  for(i in 2:length(clstr_list)){
+    df <- full_join(df,data.frame(label=paste("cluster", as.character(i)),
+                            x=clstr_list[[i]]$x, y=clstr_list[[i]]$y,
+                            r=clstr_list[[i]]$rad))
+  }
+  return(df)
+}
+

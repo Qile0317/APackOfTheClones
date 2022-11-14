@@ -1,19 +1,15 @@
-#script for function to manipulate and manage all clusters
+#script for function to manipulate and manage all clusters. Once again user doesn't need this script
 
-#The packing algo is basically done. Now to manage centroid locations of both clusters is easy, coords can be transformed. 
-#split seurat obj into UMAP coords and 
+#split seurat obj into UMAP coords and clusters
 group_clusters <- function(SeuratObj){
   return(data.frame(
     SeuratObj@reductions[["umap"]]@cell.embeddings,
     clusters = SeuratObj$seurat_clusters))
 }
 
-#clsdf <- group_clusters(pbmc)
-#ggplot(data=clsdf,aes(x=UMAP_1,y=UMAP_2,color=clusters)) + geom_point()
-
-#centroid finder for a whole dataframe. returns dataframe. I think it might be bugged.
+#centroid finder for a whole dataframe. returns dataframe.
 #it also needs to be able to incorporate color. the labelling is also off somehow.
-#Run group_clusters before imputting df. 
+#Run group_clusters before imputting df.
 
 #the FIRST row must be UMAP_1 (x)
 #the SECOND row must be UMAP_2 (y)
@@ -49,7 +45,7 @@ trans_coord <- function(cluster, new_centroid = c("none","none")){
     ansc[[2]][i] <- cluster[[2]][i] + cluster[[4]][2]
     }
   return(ansc)
-  } 
+  }
 
 trans_cluster <- function(cluster_list){
   ansc <- list()
@@ -57,29 +53,4 @@ trans_cluster <- function(cluster_list){
     ansc[[i]]<-trans_coord(cluster_list[[i]])
   }
   return(ansc)
-} 
-
-# result plotting function. clusters is a list of lists transformed into a dataframe, which are clusters. 
-# A cluster list includes $x, $y, $rad, $centroid.
-#the clusters imput is a dataframe. 
-plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
-                          title = "Sizes of clones within each cluster",
-                          haslegend=TRUE, void=TRUE,
-                          origin=FALSE){
-  if(!origin){
-    p1 <- ggplot() + geom_circle(data = clusters, mapping = aes(
-      x0 = x, y0 = y, r=r, fill=label),  n=n, linetype=linetype) + #higher n is basically higher resolution
-      labs(title = title) + coord_fixed()  
-    #geom_text(data = clusters, aes(x,y, label = label)) #this should only be near a cluster. can make simple function to put it on bottom right.
-    if(void){p1 <- p1 + theme_void()}
-    if(haslegend){p1 <- p1 + theme(legend.position="none")}
-    p1
-  }else{
-    p1 <- ggplot(clusters,mapping=aes(x,y)) + geom_point() + labs(title = title) + coord_fixed()
-    if(void){p1 <- p1 + theme_void()}
-    p1
-  }
 }
-
-#now: be able to group by color and have an actual good title
-#repulsion is coming
