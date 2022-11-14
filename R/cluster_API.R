@@ -32,25 +32,21 @@ find_centroids <- function(df){
 #ggplot(t,aes(x=x,y=y,color=cluster)) + geom_point() + umapPlot
 #looks right!
 
-#functions for moving cluster to NEWLY APPOINTED centroid
-#this is for 1 that creates a new list which is inefficient but R is very dumb with mutation. might try in the future with the Lepl() function
-trans_coord <- function(cluster, new_centroid = c("none","none")){
-  ansc <- list(x=c(),y=c(),rad=cluster[[3]],centroid=cluster[[4]],clRad=cluster[[5]])
-  #cluster <- deparse(substitute(cluster))
-  if(!identical(c("none","none"),new_centroid)){ansc[[4]] <- new_centroid} #mutate_list(deparse(substitute(cluster)),4,new_centroid)
+#transform coordinates of a cluster by the transvec, c(x,y)
+trans_coord <- function(cluster, transvec){
+  ansc <- list(x=c(),y=c(),rad=cluster[[3]],centroid=cluster[[4]]+transvec,clRad=cluster[[5]])
   for(i in 1:length(cluster[[1]])){
-    #mutate_list_el(deparse(substitute(cluster)),1,i,cluster[[1]][i] + cluster$centroid[1])
-    ansc[[1]][i] <- cluster[[1]][i] + cluster[[4]][1]
-    #mutate_list_el(deparse(substitute(cluster)),2,i,cluster[[2]][i] + cluster$centroid[2])
-    ansc[[2]][i] <- cluster[[2]][i] + cluster[[4]][2]
+    ansc[[1]][i] <- cluster[[1]][i] + transvec[1]
+    ansc[[2]][i] <- cluster[[2]][i] + transvec[2]
     }
   return(ansc)
   }
 
-trans_cluster <- function(cluster_list){
-  ansc <- list()
-  for(i in 1:length(cluster_list)){
-    ansc[[i]]<-trans_coord(cluster_list[[i]])
-  }
-  return(ansc)
-}
+
+#trans_cluster <- function(cluster_list){
+#  ansc <- list()
+#  for(i in 1:length(cluster_list)){
+#    ansc[[i]]<-trans_coord(cluster_list[[i]])
+#  }
+#  return(ansc)
+#}

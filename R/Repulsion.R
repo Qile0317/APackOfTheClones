@@ -24,21 +24,38 @@ comV <- function(Pvec){
   return(unname(c(Pvec[1]*cos(Pvec[2]),Pvec[1]*sin(Pvec[2]))))
 }
 
+#sum vectors in a list, very specific for this function
+sumL <- function(li){
+  ans <- c(0,0)
+  for(el in li){
+    ans[1] <- ans[1] + el[1]
+    ans[2] <- ans[2] + el[2]
+  }
+  return(ans)
+}
+
+#function to check if 2 cluster lists overlap, with threshold. (cluster overlap check (coc))
+do_cl_intersect <- function(Cn,Cm,thr){
+  xdif <- (Cn[[4]][1]+Cm[[4]][1])^2
+  ydif <- (Cn[[4]][2]+Cm[[4]][2])^2
+  distance <- sqrt(xdif+ydif)
+  return(distance+thr < Cn[[5]] + Cm[[5]])
+}
+
 #at the end, its possible to find optimal G by seeing how many iterations each G took. but unessecary
 
 #However, there arent that many clusters so it should be fine.
 #ASSUMES NO 2 CENTROIDS ARE THE SAME!!!!!!!!
-#this can even be visualized
-#UNIFNISHED! need to deal with prevC, currC, thr, and test G.
+#thr is how much overlap is acceptable.
+#G is the strength of the repulsion. should be a small number
+#max_iter is there to prevent it from running forever as its not super optimized.
 
 #inp is a list of cluster lists. thr is the allowed border that isnt implemented.
-repulse_cluster <- function(inp, thr = 1, G = 0.5, max_iter = 10){ #not sure what G should be, need to test.
-  if(max_iter > 30){
-    print("Max iterations too high, reducing to 30...")
-    max_iter <- 30}
+repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ #not sure what G should be, need to test.
   #keep a variable of if ANY vector is added. if the prev and curr are unchanged, then return.
   li <- length(inp)
-  transvec <- rep(c(0,0), li)
+  transvec <- list()
+  for(i in 1:li){transvec[[i]]<-c(0,0)}
   ctvec <- transvec
   otvec <- transvec
   change <- TRUE
@@ -51,31 +68,27 @@ repulse_cluster <- function(inp, thr = 1, G = 0.5, max_iter = 10){ #not sure wha
         currChange <- FALSE
         for(j in 1:li){
           #find distance vector between centroids
-          if(!identical(inp[[i]][[4]],inp[[j]][[4]])){
+          if(do_cl_intersect(inp[[i]],inp[[j]],thr)==TRUE){
             polDV <- pdV(inp[[i]],inp[[j]])
-            if(polDV[1] != 0){ #if its not the same,
+            if(polDV[1] != 0){
               #Find repulsion vec (newtons formula) + storing component
-              ctvec[j] <- comV(c(-1*G*((pi*(
-                inp[[i]]$clstr_rad^2 +
-                  inp[[j]]$clstr_rad^2))/(polDV[1]+thr)^2), #"magnitude"
+              ctvec[[j]] <- comV(c(G*((pi*( #getting rid of *-1 helped. Lol looks like the original direction was already pointing opposite.
+                inp[[i]][[5]]^2 +
+                  inp[[j]][[5]]^2))/(polDV[1])^2), #"magnitude" (5 is cluster radius clRad)
                 polDV[2])) #"direction"
               currChange <- TRUE #update that there is change within this iteration
             }
           }
-          if(currChange == FALSE){change = FALSE}
+          if(currChange == FALSE){change = FALSE}else{change = TRUE} #unessecary?
         }
-        transvec[i] <- sum(ctvec[i])
+        transvec[[i]] <- sumL(ctvec)
         ctvec <- otvec #reset
         for(i in 1:li){
-          inp[[i]]$centroid <- inp[[i]]$centroid+transvec[i]
-          inp[[i]] <- trans_coord(inp[[i]]) #unfortunately doesnt mutate
+          inp[[i]] <- trans_coord(inp[[i]],transvec[[i]]) #transforms cluster to new centroid
         }
         }
       }
   return(inp)
   }
 }
-
-repulse_cluster(clusterlist)
-main <- df_full_join(clusterlist)
-plot_clusters(main) #lmao didnt work, also had 12 warnings
+#IT WORKS!! :D
