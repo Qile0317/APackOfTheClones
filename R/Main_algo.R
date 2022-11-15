@@ -2,6 +2,7 @@
 #of numbers that represent radii of circles, Of course, this radii array is
 #generated from the integrated sc-RNAseq and TCR library.
 
+#ill get rid of these soon.
 library(cli)
 library(tidyverse)
 library(ggdag)
@@ -293,7 +294,8 @@ circle_layout <- function(input_rad_vec, centroid = c(0,0), ORDER=TRUE, try_plac
       Xvec <- c(Xvec,c$val[[2]])
       Yvec <- c(Yvec,c$val[[3]])
   }
-  ans <- list(x=Xvec,y=Yvec,rad=Rvec,centroid=centroid)
+  ans <- list(x=Xvec,y=Yvec,rad=Rvec,centroid=c(0,0),clRad=0)
+  if(!identical(centroid,c(0,0))){ans <- trans_coord(ans,centroid)} #didnt test this lol
   ans[["clRad"]] <- est_rad(ans) #estimated radius of cluster, function found in utils.r
   return(ans)
 }

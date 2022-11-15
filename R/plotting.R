@@ -3,6 +3,7 @@
 # result plotting function. clusters is a list of lists transformed into a dataframe, which are clusters.
 # A cluster list includes $x, $y, $rad, $centroid.
 #the clusters imput is a dataframe. #move into seperate script
+
 plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
                           haslegend=TRUE, void=TRUE,
