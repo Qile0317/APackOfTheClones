@@ -43,10 +43,10 @@ trans_coord <- function(cluster, transvec){
   }
 
 
-#trans_cluster <- function(cluster_list){
-#  ansc <- list()
-#  for(i in 1:length(cluster_list)){
-#    ansc[[i]]<-trans_coord(cluster_list[[i]])
-#  }
-#  return(ansc)
-#}
+trans_cluster <- function(cluster_list){
+  ansc <- list()
+  for(i in 1:length(cluster_list)){
+    ansc[[i]]<-trans_coord(cluster_list[[i]],cluster_list[[i]][[4]])
+  }
+  return(ansc)
+}

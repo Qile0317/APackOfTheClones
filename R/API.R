@@ -11,16 +11,15 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..) and centroids
 
   #circle layout
   for(i in 1:length(sizes)){
-    if(progbar){print(paste("formulating cluster",as.character(i)))}
+    if(progbar){print(paste("packing cluster", as.character(i))," \n")}
     ans[[i]] <- circle_layout(sizes[[i]],
                               ORDER = ORDER,
                               try_place = try_place,
                               progbar = progbar)
   }
-
   #repulsion
   if(repulse){ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_iter)}
-
+  print("repulse done")
   #joining list into df
   ans <- df_full_join(ans)
 

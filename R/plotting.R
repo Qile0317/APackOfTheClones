@@ -7,12 +7,12 @@
 plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
                           haslegend=TRUE, void=TRUE,
-                          origin=FALSE){
+                          origin=FALSE){ #, label=TRUE (lavels each individual circle, yikes)
   if(!origin){
     p1 <- ggplot() + geom_circle(data = clusters, mapping = aes(
-      x0 = x, y0 = y, r=r, fill=label),  n=n, linetype=linetype) + #higher n is basically higher resolution
+      x0 = x, y0 = y, r=r, fill= .data[["label"]]),  n=n, linetype=linetype) +
       labs(title = title) + coord_fixed()
-    #geom_text(data = clusters, aes(x,y, label = label)) #this should only be near a cluster. can make simple function to put it on bottom right.
+    #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
     if(void){p1 <- p1 + theme_void()}
     if(haslegend){p1 <- p1 + theme(legend.position="none")}
     p1
