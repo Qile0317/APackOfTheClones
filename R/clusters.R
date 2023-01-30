@@ -14,7 +14,7 @@ group_clusters <- function(SeuratObj){
 #the FIRST row must be UMAP_1 (x)
 #the SECOND row must be UMAP_2 (y)
 #the THIRD row of the dataframe must be clusters
-find_centroids <- function(df){
+find_centroids <- function(df, return_mode = "list"){ # or "df"
   cll <- split(df, factor(df[,3])) #the last cluster column becomes redundant
   l <- length(cll)
   nameset <- rep(c(""),times=l)
@@ -25,7 +25,15 @@ find_centroids <- function(df){
     xset[i] <- sum(cll[[i]][,1])/length(cll[[i]][,1])
     yset[i] <- sum(cll[[i]][,2])/length(cll[[i]][,2])
   }
-  return(data.frame(cluster=nameset,x=xset,y=yset))
+  if (return_mode != "list") { # return df, although its not rlly needed...
+    return(data.frame(cluster = nameset, x = xset, y = yset))
+  }
+  #return list (theres definetely a smarter way to do this)
+  list_output <- list()
+  for (i in 1:l){
+    list_output[[nameset[i]]] <- c(xset[i],yset[i])
+  }
+  return(list_output)
 }
 
 #t <- find_centroids(clsdf)

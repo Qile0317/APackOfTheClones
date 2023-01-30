@@ -22,7 +22,9 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Imports: 
+    data.table,
     dplyr,
     ggforce,
     ggplot2,
-    R6
+    R6,
+    Seurat

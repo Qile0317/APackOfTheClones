@@ -10,23 +10,25 @@ distV <- function(c1,c2){
 } # works
 
 #polar form conversion from component form. its with respect to x axis. - works
-polV <- function(vec){
-  return(c("magnitude"=sqrt(sum(vec^2)),
-           "direction"=atan2(vec[2],vec[1])))
+polV <- function(vec) {
+  return(c("magnitude" = sqrt(sum(vec^2)),
+           "direction" = atan2(vec[2], vec[1])))
   }
 
 #polar distance vector - works
-pdV <- function(c1,c2){return(polV(distV(c1,c2)))}
+pdV <- function(c1 ,c2) {
+  return(polV(distV(c1, c2)))
+}
 
 #converts polar form to component form of vector - works
-comV <- function(Pvec){
-  return(unname(c(Pvec[1]*cos(Pvec[2]),Pvec[1]*sin(Pvec[2]))))
+comV <- function(Pvec) {
+  return(unname(c(Pvec[1] * cos(Pvec[2]), Pvec[1] * sin(Pvec[2]))))
 }
 
 #sum vectors in a list, very specific for this function
-sumL <- function(li){
-  ans <- c(0,0)
-  for(el in li){
+sumL <- function(li) {
+  ans <- c(0, 0)
+  for (el in li) {
     ans[1] <- ans[1] + el[1]
     ans[2] <- ans[2] + el[2]
   }
@@ -34,11 +36,11 @@ sumL <- function(li){
 }
 
 #function to check if 2 cluster lists overlap, with threshold. (cluster overlap check (coc))
-do_cl_intersect <- function(Cn,Cm,thr){
-  xdif <- (Cn[[4]][1]+Cm[[4]][1])^2
-  ydif <- (Cn[[4]][2]+Cm[[4]][2])^2
-  distance <- sqrt(xdif+ydif)
-  return(distance+thr < Cn[[5]] + Cm[[5]])
+do_cl_intersect <- function(Cn, Cm, thr) {
+  xdif <- (Cn[[4]][1] + Cm[[4]][1])^2
+  ydif <- (Cn[[4]][2] + Cm[[4]][2])^2
+  distance <- sqrt(xdif + ydif)
+  return(distance + thr < Cn[[5]] + Cm[[5]])
 }
 
 #at the end, its possible to find optimal G by seeing how many iterations each G took. but unessecary
