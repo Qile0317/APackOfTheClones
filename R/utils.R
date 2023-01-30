@@ -1,7 +1,6 @@
 # script of miscalleneous/utility functions
 
-#simple progress bar.
-#In the future it should be possible to include ETA but it usually doesnt take too long anyway
+#simple progress bar
 progress_bar <- function (x, max = 100) {
   percent <- x / max * 100
   cat(sprintf('\r[%-50s] %d%%',
@@ -48,4 +47,3 @@ df_full_join <- function(clstr_list){ #i need option to put custom labels
   }
   return(df)
 }
-

@@ -1,5 +1,4 @@
 # Repulsion = -G(m_1 + m_2)/d^2
-#the coding train did this and assumed all masses are equivalent, which saves iteration. HOwever its not the case here.
 #with iteration, this algo is O(mn^2) where m is the number of iterationsz needed to be made.
 
 #prereq function to find the repulsion force vector of 2 circles,
@@ -91,4 +90,5 @@ repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ #not sure w
   return(inp)
   }
 }
-#IT WORKS!! :D
+
+# I could make it so that if a cluster already isn't touching anything, that repulsion wont apply to it

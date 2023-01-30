@@ -65,4 +65,3 @@ clength <- function(node, showRT = FALSE){
   }
   return(ccc)
 }
-

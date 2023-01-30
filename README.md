@@ -16,7 +16,7 @@ Final idea is to allow seamless integration into common scRNAseq pipelines to al
 <img src="https://github.com/Qile0317/scRNAseq-CircularPacking/blob/main/Example.png" />
 
 # docs - unfinished
-```plot_API(sizes)``` is the main function at the moment. It takes in a list of vectors that are just arrays of numbers representing circle radii. The G argument specifies how hard clusters repell eachother.
+```plot_API(sizes, centroids)``` is the main function at the moment. It takes in a list of vectors that are just arrays of numbers representing circle radii. The G argument specifies how hard clusters repell eachother.
 
 ### sc-RNAseq integration with the seurat package
 As mentioned before, it is underway to get the TCR library data to be able to make the "sizes of clone within a cluster" a reality. The main issue I am having is integrating the scrnaseq and tcr/bcr data. The lack of avaliable packages/knowledge makes it very hard to work with.

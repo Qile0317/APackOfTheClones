@@ -10,18 +10,17 @@ plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #line
                           origin=FALSE){ #, label=TRUE (lavels each individual circle, yikes)
   if(!origin){
     p1 <- ggplot() + geom_circle(data = clusters, mapping = aes(
-      x0 = x, y0 = y, r=r, fill= .data[["label"]]),  n=n, linetype=linetype) +
+      x0 = x, y0 = y, r=r, fill= .data[["label"]]), # not sure if .data shoulf be here
+      n=n, linetype=linetype) +
       labs(title = title) + coord_fixed()
     #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
     if(void){p1 <- p1 + theme_void()}
     if(haslegend){p1 <- p1 + theme(legend.position="none")}
-    p1
   }else{
     p1 <- ggplot(clusters,mapping=aes(x,y)) + geom_point() + labs(title = title) + coord_fixed()
     if(void){p1 <- p1 + theme_void()}
-    p1
   }
+  return(p1)
 }
 
 #now: be able to group by color and have an actual good title
-#repulsion is coming

@@ -4,3 +4,6 @@
 .Ruserdata
 inst/doc
 tests/testpacking.R
+/data
+.Rhistory
+devnotes.txt
