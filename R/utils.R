@@ -14,8 +14,8 @@ progress_bar <- function (x, max = 100) {
 areaFromRad <- function(c){
   ans <- c()
   for(i in c){
-    area <- pi*(i^2)
-    ans <- c(ans,area)
+    area <- pi * (i^2)
+    ans <- c(ans, area)
   }
   return(ans)
 }
@@ -25,15 +25,18 @@ areaFromRad <- function(c){
 #the x or y MUST BE the first in the list, and assumes centeroid at 0,0
 est_rad <- function(coords){
   cc <- 0
-  max <- 0
-  for(i in 1:length(coords[[1]])){ #$x
-    if(coords[[1]][i] > max){ #$if term in x is bigger than max
-      max <- coords[[1]][i]
+  max_x <- 0
+  for(i in 1:length(coords$x)){ # x should be the first in the coord list
+    current_coord <- coords$x[i]
+    if(current_coord > max_x){
+      max_x <- current_coord
       cc <- i
     }
   }
-  maxr <- coords[[3]][cc] #the third should be radius
-  return(max+maxr) #+coords[[4]][1] fourth should be centroid
+
+  max_radius <- coords$rad[cc] #radii should be third in the list
+  centroid_x <- coords$centroid[1] #centroid should be fourth in the list
+  return(max_x + centroid_x + max_radius)
 }
 
 #full join a list of lists into a dataframe with generated labels. memory inefficient

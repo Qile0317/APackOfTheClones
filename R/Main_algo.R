@@ -4,7 +4,7 @@
 
 library(dplyr) # for full join
 library(ggplot2) # for plotting
-library(R6) # for linked list 
+library(R6) # for linked list
 library(ggforce) # for circles on plot
 
 #the usethis package is nice for devs
@@ -229,10 +229,11 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   for (i in 1:length(input_rad_vec)) {
     currN <- paste("Circle", as.character(i), sep = "_")
     currCirc <- node$new(val = list(area = NULL, x = 0, y = 0,
-                         color = NULL, label = currN, 
+                         color = NULL, label = currN,
                          rad = input_rad_vec[i]))
     circles <- append(circles, currCirc)
   }
+
   lenCirc <- length(circles)
 
   #Taking care of "degenerate" cases when there are one or two circles (broken atm)
@@ -249,11 +250,6 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
 
   # Initialise the boundary
   init_boundary(list(circles[[1]],circles[[2]],circles[[3]]))
-
-  #if(progbar){
-  #for(i in 1:length(circles)){
-    #print(paste(circles[[i]]$val$label,":",circles[[i]]$val$rad,sep=""))}
-  #}
 
   #Loop through the remaining circles,fitting them
   j <- 4
@@ -281,7 +277,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
 
         fit_tang_circle(Cm, Cn, circles[[j]])
 
-        check <- overlap_check(Cm,Cn,circles[[j]])
+        check <- overlap_check(Cm, Cn, circles[[j]])
 
         if (identical(check, "clear")){
           insert_circle(Cm, Cn, circles[[j]])
@@ -298,13 +294,23 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   Xvec <- c()
   Yvec <- c()
 
-  for (c in circles) { #better practisce would be to initialize vector of zeros first
+  for (c in circles) { #better practisce would be to initialize vectors of zeros first
       Rvec <- c(Rvec, c$val[[6]])
       Xvec <- c(Xvec, c$val[[2]])
       Yvec <- c(Yvec, c$val[[3]])
   }
-  ans <- list(x=Xvec,y=Yvec,rad=Rvec,centroid=c(0,0),clRad=0)
-  if(!identical(centroid,c(0,0))){ans <- trans_coord(ans,centroid)} #didnt test this lol
-  ans[["clRad"]] <- est_rad(ans) #estimated radius of cluster, function found in utils.r
+
+  ans <- list("x" = Xvec,
+              "y" = Yvec,
+              "rad" = Rvec,
+              "centroid" = centroid,
+              "clRad" = 0)
+
+  if(!identical(centroid, c(0, 0))){ #didnt test this
+    ans <- trans_coord(ans, centroid)
+  }
+
+  ans[[5]] <- est_rad(ans) #estimated radius of cluster, function found in utils.r
+
   return(ans)
 }

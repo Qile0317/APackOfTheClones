@@ -35,6 +35,7 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
 
   # This code applies data_concater function per  barcodes to create a
   # concatenated string with  the information we want to keep
+  print("integrating")
   tcr_collapsed <- tcr[, {setTxtProgressBar(pb,.GRP); lapply(.SD, data_concater)} , by=barcode]
 
   #assign rownames for integration
@@ -167,4 +168,9 @@ get_cluster_centroids <- function(seurat_obj) {
 pbmc_size_list <- get_clone_sizes(pbmc,normalize=FALSE)
 pbmc_norm_size_list <- get_clone_sizes(pbmc)
 pbmc_centroid_list <- get_cluster_centroids(pbmc)
+
+# Error in if (do_cl_intersect(inp[[i]], inp[[j]], thr)) { :argument is of length zero
+# I need to debug this, i think the list construction may be wrong.
+
+plot_API(pbmc_norm_size_list,pbmc_centroid_list)
 

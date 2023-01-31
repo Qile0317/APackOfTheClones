@@ -1,9 +1,10 @@
 # Repulsion = -G(m_1 + m_2)/d^2
-#with iteration, this algo is O(mn^2) where m is the number of iterationsz needed to be made.
+#with iteration, this algo is O(mn^2) where m is the iteration threshold
 
 #prereq function to find the repulsion force vector of 2 circles,
 #the imputs are lists for 1 cluster with $x, $y, $rad, $centroid, $clstr_rad
 #$centroid must be c(x,y)
+# it creates the OPPOSITE vector so there is no need for G to be negative
 distV <- function(c1,c2){
   return(c(c1$centroid[1]-c2$centroid[1],
            c1$centroid[2]-c2$centroid[2]))
@@ -35,13 +36,16 @@ sumL <- function(li) {
   return(ans)
 }
 
-#function to check if 2 cluster lists overlap, with threshold. (cluster overlap check (coc))
-do_cl_intersect <- function(Cn, Cm, thr) {
-  xdif <- (Cn[[4]][1] + Cm[[4]][1])^2
-  ydif <- (Cn[[4]][2] + Cm[[4]][2])^2
-  distance <- sqrt(xdif + ydif)
-  return(distance + thr < Cn[[5]] + Cm[[5]])
+#function to check if 2 cluster lists overlap, with threshold.
+do_cl_intersect <- function(Cn, Cm, thr) { # could also do percent threshold
+  xdif <- (Cn$centroid[1] + Cm$centroid[1])
+  ydif <- (Cn$centroid[2] + Cm$centroid[2])
+  euc_dist <- sqrt((xdif^2) + (ydif^2))
+  return((euc_dist + thr) < (Cn$clRad + Cm$clRad)) #something is wrong with Cn and Cm
 }
+
+# Error in Cn[[5]] + Cm[[5]] : non-numeric argument to binary operator
+# I dont think it the fault of the function its something wrong with the cluster list creation
 
 #at the end, its possible to find optimal G by seeing how many iterations each G took. but unessecary
 
@@ -52,7 +56,7 @@ do_cl_intersect <- function(Cn, Cm, thr) {
 #max_iter is there to prevent it from running forever as its not super optimized.
 
 #inp is a list of cluster lists. thr is the allowed border that isnt implemented.
-repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ #not sure what G should be, need to test.
+repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ # so the inp is a list of ?
   #keep a variable of if ANY vector is added. if the prev and curr are unchanged, then return.
   li <- length(inp)
   transvec <- list()
@@ -61,29 +65,33 @@ repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ #not sure w
   otvec <- transvec
   change <- TRUE
   i <- 0
+
   while(i <= max_iter){
-    if(change == FALSE){return(inp)
+    if(!change){
+      return(inp)
+
       }else{
       i <- i + 1
+
       for(i in 1:li){
         currChange <- FALSE
+
         for(j in 1:li){
-          #find distance vector between centroids
-          if(do_cl_intersect(inp[[i]],inp[[j]],thr)==TRUE){
-            polDV <- pdV(inp[[i]],inp[[j]])
+          if(do_cl_intersect(inp[[i]],inp[[j]],thr)){
+            polDV <- pdV(inp[[i]],inp[[j]]) # find distance vector between centroids
+
             if(polDV[1] != 0){
-              #Find repulsion vec (newtons formula) + storing component
-              ctvec[[j]] <- comV(c(G*((pi*( #getting rid of *-1 helped. Lol looks like the original direction was already pointing opposite.
-                inp[[i]][[5]]^2 +
-                  inp[[j]][[5]]^2))/(polDV[1])^2), #"magnitude" (5 is cluster radius clRad)
-                polDV[2])) #"direction"
+              #Find polar repulsion vec (with newtons formula) + converting to and storing component form
+              ctvec[[j]] <- comV(c(G*((pi*(inp[[i]][[5]]^2 + inp[[j]][[5]]^2))/(polDV[1])^2), polDV[2]))
               currChange <- TRUE #update that there is change within this iteration
             }
           }
-          if(currChange == FALSE){change = FALSE}else{change = TRUE} #unessecary?
+          if(!currChange){change = FALSE}else{change = TRUE} #unessecary?
         }
+
         transvec[[i]] <- sumL(ctvec)
         ctvec <- otvec #reset
+
         for(i in 1:li){
           inp[[i]] <- trans_coord(inp[[i]],transvec[[i]]) #transforms cluster to new centroid
         }
@@ -93,4 +101,4 @@ repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ #not sure w
   }
 }
 
-# I could make it so that if a cluster already isn't touching anything, that repulsion wont apply to it
+# TODO: could make it so that if a cluster already isn't touching anything, that repulsion wont apply to it (no vectors added)
