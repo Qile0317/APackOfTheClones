@@ -116,7 +116,7 @@ get_clone_sizes <- function(integrated_seurat_obj, normalize = TRUE) {
 
   #initialize outputs
   radii <- replicate(umap_cluster_count(integrated_seurat_obj), c())
-  min_read_count <- 0
+  min_read_count <- Inf
 
   #label_radii_index_dict <- dict() #if in the future i wanna assign label to cluster i can do this
 
@@ -165,6 +165,6 @@ get_cluster_centroids <- function(seurat_obj) {
 
 #these can be passed to plot_APi
 pbmc_size_list <- get_clone_sizes(pbmc,normalize=FALSE)
-pbmc_norm_size_list <- get_clone_sizes(pbmc) # normaliztion is screwed
+pbmc_norm_size_list <- get_clone_sizes(pbmc)
 pbmc_centroid_list <- get_cluster_centroids(pbmc)
 
