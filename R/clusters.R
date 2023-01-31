@@ -1,12 +1,5 @@
 #script for function to manipulate and manage all clusters. Once again user doesn't need this script
 
-#split seurat obj into UMAP coords and clusters
-group_clusters <- function(SeuratObj){
-  return(data.frame(
-    SeuratObj@reductions[["umap"]]@cell.embeddings,
-    clusters = SeuratObj$seurat_clusters))
-}
-
 #centroid finder for a whole dataframe. returns dataframe.
 #it also needs to be able to incorporate color. the labelling is also off somehow.
 #Run group_clusters before imputting df.
