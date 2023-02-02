@@ -2,7 +2,7 @@
 #of numbers that represent radii of circles, Of course, this radii array is
 #generated from the integrated sc-RNAseq and TCR library.
 
-library(dplyr) # for full join
+library(dplyr) # for full join and other stuff
 library(ggplot2) # for plotting
 library(R6) # for linked list
 library(ggforce) # for circles on plot
@@ -96,14 +96,14 @@ fit_tang_circle <- function(C1, C2, C3) {
   C3
 }
 
-place_starting_three <- function(C1,C2,C3){
-  C1$val[[2]] <- -1*(C1$val[[6]])
+place_starting_three <- function(C1, C2, C3) {
+  C1$val[[2]] <- -1 * (C1$val[[6]])
   C2$val[[2]] <- C2$val[[6]]
 
-  fit_tang_circle(C1,C2,C3) #BM's original note: it seems like it might be necessary to initialise with opposite orientation
+  fit_tang_circle(C1, C2, C3) #BM's original note: it seems like it might be necessary to initialise with opposite orientation
 
-  centroid_x <- (C1$val[[2]]+C2$val[[2]]+C3$val[[2]])/3
-  centroid_y <- (C1$val[[3]]+C2$val[[3]]+C3$val[[3]])/3
+  centroid_x <- (C1$val[[2]] + C2$val[[2]] + C3$val[[2]])/3
+  centroid_y <- (C1$val[[3]] + C2$val[[3]] + C3$val[[3]])/3
 
   C1$val[[2]] <- C1$val[[2]] - centroid_x
   C2$val[[2]] <- C2$val[[2]] - centroid_x
@@ -117,11 +117,11 @@ place_starting_three <- function(C1,C2,C3){
 ################## circle packing algos #############################################
 
 #finds the closest circle to the origin in the linked list containing c
-closest <- function(c, showProcess=FALSE){
+closest <- function(c, showProcess=FALSE){ #showProcess is for debugging
   closest <- c
   circ <- c$nxt
-  if(showProcess){print("--------------")}
-  while(identical(circ,c)==FALSE){
+
+  while(!identical(circ, c)){
 
     if(showProcess){
       print(closest$val$label)
@@ -142,11 +142,11 @@ closest <- function(c, showProcess=FALSE){
 #fitted tangent to this pair.
 
 
-closest_place <- function(c,d){
+closest_place <- function(c, d){
   closest = c
   circ = c$nxt
-  while(identical(circ,c)==FALSE){
-    if(centre_dist(fit_tang_circle(closest, closest$nxt, d)) > centre_dist(fit_tang_circle(circ, circ$nxt, d))){
+  while(!identical(circ,c)){
+    if(centre_dist(fit_tang_circle(closest, closest$nxt, d)) > centre_dist(fit_tang_circle(circ, circ$nxt, d))) {
       closest <- circ
     }
     circ <- circ$nxt
@@ -158,8 +158,8 @@ closest_place <- function(c,d){
 do_intersect <- function(c, d) {
   xdif <- (c$val$x - d$val$x)^2
   ydif <- (c$val$y - d$val$y)^2
-  dista <- sqrt(xdif + ydif)
-  return(dista < ((c$val$rad) + (d$val$rad)))
+  euc_dist <- sqrt(xdif + ydif)
+  return(euc_dist < ((c$val$rad) + (d$val$rad)))
 } #could reformulate as discrepancy > threshold
 
 #convenience function to tidy up overlap_check
@@ -168,7 +168,7 @@ geod_dist <- function(Cm, Cn, C) {
 }
 
 #overlap check of 3 circles.
-overlap_check <- function(Cm, Cn, C){
+overlap_check <- function(Cm, Cn, C) {
   C_em <- Cm
   C_en <- Cn
   obstruct <- list()
@@ -205,6 +205,23 @@ overlap_check <- function(Cm, Cn, C){
   }
 }
 
+#Cluster radius estimator that assumes imput is a list of x,y,r. Runs in linear time by 1 scan as list isnt sorted
+#the x or y MUST BE the first in the list, and assumes centeroid at 0,0
+est_rad <- function(coords){
+  cc <- 0
+  max_x <- 0
+  for(i in 1:length(coords$x)){ # x should be the first in the coord list
+    current_coord <- coords$x[i]
+    if(current_coord > max_x){
+      max_x <- current_coord
+      cc <- i
+    }
+  }
+  max_radius <- coords$rad[cc] #radii should be third in the list
+  centroid_x <- coords$centroid[1] #centroid should be fourth in the list
+  return(max_x + max_radius - centroid_x)
+}
+
 #The circle layout function.###################################
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
 #Optional arguments are:
@@ -220,9 +237,10 @@ overlap_check <- function(Cm, Cn, C){
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE, print_BL = FALSE) {
-  if (ORDER) {
-    input_rad_vec <- rev(sort(input_rad_vec))
-  }
+
+  if (identical(input_rad_vec, list())) {return(NULL)}
+
+  if (ORDER) {input_rad_vec <- rev(sort(input_rad_vec))}
 
   # Initialise the circles with radii (not areas) as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here
@@ -236,16 +254,32 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
 
   lenCirc <- length(circles)
 
-  #Taking care of "degenerate" cases when there are one or two circles (broken atm)
+  #Taking care of "degenerate" cases when there are only one or two circles
   if (lenCirc == 1) {
-    return(c(circles[[1]]$val[[2]], circles[[1]]$val[[3]], circles[[1]]$val[[6]]))
-  }else if (lenCirc == 2) {
-    circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
-    circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
-    return(c(circles[[1]]$val, circles[[2]]$val))
+    return(list("x" = circles[[1]]$val[[2]] + centroid[1],
+                "y" = circles[[1]]$val[[3]] + centroid[2],
+                "rad" = circles[[1]]$val[[6]],
+                "centroid" = centroid,
+                "clRad" = circles[[1]]$val[[6]]))
   }
 
-  # Place the first three circles to be mutually tangent, with centroid the origin.
+  if (lenCirc == 2) {
+    # transform the x coordinates to place left and right of center
+    circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
+    circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
+
+    output <- list("x" = c(circles[[1]]$val[[2]] + centroid[1],
+                           circles[[2]]$val[[2]] + centroid[1]),
+                   "y" = c(centroid[2], centroid[2]),
+                   "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]),
+                   "centroid" = centroid,
+                   "clRad" = 0)
+
+    output[[5]] <- est_rad(output)
+    return(output)
+  }
+
+  # Place the first three circles to be mutually tangent, with centroid at the origin.
   place_starting_three(circles[[1]], circles[[2]], circles[[3]])
 
   # Initialise the boundary
@@ -264,10 +298,12 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
 
     # Check for overlaps and update, refit and recheck until "clear"
     check <- overlap_check(cl, cl$nxt, circles[[j]])
+
     if(identical(check, "clear")) {
       insert_circle(cl, cl$nxt, circles[[j]])
       j <- j + 1
       if (progbar) {progress_bar(j,lenCirc)}
+
     }else{
       while(!identical(check,"clear")){
         Cm <- check[[1]]
@@ -300,17 +336,18 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
       Yvec <- c(Yvec, c$val[[3]])
   }
 
+  # construct output cluster list
   ans <- list("x" = Xvec,
               "y" = Yvec,
               "rad" = Rvec,
               "centroid" = centroid,
               "clRad" = 0)
 
-  if(!identical(centroid, c(0, 0))){ #didnt test this
-    ans <- trans_coord(ans, centroid)
-  }
+  # transform the x and y coordinates to the centroid if its not 0,0.
+  if(!identical(centroid, c(0, 0))){ans <- trans_coord(ans)}
 
-  ans[[5]] <- est_rad(ans) #estimated radius of cluster, function found in utils.r
+  #estimate radius of cluster for repulsion
+  ans[[5]] <- est_rad(ans)
 
   return(ans)
 }

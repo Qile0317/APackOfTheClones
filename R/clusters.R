@@ -34,20 +34,21 @@ find_centroids <- function(df, return_mode = "list"){ # or "df"
 #looks right!
 
 #transform coordinates of a cluster by the transvec, c(x,y)
-trans_coord <- function(cluster, transvec){
-  ansc <- list(x=c(),y=c(),rad=cluster[[3]],centroid=cluster[[4]]+transvec,clRad=cluster[[5]])
-  for(i in 1:length(cluster[[1]])){
-    ansc[[1]][i] <- cluster[[1]][i] + transvec[1]
-    ansc[[2]][i] <- cluster[[2]][i] + transvec[2]
-    }
-  return(ansc)
+trans_coord <- function(cluster) {
+  ansc <- list(x = c(), y = c(), rad=cluster[[3]], centroid=cluster[[4]], clRad=cluster[[5]])
+
+  for(i in 1:length(cluster[[1]])) {
+    ansc[[1]][i] <- cluster[[1]][i] + cluster[[4]][1] # x of centroid
+    ansc[[2]][i] <- cluster[[2]][i] + cluster[[4]][2] # y of centroid
   }
+  return(ansc)
+}
 
-
-trans_cluster <- function(cluster_list){
+#transform coords of a cluster but I ac think its useless
+trans_cluster <- function(cluster_list) {
   ansc <- list()
   for(i in 1:length(cluster_list)){
-    ansc[[i]]<-trans_coord(cluster_list[[i]],cluster_list[[i]][[4]])
+    ansc[[i]] <- trans_coord(cluster_list[[i]])
   }
   return(ansc)
 }

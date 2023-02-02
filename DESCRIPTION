@@ -1,7 +1,7 @@
 Package: scballpack
 Type: Package
 Title: Visualization Of T-cell Clonal Clusters
-Version: 0.0.1
+Version: 0.1.0
 Author: Qile Yang, Ben Murrell
 Authors@R: c(
     person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut")),
@@ -26,5 +26,6 @@ Imports:
     dplyr,
     ggforce,
     ggplot2,
+    hash,
     R6,
     Seurat

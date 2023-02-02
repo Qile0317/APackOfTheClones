@@ -6,3 +6,4 @@ inst/doc
 tests/testpacking.R
 /data
 devnotes.txt
+R/packages.R
