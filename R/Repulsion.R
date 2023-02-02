@@ -4,6 +4,7 @@
 #prereq function to find the repulsion force vector of 2 circles,
 #the imputs are lists for 1 cluster with $x, $y, $rad, $centroid, $clstr_rad
 #$centroid must be c(x,y)
+
 # it creates the OPPOSITE vector so there is no need for G to be negative
 distV <- function(c1,c2){
   return(c(c1$centroid[1]-c2$centroid[1],
@@ -27,16 +28,15 @@ comV <- function(Pvec) {
 }
 
 #sum vectors in a list, very specific for this function
-sumL <- function(li) {
+sumL <- function(vec_list) {
   ans <- c(0, 0)
-  for (el in li) {
-    ans[1] <- ans[1] + el[1]
-    ans[2] <- ans[2] + el[2]
+  for (element in vec_list) {
+    ans <- ans + element
   }
   return(ans)
 }
 
-#function to check if 2 cluster lists overlap, with threshold.
+#function to check if 2 cluster lists overlap, with a threshold.
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
   if (is.null(Cn) || is.null(Cm) || length(Cn) <= 0 || length(Cm) <= 0) {return(FALSE)}
 
@@ -45,7 +45,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   centroid_ydif <- (Cn$centroid[2] - Cm$centroid[2])
   centroid_euc_dist <- sqrt((centroid_xdif^2) + (centroid_ydif^2))
 
-  return((centroid_euc_dist - thr) < (Cn$clRad + Cm$clRad)) #something is wrong with Cn and Cm
+  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad)) #something is wrong with Cn and Cm
 }
 
 # Error in Cn[[5]] + Cm[[5]] : non-numeric argument to binary operator
@@ -59,7 +59,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 
 #inp is a list of cluster lists. thr is the allowed border that isnt implemented.
 
-repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ # so the inp is a list of ?
+repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ # so the inp is a list of clusterlists
   #keep a variable of if ANY vector is added. if the prev and curr are unchanged, then return.
   li <- length(inp)
   transvec <- list()

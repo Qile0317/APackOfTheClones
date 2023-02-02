@@ -2,30 +2,20 @@
 #of numbers that represent radii of circles, Of course, this radii array is
 #generated from the integrated sc-RNAseq and TCR library.
 
-library(dplyr) # for full join and other stuff
-library(ggplot2) # for plotting
-library(R6) # for linked list
-library(ggforce) # for circles on plot
-
-#the usethis package is nice for devs
-
-#ill get rid of these soon.
-#library(cli)
-#library(ggdag)
-#library(pryr)
-#library(ggraph)
-
-#function to convert list to the circular doubly linked list.
+#function to initialize list into the circular doubly linked list.
 init_boundary <- function(a){
-  for(i in 1:(length(a)-1)){
-    a[[i+1]]$prv <- a[[i]]
-    a[[i]]$nxt <- a[[i+1]]}
+
+  for (i in 1:(length(a) - 1)) {
+    a[[i + 1]]$prv <- a[[i]]
+    a[[i]]$nxt <- a[[i + 1]]
+  }
+
   a[[length(a)]]$nxt <- a[[1]]
-  a[[1]]$prv = a[[length(a)]]
+  a[[1]]$prv <- a[[length(a)]]
 }
 
 #function to find "distance" between 2 elements of linked list
-fwd_dist <- function(c,d){
+fwd_dist <- function(c, d){
   count <- 0
   circ <- c
   while(identical(circ,d)==FALSE){
@@ -36,8 +26,8 @@ fwd_dist <- function(c,d){
 }
 
 #initializing/inserting 3 circles
-insert_circle <- function(c,d,e){
-  if ((identical(c$nxt, d) == FALSE) || (identical(d$prv, c) == FALSE)) {
+insert_circle <- function(c, d, e){
+  if ((!identical(c$nxt, d)) || (!identical(d$prv, c))) {
     stop("Two circles not adjacent")
   }else {
     c$nxt <- e
@@ -49,17 +39,15 @@ insert_circle <- function(c,d,e){
 
 #removes segment between c d as one moves forwards
 fwd_remove <- function(c, d) {
-  if (identical(c, d)) {
-    stop("Circles are the same.")
-  }else if (identical(c$nxt, d)) {
-    stop("Circles are consecutive.")
-  }else {
-    circ <- c$nxt
-    while (identical(circ, d) == FALSE) {
-      circ$prv$nxt <- circ$nxt
-      circ$nxt$prv <- circ$prv
-      circ <- circ$nxt
-    }
+
+  if (identical(c, d)) {stop("Circles are the same.")}
+  if (identical(c$nxt, d)) {stop("Circles are consecutive.")}
+
+  circ <- c$nxt
+  while (!identical(circ, d)) {
+    circ$prv$nxt <- circ$nxt
+    circ$nxt$prv <- circ$prv
+    circ <- circ$nxt
   }
 }
 
@@ -72,6 +60,7 @@ centre_dist <- function(c){
 
 #fit tangent circle function
 fit_tang_circle <- function(C1, C2, C3) {
+
   x1 <- C1$val$x
   x2 <- C2$val$x
   y1 <- C1$val$y
@@ -84,7 +73,7 @@ fit_tang_circle <- function(C1, C2, C3) {
 
   if (distance > (r1 + r2 + 2 * r)) {
     stop("Gap too large.")
-    }else {distance}
+  }else {distance} # ?
 
   cos_sig <- (x2 - x1)/distance
   sin_sig <- (y2 - y1)/distance
@@ -96,6 +85,7 @@ fit_tang_circle <- function(C1, C2, C3) {
   C3
 }
 
+# place three circles in the center
 place_starting_three <- function(C1, C2, C3) {
   C1$val[[2]] <- -1 * (C1$val[[6]])
   C2$val[[2]] <- C2$val[[6]]
@@ -117,21 +107,14 @@ place_starting_three <- function(C1, C2, C3) {
 ################## circle packing algos #############################################
 
 #finds the closest circle to the origin in the linked list containing c
-closest <- function(c, showProcess=FALSE){ #showProcess is for debugging
+closest <- function(c){
   closest <- c
   circ <- c$nxt
 
-  while(!identical(circ, c)){
-
-    if(showProcess){
-      print(closest$val$label)
-      print(centre_dist(closest))
-      print(circ$val$label)
-      print(centre_dist(circ))
-      print("--------------")}
-
-    if(centre_dist(closest) > centre_dist(circ)){
-      closest <- circ}
+  while (!identical(circ, c)) {
+    if (centre_dist(closest) > centre_dist(circ)) {
+      closest <- circ
+    }
     circ <- circ$nxt
   }
   return(closest)
@@ -141,12 +124,11 @@ closest <- function(c, showProcess=FALSE){ #showProcess is for debugging
 #successive circles on the boundary, this pair minimizes distance from the center of d to the origin, when d is
 #fitted tangent to this pair.
 
-
 closest_place <- function(c, d){
-  closest = c
-  circ = c$nxt
-  while(!identical(circ,c)){
-    if(centre_dist(fit_tang_circle(closest, closest$nxt, d)) > centre_dist(fit_tang_circle(circ, circ$nxt, d))) {
+  closest <- c
+  circ <- c$nxt
+  while (!identical(circ,c)) {
+    if (centre_dist(fit_tang_circle(closest, closest$nxt, d)) > centre_dist(fit_tang_circle(circ, circ$nxt, d))) {
       closest <- circ
     }
     circ <- circ$nxt

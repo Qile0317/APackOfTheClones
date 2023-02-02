@@ -6,5 +6,8 @@ inst/doc
 tests/testpacking.R
 /data
 devnotes.txt
-R/packages.R
+packages.R
 test.svg
+.Rdata
+.httr-oauth
+.DS_Store

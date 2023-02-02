@@ -1,0 +1,5 @@
+image: r-base
+
+test:
+  script:
+  - R -e 'devtools::test()'

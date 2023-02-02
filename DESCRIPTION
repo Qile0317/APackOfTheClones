@@ -11,7 +11,7 @@ Description: A simple, customizable plotting API to visualize T-cell clonal expa
     loosely based on delaunay trianglulation, improved from an original julia script by Ben Murrell APackOfTheClones.jl. 
     Imput data consists of a Seurat object with readily avaliable UMAP and cluster information, and an integrated T-cell repertoire.
     Additional manual labelling is possible of each cluster, and accepted overlap between clusters is also customizable.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: true

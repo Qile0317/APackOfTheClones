@@ -1,8 +1,11 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
 #The user doesn't need to access any of these functions.
 
-# Node constructor
+library(R6)
+
+# Node constructor for the circularly linked list
 node <- R6Class("Node",
+
                 list(
                   val = NULL,
                   nxt = NULL,
@@ -14,7 +17,8 @@ node <- R6Class("Node",
                     self$nxt <- nxt
                     self$prv <- prv
                   },
-                  print = function(...){
+
+                  print = function(...){ # for debug
                     cat("Circle: \n")
                     cat("  label: ", self$val[[5]], "\n", sep = "")
                     cat("  x-coordinate: ", self$val[[2]], "\n", sep = "")

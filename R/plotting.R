@@ -1,6 +1,6 @@
 #main plotting function
 
-# result plotting function. clusters is a list of lists transformed into a dataframe, which are clusters.
+# result plotting function. clusters is a list of clusterlists TRANSFORM into a dataframe, which are clusters.
 # A cluster list includes $x, $y, $rad, $centroid.
 #the clusters imput is a dataframe. #move into seperate script
 
