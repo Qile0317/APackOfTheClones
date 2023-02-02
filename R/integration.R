@@ -73,7 +73,7 @@ dict_list_vals <- function(dict_list, scale_factor = 0.001) {
     if (is.null(curr_hashmap)) {
       output[[i]] <- NULL
     }else{
-      output[[i]] <- sapply(unname(values(curr_hashmap)), multiply_by_factor) # TODO: put cluster names? other wise i can just have the label list
+      output[[i]] <- sapply(unname(values(curr_hashmap)), multiply_by_factor)
     }
   }
   return(output)
