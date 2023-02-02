@@ -2,9 +2,9 @@
 
 #centroid finder for a whole dataframe. returns dataframe.
 
-#the FIRST row must be UMAP_1 (x)
-#the SECOND row must be UMAP_2 (y)
-#the THIRD row of the dataframe must be clusters
+# 1st row must be UMAP_1 (x)
+# 2nd row must be UMAP_2 (y)
+# 3rd row of the dataframe must be clusters
 find_centroids <- function(df, return_mode = "list") { # or "df"
   cll <- split(df, factor(df[, 3])) #the last cluster column becomes redundant
   l <- length(cll)

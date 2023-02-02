@@ -6,7 +6,7 @@ c1 <- list("x" = c(2.7, 5.3, 4, 4, 4, 5.977272, 2.022728, 3.271739, 5.249012),
            "y" = c(4.367544, 4.367544, 6.264911, 2.470178, 6.264911, 6.565567,
                    6.565567, 8.127607, 8.428263),
            "rad" = c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
-           "centroid" = c(4,5),
+           "centroid" = c(4, 5),
            "clRad" = 2.977272)
 
 c2 <- list("x" = c(1.0196581, 4.9196581, 3.0606838, 3.0581197, 3.0581197,
@@ -14,7 +14,7 @@ c2 <- list("x" = c(1.0196581, 4.9196581, 3.0606838, 3.0581197, 3.0581197,
            "y" = c(3.0114986, 3.0114986, 5.9770027, 0.1663845, 5.8566128,
                    6.3901255),
            "rad" = c(2, 1.9, 1.6, 1.5, 1.5, 1.5),
-           "centroid" = c(3,4),
+           "centroid" = c(3, 4),
            "clRad" = 3.819658)
 
 c3 <- list("x" = c(19.2381, 20.6381, 20.12381, 20.10952, 20.10952),
@@ -25,7 +25,7 @@ c3 <- list("x" = c(19.2381, 20.6381, 20.12381, 20.10952, 20.10952),
 
 # plot_clusters(df_full_join(list(c1,c2,c3)))
 
-# Vector operations
+# Vector operations - tbh they are simple enough that they don't really need testing
 test_that("distV() can get direction vector from clusterlists", {
   expect_equal(distV(c1, c2), c(1, 1))
 })
@@ -44,7 +44,7 @@ test_that("pdV() can get polar direction vector", {
 test_that("comV() can convert from polar to component form", {
   expect_equal(comV(c("magnitude" = 1.41421356,
                       "direction" = 0.78539816)),
-               c(1,1))
+               c(1, 1))
 })
 
 test_that("sumL() can sum component vectors in a list", {

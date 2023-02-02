@@ -1,12 +1,12 @@
 # scballpack
-[![Build Status](https://github.com/Qile0317/scballpack/actions/workflows/CI.yml/badge.svg?branch=master)]
-[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)]
+![Build Status](https://github.com/Qile0317/scballpack/actions/workflows/CI.yml/badge.svg?branch=main)
+![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 
 ```scballpack``` is a work-in-progress R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling. 
 
 The concept was first implemented in a study by Ma et al.[[1]](#1) for nasal polyp $T_{H}$ cells. The resulting plot visually quantified clonal expansion, as seen in the following figure. 
 
-<img src="example.png" width="60%" align="center" />
+<img src="example.png" width="70%" align="center" />
 
 ## Installation
 The package and its build is incomplete at the moment. However, if this repository is cloned, one could manually run all the scripts in ```/R```

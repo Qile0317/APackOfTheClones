@@ -29,3 +29,4 @@ Imports:
     hash,
     R6,
     Seurat
+RoxygenNote: 7.2.1
