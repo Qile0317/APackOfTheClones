@@ -1,0 +1,13 @@
+citHeader("To cite scballpack in publications use:")
+
+citEntry(
+  entry    = "manual",
+  title    = "scballpack: Visualize T cell clonal expansion via circle packing",
+  author   = "Qile Yang",
+  year     = 2023,
+  url      = "https://github.com/Qile0317/scballpack",
+  textVersion = paste(
+    "Yang, Qile. 2023. scballpack: Visualize T cell clonal expansion via circle packing. ",
+    "URL https://github.com/Qile0317/scballpack"
+  )
+)

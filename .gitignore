@@ -3,10 +3,11 @@
 .RData
 .Ruserdata
 inst/doc
-/data
+/loc_tesdat
 devnotes.txt
 packages.R
 test.svg
 .Rdata
 .httr-oauth
 .DS_Store
+docs

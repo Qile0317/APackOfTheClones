@@ -12,7 +12,7 @@ scballpack(
   ORDER = TRUE,
   try_place = TRUE,
   progbar = TRUE,
-  repulse = TRUE,
+  repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 0.05,
   max_repulsion_iter = 100,

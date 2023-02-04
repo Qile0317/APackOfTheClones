@@ -2,3 +2,12 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^packages\.R$
+^devnotes\.txt$
+^example\.png$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^loc_tesdat$
+^/loc_tesdat$
+^\.github$
+^\.gitlab-ci\.yml$

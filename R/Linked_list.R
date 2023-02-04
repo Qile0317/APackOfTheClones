@@ -55,12 +55,12 @@ areaFromRad <- function(c){
 
 ################ debugging functions ##############################################
 #traverse and print every element of the list recursively.
-traverse <- function(node){
+traverse <- function(node) {
   OV <- node$val[[5]]
   node$val[[5]] <- "ORIGIN"
 
   trav <- function(nd){
-    if(nd$nxt$val[[5]]=="ORIGIN"){
+    if (nd$nxt$val[[5]] == "ORIGIN") {
       nd$nxt$val[[5]] <- OV
       return(nd)
     }
@@ -71,13 +71,13 @@ traverse <- function(node){
 }
 
 #getting length of circular linked list
-clength <- function(node, showRT = FALSE){
+clength <- function(node, showRT = FALSE) {
   OV <- node$val$label
   ccc <- 1
   node$val$label <- "PKNBVDFGYHJNBVCXSDFGHJB" #if this is one of the names of the labels then RIP
   current <- node
 
-  while(!identical(current$nxt$val$label,"PKNBVDFGYHJNBVCXSDFGHJB")){
+  while (!identical(current$nxt$val$label,"PKNBVDFGYHJNBVCXSDFGHJB")){
     ccc <- ccc + 1
     current <- current[['nxt']]
   }

@@ -48,6 +48,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 ln_abs <- function(x) {return(log(max(abs(x), 0.02)) + 2)}
 
 # quadratic iterative repulsion. inp is a list of clusterlists
+# doesn't work...
 repulse_cluster <- function(inp, thr = 0, G = 6e-11, max_iter = 100){
   inp_len <- length(inp)
   iter_count <- 0

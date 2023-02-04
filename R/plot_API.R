@@ -1,10 +1,11 @@
 #The API functions for generating the ggplot
 
+suppressPackageStartupMessages(library(dplyr))
+
 # shortcut to get the umap plot
 get_umap <- function(seurat_obj) {return(DimPlot(object = seurat_obj, reduction = 'umap'))}
 
 #full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
-# It'd be nice if dplyr didn't keep printing "full join , by = c(...) into thhee console"...
 df_full_join <- function(clstr_list) {
   df <- data.frame(label = character(0),
                    x = numeric(0),
