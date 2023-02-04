@@ -1,5 +1,4 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
-#The user doesn't need to access any of these functions.
 
 library(R6)
 
@@ -71,10 +70,8 @@ traverse <- function(node){
   trav(node)
 }
 
-#getting length of circular linked list iteratively
-#note! does not work if its not circularly linked!! will run forever
+#getting length of circular linked list
 clength <- function(node, showRT = FALSE){
-  starting <- Sys.time()
   OV <- node$val$label
   ccc <- 1
   node$val$label <- "PKNBVDFGYHJNBVCXSDFGHJB" #if this is one of the names of the labels then RIP
@@ -85,8 +82,7 @@ clength <- function(node, showRT = FALSE){
     current <- current[['nxt']]
   }
   node$val$label <- OV
-  ending <- Sys.time()
-  if(showRT==TRUE){
+  if (showRT) {
     print(starting-ending)
   }
   return(ccc)

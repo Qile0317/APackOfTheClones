@@ -14,11 +14,12 @@ df_full_join <- function(clstr_list) {
   for(i in 1:length(clstr_list)){
     if (!is.null(clstr_list[[i]])) {
 
-      df <- invisible(full_join(
-        df, data.frame(label = paste("cluster", as.character(i-1)),
-                       x = clstr_list[[i]]$x,
-                       y = clstr_list[[i]]$y,
-                       r=clstr_list[[i]]$rad)))
+      df <- full_join(
+        df, data.frame("label" = paste("cluster", as.character(i-1)),
+                       "x" = clstr_list[[i]]$x,
+                       "y" = clstr_list[[i]]$y,
+                       "r"=clstr_list[[i]]$rad),
+        by = join_by("label", "x", "y", "r"))
     }
   }
   return(df)

@@ -1,6 +1,6 @@
 #script for functions to deal with centroids and cluster coords
 
-#centroid finder for a whole dataframe. returns dataframe.
+#centroid finder for a whole dataframe. # indexing is a bit off but no big deal for the function
 find_centroids <- function(df, return_mode = "list") { # or "df"
   cll <- split(df, factor(df[, 3])) #the last cluster column becomes redundant
   l <- length(cll)
@@ -25,15 +25,13 @@ find_centroids <- function(df, return_mode = "list") { # or "df"
   return(list_output)
 }
 
-#get centroids from seurat obj # indexing is a bit off but no big deal for the function
+# get centroids from seurat obj
 get_cluster_centroids <- function(seurat_obj) {
   return(find_centroids(data.frame(
     seurat_obj@reductions[["umap"]]@cell.embeddings,
     clusters = seurat_obj$seurat_clusters)
   ))
 }
-
-#td <- data.frame(pbmc@reductions[["umap"]]@cell.embeddings,clusters = pbmc$seurat_clusters)
 
 #transform coordinates of a cluster from c(0, 0) to its own new centroid, or MOVE to new coord from current
 trans_coord <- function(cluster, new_coord = NULL) {
