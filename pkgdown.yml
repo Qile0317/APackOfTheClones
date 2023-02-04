@@ -1,0 +1,10 @@
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  scBallPack_Intro: scBallPack_Intro.html
+last_built: 2023-02-04T19:45Z
+urls:
+  reference: https://qile0317.github.io/scballpack/reference
+  article: https://qile0317.github.io/scballpack/articles
+
