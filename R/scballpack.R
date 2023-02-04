@@ -49,7 +49,7 @@ scballpack <- function(seurat_obj, tcr_df,
                        ORDER = TRUE,
                        try_place = TRUE,
                        progbar = TRUE,
-                       repulse = TRUE,
+                       repulse = FALSE, # need to fix...
                        repulsion_threshold = 1,
                        repulsion_strength = 0.05,
                        max_repulsion_iter = 100,
@@ -62,7 +62,7 @@ scballpack <- function(seurat_obj, tcr_df,
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
   if (max_repulsion_iter > 1000) {warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")}
 
-  # integrate TCR and print how many were integrated
+  # integrate TCR and show how many were integrated
   integrated_seurat_obj <- integrate_tcr(seurat_obj, tcr_df)
   percent_integrated <- 100 - percent_na(integrated_seurat_obj)
   message("")
@@ -99,6 +99,6 @@ scballpack <- function(seurat_obj, tcr_df,
       ggtitle("Sizes of clones within each cluster")
   }
 
-  message("Packing completed successfully. It's highly recommended to use the svglite package to save the resulting plot as an svg")
+  #message("Packing completed successfully. It's highly recommended to use the svglite package to save the resulting plot as an svg")
   return(result_plot)
 }

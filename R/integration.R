@@ -152,11 +152,3 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
   #convert the list of dicts into list of radii
   return(dict_list_vals(clonotype_dict_list, scale_factor))
 }
-
-#get centroids (wrapper) # indexing is a bit off but no big deal for the function
-get_cluster_centroids <- function(seurat_obj) {
-  return(find_centroids(data.frame(
-    seurat_obj@reductions[["umap"]]@cell.embeddings,
-    clusters = seurat_obj$seurat_clusters)
-    ))
-}

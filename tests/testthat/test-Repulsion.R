@@ -66,4 +66,4 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
 })
 
 # test the actual repulsion
-# unfinished
+

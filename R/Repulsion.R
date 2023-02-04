@@ -1,9 +1,5 @@
-# Repulsion = -G(m_1 + m_2)/d^2
+# Repulsion FORCE = log10(-G(m_1 x m_2)/d^2)
 #with iteration, this algo is O(mn^2) where m is the iteration threshold
-
-#prereq function to find the repulsion force vector of 2 circles,
-#the imputs are lists for 1 cluster with $x, $y, $rad, $centroid, $clstr_rad
-#$centroid must be c(x,y)
 
 # it creates the OPPOSITE vector so there is no need for G to be negative
 distV <- function(c1,c2){
@@ -45,72 +41,89 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   centroid_ydif <- (Cn$centroid[2] - Cm$centroid[2])
   centroid_euc_dist <- sqrt((centroid_xdif^2) + (centroid_ydif^2))
 
-  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad)) #something is wrong with Cn and Cm
+  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad))
 }
 
-# Error in Cn[[5]] + Cm[[5]] : non-numeric argument to binary operator
-# I dont think it the fault of the function its something wrong with the cluster list creation
+# ln transformer function for force, where if res < 0, returns G and nudges x to prevent -inf.
+ln_abs <- function(x) {return(log(max(abs(x), 0.02)) + 2)}
 
-#However, there arent that many clusters so it should be fine.
-#ASSUMES NO 2 CENTROIDS ARE THE SAME!!!!!!!!
-#thr is how much overlap is acceptable.
-#G is the strength of the repulsion. should be a small number
-#max_iter is there to prevent it from running forever as its not super optimized.
+# quadratic iterative repulsion. inp is a list of clusterlists
+repulse_cluster <- function(inp, thr = 0, G = 6e-11, max_iter = 100){
+  inp_len <- length(inp)
+  iter_count <- 0
 
-#inp is a list of cluster lists. thr is the allowed border that isnt implemented.
-
-repulse_cluster <- function(inp, thr = 1, G = 0.05, max_iter = 100){ # so the inp is a list of clusterlists
-  #keep a variable of if ANY vector is added. if the prev and curr are unchanged, then return.
-  li <- length(inp)
   transvec <- list()
-  for(i in 1:li){transvec[[i]]<-c(0,0)}
-  ctvec <- transvec
-  otvec <- transvec
+  for (i in 1:inp_len) {transvec[[i]]<-c(0, 0)}
+  curr_repulsion_vec <- transvec
+  blank_vec <- transvec
+
+  proceed <- FALSE
   change <- TRUE
-  i <- 0
 
-  while(i <= max_iter){
-    if(!change){
-      return(inp)
+  while(iter_count <= max_iter){
 
-      }else{ #this else is ac quite unessecary nesting
-      i <- i + 1
+    if (!change) {return(inp)} # if no cluster is touching, return
+    iter_count <- iter_count + 1
 
-      for(i in 1:li){
-        currChange <- FALSE
+    for(i in 1:inp_len){
+      currChange <- FALSE
 
-        for(j in 1:li){
-
-          #check edge case
+      for(j in 1:inp_len){
+        proceed <- FALSE
+        if (i != j) {
           if (!is.null(inp[[i]]) && !is.null(inp[[j]])) {
             proceed <- TRUE
-          }else {proceed <- FALSE}
-
-          #iterative repulsion
-          if (proceed) {
-            if (do_cl_intersect(inp[[i]],inp[[j]],thr)) {
-              polDV <- pdV(inp[[i]],inp[[j]]) # find distance vector between centroids
-
-              if(polDV[1] != 0){
-                #Find polar repulsion vec (with newtons formula) + converting to and storing component form
-                ctvec[[j]] <- comV(c(G*((pi*(inp[[i]][[5]]^2 + inp[[j]][[5]]^2))/(polDV[1])^2), polDV[2])) #tbh pi and squaring are completely unessecary and one could just adjust G
-                currChange <- TRUE
-              }
-            }
           }
-          if(!currChange){change = FALSE}else{change = TRUE} #unessecary?
         }
 
+        message("-- -- -- --")
+        message(paste("is.not.null:", as.character(!is.null(inp[[i]]) && !is.null(inp[[j]]))))
+        message(paste("proceed?:",as.character(proceed)))
+
+        #iterative repulsion
         if (proceed) {
-          transvec[[i]] <- sumL(ctvec)
-          ctvec <- otvec #reset
 
-          for(i in 1:li){
-            inp[[i]] <- trans_coord(inp[[i]],transvec[[i]]) #transforms cluster to new centroid
+          print(i)
+          print(j)
+          message("intersect?")
+          message(as.character(do_cl_intersect(inp[[i]], inp[[j]], thr)))
+
+          if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
+            polar_dist_vec <- pdV(inp[[i]], inp[[j]]) # find polar distance vector between centroids
+
+            #Find polar repulsion vec (with newtons formula) + converting to and storing component form
+            curr_repulsion_vec[[j]] <- comV(
+              c(ln_abs((G * inp[[i]][[5]] * inp[[j]][[5]])) / (unname(polar_dist_vec["magnitude"])^2),
+                unname(polar_dist_vec["direction"]))
+              )
+            currChange <- TRUE
+
+            message(paste("curr_repulsion_vec[[",as.character(j),"]] ="))
+            print(curr_repulsion_vec[[j]])
           }
         }
-        }
+        if (!currChange) {change <- FALSE}else {change <- TRUE}
       }
+
+      # inner j looping complete. summing transforming vectors
+      if (proceed) {
+        transvec[[i]] <- sumL(curr_repulsion_vec)
+
+        message("_____ j loop complete _________")
+        message(paste("transvec[[",as.character(i),"]] ="))
+        print(head(transvec[[i]]))
+
+        for(i in 1:inp_len){
+          inp[[i]] <- trans_coord(inp[[i]], transvec[[i]])
+        }
+
+        message("transformed cluster")
+        print(head(inp[[i]]))
+        message("____________________________________________")
+
+        curr_repulsion_vec <- blank_vec #reset repulsion
+      }
+    }
   }
   return(inp)
 }
