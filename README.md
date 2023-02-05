@@ -1,6 +1,7 @@
 # scballpack
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/Qile0317/scballpack/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/scballpack?branch=main)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: end -->
 
@@ -28,7 +29,7 @@ And integrates the TCR library into the seurat object metadata(creates a new tem
 ```R
 library(Seurat)
 library(readr)
-#library(scballpack)
+library(scballpack)
 
 # run sc-RNAseq pipeline to produce a seurat_object
 
@@ -42,7 +43,7 @@ ball_pack_plot
 It is also highly recommended to save the plot as an svg for use in publications.
 
 In addition, ```integrate_tcr``` can just integrate the TCR V(D)J library into a seurat object metadata for further analyses:
-```
+```R
 TCR_dataframe <- read.csv("file_location/all_contig_annotations.csv")
 integrated_seurat_object <- integrate_tcr(seurat_object, TCR_dataframe)
 

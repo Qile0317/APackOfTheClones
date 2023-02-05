@@ -57,9 +57,11 @@ plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #line
 
 #now: be able to group by color...
 
-#API for plotting size vectors . Integrating the data is work in progress.
+#API for plotting size vectors .
+#I could also export this
 plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      centroids, # centroids of size vectors [[1]] c(x,y)
+                     rad_decrease = 0,
                      ORDER = TRUE,
                      try_place = TRUE,
                      progbar = TRUE, # packing
@@ -67,7 +69,9 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      thr = 1, G = 0.05, max_repulsion_iter = 100, #repulsion parameters
                      n = 360, linetype = "blank",
                      plot_title = "Sizes of clones within each cluster",
-                     haslegend=TRUE, void=TRUE, origin=FALSE){ #prev 3 lines were for plotting function
+                     haslegend = TRUE,
+                     void = TRUE,
+                     origin = FALSE){
   ans <- list()
 
   #circle layout
@@ -84,6 +88,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
 
       ans[[i]] <- circle_layout(sizes[[i]],
                                 centroid = centroids[[i]],
+                                rad_decrease = rad_decrease,
                                 ORDER = ORDER,
                                 try_place = try_place,
                                 progbar = progbar)

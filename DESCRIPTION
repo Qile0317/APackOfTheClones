@@ -11,6 +11,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Suggests: 
+    covr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

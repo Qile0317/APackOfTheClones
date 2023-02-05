@@ -205,8 +205,11 @@ est_rad <- function(coords){
 }
 
 #The circle layout function.###################################
+# could export this just as a pure function
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
+
 #Optional arguments are:
+# rad decrease: after packing, if the circles should be slightly smaller to have a small gap of the input value between them
 #"order": default = true
 #if true it sorts the input vector in descending order before packing
 #"try_place":  default is true
@@ -217,6 +220,7 @@ est_rad <- function(coords){
 #   this function does not incorporate colors! functionality will be added later. its very simple to do in ggplot
 
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
+                          rad_decrease = 0,
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE, print_BL = FALSE) {
 
@@ -240,7 +244,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if (lenCirc == 1) {
     return(list("x" = circles[[1]]$val[[2]] + centroid[1],
                 "y" = circles[[1]]$val[[3]] + centroid[2],
-                "rad" = circles[[1]]$val[[6]],
+                "rad" = circles[[1]]$val[[6]] - rad_decrease,
                 "centroid" = centroid,
                 "clRad" = circles[[1]]$val[[6]]))
   }
@@ -250,15 +254,14 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
     circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
     circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
 
-    output <- list("x" = c(circles[[1]]$val[[2]] + centroid[1],
-                           circles[[2]]$val[[2]] + centroid[1]),
-                   "y" = c(centroid[2], centroid[2]),
-                   "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]),
-                   "centroid" = centroid,
-                   "clRad" = 0)
-
-    output[[5]] <- est_rad(output)
-    return(output)
+    return(list("x" = c(circles[[1]]$val[[2]] + centroid[1],
+                        circles[[2]]$val[[2]] + centroid[1]),
+                "y" = c(centroid[2], centroid[2]),
+                "rad" = c(circles[[1]]$val[[6]],
+                          circles[[2]]$val[[6]]) - rad_decrease,
+                "centroid" = centroid,
+                "clRad" = 0.5 * (circles[[1]]$val[[6]] +
+                                  circles[[2]]$val[[6]])))
   }
 
   # Place the first three circles to be mutually tangent, with centroid at the origin.
@@ -321,7 +324,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   # construct output cluster list
   ans <- list("x" = Xvec,
               "y" = Yvec,
-              "rad" = Rvec,
+              "rad" = Rvec - rad_decrease,
               "centroid" = centroid,
               "clRad" = 0)
 
@@ -329,7 +332,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if(!identical(centroid, c(0, 0))){ans <- trans_coord(ans)}
 
   #estimate radius of cluster for repulsion
-  ans[[5]] <- est_rad(ans)
+  ans[[5]] <- est_rad(ans) + rad_decrease
 
   message("")
   return(ans)

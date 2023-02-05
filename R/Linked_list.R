@@ -31,7 +31,7 @@ node <- R6Class("Node",
                 )
 )
 
-# miscalleneous/utility functions
+# miscalleneous/utility/debugging functions
 
 #simple progress bar
 progress_bar <- function (x, max = 100) {
@@ -41,16 +41,6 @@ progress_bar <- function (x, max = 100) {
               floor(percent)))
   if (x == max)
     cat('\n')
-}
-
-#area from radii vector (not even used)
-areaFromRad <- function(c){
-  ans <- c()
-  for(i in c){
-    area <- pi * (i^2)
-    ans <- c(ans, area)
-  }
-  return(ans)
 }
 
 ################ debugging functions ##############################################
@@ -71,19 +61,15 @@ traverse <- function(node) {
 }
 
 #getting length of circular linked list
-clength <- function(node, showRT = FALSE) {
+clength <- function(node) {
   OV <- node$val$label
   ccc <- 1
   node$val$label <- "PKNBVDFGYHJNBVCXSDFGHJB" #if this is one of the names of the labels then RIP
   current <- node
-
   while (!identical(current$nxt$val$label,"PKNBVDFGYHJNBVCXSDFGHJB")){
     ccc <- ccc + 1
     current <- current[['nxt']]
   }
   node$val$label <- OV
-  if (showRT) {
-    print(starting-ending)
-  }
   return(ccc)
 }

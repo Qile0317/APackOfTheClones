@@ -11,3 +11,7 @@
 ^/loc_tesdat$
 ^\.github$
 ^\.gitlab-ci\.yml$
+^\.travis\.yml$
+^codecov\.yml$
+^\.vscode$
+^\.RDataTmp$
