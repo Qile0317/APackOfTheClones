@@ -1,3 +1,8 @@
+library(hash)
+library(Seurat)
+library(ggplot2)
+library(ggforce)
+
 # creating simpler (tho prob unessecary) dictionary syntax
 dict <- function(keys, values) {
   output <- hash()

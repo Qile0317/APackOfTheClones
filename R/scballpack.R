@@ -1,11 +1,12 @@
 # load packages
-suppressPackageStartupMessages(library(Seurat))
-suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(ggforce))
-suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(hash))
-suppressPackageStartupMessages(library(data.table))
+library(Seurat)
+library(ggplot2)
+library(ggforce)
+library(dplyr)
+library(hash)
+library(data.table)
 library(R6)
+library(utils)
 
 #' Visualize T cell clonal expansion with a ball-packing plot.
 #'

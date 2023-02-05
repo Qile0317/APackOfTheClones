@@ -1,5 +1,7 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
 
+
+suppressPackageStartupMessages(library(dplyr))
 library(R6)
 
 # Node constructor for the circularly linked list

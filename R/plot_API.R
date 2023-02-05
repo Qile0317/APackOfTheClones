@@ -1,6 +1,11 @@
 #The API functions for generating the ggplot
 
-suppressPackageStartupMessages(library(dplyr))
+library(dplyr)
+library(hash)
+library(data.table)
+library(utils)
+library(ggplot2)
+library(ggforce)
 
 # shortcut to get the umap plot
 get_umap <- function(seurat_obj) {return(DimPlot(object = seurat_obj, reduction = 'umap'))}

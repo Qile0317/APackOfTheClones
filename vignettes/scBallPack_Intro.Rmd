@@ -17,3 +17,4 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(scballpack)
 ```
+This vignette is unfinished. But refer to "References" on the documentation site.

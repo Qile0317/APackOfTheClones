@@ -2,6 +2,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/scballpack/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/scballpack?branch=main)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/scballpack/)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: end -->
 
