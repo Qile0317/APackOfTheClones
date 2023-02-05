@@ -15,10 +15,10 @@ init_boundary <- function(a){
 }
 
 #function to find "distance" between 2 elements of linked list
-fwd_dist <- function(c, d){
+fwd_dist <- function(c, d) {
   count <- 0
   circ <- c
-  while(identical(circ,d)==FALSE){
+  while (!identical(circ,d)) {
     count <- count + 1
     circ <- circ$nxt
   }
@@ -26,7 +26,7 @@ fwd_dist <- function(c, d){
 }
 
 #initializing/inserting 3 circles
-insert_circle <- function(c, d, e){
+insert_circle <- function(c, d, e) {
   if ((!identical(c$nxt, d)) || (!identical(d$prv, c))) {
     stop("Two circles not adjacent")
   }else {
@@ -54,7 +54,7 @@ fwd_remove <- function(c, d) {
 # Functions related to the geometry of circles ###############################
 
 #distance from the centre of a circle to the origin.
-centre_dist <- function(c){
+centre_dist <- function(c) {
   sqrt((c$val[[2]])^2 + (c$val[[3]])^2)
 }
 
@@ -331,5 +331,6 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   #estimate radius of cluster for repulsion
   ans[[5]] <- est_rad(ans)
 
+  message("")
   return(ans)
 }
