@@ -11,3 +11,4 @@ test.svg
 .httr-oauth
 .DS_Store
 docs
+/.vscode

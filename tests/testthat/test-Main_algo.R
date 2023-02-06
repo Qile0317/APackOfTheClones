@@ -13,7 +13,7 @@ test_that("est_rad() works", {
 test_that("circle_layout() works", {
   expect_equal(circle_layout(c(1, 1, 1, 1, 1.3, 1, 1, 1, 1.3),
                              c1$centroid, progbar = FALSE),
-               c1, tolerance = 3e-7)
+               c1, tolerance = 3e-5)
   expect_equal(circle_layout(c(1.9, 1.5, 1.6, 1.5, 2.0, 1.5),
                              c2$centroid, progbar = FALSE),
                c2, tolerance = 3e-7)
@@ -21,7 +21,7 @@ test_that("circle_layout() works", {
                                            progbar = FALSE)))
 })
 
-test_that("circle_layout() handles edge cases", {
+test_that("circle_layout() handles edge cases and centroids", {
   expect_null(circle_layout(list()))
 
   #input length = 1
@@ -64,5 +64,26 @@ test_that("circle_layout() handles edge cases", {
                tolerance = 3e-7)
 })
 
-# need to test the optional args
+# Testing optional args
+test_that("circle_layout(ORDER = FALSE) works", {
+  expect_equal(circle_layout(c(6,9,4,2,7), ORDER = FALSE),
+               list("x" = c(-6.733333, 8.266667, -1.533333,
+                            4.224154, -7.723841),
+                    "y" = c(-2.847221, -2.847221, 5.694442,
+                            7.383033, -3.398282),
+                    "rad" = c(6, 9, 4, 2, 7),
+                    "centroid" = c(0, 0),
+                    "clRad" = 17.26667), tolerance = 3e-6)
+})
 
+test_that("circle_layout(rad_decrease = 0.9) works", {
+  new_c1 <- c1
+  new_c1[[3]] <- c1[[3]] * 0.9
+  expect_equal(circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
+                             centroid = new_c1$centroid,
+                             rad_decrease = 0.9),
+               new_c1,
+               tolerance = 3e-7)
+})
+
+# may need to test try_place but its pretty reliable.

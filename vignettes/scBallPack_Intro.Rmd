@@ -2,7 +2,7 @@
 title: "scballpack-User-Vignette"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NAME-OF-VIGNETTE}
+  %\VignetteIndexEntry{scballpack-User-Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

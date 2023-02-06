@@ -9,7 +9,7 @@ Description: A circle packing package for visualizing T-cell clonal expansion by
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-US
-LazyData: true
+LazyData: false
 Suggests: 
     covr,
     knitr,
@@ -24,7 +24,7 @@ Imports:
     ggplot2,
     hash,
     R6,
-    Seurat
+    Seurat,
     utils
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/scballpack/

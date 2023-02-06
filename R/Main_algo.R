@@ -220,13 +220,13 @@ est_rad <- function(coords){
 #   this function does not incorporate colors! functionality will be added later. its very simple to do in ggplot
 
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
-                          rad_decrease = 0,
+                          rad_decrease = 1,
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE, print_BL = FALSE) {
 
   if (identical(input_rad_vec, list())) {return(NULL)}
 
-  if (ORDER) {input_rad_vec <- rev(sort(input_rad_vec))}
+  if (ORDER) {input_rad_vec <- sort(input_rad_vec, decreasing = TRUE)}
 
   # Initialise the circles with radii (not areas) as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here
@@ -244,7 +244,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if (lenCirc == 1) {
     return(list("x" = circles[[1]]$val[[2]] + centroid[1],
                 "y" = circles[[1]]$val[[3]] + centroid[2],
-                "rad" = circles[[1]]$val[[6]] - rad_decrease,
+                "rad" = circles[[1]]$val[[6]] * rad_decrease,
                 "centroid" = centroid,
                 "clRad" = circles[[1]]$val[[6]]))
   }
@@ -258,7 +258,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                         circles[[2]]$val[[2]] + centroid[1]),
                 "y" = c(centroid[2], centroid[2]),
                 "rad" = c(circles[[1]]$val[[6]],
-                          circles[[2]]$val[[6]]) - rad_decrease,
+                          circles[[2]]$val[[6]]) * rad_decrease,
                 "centroid" = centroid,
                 "clRad" = 0.5 * (circles[[1]]$val[[6]] +
                                   circles[[2]]$val[[6]])))
@@ -324,16 +324,20 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   # construct output cluster list
   ans <- list("x" = Xvec,
               "y" = Yvec,
-              "rad" = Rvec - rad_decrease,
+              "rad" = Rvec,
               "centroid" = centroid,
               "clRad" = 0)
 
   # transform the x and y coordinates to the centroid if its not 0,0.
   if(!identical(centroid, c(0, 0))){ans <- trans_coord(ans)}
 
-  #estimate radius of cluster for repulsion
-  ans[[5]] <- est_rad(ans) + rad_decrease
+  # estimate radius of cluster for repulsion
+  ans[[5]] <- est_rad(ans)
 
+  # scale radius
+  if (rad_decrease != 1) {ans[[3]] <- Rvec * rad_decrease}
+
+  # return
   message("")
   return(ans)
 }
