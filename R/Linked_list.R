@@ -5,33 +5,24 @@ suppressPackageStartupMessages(library(dplyr))
 library(R6)
 
 # Node constructor for the circularly linked list
-node <- R6Class("Node",
+node <- R6::R6Class("Node",
+                    list(
+                      val = NULL,
+                      nxt = NULL,
+                      prv = NULL,
 
-                list(
-                  val = NULL,
-                  nxt = NULL,
-                  prv = NULL,
-                  initialize = function(val = NULL,
-                                        nxt = NULL,
-                                        prv = NULL){
-                    self$val <- val
-                    self$nxt <- nxt
-                    self$prv <- prv
-                  },
-
-                  print = function(...){ # for debug
-                    cat("Circle: \n")
-                    cat("  label: ", self$val[[5]], "\n", sep = "")
-                    cat("  x-coordinate: ", self$val[[2]], "\n", sep = "")
-                    cat("  y-coordinate:  ", self$val[[3]], "\n", sep = "")
-                    cat("  radius:  ", self$val[[6]], "\n", sep = "")
-                    cat("  color: ", self$val$color, "\n", sep = "")
-                    cat("  predessor: ", self$prv$val[[5]], "\n", sep = "")
-                    cat("  successor: ", self$nxt$val[[5]], "\n", sep = "")
-                    invisible(self)
-                  }
-                )
+                      initialize = function(val = NULL,
+                                            nxt = NULL,
+                                            prv = NULL){
+                        self$val <- val
+                        self$nxt <- nxt
+                        self$prv <- prv
+                      }
+                    )
 )
+
+# check if R6 so that R CMD doesnt bug me ab not using R6
+invisible(R6::is.R6Class(1))
 
 # miscalleneous/utility/debugging functions
 
@@ -39,13 +30,12 @@ node <- R6Class("Node",
 progress_bar <- function (x, max = 100) {
   percent <- x / max * 100
   cat(sprintf('\r[%-50s] %d%%',
-              paste(rep('=', percent / 2), collapse = ''),
+              paste(rep('=', percent * 0.5), collapse = ''),
               floor(percent)))
   if (x == max)
     cat('\n')
 }
 
-################ debugging functions ##############################################
 #traverse and print every element of the list recursively.
 traverse <- function(node) {
   OV <- node$val[[5]]

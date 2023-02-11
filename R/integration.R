@@ -2,10 +2,11 @@ library(hash)
 library(Seurat)
 library(ggplot2)
 library(ggforce)
+library(data.table)
 
 # creating simpler (tho prob unessecary) dictionary syntax
 dict <- function(keys, values) {
-  output <- hash()
+  output <- hash::hash()
   for (i in 1:length(keys)) {
     output[[keys[i]]] <- values[i]
   }
@@ -52,8 +53,9 @@ dict <- function(keys, values) {
 #' @references atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 #'
 integrate_tcr <- function(seurat_obj, tcr_file) {
+
   new_seurat_obj <- seurat_obj
-  tcr <- as.data.table(tcr_file)
+  tcr <- data.table::as.data.table(tcr_file)
 
   #cell barcodes are duplicated in rows because
   #the sequencing of TRA and TRB genes creates
@@ -61,8 +63,8 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
 
   # Prepare a progress bar to monitor progress (helpful for large aggregations)
   message("integrating TCR library into seurat object")
-  grpn <- uniqueN(tcr$barcode)
-  pb <- txtProgressBar(min = 0, max = grpn, style = 3)
+  grpn <- data.table::uniqueN(tcr$barcode)
+  pb <- utils::txtProgressBar(min = 0, max = grpn, style = 3)
 
   # Generate a function that will concatenate unique data entries and collapse duplicate rows
   # To do this, I first factorize the data and then get factor levels as unique data points
@@ -75,11 +77,14 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
 
   # This code applies data_concater function per  barcodes to create a
   # concatenated string with  the information we want to keep
-  tcr_collapsed <- tcr[, {setTxtProgressBar(pb,.GRP); lapply(.SD, data_concater)} , by = barcode]
+  tcr_collapsed <- tcr[, {
+    utils::setTxtProgressBar(pb, data.table::.GRP);
+    lapply(data.table::.SD, data_concater)
+    }, by = tcr_file$barcode] # not sure abt this $
 
   #assign rownames for integration
   rownames(tcr_collapsed) <- tcr_collapsed$barcode
-  new_seurat_obj <- AddMetaData(new_seurat_obj, metadata = tcr_collapsed)
+  new_seurat_obj <- Seurat::AddMetaData(new_seurat_obj, metadata = tcr_collapsed)
 
   return(new_seurat_obj)
 }
@@ -116,7 +121,10 @@ dict_list_vals <- function(dict_list, scale_factor = 0.001) {
     if (is.null(curr_hashmap)) {
       output[[i]] <- NULL
     }else{
-      output[[i]] <- sapply(unname(values(curr_hashmap)), multiply_by_factor)
+      output[[i]] <- sapply(
+        unname(hash::values(curr_hashmap)),
+        multiply_by_factor
+      )
     }
   }
   return(output)
@@ -126,7 +134,7 @@ dict_list_vals <- function(dict_list, scale_factor = 0.001) {
 get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
 
   clonotype_dict_list <- replicate(count_umap_clusters(integrated_seurat_obj),
-                                   hash())
+                                   hash::hash())
   min_read_count <- Inf
 
   #work in progress

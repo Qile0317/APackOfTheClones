@@ -220,7 +220,7 @@ est_rad <- function(coords){
 #   this function does not incorporate colors! functionality will be added later. its very simple to do in ggplot
 
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
-                          rad_decrease = 1,
+                          rad_decrease = 1, # scale factor
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE, print_BL = FALSE) {
 

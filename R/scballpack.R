@@ -72,7 +72,9 @@ scballpack <- function(seurat_obj, tcr_df,
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
-  if (max_repulsion_iter > 1000) {warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")}
+  if (max_repulsion_iter > 1000) {
+    warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
+  }
 
   # integrate TCR and show how many were integrated
   integrated_seurat_obj <- integrate_tcr(seurat_obj, tcr_df)
@@ -105,10 +107,10 @@ scballpack <- function(seurat_obj, tcr_df,
   #set theme
   if (use_default_theme) {
     result_plot <- result_plot +
-      theme_classic() +
-      xlab("UMAP_1") +
-      ylab("UMAP_2") +
-      ggtitle("Sizes of clones within each cluster")
+      ggplot2::theme_classic() +
+      ggplot2::xlab("UMAP_1") +
+      ggplot2::ylab("UMAP_2") +
+      ggplot2::ggtitle("Sizes of clones within each cluster")
   }
   #return
   message("packing completed successfully")

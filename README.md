@@ -15,7 +15,7 @@ The concept was first implemented in a study Ma et al.[[1]](#1) by Ben Murrell (
 ## Installation
 ```
 library(devtools)
-install_github("Qile0317/scballpack")
+devtools::install_github("Qile0317/scballpack")
 library("scballpack")
 ```
 In the future the package will hopefully be on CRAN.

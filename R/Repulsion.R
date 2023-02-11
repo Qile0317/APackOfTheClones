@@ -112,14 +112,14 @@ repulse_cluster <- function(inp, thr = 0, G = 6e-11, max_iter = 100){
 
         message("_____ j loop complete _________")
         message(paste("transvec[[",as.character(i),"]] ="))
-        print(head(transvec[[i]]))
+        print(utils::head(transvec[[i]]))
 
         for(i in 1:inp_len){
           inp[[i]] <- trans_coord(inp[[i]], transvec[[i]])
         }
 
         message("transformed cluster")
-        print(head(inp[[i]]))
+        print(utils::head(inp[[i]]))
         message("____________________________________________")
 
         curr_repulsion_vec <- blank_vec #reset repulsion
