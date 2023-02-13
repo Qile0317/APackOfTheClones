@@ -14,9 +14,11 @@ test_that("circle_layout() works", {
   expect_equal(circle_layout(c(1, 1, 1, 1, 1.3, 1, 1, 1, 1.3),
                              c1$centroid, progbar = FALSE),
                c1, tolerance = 3e-5)
+
   expect_equal(circle_layout(c(1.9, 1.5, 1.6, 1.5, 2.0, 1.5),
                              c2$centroid, progbar = FALSE),
                c2, tolerance = 3e-7)
+
   expect_false(identical(c3, circle_layout(c(0.8,0.6,0.6,0.5,0.5),
                                            progbar = FALSE)))
 })
@@ -55,7 +57,7 @@ test_that("circle_layout() handles edge cases and centroids", {
                     "clRad" = 244.5))
 
   # input length = 3 (not really an edge case but rather a test of the while loop)
-  expect_equal(circle_layout(c(1, 2, 3)),
+  expect_equal(circle_layout(c(1, 2, 3), progbar = FALSE),
                list("x" = c(-2.7333333, 2.2666667, 0.4666667),
                     "y" = c(-0.8, -0.8, 1.6),
                     "rad" = c(3, 2, 1),
@@ -66,7 +68,7 @@ test_that("circle_layout() handles edge cases and centroids", {
 
 # Testing optional args
 test_that("circle_layout(ORDER = FALSE) works", {
-  expect_equal(circle_layout(c(6,9,4,2,7), ORDER = FALSE),
+  expect_equal(circle_layout(c(6,9,4,2,7), ORDER = FALSE), progbar = FALSE,
                list("x" = c(-6.733333, 8.266667, -1.533333,
                             4.224154, -7.723841),
                     "y" = c(-2.847221, -2.847221, 5.694442,
@@ -81,7 +83,8 @@ test_that("circle_layout(rad_decrease = 0.9) works", {
   new_c1[[3]] <- c1[[3]] * 0.9
   expect_equal(circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
                              centroid = new_c1$centroid,
-                             rad_decrease = 0.9),
+                             rad_decrease = 0.9,
+                             progbar = FALSE),
                new_c1,
                tolerance = 3e-7)
 })

@@ -50,5 +50,4 @@ test_that("do_cl_intersect() handles edge case", {
   expect_false(do_cl_intersect(NULL, Cm))
 })
 
-# test the actual repulsion
-
+# test the actual repulsion in another file

@@ -40,23 +40,19 @@ df_full_join <- function(clstr_list) {
 # A cluster list includes $x, $y, $rad, $centroid.
 #the clusters imput is a dataframe. #move into seperate script
 
-plot_clusters <- function(clusters, n = 360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
+plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
                           haslegend = TRUE, void = TRUE,
                           origin = FALSE){ #, label=TRUE (lavels each individual circle, yikes)
   if(!origin){
-    p1 <- ggplot2::ggplot() + ggforce::geom_circle(
-      data = clusters, mapping = ggplot2::aes(
-        x0 = ggplot2::.data[["x"]],
-        y0 = ggplot2::.data[["y"]],
-        r = ggplot2::.data[["r"]],
-        fill = ggplot2::.data[["label"]]),
-
+    p1 <- ggplot2::ggplot() +
+      ggforce::geom_circle(data = clusters, mapping = ggplot2::aes(
+        x0 = x, y0 = y, r = r, fill = label),
       n = n, linetype = linetype) +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
 
-    if(void){p1 <- p1 + ggplot2::theme_void()}
+    #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
 
     if(!haslegend){
       p1 <- p1 + ggplot2::theme(legend.position="none")
@@ -64,17 +60,11 @@ plot_clusters <- function(clusters, n = 360, linetype="blank", #linewidth=1, #li
       #p1 <- p1 + guide_legend(title = NULL, )
     }
   }else{
-    p1 <- ggplot2::ggplot(
-      clusters,
-      mapping = ggplot2::aes(
-        ggplot2::.data[["x"]],
-        ggplot2::.data[["y"]])
-      ) +
-      ggplot2::geom_point() + ggplot2::labs(title = title) +
-      ggplot2::coord_fixed()
-
-    if(void){p1 <- p1 + ggplot2::theme_void()}
+    p1 <- ggplot2::ggplot(clusters,mapping=aes(x,y)) + geom_point() + labs(title = title) + coord_fixed()
   }
+
+  if(void){p1 <- p1 + ggplot2::theme_void()}
+
   return(p1)
 }
 
@@ -89,8 +79,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      try_place = TRUE,
                      progbar = TRUE, # packing
                      repulse = FALSE,
-                     thr = 1, G = 0.05,
-                     max_repulsion_iter = 100, #repulsion parameters
+                     thr = 1, G = 0.05, max_repulsion_iter = 100, #repulsion parameters
                      n = 360, linetype = "blank",
                      plot_title = "Sizes of clones within each cluster",
                      haslegend = TRUE,
