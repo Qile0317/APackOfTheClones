@@ -15,3 +15,4 @@
 ^codecov\.yml$
 ^\.vscode$
 ^\.RDataTmp$
+^src$

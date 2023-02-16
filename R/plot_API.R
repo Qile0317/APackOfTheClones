@@ -40,7 +40,7 @@ df_full_join <- function(clstr_list) {
 # A cluster list includes $x, $y, $rad, $centroid.
 #the clusters imput is a dataframe. #move into seperate script
 
-plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #linewidth doesnt work lol.
+plot_clusters <- function(clusters, n=360, linetype ="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
                           haslegend = TRUE, void = TRUE,
                           origin = FALSE){ #, label=TRUE (lavels each individual circle, yikes)
@@ -74,7 +74,7 @@ plot_clusters <- function(clusters, n=360, linetype="blank", #linewidth=1, #line
 #I could also export this
 plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      centroids, # centroids of size vectors [[1]] c(x,y)
-                     rad_decrease = 0,
+                     rad_decrease = 1,
                      ORDER = TRUE,
                      try_place = TRUE,
                      progbar = TRUE, # packing
@@ -128,15 +128,17 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
 # change the axis scales to fit the original plot approximately.
 retain_scale <- function(seurat_obj, ball_pack_plt) {
 
-  umap_plt <- get_umap(seurat_obj)
+  test_umap_plt <- get_umap(seurat_obj)
 
-  umap_xr <- ggplot2::ggplot_build(umap_plt)$layout$panel_scales_x[[1]]$range$range
-  umap_yr <- ggplot2::ggplot_build(umap_plt)$layout$panel_scales_y[[1]]$range$range
+  # get current ranges
+  umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
+  umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
+  rm("test_umap_plt")
 
   ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
   ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
 
-  # new ranges
+  # set new ranges
   min_xr <- max(ball_pack_xr[1], umap_xr[1])
   max_xr <- max(ball_pack_xr[2], umap_xr[2])
 

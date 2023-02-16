@@ -68,7 +68,7 @@ test_that("circle_layout() handles edge cases and centroids", {
 
 # Testing optional args
 test_that("circle_layout(ORDER = FALSE) works", {
-  expect_equal(circle_layout(c(6,9,4,2,7), ORDER = FALSE), progbar = FALSE,
+  expect_equal(circle_layout(c(6,9,4,2,7), ORDER = FALSE, progbar = FALSE),
                list("x" = c(-6.733333, 8.266667, -1.533333,
                             4.224154, -7.723841),
                     "y" = c(-2.847221, -2.847221, 5.694442,

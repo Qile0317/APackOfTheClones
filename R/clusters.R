@@ -10,7 +10,7 @@ find_centroids <- function(df, return_mode = "list") { # or "df"
   yset <- xset
 
   for (i in 1:l){
-    nameset[i] <- cll[[i]][,3][1] #i dont think this works lol
+    nameset[i] <- cll[[i]][,3][1]
     xset[i] <- sum(cll[[i]][, 1])/length(cll[[i]][, 1])
     yset[i] <- sum(cll[[i]][, 2])/length(cll[[i]][, 2])
   }
@@ -33,9 +33,8 @@ get_cluster_centroids <- function(seurat_obj) {
   ))
 }
 
-#transform coordinates of a cluster from c(0, 0) to its own new centroid, or MOVE to new coord from current
+#transform coordinates of a clusterlist from c(0, 0) to its own new centroid, or MOVE to new coord from current
 trans_coord <- function(cluster, new_coord = NULL) {
-  len <- length(cluster[[1]]) # x,y,r have the same length
 
   if (!is.null(new_coord)) {
     dx <- new_coord[1] - cluster[[4]][1]
@@ -47,16 +46,10 @@ trans_coord <- function(cluster, new_coord = NULL) {
     dy <- cluster[[4]][2]
   }
 
-  ansc <- list("x" = rep(0, len),
-               "y" = rep(0, len),
-               "rad" = cluster[[3]],
-               "centroid" = cluster[[4]],
-               "clRad" = cluster[[5]])
-
-  for(i in 1:len) {
-    ansc[[1]][i] <- cluster[[1]][i] + dx
-    ansc[[2]][i] <- cluster[[2]][i] + dy
-  }
-
-  return(ansc)
+  return(list("x" = cluster[[1]] + dx,
+              "y" = cluster[[2]] + dy,
+              "rad" = cluster[[3]],
+              "centroid" = cluster[[4]],
+              "clRad" = cluster[[5]])
+         )
 }

@@ -47,5 +47,26 @@ c3 <- list("x" = c(19.2381, 20.6381, 20.12381, 20.10952, 20.10952),
            "centroid" = c(20, 20),
            "clRad" = 1.238095)
 
+# aggregate them
+test_cluster_lists <- list(c1, c1_shifted_by_4_5, c1_shifted_to_9_0,c2,c3)
+
+test_centroids <- list(
+  "c1" = c(4, 5),
+  "c1_shifted_by_4_5" = c(4, 5),
+  "c1_shifted_to_9_0" = c(9, 0),
+  "c2" = c(3, 4),
+  "c3" = c(20, 20)
+)
+
+test_radii <- list(
+  "c1" = c(), "c1_shifted_by_4_5" = c(),
+  "c1_shifted_to_9_0" = c(), "c2" = c(3, 4),
+  "c3" = c()
+)
+
+for (i in 1:length(test_cluster_lists)) {
+  test_radii[[i]] <- test_cluster_lists[[i]][[3]]
+}
+
 # plot_clusters(df_full_join(list(c1,c1_shifted_by_4_5,
 #                                 c1_shifted_to_9_0, c2,c3)))

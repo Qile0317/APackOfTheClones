@@ -3,7 +3,7 @@
 #generated from the integrated sc-RNAseq and TCR library.
 
 #function to initialize list into the circular doubly linked list.
-init_boundary <- function(a){
+init_boundary <- function(a) {
 
   for (i in 1:(length(a) - 1)) {
     a[[i + 1]]$prv <- a[[i]]
@@ -18,7 +18,7 @@ init_boundary <- function(a){
 fwd_dist <- function(c, d) {
   count <- 0
   circ <- c
-  while (!identical(circ,d)) {
+  while (!identical(circ, d)) {
     count <- count + 1
     circ <- circ$nxt
   }
@@ -205,6 +205,7 @@ est_rad <- function(coords){
 }
 
 #The circle layout function.###################################
+# It'll be nice to write this fully in c++ and the repulsion too
 # could export this just as a pure function
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
 
