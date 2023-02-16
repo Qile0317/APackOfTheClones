@@ -1,3 +1,5 @@
+library(R6)
+
 test_that("Node initialization works", {
   test_node <- node$new(
     val = list(1, 1, 2, 3, "color" = "#5318008", 3)

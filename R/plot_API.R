@@ -60,7 +60,10 @@ plot_clusters <- function(clusters, n=360, linetype ="blank", #linewidth=1, #lin
       #p1 <- p1 + guide_legend(title = NULL, )
     }
   }else{
-    p1 <- ggplot2::ggplot(clusters,mapping=aes(x,y)) + geom_point() + labs(title = title) + coord_fixed()
+    p1 <- ggplot2::ggplot(clusters, mapping=aes(x,y)) +
+      ggplot2::geom_point() +
+      ggplot2::labs(title = title) +
+      ggplot2::coord_fixed()
   }
 
   if(void){p1 <- p1 + ggplot2::theme_void()}
@@ -133,6 +136,7 @@ retain_scale <- function(seurat_obj, ball_pack_plt) {
   # get current ranges
   umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
   umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
+
   rm("test_umap_plt")
 
   ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
