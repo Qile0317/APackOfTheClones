@@ -23,8 +23,9 @@ test_that("circle_layout() works", {
                                            progbar = FALSE)))
 })
 
-test_that("circle_layout() handles edge cases and centroids", {
-  expect_null(circle_layout(list()))
+test_that("circle_layout() handles edge cases", {
+  # no input for cluster
+  expect_true(is.na(circle_layout(list())))
 
   #input length = 1
   expect_equal(circle_layout(c(69)),

@@ -19,7 +19,8 @@ scballpack(
   use_default_theme = TRUE,
   show_origin = FALSE,
   clone_scale_factor = 0.01,
-  retain_axis_scales = TRUE
+  retain_axis_scales = TRUE,
+  modify_obj = FALSE
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ scballpack(
 \item{clone_scale_factor}{numeric. Decides how much to scale each circle. Usually should be kept at around 0.01 to somewhat maintain UMAP structure}
 
 \item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales of the original UMAP}
+
+\item{modify_obj}{If `TRUE`, will modify the current seurat object after integration. Else has no effect on the input seurat object}
 }
 \value{
 Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects

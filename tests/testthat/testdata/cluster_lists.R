@@ -48,7 +48,9 @@ c3 <- list("x" = c(19.2381, 20.6381, 20.12381, 20.10952, 20.10952),
            "clRad" = 1.238095)
 
 # aggregate them
-test_cluster_lists <- list(c1, c1_shifted_by_4_5, c1_shifted_to_9_0,c2,c3)
+test_cluster_lists <- list(
+  c1, c1_shifted_by_4_5, c1_shifted_to_9_0, c2, c3
+)
 
 test_centroids <- list(
   "c1" = c(4, 5),
@@ -60,7 +62,7 @@ test_centroids <- list(
 
 test_radii <- list(
   "c1" = c(), "c1_shifted_by_4_5" = c(),
-  "c1_shifted_to_9_0" = c(), "c2" = c(3, 4),
+  "c1_shifted_to_9_0" = c(), "c2" = c(),
   "c3" = c()
 )
 

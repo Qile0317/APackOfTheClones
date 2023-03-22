@@ -21,13 +21,14 @@ df_full_join <- function(clstr_list) {
                    r = numeric(0))
 
   for(i in 1:length(clstr_list)){
-    if (!is.null(clstr_list[[i]])) {
+    if (!any(is.na(clstr_list[[i]]))) {
 
       df <- dplyr::full_join(
-        df, data.frame("label" = paste("cluster", as.character(i-1)),
+        df, data.frame("label" = rep(paste("cluster", as.character(i - 1)),
+        length(clstr_list[[i]]$x)),
                        "x" = clstr_list[[i]]$x,
                        "y" = clstr_list[[i]]$y,
-                       "r"=clstr_list[[i]]$rad),
+                       "r" = clstr_list[[i]]$rad),
         by = dplyr::join_by("label", "x", "y", "r"))
     }
   }
@@ -40,11 +41,11 @@ df_full_join <- function(clstr_list) {
 # A cluster list includes $x, $y, $rad, $centroid.
 #the clusters imput is a dataframe. #move into seperate script
 
-plot_clusters <- function(clusters, n=360, linetype ="blank", #linewidth=1, #linewidth doesnt work lol.
+plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
                           haslegend = TRUE, void = TRUE,
-                          origin = FALSE){ #, label=TRUE (lavels each individual circle, yikes)
-  if(!origin){
+                          origin = FALSE){ #, label=TRUE (labels each individual circle, yikes)
+  if (!origin) {
     p1 <- ggplot2::ggplot() +
       ggforce::geom_circle(data = clusters, mapping = ggplot2::aes(
         x0 = x, y0 = y, r = r, fill = label),
@@ -54,19 +55,21 @@ plot_clusters <- function(clusters, n=360, linetype ="blank", #linewidth=1, #lin
 
     #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
 
-    if(!haslegend){
-      p1 <- p1 + ggplot2::theme(legend.position="none")
-    }else{
+    if (!haslegend) {
+      p1 <- p1 + ggplot2::theme(legend.position = "none")
+    }else {
       #p1 <- p1 + guide_legend(title = NULL, )
     }
-  }else{
+  }else {
     p1 <- ggplot2::ggplot(clusters, mapping=aes(x,y)) +
       ggplot2::geom_point() +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
   }
 
-  if(void){p1 <- p1 + ggplot2::theme_void()}
+  if (void) {
+    p1 <- p1 + ggplot2::theme_void()
+  }
 
   return(p1)
 }
@@ -82,7 +85,8 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      try_place = TRUE,
                      progbar = TRUE, # packing
                      repulse = FALSE,
-                     thr = 1, G = 0.05, max_repulsion_iter = 100, #repulsion parameters
+                     thr = 1, G = 0.05, 
+                     max_repulsion_iter = 100, #repulsion parameters
                      n = 360, linetype = "blank",
                      plot_title = "Sizes of clones within each cluster",
                      haslegend = TRUE,
@@ -94,7 +98,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   for(i in 1:length(sizes)){
 
     if (length(sizes[[i]]) == 0) {
-      ans[[i]] <- NULL
+      ans[[i]] <- NA # important!
 
     }else{
       if(progbar){
@@ -111,7 +115,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
     }
   }
 
-  #repulsion, not sure how it handles nulls
+  #repulsion, not sure how it handles nulls (not even sure if nulls are present...)
   if (repulse) {
     if(progbar){message("repulsing clusters")}
     ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter)
@@ -120,11 +124,10 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   #joining list into df for plotting
   ans <- df_full_join(ans)
 
-  #return(ans) # debug. but everything works untill this point
-
   #plotting
   ans <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
+
   return(ans)
 }
 

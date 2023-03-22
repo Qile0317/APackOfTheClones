@@ -26,10 +26,6 @@ test_that("sumL() can sum component vectors in a list", {
   expect_equal(sumL(list(c(1, 1), c(1, 2), c(-1, -9))), c(1, -6))
 })
 
-test_that("ln_abs() works", {
-  expect_equal(ln_abs(69420), 13.14793, tolerance = 3e-7)
-})
-
 # test cluster intersection function
 test_that("do_cl_intersect() = TRUE for overlapping lists", {
   expect_true(do_cl_intersect(c1, c2))
@@ -47,7 +43,19 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
 })
 
 test_that("do_cl_intersect() handles edge case", {
-  expect_false(do_cl_intersect(NULL, Cm))
+  expect_false(do_cl_intersect(NA, Cm))
 })
 
-# test the actual repulsion in another file
+# test the helper function for repulsion iteration
+test_that("do_proceed() works", {
+  expect_false(do_proceed(test_cluster_lists, 1, 1, 2))
+  expect_true(do_proceed(test_cluster_lists, 1, 4, 2))
+})
+
+test_that("do_proceed() handles NAs", {
+  new_list <- test_cluster_lists
+  new_list[[3]] <- NA
+  expect_false(do_proceed(new_list, 1, 3, 2))
+  expect_true(do_proceed(new_list, 1, 4, 2))
+  rm("new_list")
+})

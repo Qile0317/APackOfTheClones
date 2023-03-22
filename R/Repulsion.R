@@ -1,6 +1,3 @@
-# Repulsion FORCE = log10(-G(m_1 x m_2)/d^2)
-#with iteration, this algo is O(mn^2) where m is the iteration threshold
-
 # it creates the OPPOSITE vector so there is no need for G to be negative
 distV <- function(c1,c2){
   return(c(c1$centroid[1]-c2$centroid[1],
@@ -34,7 +31,7 @@ sumL <- function(vec_list) {
 
 #function to check if 2 cluster lists overlap, with a threshold.
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
-  if (is.null(Cn) || is.null(Cm) || length(Cn) <= 0 || length(Cm) <= 0) {return(FALSE)}
+  if (any(is.na(Cn)) || any(is.na(Cm))) {return(FALSE)}
 
   #calculate euclidean distance of centroids
   centroid_xdif <- (Cn$centroid[1] - Cm$centroid[1])
@@ -44,12 +41,30 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad))
 }
 
-# ln transformer function for force, where if res < 0, returns G and nudges x to prevent -inf.
-ln_abs <- function(x) {return(log(max(abs(x), 0.02)) + 2)}
+# helper function for iterative repulsion to check if the current input is valid
+# Ah, we've found the issue. Setting something to NULL in R removes it
+do_proceed <- function(inp, i, j, thr) {
+  if (i != j) {
+    if (!any(is.na(inp[[i]]))) {
+      if (!any(is.na(inp[[j]]))) {
+        if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
+          return(TRUE)
+        }
+      }
+    }
+  }
+  return(FALSE)
+}
 
-# quadratic iterative repulsion. inp is a list of clusterlists
-# doesn't work...
-repulse_cluster <- function(inp, thr = 0, G = 6e-11, max_iter = 100){
+# iterative repulsion. inp is a list of clusterlists
+repulse_cluster <- function(
+    inp,
+    thr = 0,
+    G = 6e-11,
+    max_iter = 100,
+    dist_adjust = 2) {
+
+  #init variables
   inp_len <- length(inp)
   iter_count <- 0
 
@@ -62,65 +77,42 @@ repulse_cluster <- function(inp, thr = 0, G = 6e-11, max_iter = 100){
   change <- TRUE
 
   while(iter_count <= max_iter){
-
-    if (!change) {return(inp)} # if no cluster is touching, return
+    if (!change) {return(inp)}
     iter_count <- iter_count + 1
 
-    for(i in 1:inp_len){
+    for(i in 1:inp_len) {
       currChange <- FALSE
 
-      for(j in 1:inp_len){
-        proceed <- FALSE
-        if (i != j) {
-          if (!is.null(inp[[i]]) && !is.null(inp[[j]])) {
-            proceed <- TRUE
-          }
-        }
+      for(j in 1:inp_len) {
 
-        message("-- -- -- --")
-        message(paste("is.not.null:", as.character(!is.null(inp[[i]]) && !is.null(inp[[j]]))))
-        message(paste("proceed?:",as.character(proceed)))
+          proceed <- do_proceed(inp, i, j, thr)
 
-        #iterative repulsion
-        if (proceed) {
-
-          print(i)
-          print(j)
-          message("intersect?")
-          message(as.character(do_cl_intersect(inp[[i]], inp[[j]], thr)))
-
-          if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
+          if (proceed) {
             polar_dist_vec <- pdV(inp[[i]], inp[[j]]) # find polar distance vector between centroids
 
-            #Find polar repulsion vec (with newtons formula) + converting to and storing component form
-            curr_repulsion_vec[[j]] <- comV(
-              c(ln_abs((G * inp[[i]][[5]] * inp[[j]][[5]])) / (unname(polar_dist_vec["magnitude"])^2),
-                unname(polar_dist_vec["direction"]))
-              )
+            #Find polar repulsion vec
+            polar_repulsion_vec <- c(
+              (G * inp[[i]][[5]] * inp[[j]][[5]]) /
+                (unname(polar_dist_vec["magnitude"]) + dist_adjust)^2,
+              polar_dist_vec["direction"]
+            )
+
+            #store as component form
+            curr_repulsion_vec[[j]] <- comV(polar_repulsion_vec)
             currChange <- TRUE
 
-            message(paste("curr_repulsion_vec[[",as.character(j),"]] ="))
-            print(curr_repulsion_vec[[j]])
           }
-        }
-        if (!currChange) {change <- FALSE}else {change <- TRUE}
+
+          if (!currChange) {change <- FALSE}else {change <- TRUE}
       }
 
       # inner j looping complete. summing transforming vectors
       if (proceed) {
         transvec[[i]] <- sumL(curr_repulsion_vec)
 
-        message("_____ j loop complete _________")
-        message(paste("transvec[[",as.character(i),"]] ="))
-        print(utils::head(transvec[[i]]))
-
         for(i in 1:inp_len){
           inp[[i]] <- trans_coord(inp[[i]], transvec[[i]])
         }
-
-        message("transformed cluster")
-        print(utils::head(inp[[i]]))
-        message("____________________________________________")
 
         curr_repulsion_vec <- blank_vec #reset repulsion
       }

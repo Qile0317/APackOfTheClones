@@ -30,6 +30,7 @@ library(utils)
 #' @param show_origin logical. If `TRUE`, only the centers of each circle will be plotted
 #' @param clone_scale_factor numeric. Decides how much to scale each circle. Usually should be kept at around 0.01 to somewhat maintain UMAP structure
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP
+#' @param modify_obj If `TRUE`, will modify the current seurat object after integration. Else has no effect on the input seurat object
 #'
 #' @return Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects
 #'
@@ -68,7 +69,8 @@ scballpack <- function(seurat_obj, tcr_df,
                        use_default_theme = TRUE,
                        show_origin = FALSE,
                        clone_scale_factor = 0.01,
-                       retain_axis_scales = TRUE) {
+                       retain_axis_scales = TRUE,
+                       modify_obj = FALSE) {
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
@@ -76,8 +78,11 @@ scballpack <- function(seurat_obj, tcr_df,
     warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
   }
 
-  # integrate TCR and show how many were integrated
+  # integrate TCR
   integrated_seurat_obj <- integrate_tcr(seurat_obj, tcr_df)
+  if (modify_obj) {seurat_obj <- integrated_seurat_obj}
+
+  # show % integrated
   percent_integrated <- 100 - percent_na(integrated_seurat_obj)
   message(paste("\nPercent of cells integrated:", as.character(round(percent_integrated)), "%"))
 
@@ -112,7 +117,8 @@ scballpack <- function(seurat_obj, tcr_df,
       ggplot2::ylab("UMAP_2") +
       ggplot2::ggtitle("Sizes of clones within each cluster")
   }
-  #return
-  message("packing completed successfully")
+
+  if (!modify_obj) {rm("integrated_seurat_obj")} # not sure if nessecary
+
   return(result_plot)
 }

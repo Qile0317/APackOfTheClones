@@ -25,7 +25,9 @@ Imports:
     ggplot2,
     hash,
     R6,
+    Rcpp (>= 1.0.10),
     Seurat,
     utils
+LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/scballpack/

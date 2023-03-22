@@ -25,7 +25,7 @@ fwd_dist <- function(c, d) {
   count
 }
 
-#initializing/inserting 3 circles
+#initializing/inserting circle
 insert_circle <- function(c, d, e) {
   if ((!identical(c$nxt, d)) || (!identical(d$prv, c))) {
     stop("Two circles not adjacent")
@@ -104,7 +104,7 @@ place_starting_three <- function(C1, C2, C3) {
   C3$val[[3]] <- C3$val[[3]] - centroid_y
 }
 
-################## circle packing algos #############################################
+################## circle packing algos ##############################
 
 #finds the closest circle to the origin in the linked list containing c
 closest <- function(c){
@@ -164,7 +164,7 @@ overlap_check <- function(Cm, Cn, C) {
     circ <- circ$nxt
   }
 
-  LenObs <- length(obstruct)  #if there are any intersectiosn
+  LenObs <- length(obstruct)  #if there are any intersections
 
   if (LenObs > 0) { #find the one closest to {Cm, Cn}, (distance is in number of steps)
     nearest <- obstruct[[1]]
@@ -205,7 +205,6 @@ est_rad <- function(coords){
 }
 
 #The circle layout function.###################################
-# It'll be nice to write this fully in c++ and the repulsion too
 # could export this just as a pure function
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
 
@@ -225,16 +224,15 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE, print_BL = FALSE) {
 
-  if (identical(input_rad_vec, list())) {return(NULL)}
+  if (identical(input_rad_vec, list())) {return(NA)}
 
   if (ORDER) {input_rad_vec <- sort(input_rad_vec, decreasing = TRUE)}
 
   # Initialise the circles with radii (not areas) as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here
   for (i in 1:length(input_rad_vec)) {
-    currN <- paste("Circle", as.character(i), sep = "_")
     currCirc <- node$new(val = list(area = NULL, x = 0, y = 0,
-                         color = NULL, label = currN,
+                         color = NULL, label = NULL,
                          rad = input_rad_vec[i]))
     circles <- append(circles, currCirc)
   }
@@ -269,7 +267,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   place_starting_three(circles[[1]], circles[[2]], circles[[3]])
 
   # Initialise the boundary
-  init_boundary(list(circles[[1]],circles[[2]],circles[[3]]))
+  init_boundary(list(circles[[1]], circles[[2]], circles[[3]]))
 
   #Loop through the remaining circles,fitting them
   j <- 4
@@ -285,12 +283,14 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
     # Check for overlaps and update, refit and recheck until "clear"
     check <- overlap_check(cl, cl$nxt, circles[[j]])
 
-    if(identical(check, "clear")) {
+    if (identical(check, "clear")) {
       insert_circle(cl, cl$nxt, circles[[j]])
       j <- j + 1
-      if (progbar) {progress_bar(j,lenCirc)}
+      if (progbar) {
+        progress_bar(j, lenCirc)
+      }
 
-    }else{
+    }else {
       while(!identical(check,"clear")){
         Cm <- check[[1]]
         Cn <- check[[2]]
@@ -330,15 +330,20 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
               "clRad" = 0)
 
   # transform the x and y coordinates to the centroid if its not 0,0.
-  if(!identical(centroid, c(0, 0))){ans <- trans_coord(ans)}
+  if (!identical(centroid, c(0, 0))) {
+    ans <- trans_coord(ans)
+  }
 
   # estimate radius of cluster for repulsion
-  ans[[5]] <- est_rad(ans)
+  ans[[5]] <- est_rad(ans) # can speed up if done alongside
 
   # scale radius
-  if (rad_decrease != 1) {ans[[3]] <- Rvec * rad_decrease}
+  if (rad_decrease != 1) {
+    ans[[3]] <- Rvec * rad_decrease
+  }
 
-  # return
-  message("")
+  if (progbar) {
+    message("")
+  }
   return(ans)
 }
