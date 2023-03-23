@@ -2,7 +2,9 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
+#' @useDynLib scballpack
+#' @importFrom Rcpp sourceCpp
 get_clone_sizes_Cpp <- function(barcodes, clusters, clonotype_ids, num_clusters, scale_factor) {
-    .Call('_scballpack_get_clone_sizes_Cpp', PACKAGE = 'scballpack', barcodes, clusters, clonotype_ids, num_clusters, scale_factor)
+    .Call(`_scballpack_get_clone_sizes_Cpp`, barcodes, clusters, clonotype_ids, num_clusters, scale_factor)
 }
 

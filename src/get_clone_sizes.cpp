@@ -43,6 +43,8 @@ result_vector_list convert_to_list_output(cluster_clonotypes_hash_vec vector_of_
 }
 
 //' @export
+//' @useDynLib scballpack
+//' @importFrom Rcpp sourceCpp
 // [[Rcpp::export]]
 std::vector<NumericVector> get_clone_sizes_Cpp(StringVector barcodes, NumericVector clusters, StringVector clonotype_ids, int num_clusters, double scale_factor) {
 
@@ -52,6 +54,9 @@ std::vector<NumericVector> get_clone_sizes_Cpp(StringVector barcodes, NumericVec
 
   // do the clonotype/cluster counting into a vector of hashmaps
   for (int i = 0; i < barcodes.length(); i++) {
+    if (i % 1000 == 0) {
+      checkUserInterrupt();
+    }
     if (!StringVector::is_na(barcodes[i])) {
       String curr_clonotype = clonotype_ids[i];
       curr_cluster = clusters[i] - 1;
