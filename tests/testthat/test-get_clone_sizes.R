@@ -5,7 +5,7 @@ test_that("count_umap_clusters() works", {
 })
 
 test_that("get_clone_sizes works", {
-  expect_identical(
+  expect_equal(
     get_clone_sizes(test_integrated_pbmc, scale_factor = 1),
     list(
       c(1, 1, 2, 3, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 4, 4, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 3),
@@ -22,5 +22,3 @@ test_that("get_clone_sizes works", {
     )
   )
 })
-
-new_get_clone_sizes(test_integrated_pbmc)

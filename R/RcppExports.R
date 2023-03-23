@@ -3,6 +3,6 @@
 
 #' @export
 get_clone_sizes_Cpp <- function(barcodes, clusters, clonotype_ids, num_clusters, scale_factor) {
-    .Call('_scballpack_get_clone_sizes_Cpp', PACKAGE = 'scballpack', barcodes, clusters, clonotype_ids, num_clusters, scale_factor)
+    .Call(`_scballpack_get_clone_sizes_Cpp`, barcodes, clusters, clonotype_ids, num_clusters, scale_factor)
 }
 

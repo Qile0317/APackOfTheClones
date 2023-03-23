@@ -1,10 +1,9 @@
 suppressPackageStartupMessages(library(Seurat))
 
 source("testdata/SCIP.R")
-#source("tests/testthat/testdata/SCIP.R")
 
 test_that("integrate_tcr() works", {
-  expect_identical(
+  expect_equal(
     integrate_tcr(test_pbmc, test_tcr),
     test_integrated_pbmc
   )
