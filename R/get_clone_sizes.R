@@ -5,6 +5,10 @@ count_umap_clusters <- function(seurat_obj) {
   return(length(levels(seurat_obj@meta.data[["seurat_clusters"]])))
 }
 
+# ignore the code below it was a prior attemp at implemention an Rcpp version
+
+sourceCpp("src/get_clone_sizes.cpp")
+
 # counting clonotypes to make the sizes of clones within cluster data.
 get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
   num_clusters <- as.numeric(count_umap_clusters(integrated_seurat_obj))

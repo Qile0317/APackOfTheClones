@@ -53,3 +53,6 @@ trans_coord <- function(cluster, new_coord = NULL) {
               "clRad" = cluster[[5]])
          )
 }
+
+library(devtools)
+install_version("rlang", version = "1.1.0")

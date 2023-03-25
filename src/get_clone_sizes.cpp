@@ -42,9 +42,9 @@ result_vector_list convert_to_list_output(cluster_clonotypes_hash_vec vector_of_
   return list_output;
 }
 
-//' @export
-//' @useDynLib scballpack
-//' @importFrom Rcpp sourceCpp
+///' @export
+///' @useDynLib scballpack
+///' @importFrom Rcpp sourceCpp
 // [[Rcpp::export]]
 std::vector<NumericVector> get_clone_sizes_Cpp(StringVector barcodes, NumericVector clusters, StringVector clonotype_ids, int num_clusters, double scale_factor) {
 
