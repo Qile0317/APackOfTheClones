@@ -1,4 +1,4 @@
-# scballpack <img src="scballpack.png" width="25%" align="right" />
+# scballpack <img src="scballpack.png" width="20%" align="right" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml)

@@ -3,7 +3,6 @@ library(Seurat)
 library(ggplot2)
 library(ggforce)
 library(dplyr)
-library(hash)
 library(data.table)
 library(R6)
 library(utils)
@@ -59,10 +58,10 @@ library(utils)
 clonal_expansion_plot <- function(
     seurat_obj, tcr_df,
     res = 360,
-    clone_scale_factor = 0.01,
-    rad_scale_factor = 1,
+    clone_scale_factor = 0.01, # do 0.5 for test ds
+    rad_scale_factor = 1, # usually 0.95 look pretty pleasant
     ORDER = TRUE,
-    try_place = TRUE,
+    try_place = FALSE, # true looks pretty cramped usually
     progbar = TRUE,
     repulse = FALSE, # need to fix...
     repulsion_threshold = 1,
@@ -70,8 +69,8 @@ clonal_expansion_plot <- function(
     max_repulsion_iter = 100,
     use_default_theme = TRUE,
     show_origin = FALSE,
-    retain_axis_scales = TRUE,
-    modify_obj = FALSE) {
+    retain_axis_scales = TRUE, # sometimes breaks the plot
+    modify_obj = FALSE) { #modify_obj doesnt work
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
@@ -86,6 +85,8 @@ clonal_expansion_plot <- function(
   # show % integrated
   percent_integrated <- 100 - percent_na(integrated_seurat_obj)
   message(paste("\nPercent of cells integrated:", as.character(round(percent_integrated)), "%"))
+  if (percent_integrated < 50) {message(
+    "A larger number of non-integrated cells usually just indicates lots of duplicate barcodes")}
 
   # get the clone sizes and cluster centroids
   clone_size_list <- get_clone_sizes(integrated_seurat_obj, scale_factor = clone_scale_factor) # need to scale

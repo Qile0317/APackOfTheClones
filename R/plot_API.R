@@ -1,7 +1,6 @@
 #The API functions for generating the ggplot
 
 library(dplyr)
-library(hash)
 library(data.table)
 library(utils)
 library(ggplot2)

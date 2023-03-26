@@ -42,7 +42,6 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 }
 
 # helper function for iterative repulsion to check if the current input is valid
-# Ah, we've found the issue. Setting something to NULL in R removes it
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
     if (!any(is.na(inp[[i]]))) {

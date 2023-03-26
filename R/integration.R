@@ -70,7 +70,7 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
   tcr_collapsed <- tcr[, {setTxtProgressBar(pb, .GRP);
     lapply(.SD, data_concater)},
     by = barcode]
-
+  
   #assign rownames for integration and add metadata
   rownames(tcr_collapsed) <- tcr_collapsed$barcode
 
@@ -78,7 +78,6 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
     new_seurat_obj,
     metadata = tcr_collapsed
   )
-
   return(new_seurat_obj)
 }
 
