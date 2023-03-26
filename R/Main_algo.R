@@ -63,35 +63,40 @@ fit_tang_circle <- function(C1, C2, C3) {
 
   x1 <- C1$val$x
   x2 <- C2$val$x
+  
   y1 <- C1$val$y
   y2 <- C2$val$y
+  
   r1 <- C1$val$rad
   r2 <- C2$val$rad
   r <- C3$val$rad
 
   distance <- sqrt((x1 - x2)^2 + (y1 - y2)^2)
 
-  if (distance > (r1 + r2 + 2 * r)) {
+  if (distance > (r1 + r2 + (2 * r))) {
     stop("Gap too large.")
-  }else {distance} # ?
+  }
 
   cos_sig <- (x2 - x1)/distance
   sin_sig <- (y2 - y1)/distance
   cos_gam <- (distance^2 + (r + r1)^2 - (r + r2)^2)/(2*distance*(r + r1))
   sin_gam <- sqrt(1 - (cos_gam)^2)
 
-  C3$val[[2]] <- x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam)
-  C3$val[[3]] <- y1 + (r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam)
-  C3
+  C3$val$x <- x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam)
+  C3$val$y <- y1 + (r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam)
+  return(C3)
 }
+
+#Note: fit_tang_circle! fits C3 such that C1,C2,C3 are arranged counterclockwise
 
 # place three circles in the center
 place_starting_three <- function(C1, C2, C3) {
-  C1$val[[2]] <- -1 * (C1$val[[6]])
-  C2$val[[2]] <- C2$val[[6]]
+  C1$val$x <- -1 * (C1$val$rad)
+  C2$val$x <- C2$val$rad
 
-  fit_tang_circle(C1, C2, C3) #BM's original note: it seems like it might be necessary to initialise with opposite orientation
+  fit_tang_circle(C2, C1, C3) #BM's original note: it seems like it might be necessary to initialise with opposite orientation
 
+  #calculate the centroid of their centers, and translate each circle by it
   centroid_x <- (C1$val[[2]] + C2$val[[2]] + C3$val[[2]])/3
   centroid_y <- (C1$val[[3]] + C2$val[[3]] + C3$val[[3]])/3
 

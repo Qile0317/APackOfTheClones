@@ -159,3 +159,11 @@ retain_scale <- function(seurat_obj, ball_pack_plt) {
 
 # A more advanced version could multiply axses by a small amount to retain ratios exactly
 # also this isnt perfect, in my own testcase 1 row was removed
+
+# plotting for devs to test a single clusteer
+
+plot_single_cluster <- function(sizes) {
+  a <- circle_layout(sizes)
+  a <- df_full_join(list(a))
+  plot_clusters(a)
+}
