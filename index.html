@@ -59,7 +59,7 @@
 <!-- badges: start -->
 
 <p><code>scballpack</code> is an R package to produce “ball-packing” visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling.</p>
-<p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. The resulting plot visually quantified clonal expansion, as seen in the following figure.</p>
+<p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>scballpack</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of <code>scballpack</code> being used on a public 10X genomics dataset:</p>
 <p><img src="reference/figures/example.png" width="75%" align="center"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -117,7 +117,7 @@
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
-<p>Thanks to Ben Murrel (@murrelb) at the Karolinska Instituet for introducing the idea, giving suggestions, and building the <code>julia</code> implementation of the ball packing algorithm in the original paper.</p>
+<p>Thanks to Murray Christian and Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, giving suggestions, and building the <code>julia</code> implementation of the ball packing algorithm in the original paper.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
