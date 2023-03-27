@@ -1,4 +1,5 @@
 source("testdata/cluster_lists.R")
+source("testdata/SCIP.R")
 
 test_that("find_centroids() works", {
   input <- data.frame(
@@ -19,10 +20,18 @@ test_that("find_centroids() works", {
                tolerance=3e-7)
 })
 
-# can assume get_cluster_centroids() works
+test_that("get_cluster_centroids() works", {
+  expect_equal(
+    get_cluster_centroids(test_pbmc),
+    list(`1` = c(5.72926706448197, 8.48345941543579),
+         `2` = c(-9.54877844080329, -14.1390990257263)
+         ))
+})
 
 test_that("trans_coord() works withOUT new_coord", {
-  expect_equal(trans_coord(c1), c1_shifted_by_4_5)
+  c1_new <- c1
+  c1_new$centroid <- c(4,5)
+  expect_equal(trans_coord(c1_new), c1_shifted_by_4_5)
 })
 
 test_that("trans_coord() works WITH new_coord",{

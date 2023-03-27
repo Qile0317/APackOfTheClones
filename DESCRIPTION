@@ -23,6 +23,7 @@ Imports:
     dplyr,
     ggforce,
     ggplot2,
+    hash,
     R6,
     Seurat,
     utils

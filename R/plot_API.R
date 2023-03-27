@@ -42,13 +42,15 @@ df_full_join <- function(clstr_list) {
 
 plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #linewidth doesnt work lol.
                           title = "Sizes of clones within each cluster",
-                          haslegend = TRUE, void = TRUE,
+                          haslegend = FALSE, void = TRUE,
                           origin = FALSE){ #, label=TRUE (labels each individual circle, yikes)
   if (!origin) {
-    p1 <- ggplot2::ggplot() +
-      ggforce::geom_circle(data = clusters, mapping = ggplot2::aes(
-        x0 = x, y0 = y, r = r, fill = label),
+    p1 <- ggplot2::ggplot(data = clusters) +
+      ggforce::geom_circle(ggplot2::aes(
+        x0 = x, y0 = y, r = r, fill = color),
       n = n, linetype = linetype) +
+      ggplot2::scale_fill_identity() +
+      
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
 
@@ -70,7 +72,7 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
     p1 <- p1 + ggplot2::theme_void()
   }
 
-  return(p1)
+  return(p1 + ggplot2::theme(legend.position = "none"))
 }
 
 #now: be able to group by color...
@@ -79,6 +81,7 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
 #I could also export this
 plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      centroids, # centroids of size vectors [[1]] c(x,y)
+                     num_clusters,
                      rad_decrease = 1,
                      ORDER = TRUE,
                      try_place = TRUE,
@@ -122,7 +125,10 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
 
   #joining list into df for plotting
   ans <- df_full_join(ans)
-
+  
+  # deal with coloring. in future make customizable
+  ans <- insert_colors(ans, num_clusters)
+  
   #plotting
   ans <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
@@ -159,11 +165,3 @@ retain_scale <- function(seurat_obj, ball_pack_plt) {
 
 # A more advanced version could multiply axses by a small amount to retain ratios exactly
 # also this isnt perfect, in my own testcase 1 row was removed
-
-# plotting for devs to test a single clusteer
-
-plot_single_cluster <- function(sizes) {
-  a <- circle_layout(sizes)
-  a <- df_full_join(list(a))
-  plot_clusters(a)
-}

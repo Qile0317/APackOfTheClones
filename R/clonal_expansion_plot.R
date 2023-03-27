@@ -77,6 +77,8 @@ clonal_expansion_plot <- function(
   if (max_repulsion_iter > 1000) {
     warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
   }
+  
+  num_clusters <- count_umap_clusters(seurat_obj)
 
   # integrate TCR
   integrated_seurat_obj <- integrate_tcr(seurat_obj, tcr_df)
@@ -95,6 +97,7 @@ clonal_expansion_plot <- function(
   # pack the plot
   result_plot <- plot_API(sizes = clone_size_list,
                           centroids = centroid_list,
+                          num_clusters = num_clusters,
                           rad_decrease = rad_scale_factor,
                           ORDER = ORDER,
                           try_place = try_place,
@@ -120,7 +123,6 @@ clonal_expansion_plot <- function(
       ggplot2::ggtitle("Sizes of clones within each cluster")
   }
 
-  if (!modify_obj) {rm("integrated_seurat_obj")} # not sure if nessecary
-
+  if (!modify_obj) {rm("integrated_seurat_obj")} # not sure if nessecary  
   return(result_plot)
 }

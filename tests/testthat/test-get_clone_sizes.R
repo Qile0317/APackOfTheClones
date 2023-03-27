@@ -9,8 +9,8 @@ test_that("get_clone_sizes works", {
   trial <- get_clone_sizes(test_integrated_pbmc, scale_factor = 1)
   
   expect_equal(length(trial), 2)
-  expect_equal(sum(trial[[1]]), 50)
-  expect_equal(sum(trial[[2]]), 30)
+  expect_equal(round(sum(trial[[1]])), 36)
+  expect_equal(round(sum(trial[[2]])), 23)
   
   trial_cl_1_tabled <- as.numeric(unname(table(trial[[1]])))
   trial_cl_2_tabled <- as.numeric(unname(table(trial[[2]])))

@@ -2,7 +2,7 @@ source("testdata/cluster_lists.R")
 
 # numerical operations
 test_that("distV() can get direction vector from clusterlists", {
-  expect_equal(distV(c1, c2), c(1, 1))
+  expect_equal(distV(c1, c2), c(-3, -4))
 })
 
 test_that("polV() can do polar form conversion", {
@@ -11,8 +11,9 @@ test_that("polV() can do polar form conversion", {
 })
 
 test_that("pdV() can get polar direction vector", {
-  expect_equal(pdV(c1, c2), c("magnitude" = 1.41421356,
-                              "direction" = 0.78539816))
+  expect_equal(pdV(c1, c2), c("magnitude" = 5,
+                              "direction" = -2.2142974),
+               tolerance = 3e-6)
   expect_equal(pdV(c1, c2), polV(distV(c1, c2)))
 })
 

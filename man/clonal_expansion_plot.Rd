@@ -11,7 +11,7 @@ clonal_expansion_plot(
   clone_scale_factor = 0.01,
   rad_scale_factor = 1,
   ORDER = TRUE,
-  try_place = TRUE,
+  try_place = FALSE,
   progbar = TRUE,
   repulse = FALSE,
   repulsion_threshold = 1,
