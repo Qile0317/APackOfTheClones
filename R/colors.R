@@ -32,5 +32,5 @@ insert_colors <- function(cluster_dataframe, num_clusters) {
   for (i in 1:length(color_vec)) {
     color_vec[i] <- color_hashmap[[color_vec[i]]]
   }
-  return(cluster_dataframe %>%mutate("color" = color_vec))
+  return(cluster_dataframe %>% dplyr::mutate("color" = color_vec))
 }
