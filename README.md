@@ -1,4 +1,4 @@
-# scballpack <img src="scballpack.png" width="20%" align="right" />
+# scballpack <img src="APackOfTheClones.png" width="20%" align="right" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/scballpack/actions/workflows/R-CMD-check.yaml)
@@ -7,17 +7,17 @@
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: end -->
 
-```scballpack``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling. 
+```APackOfTheClones``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling. 
 
-The concept was first implemented in a study Ma et al.[[1]](#1) by Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `scballpack` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of `scballpack` being used on a public 10X genomics dataset:
+The concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of `APackOfTheClones` being used on a public 10X genomics dataset:
 
 <img src="man/figures/example.png" width="75%" align="center" />
 
 ## Installation
 ```
 library(devtools)
-devtools::install_github("Qile0317/scballpack")
-library("scballpack")
+devtools::install_github("Qile0317/APackOfTheClones")
+library("APackOfTheClones")
 ```
 In the future the package will hopefully be on CRAN.
 
@@ -31,7 +31,7 @@ And integrates the TCR library into the seurat object metadata(creates a new tem
 ```R
 library(Seurat)
 library(readr)
-library(scballpack)
+library(APackOfTheClones)
 
 # run sc-RNAseq pipeline to produce a seurat_object
 
@@ -52,10 +52,10 @@ integrated_seurat_object <- integrate_tcr(seurat_object, TCR_dataframe)
 # or simply modify the current seurat object
 seurat_object <- integrate_tcr(seurat_object, TCR_dataframe)
 ```
-Which also takes care of multiple rows of data for the same cell barcode. Run ```?integrate_tcr``` for more details.
+Which also takes care of multiple rows of data for the same cell barcode. Run `?integrate_tcr` for more details.
 
 ## Contributing
-The package is currently incomplete, and more features, tests, bugfixes, and documentation are to come. However, pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
+`APackOfTheClones` is currently incomplete, and more features, tests, bugfixes, and documentation are to come. However, pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
 
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette, in addition to publication to CRAN.
 
@@ -70,4 +70,4 @@ Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. 
 atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
-Thanks to Murray Christian and Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, giving suggestions, and building the ```julia``` implementation of the ball packing algorithm in the original paper.
+Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea and giving suggestions.

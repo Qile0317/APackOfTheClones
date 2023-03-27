@@ -1,6 +1,6 @@
-Package: scballpack
+Package: APackOfTheClones
 Type: Package
-Title: Visualization Of T-cell Clonal Clusters
+Title: Visualization Of T-cell Clonal Expansion
 Version: 0.1.0
 Author: Qile Yang
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut")))
