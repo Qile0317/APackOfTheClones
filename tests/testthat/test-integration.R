@@ -3,7 +3,7 @@ library(data.table)
 
 source("testdata/SCIP.R")
 
-# the tests wont work with me but it does work
+# something is wrong with the progress bar
 #test_that("integrate_tcr() works", {
 #  expect_identical(
 #    integrate_tcr(test_pbmc, test_tcr),

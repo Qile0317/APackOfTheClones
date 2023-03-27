@@ -1,3 +1,6 @@
+library(dplyr)
+library(hash)
+
 source("testdata/SCIP.R")
 
 test_that("count_umap_clusters() works", {

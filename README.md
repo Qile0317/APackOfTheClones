@@ -9,7 +9,7 @@
 
 ```scballpack``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling. 
 
-The concept was first implemented in a study Ma et al.[[1]](#1) by Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. The resulting plot visually quantified clonal expansion, as seen in the following figure. 
+The concept was first implemented in a study Ma et al.[[1]](#1) by Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `scballpack` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of `scballpack` being used on a public 10X genomics dataset:
 
 <img src="man/figures/example.png" width="75%" align="center" />
 
@@ -70,4 +70,4 @@ Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. 
 atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
-Thanks to Ben Murrel (@murrelb) at the Karolinska Instituet for introducing the idea, giving suggestions, and building the ```julia``` implementation of the ball packing algorithm in the original paper.
+Thanks to Murray Christian and Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, giving suggestions, and building the ```julia``` implementation of the ball packing algorithm in the original paper.
