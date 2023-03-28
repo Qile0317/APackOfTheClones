@@ -19,8 +19,7 @@ clonal_expansion_plot(
   max_repulsion_iter = 100,
   use_default_theme = TRUE,
   show_origin = FALSE,
-  retain_axis_scales = TRUE,
-  modify_obj = FALSE
+  retain_axis_scales = TRUE
 )
 }
 \arguments{
@@ -52,9 +51,7 @@ clonal_expansion_plot(
 
 \item{show_origin}{logical. If `TRUE`, only the centers of each circle will be plotted}
 
-\item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales of the original UMAP}
-
-\item{modify_obj}{If `TRUE`, will modify the current seurat object after integration. Else has no effect on the input seurat object}
+\item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales of the original UMAP.}
 }
 \value{
 Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects

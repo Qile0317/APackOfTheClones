@@ -28,8 +28,7 @@ library(utils)
 #' @param max_repulsion_iter numeric. The number of repulsion iterations.
 #' @param use_default_theme If `TRUE`, the resulting plot will have the same theme as the seurat UMAP
 #' @param show_origin logical. If `TRUE`, only the centers of each circle will be plotted
-#' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP
-#' @param modify_obj If `TRUE`, will modify the current seurat object after integration. Else has no effect on the input seurat object
+#' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP.
 #'
 #' @return Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects
 #'
@@ -69,8 +68,7 @@ clonal_expansion_plot <- function(
     max_repulsion_iter = 100,
     use_default_theme = TRUE,
     show_origin = FALSE,
-    retain_axis_scales = TRUE, # sometimes breaks the plot
-    modify_obj = FALSE) { #modify_obj doesnt work
+    retain_axis_scales = TRUE) { #sometimes breaks the plot
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
@@ -82,7 +80,6 @@ clonal_expansion_plot <- function(
 
   # integrate TCR
   integrated_seurat_obj <- integrate_tcr(seurat_obj, tcr_df)
-  if (modify_obj) {seurat_obj <- integrated_seurat_obj}
 
   # show % integrated
   percent_integrated <- 100 - percent_na(integrated_seurat_obj)
@@ -122,7 +119,5 @@ clonal_expansion_plot <- function(
       ggplot2::ylab("UMAP_2") +
       ggplot2::ggtitle("Sizes of clones within each cluster")
   }
-
-  if (!modify_obj) {rm("integrated_seurat_obj")} # not sure if nessecary  
   return(result_plot)
 }
