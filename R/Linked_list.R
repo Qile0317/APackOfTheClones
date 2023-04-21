@@ -1,6 +1,5 @@
 #script of the circular, doubly linked list implementation and also some utility functions for debugging
 
-
 suppressPackageStartupMessages(library(dplyr))
 library(R6)
 
@@ -21,8 +20,6 @@ node <- R6::R6Class("Node",
                     )
 )
 
-# check if R6 so that R CMD doesnt bug me ab not using R6
-invisible(R6::is.R6Class(1))
 
 # miscalleneous/utility/debugging functions
 

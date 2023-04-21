@@ -2,6 +2,7 @@ library(Seurat)
 library(ggplot2)
 library(ggforce)
 library(data.table)
+library(utils)
 
 #' Integrate a TCR library into Seurat object metadata
 #'

@@ -1,13 +1,13 @@
-citHeader("To cite scballpack in publications use:")
+citHeader("To cite APackOfTheClones in publications, please use:")
 
 citEntry(
   entry    = "manual",
-  title    = "scballpack: Visualize T cell clonal expansion via circle packing",
+  title    = "APackOfTheClones: Visualize T cell clonal expansion via circle packing",
   author   = "Qile Yang",
   year     = 2023,
-  url      = "https://github.com/Qile0317/scballpack",
+  url      = "https://github.com/Qile0317/APackOfTheClones",
   textVersion = paste(
-    "Yang, Qile. 2023. scballpack: Visualize T cell clonal expansion via circle packing. ",
-    "URL https://github.com/Qile0317/scballpack"
+    "Yang, Qile. 2023. APackOfTheClones: Visualize T cell clonal expansion via circle packing. ",
+    "URL https://github.com/Qile0317/APackOfTheClones"
   )
 )

@@ -17,3 +17,4 @@
 ^\.RDataTmp$
 ^src$
 /.*cpp$
+^a.exe$

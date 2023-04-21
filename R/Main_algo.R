@@ -55,7 +55,7 @@ fwd_remove <- function(c, d) {
 
 #distance from the centre of a circle to the origin.
 centre_dist <- function(c) {
-  sqrt((c$val[[2]])^2 + (c$val[[3]])^2)
+  return(sqrt((c$val[[2]])^2 + (c$val[[3]])^2))
 }
 
 #fit tangent circle function
