@@ -69,7 +69,7 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 <span>  max_repulsion_iter <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_origin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  retain_axis_scales <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -132,7 +132,7 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 
 
 <dt>retain_axis_scales</dt>
-<dd><p>If `TRUE`, approximately maintains the axis scales of the original UMAP.</p></dd>
+<dd><p>If `TRUE`, approximately maintains the axis scales of the original UMAP. However, sometimes this argument breaks a few circles so it should be set to false if this happens. The fix is in-progress</p></dd>
 
 </dl></div>
     <div class="section level2">
