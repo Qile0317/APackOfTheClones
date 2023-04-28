@@ -1,8 +1,7 @@
 source("testdata/SCIP.R")
 
-# test doesnt work bc of issues with the progressbar and missing values or smthn but it works in practisce
-#test_that("The main API works", {
-#  expect_doppelganger(
-#    "main_plot",
-#    clonal_expansion_plot(test_pbmc, test_tcr, progbar = F))
-#})
+test_that("The main API works, where retain_axis_scales = F", {
+  expect_doppelganger(
+    "main_plot",
+    clonal_expansion_plot(test_pbmc, test_tcr, progbar = F, clone_scale_factor = 0.5, retain_axis_scales = F))
+})

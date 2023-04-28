@@ -71,5 +71,16 @@ test_that("plot_API(rad_decrease = 0.8) works", {
   )
 })
 
-# need to test try_place
+test_that("plot_API(try_place = TRUE) works", {
+  test_plot <- plot_API(
+    test_radii[-1], test_centroids[-1], 5,
+    progbar = F, repulse = F,
+    try_place = T
+  )
+  expect_doppelganger(
+    "plot_API_try_place_TRUE",
+    test_plot
+  )
+})
+
 # need to test more edge cases
