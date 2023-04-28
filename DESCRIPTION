@@ -23,9 +23,11 @@ Imports:
     dplyr,
     ggforce,
     ggplot2,
+    grDevices,
     hash,
     R6,
     Seurat,
+    stats,
     utils
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/scballpack/

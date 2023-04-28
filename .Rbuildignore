@@ -16,5 +16,6 @@
 ^\.vscode$
 ^\.RDataTmp$
 ^src$
+^src/.*
 /.*cpp$
 ^a.exe$

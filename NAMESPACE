@@ -2,3 +2,8 @@
 
 export(clonal_expansion_plot)
 export(integrate_tcr)
+import(data.table)
+importFrom(grDevices,hcl)
+importFrom(stats,aggregate)
+importFrom(stats,na.omit)
+importFrom(utils,setTxtProgressBar)

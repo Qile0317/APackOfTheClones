@@ -22,6 +22,11 @@ library(utils)
 #' @concept sc_RNAseq
 #'
 #' @export
+#' @importFrom grDevices hcl
+#' @importFrom stats aggregate
+#' @importFrom stats na.omit
+#' @importFrom utils setTxtProgressBar 
+#' @import data.table
 #'
 #' @examples
 #' \dontrun{
@@ -62,7 +67,7 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
   # Then data points are pasted together separated with "__" to access later on if needed
 
   data_concater <- function(x){
-    x <- levels(factor(x))
+    x <- levels(factor(na.omit(x))) # not sure if na.omit is a good idea
     paste(x, collapse = "__")
   }
 
@@ -70,7 +75,7 @@ integrate_tcr <- function(seurat_obj, tcr_file) {
   # concatenated string with  the information we want to keep
   tcr_collapsed <- tcr[, {setTxtProgressBar(pb, .GRP);
     lapply(.SD, data_concater)},
-    by = barcode]
+    by = "barcode"]
   
   #assign rownames for integration and add metadata
   rownames(tcr_collapsed) <- tcr_collapsed$barcode

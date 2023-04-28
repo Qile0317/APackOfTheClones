@@ -18,16 +18,16 @@ df_full_join <- function(clstr_list) {
                    x = numeric(0),
                    y = numeric(0),
                    r = numeric(0))
-
+  
   for(i in 1:length(clstr_list)){
     if (!any(is.na(clstr_list[[i]]))) {
-
+      
       df <- dplyr::full_join(
         df, data.frame("label" = rep(paste("cluster", as.character(i - 1)),
-        length(clstr_list[[i]]$x)),
-                       "x" = clstr_list[[i]]$x,
-                       "y" = clstr_list[[i]]$y,
-                       "r" = clstr_list[[i]]$rad),
+                                     length(clstr_list[[i]][["x"]])),
+                       "x" = clstr_list[[i]][["x"]],
+                       "y" = clstr_list[[i]][["y"]],
+                       "r" = clstr_list[[i]][["rad"]]),
         by = dplyr::join_by("label", "x", "y", "r"))
     }
   }
@@ -48,14 +48,14 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
     p1 <- ggplot2::ggplot(data = clusters) +
       ggforce::geom_circle(ggplot2::aes(
         x0 = x, y0 = y, r = r, fill = color),
-      n = n, linetype = linetype) +
+        n = n, linetype = linetype) +
       ggplot2::scale_fill_identity() +
       
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
-
+    
     #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
-
+    
     if (!haslegend) {
       p1 <- p1 + ggplot2::theme(legend.position = "none")
     }else {
@@ -67,11 +67,11 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
   }
-
+  
   if (void) {
     p1 <- p1 + ggplot2::theme_void()
   }
-
+  
   return(p1 + ggplot2::theme(legend.position = "none"))
 }
 
@@ -95,19 +95,19 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      void = TRUE,
                      origin = FALSE){
   ans <- list()
-
+  
   #circle layout
   for(i in 1:length(sizes)){
-
+    
     if (length(sizes[[i]]) == 0) {
       ans[[i]] <- NA # important!
-
+      
     }else{
       if(progbar){
         message("")
         message(paste("packing cluster", as.character(i)))
       }
-
+      
       ans[[i]] <- circle_layout(sizes[[i]],
                                 centroid = centroids[[i]],
                                 rad_decrease = rad_decrease,
@@ -116,13 +116,13 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                                 progbar = progbar)
     }
   }
-
+  
   #repulsion, not sure how it handles nulls (not even sure if nulls are present...)
   if (repulse) {
     if(progbar){message("repulsing clusters")}
     ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter)
   }
-
+  
   #joining list into df for plotting
   ans <- df_full_join(ans)
   
@@ -132,35 +132,35 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   #plotting
   ans <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
-
+  
   return(ans)
 }
 
 # change the axis scales to fit the original plot approximately.
 retain_scale <- function(seurat_obj, ball_pack_plt) {
-
+  
   test_umap_plt <- get_umap(seurat_obj)
-
+  
   # get current ranges
   umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
   umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
-
+  
   rm("test_umap_plt")
-
+  
   ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
   ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
-
+  
   # set new ranges
   min_xr <- max(ball_pack_xr[1], umap_xr[1])
   max_xr <- max(ball_pack_xr[2], umap_xr[2])
-
+  
   min_yr <- max(ball_pack_yr[1], umap_yr[1])
   max_yr <- max(ball_pack_yr[2], umap_yr[2])
-
+  
   return(ball_pack_plt +
            ggplot2::xlim(min_xr, max_xr) +
            ggplot2::ylim(min_yr, max_yr)
-         )
+  )
 }
 
 # A more advanced version could multiply axses by a small amount to retain ratios exactly
