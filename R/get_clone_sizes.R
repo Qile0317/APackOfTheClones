@@ -9,7 +9,7 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
   freq <- freq[["clonotype_ids"]]
   
   for (i in 1:length(freq)) {
-    freq[[i]] <- sapply(as.numeric(freq[[i]]), function(x) (sqrt(x) * scale_factor))
+    freq[[i]] <- sapply(as.numeric(freq[[i]]), function(x) (sqrt(x) * scale_factor)) # radii are square rooted and scaled!
   }
   
   return(freq)

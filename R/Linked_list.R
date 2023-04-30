@@ -20,9 +20,6 @@ node <- R6::R6Class("Node",
                     )
 )
 
-
-# miscalleneous/utility/debugging functions
-
 #simple progress bar
 progress_bar <- function (x, max = 100) {
   percent <- x / max * 100
@@ -31,34 +28,4 @@ progress_bar <- function (x, max = 100) {
               floor(percent)))
   if (x == max)
     cat('\n')
-}
-
-#traverse and print every element of the list recursively.
-traverse <- function(node) {
-  OV <- node$val[[5]]
-  node$val[[5]] <- "ORIGIN"
-
-  trav <- function(nd){
-    if (nd$nxt$val[[5]] == "ORIGIN") {
-      nd$nxt$val[[5]] <- OV
-      return(nd)
-    }
-    print(nd)
-    trav(nd[["nxt"]])
-  }
-  trav(node)
-}
-
-#getting length of circular linked list
-clength <- function(node) {
-  OV <- node$val$label
-  ccc <- 1
-  node$val$label <- "PKNBVDFGYHJNBVCXSDFGHJB" #if this is one of the names of the labels then RIP
-  current <- node
-  while (!identical(current$nxt$val$label,"PKNBVDFGYHJNBVCXSDFGHJB")){
-    ccc <- ccc + 1
-    current <- current[['nxt']]
-  }
-  node$val$label <- OV
-  return(ccc)
 }

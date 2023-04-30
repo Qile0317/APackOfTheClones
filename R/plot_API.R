@@ -136,8 +136,9 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   return(ans)
 }
 
-# change the axis scales to fit the original plot approximately.
-retain_scale <- function(seurat_obj, ball_pack_plt) {
+#' change the axis scales to fit the original plot approximately.
+#' @importFrom ggplot2 coord_cartesian
+retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
   
   test_umap_plt <- get_umap(seurat_obj)
   
@@ -151,15 +152,16 @@ retain_scale <- function(seurat_obj, ball_pack_plt) {
   ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
   
   # set new ranges
-  min_xr <- max(ball_pack_xr[1], umap_xr[1])
-  max_xr <- max(ball_pack_xr[2], umap_xr[2])
+  min_xr <- min(ball_pack_xr[1], umap_xr[1]) - buffer
+  max_xr <- max(ball_pack_xr[2], umap_xr[2]) + buffer
   
-  min_yr <- max(ball_pack_yr[1], umap_yr[1])
-  max_yr <- max(ball_pack_yr[2], umap_yr[2])
+  min_yr <- min(ball_pack_yr[1], umap_yr[1]) - buffer
+  max_yr <- max(ball_pack_yr[2], umap_yr[2]) + buffer
   
-  return(ball_pack_plt +
-           ggplot2::xlim(min_xr, max_xr) +
-           ggplot2::ylim(min_yr, max_yr)
+  return(ball_pack_plt + coord_cartesian(
+    xlim = c(min_xr, max_xr),
+    ylim = c(min_yr, max_yr)
+    )
   )
 }
 
