@@ -6,12 +6,6 @@ library(utils)
 library(ggplot2)
 library(ggforce)
 
-# shortcut to get the umap plot
-get_umap <- function(seurat_obj) {
-  return(Seurat::DimPlot(object = seurat_obj,
-                         reduction = 'umap'))
-}
-
 #full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
 df_full_join <- function(clstr_list) {
   df <- data.frame(label = character(0),
@@ -134,36 +128,3 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   
   return(ans)
 }
-
-#' change the axis scales to fit the original plot approximately.
-#' @importFrom ggplot2 coord_cartesian
-#' @noRd
-retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
-  
-  test_umap_plt <- get_umap(seurat_obj)
-  
-  # get current ranges
-  umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
-  umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
-  
-  rm("test_umap_plt")
-  
-  ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
-  ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
-  
-  # set new ranges
-  min_xr <- min(ball_pack_xr[1], umap_xr[1]) - buffer
-  max_xr <- max(ball_pack_xr[2], umap_xr[2]) + buffer
-  
-  min_yr <- min(ball_pack_yr[1], umap_yr[1]) - buffer
-  max_yr <- max(ball_pack_yr[2], umap_yr[2]) + buffer
-  
-  return(ball_pack_plt + coord_cartesian(
-    xlim = c(min_xr, max_xr),
-    ylim = c(min_yr, max_yr)
-    )
-  )
-}
-
-# A more advanced version could multiply axses by a small amount to retain ratios exactly
-# also this isnt perfect, in my own testcase 1 row was removed

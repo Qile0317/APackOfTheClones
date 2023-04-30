@@ -56,6 +56,9 @@ ball_pack_plot
 ```
 The function also takes care of multiple rows of data for the same cell barcode. Run `?integrate_tcr` for more details.
 
+## Documentation
+Comprehensive documentation and a changelog is deployed at https://qile0317.github.io/APackOfTheClones/
+
 ## Contributing
 `APackOfTheClones` is currently incomplete, and more features, tests, bugfixes, and documentation are to come. However, pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
 
