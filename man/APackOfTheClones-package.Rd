@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Qile Yang \email{qile0317@gmail.com}
+\strong{Maintainer}: Qile Yang \email{qile0317@gmail.com} [copyright holder]
 
 }
 \keyword{internal}

@@ -35,7 +35,7 @@ library(utils)
 #' \dontrun{
 #' library(Seurat)
 #' library(readr)
-#' library(scballpack)
+#' library(APackOfTheClones)
 #'
 #' # run sc-RNAseq pipeline to produce a seurat_object
 #'
@@ -90,6 +90,12 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
     new_seurat_obj,
     metadata = tcr_collapsed
   )
+  
+  if (verbose) {
+    percent_integrated <- 100 - percent_na(new_seurat_obj)
+    message(paste("\nPercent of cells integrated:", as.character(round(percent_integrated)), "%"))
+  }
+  
   return(new_seurat_obj)
 }
 

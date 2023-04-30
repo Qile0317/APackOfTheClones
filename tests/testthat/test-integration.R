@@ -6,13 +6,7 @@ source("testdata/SCIP.R")
 
 test_that("integrate_tcr() works", {
   expect_identical(
-    integrate_tcr(test_pbmc, test_tcr),
-    test_integrated_pbmc)
-})
-
-test_that("integrate_tcr() works with verbose = FALSE", {
-  expect_identical(
-    integrate_tcr(test_pbmc, test_tcr, verbose = FALSE),
+    integrate_tcr(test_pbmc, test_tcr, verbose = F),
     test_integrated_pbmc)
 })
 

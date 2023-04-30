@@ -78,14 +78,13 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
 #now: be able to group by color...
 
 #API for plotting size vectors .
-#I could also export this
 plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      centroids, # centroids of size vectors [[1]] c(x,y)
                      num_clusters,
                      rad_decrease = 1,
                      ORDER = TRUE,
                      try_place = TRUE,
-                     progbar = TRUE, # packing
+                     progbar = TRUE, 
                      repulse = FALSE,
                      thr = 1, G = 0.05, 
                      max_repulsion_iter = 100, #repulsion parameters
@@ -138,6 +137,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
 
 #' change the axis scales to fit the original plot approximately.
 #' @importFrom ggplot2 coord_cartesian
+#' @noRd
 retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
   
   test_umap_plt <- get_umap(seurat_obj)

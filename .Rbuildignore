@@ -19,3 +19,4 @@
 ^src/.*
 /.*cpp$
 ^a.exe$
+^cran-comments\.md$

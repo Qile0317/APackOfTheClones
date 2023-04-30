@@ -3,6 +3,7 @@
 export(clonal_expansion_plot)
 export(integrate_tcr)
 import(data.table)
+importFrom(ggplot2,coord_cartesian)
 importFrom(grDevices,hcl)
 importFrom(stats,aggregate)
 importFrom(stats,na.omit)

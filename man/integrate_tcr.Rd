@@ -32,7 +32,7 @@ add `NA`s for all elements of the same index.
 \dontrun{
 library(Seurat)
 library(readr)
-library(scballpack)
+library(APackOfTheClones)
 
 # run sc-RNAseq pipeline to produce a seurat_object
 
