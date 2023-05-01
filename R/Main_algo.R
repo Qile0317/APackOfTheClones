@@ -233,7 +233,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
 
   if (ORDER) {input_rad_vec <- sort(input_rad_vec, decreasing = TRUE)}
 
-  # Initialise the circles with radii (not areas) as specified in input_rad_vec, and no boundary relations.
+  # Initialise the circles with radii as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here
   for (i in 1:length(input_rad_vec)) {
     currCirc <- node$new(val = list(area = NULL, x = 0, y = 0,
@@ -243,9 +243,11 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
 
   lenCirc <- length(circles)
+  progress_bar(0,1)
 
   #Taking care of "degenerate" cases when there are only one or two circles
   if (lenCirc == 1) {
+    progress_bar(1,1)
     return(list("x" = circles[[1]]$val[[2]] + centroid[1],
                 "y" = circles[[1]]$val[[3]] + centroid[2],
                 "rad" = circles[[1]]$val[[6]] * rad_decrease,
@@ -254,6 +256,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
 
   if (lenCirc == 2) {
+    progress_bar(1,1)
     # transform the x coordinates to place left and right of center
     circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
     circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
@@ -291,7 +294,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
     if (identical(check, "clear")) {
       insert_circle(cl, cl$nxt, circles[[j]])
       j <- j + 1
-      if (progbar) {
+      if (progbar && (j <= lenCirc)) {
         progress_bar(j, lenCirc)
       }
 
@@ -313,6 +316,10 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
       }
     }
     if (print_BL) {print(clength(circles[[j-1]]))} #for debugging
+  }
+  
+  if (progbar) {
+    progress_bar(1,1)
   }
 
   ans <- list() #in the future i can put the colors in the prior functions.
@@ -346,9 +353,5 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if (rad_decrease != 1) {
     ans[[3]] <- Rvec * rad_decrease
   }
-
-  if (progbar) {
-    message("")
-  }
-  return(ans)
+  ans
 }

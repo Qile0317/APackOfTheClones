@@ -49,12 +49,7 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
       ggplot2::coord_fixed()
     
     #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
-    
-    if (!haslegend) {
-      p1 <- p1 + ggplot2::theme(legend.position = "none")
-    }else {
-      #p1 <- p1 + guide_legend(title = NULL, )
-    }
+
   }else {
     p1 <- ggplot2::ggplot(clusters, mapping=aes(x,y)) +
       ggplot2::geom_point() +
@@ -91,22 +86,21 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   
   #circle layout
   for(i in 1:length(sizes)){
-    
     if (length(sizes[[i]]) == 0) {
       ans[[i]] <- NA # important!
-      
     }else{
       if(progbar){
-        message("")
         message(paste("packing cluster", as.character(i)))
       }
       
-      ans[[i]] <- circle_layout(sizes[[i]],
-                                centroid = centroids[[i]],
-                                rad_decrease = rad_decrease,
-                                ORDER = ORDER,
-                                try_place = try_place,
-                                progbar = progbar)
+      ans[[i]] <- circle_layout(
+        sizes[[i]],
+        centroid = centroids[[i]],
+        rad_decrease = rad_decrease,
+        ORDER = ORDER,
+        try_place = try_place,
+        progbar = progbar
+      )
     }
   }
   
@@ -116,15 +110,13 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
     ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter)
   }
   
-  #joining list into df for plotting
-  ans <- df_full_join(ans)
-  
-  # deal with coloring. in future make customizable
-  ans <- insert_colors(ans, num_clusters)
+  #joining list into df and color for plotting. in future make customizable
+  ans <- insert_colors(df_full_join(ans), num_clusters)
   
   #plotting
-  ans <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
+  plt <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
   
-  return(ans)
+  # here, make and add legend to plt using ans for the legend
+  return(plt)
 }

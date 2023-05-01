@@ -1,4 +1,4 @@
-# APackOfTheClones <img src="APackOfTheClones.png" width="20%" align="right" />
+# APackOfTheClones <img src="man/figures/APackOfTheClones.png" width="20%" align="right" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)

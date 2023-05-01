@@ -26,6 +26,4 @@ progress_bar <- function (x, max = 100) {
   cat(sprintf('\r[%-50s] %d%%',
               paste(rep('=', percent * 0.5), collapse = ''),
               floor(percent)))
-  if (x == max)
-    cat('\n')
 }

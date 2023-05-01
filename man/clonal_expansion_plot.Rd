@@ -19,7 +19,12 @@ clonal_expansion_plot(
   max_repulsion_iter = 100,
   use_default_theme = TRUE,
   show_origin = FALSE,
-  retain_axis_scales = FALSE
+  retain_axis_scales = FALSE,
+  add_size_legend = FALSE,
+  legend_sizes = c(1, 5, 10),
+  legend_position = "top_left",
+  legend_buffer = 0,
+  legend_color = "#808080"
 )
 }
 \arguments{
@@ -52,6 +57,16 @@ clonal_expansion_plot(
 \item{show_origin}{logical. If `TRUE`, only the centers of each circle will be plotted}
 
 \item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales of the original UMAP. However, it will only attempt to extend the axes and never shorten.}
+
+\item{add_size_legend}{Currently bugged, do not set to `TRUE`. The intended feature is: If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones. In the future will become avaliable}
+
+\item{legend_sizes}{numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`.}
+
+\item{legend_position}{character. Can be set to either `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the legend roughly in the corresponding position}
+
+\item{legend_buffer}{numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away}
+
+\item{legend_color}{character. Indicates the color of the circles displayed on the legend. Defaults to the hex code for gray}
 }
 \value{
 Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects

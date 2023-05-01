@@ -93,7 +93,7 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
   
   if (verbose) {
     percent_integrated <- 100 - percent_na(new_seurat_obj)
-    message(paste("\nPercent of cells integrated:", as.character(round(percent_integrated)), "%"))
+    message(paste("\nPercent of unique barcodes:", as.character(round(percent_integrated)), "%"))
   }
   
   return(new_seurat_obj)
