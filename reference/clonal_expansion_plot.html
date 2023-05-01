@@ -69,7 +69,12 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 <span>  max_repulsion_iter <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_origin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  retain_axis_scales <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  retain_axis_scales <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  add_size_legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="st">"top_left"</span>,</span>
+<span>  legend_buffer <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  legend_color <span class="op">=</span> <span class="st">"#808080"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -133,6 +138,26 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 
 <dt>retain_axis_scales</dt>
 <dd><p>If `TRUE`, approximately maintains the axis scales of the original UMAP. However, it will only attempt to extend the axes and never shorten.</p></dd>
+
+
+<dt>add_size_legend</dt>
+<dd><p>Currently bugged, do not set to `TRUE`. The intended feature is: If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones. In the future will become avaliable</p></dd>
+
+
+<dt>legend_sizes</dt>
+<dd><p>numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`.</p></dd>
+
+
+<dt>legend_position</dt>
+<dd><p>character. Can be set to either `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the legend roughly in the corresponding position</p></dd>
+
+
+<dt>legend_buffer</dt>
+<dd><p>numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away</p></dd>
+
+
+<dt>legend_color</dt>
+<dd><p>character. Indicates the color of the circles displayed on the legend. Defaults to the hex code for gray</p></dd>
 
 </dl></div>
     <div class="section level2">
