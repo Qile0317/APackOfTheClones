@@ -97,7 +97,8 @@ clonal_expansion_plot <- function(
     seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
   }
   
-  clone_size_list <- get_clone_sizes(seurat_obj, scale_factor = clone_scale_factor) #radii are square rooted!
+  clone_size_list <- get_clone_sizes(seurat_obj, scale_factor = clone_scale_factor)
+  print(clone_size_list)
   centroid_list <- get_cluster_centroids(seurat_obj)
 
   # pack the plot
@@ -141,7 +142,7 @@ clonal_expansion_plot <- function(
   return(result_plot)
 }
 
-#' change the axis scales to fit the original plot approximately. 
+#' change the axis scales to fit the original plot approximately. Looks pretty bad atm.
 #' A more advanced version could multiply axses by a small amount to retain ratios exactly
 #' @importFrom ggplot2 coord_cartesian
 #' @noRd

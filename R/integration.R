@@ -68,7 +68,7 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
   # Then data points are pasted together separated with "__" to access later on if needed
 
   data_concater <- function(x){
-    x <- levels(factor(na.omit(x))) # not sure if na.omit is a good idea
+    x <- levels(factor(x)) # not sure if na.omit is needed on x
     paste(x, collapse = "__")
   }
 

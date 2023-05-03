@@ -43,6 +43,8 @@ test_that("df_full_join() works", {
 
   expect_equal(df_full_join(list(c1)),
                test_df[1:9, ])
+  
+  expect_equal(df_full_join(list(c1, NULL)), test_df[1:9, ])
 })
 
 test_that("plot_clusters() works", {

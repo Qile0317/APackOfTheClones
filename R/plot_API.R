@@ -14,7 +14,7 @@ df_full_join <- function(clstr_list) {
                    r = numeric(0))
   
   for(i in 1:length(clstr_list)){
-    if (!any(is.na(clstr_list[[i]]))) {
+    if (!any(is.null(clstr_list[[i]]))) {
       
       df <- dplyr::full_join(
         df, data.frame("label" = rep(paste("cluster", as.character(i - 1)),
@@ -86,11 +86,11 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   
   #circle layout
   for(i in 1:length(sizes)){
-    if (length(sizes[[i]]) == 0) {
-      ans[[i]] <- NA # important!
+    if (is.null(sizes[[i]])) {
+      ans[[i]] <- NULL
     }else{
       if(progbar){
-        message(paste("packing cluster", as.character(i)))
+        message(paste("\npacking cluster", as.character(i-1)))
       }
       
       ans[[i]] <- circle_layout(
@@ -104,14 +104,15 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
     }
   }
   
-  #repulsion, not sure how it handles nulls (not even sure if nulls are present...)
+  #repulsion, need to handle nulls
   if (repulse) {
     if(progbar){message("repulsing clusters")}
     ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter)
   }
   
   #joining list into df and color for plotting. in future make customizable
-  ans <- insert_colors(df_full_join(ans), num_clusters)
+  ans <- df_full_join(ans)
+  ans <- insert_colors(ans, num_clusters)
   
   #plotting
   plt <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,

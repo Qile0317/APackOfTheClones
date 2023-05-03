@@ -4,7 +4,6 @@
 
 #function to initialize list into the circular doubly linked list.
 init_boundary <- function(a) {
-
   for (i in 1:(length(a) - 1)) {
     a[[i + 1]]$prv <- a[[i]]
     a[[i]]$nxt <- a[[i + 1]]
@@ -149,12 +148,12 @@ do_intersect <- function(c, d) {
   return(euc_dist < ((c$val$rad) + (d$val$rad)))
 } #could reformulate as discrepancy > threshold
 
-#convenience function to tidy up overlap_check
+#convenience function to tidy up overlap_check, called quite alot 
 geod_dist <- function(Cm, Cn, C) {
   min(fwd_dist(Cn, C), fwd_dist(C, Cm))
 }
 
-#overlap check of 3 circles.
+#overlap check of 3 circles. From profiling, this seems to be the function called the most and longest
 overlap_check <- function(Cm, Cn, C) {
   C_em <- Cm
   C_en <- Cn
@@ -210,7 +209,6 @@ est_rad <- function(coords){
 }
 
 #The circle layout function.###################################
-# could export this just as a pure function
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
 
 #Optional arguments are:
@@ -221,8 +219,7 @@ est_rad <- function(coords){
 #if true the algorithm tries to place each new circle to be added to the packing as close to the origin as possilble,
 #if false the algorithm tries to place each new circle to be added to the packing tangent to the closest circle on the boundary.
 
-#   IMPORTANT:
-#   this function does not incorporate colors! functionality will be added later. its very simple to do in ggplot
+#   this function does not account for colors yet 
 
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                           rad_decrease = 1, # scale factor
