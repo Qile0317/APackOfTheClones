@@ -10,7 +10,7 @@ count_clone_sizes(integrated_seurat_obj)
 \item{integrated_seurat_obj}{Seurat object that has been integrated with a T-cell receptor library with \code{\link{integrate_tcr}}. More specifically, in the metadata, there must at least be the elements `seurat_clusters` and `raw_clonotype_id`}
 }
 \value{
-Returns a list of `table` objects, where each element is tabled clonotype frequencies for the seurat cluster corresponding to the same index - 1. For example, the 5th element is a tabled frequency of counts that corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed).
+Returns a list of `table` objects, where each element is tabled clonotype frequencies for the seurat cluster corresponding to the same index - 1. For example, the 5th element is a tabled frequency of counts that corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed). If an element is `NULL`, it indicates that there were no corresponding T-cell receptor barcode for the cells in the cluster.
 }
 \description{
 count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library

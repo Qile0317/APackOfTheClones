@@ -51,7 +51,7 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
     #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
 
   }else {
-    p1 <- ggplot2::ggplot(clusters, mapping=aes(x,y)) +
+    p1 <- ggplot2::ggplot(clusters, mapping=ggplot2::aes(x,y)) +
       ggplot2::geom_point() +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()

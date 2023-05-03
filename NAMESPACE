@@ -10,4 +10,4 @@ importFrom(grDevices,hcl)
 importFrom(stats,aggregate)
 importFrom(stats,na.omit)
 importFrom(utils,setTxtProgressBar)
-useDynLib(APackOfTheClones, .registration = TRUE)
+#useDynLib(APackOfTheClones, .registration = TRUE) # unfortunately rextendr generates this and I'm not sure why this breaks the build so this is temporarily manually commented out
