@@ -83,8 +83,11 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
     tcr_collapsed <- tcr[, lapply(.SD, data_concater), by = "barcode"]
   }
   
-  #assign rownames for integration and add metadata
+  # assign rownames for integration and add metadata
   rownames(tcr_collapsed) <- tcr_collapsed$barcode
+  
+  # remove NA? - doesnt do anything
+  tcr_collapsed <- na.omit(tcr_collapsed)
 
   new_seurat_obj <- Seurat::AddMetaData(
     new_seurat_obj,
