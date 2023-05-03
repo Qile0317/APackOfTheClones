@@ -76,9 +76,9 @@ clonal_expansion_plot <- function(
   show_origin = FALSE,
   retain_axis_scales = FALSE,
   add_size_legend = TRUE,
-  legend_sizes = c(1, 5, 10),
+  legend_sizes = c(1, 5, 50),
   legend_position = "top_left",
-  legend_buffer = 0,
+  legend_buffer = 1.5,
   legend_color = "#808080") {
 
   # errors/warnings:
