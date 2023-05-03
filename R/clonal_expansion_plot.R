@@ -97,7 +97,6 @@ clonal_expansion_plot <- function(
   }
   
   clone_size_list <- get_clone_sizes(seurat_obj, scale_factor = clone_scale_factor)
-  print(clone_size_list)
   centroid_list <- get_cluster_centroids(seurat_obj)
 
   # pack the plot
@@ -133,8 +132,8 @@ clonal_expansion_plot <- function(
   
   if (add_size_legend) {
     return(insert_legend(
-      plt=result_plot,circ_scale_factor=clone_scale_factor,sizes=legend_sizes,
-      pos=legend_position,buffer=legend_buffer,color=legend_color,n=res
+      plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
+      pos = legend_position, buffer = legend_buffer, color = legend_color, n = res
       )
     )
   }
