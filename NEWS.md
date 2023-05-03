@@ -6,15 +6,13 @@ Initial semi-stable release. The main functions of the package are working with 
 
 All of which have documentation, including on the documentation site.
 
-Here is a list of currently known bugs:
-* Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily
-* The functions to add a legend of circle sizes do not work as intented and is temporarily disabled.
+Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily
 
 Upcoming features/plans are:
 * Customizable cluster coloration, not just based on the original Seurat/ggplot palette
 * User-controlled cluster shifting
 * Comprehensive cluster repulsion
-* legend placement
+* better legends and optional legend border
 * automated optimization of the initial parameters of `clonal_expansion_plot`, especially the `clone_scale_factor`
 * BCR library integration
 * User vignette
