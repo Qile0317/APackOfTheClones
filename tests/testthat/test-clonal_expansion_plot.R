@@ -25,7 +25,8 @@ test_that("repulsion and try_place works", {
   expect_doppelganger(
     "repulsed_tight_plot",
       clonal_expansion_plot(
-        test_integrated_pbmc, verbose = F, repulse = T, clone_scale_factor = 0.5, retain_axis_scales = F, add_size_legend = T, try_place = T
+        test_integrated_pbmc, verbose = F, repulse = T, clone_scale_factor = 0.5, retain_axis_scales = F, try_place = T,
+        add_size_legend = T, legend_buffer = 1.5, legend_spacing = 0.25
       )
   )
 }) 

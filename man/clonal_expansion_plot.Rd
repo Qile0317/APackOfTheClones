@@ -8,7 +8,7 @@ clonal_expansion_plot(
   seurat_obj,
   tcr_df = "seurat_obj_already_integrated",
   res = 360,
-  clone_scale_factor = 0.01,
+  clone_scale_factor = 0.1,
   rad_scale_factor = 0.95,
   ORDER = TRUE,
   try_place = FALSE,
@@ -24,7 +24,8 @@ clonal_expansion_plot(
   legend_sizes = c(1, 5, 50),
   legend_position = "top_left",
   legend_buffer = 1.5,
-  legend_color = "#808080"
+  legend_color = "#808080",
+  legend_spacing = 0.4
 )
 }
 \arguments{
@@ -67,6 +68,8 @@ clonal_expansion_plot(
 \item{legend_buffer}{numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away}
 
 \item{legend_color}{character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray}
+
+\item{legend_spacing}{numeric. Indicates the horizontal distance between each stacked circle on the size legend. Usually should be kept below 0.75 -ish depending on plot size.}
 }
 \value{
 Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects

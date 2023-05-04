@@ -35,6 +35,7 @@ library(utils)
 #' @param legend_position character. Can be set to either `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the legend roughly in the corresponding position
 #' @param legend_buffer numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away
 #' @param legend_color character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray
+#' @param legend_spacing numeric. Indicates the horizontal distance between each stacked circle on the size legend. Usually should be kept below 0.75 -ish depending on plot size.
 #'
 #' @return Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects
 #'
@@ -63,7 +64,7 @@ library(utils)
 clonal_expansion_plot <- function(
   seurat_obj, tcr_df = "seurat_obj_already_integrated",
   res = 360,
-  clone_scale_factor = 0.01, # do 0.5 for test ds - need to make an estimator based on testing
+  clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
   rad_scale_factor = 0.95, 
   ORDER = TRUE,
   try_place = FALSE,
@@ -79,7 +80,8 @@ clonal_expansion_plot <- function(
   legend_sizes = c(1, 5, 50),
   legend_position = "top_left",
   legend_buffer = 1.5,
-  legend_color = "#808080") {
+  legend_color = "#808080",
+  legend_spacing = 0.4) {
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
@@ -132,12 +134,13 @@ clonal_expansion_plot <- function(
   if (add_size_legend) {
     return(insert_legend(
       plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
-      pos = legend_position, buffer = legend_buffer, color = legend_color, n = res
+      pos = legend_position, buffer = legend_buffer, color = legend_color, n = res,
+      spacing = legend_spacing
       )
     )
   }
   if (verbose) {message("Plotting complete")}
-  return(result_plot)
+  result_plot
 }
 
 #' change the axis scales to fit the original plot approximately. Looks pretty bad atm.

@@ -1,7 +1,7 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization Of T-cell Clonal Expansion
-Version: 0.1.0
+Version: 0.1.1
 Author: Qile Yang
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
@@ -30,5 +30,5 @@ Imports:
     stats,
     utils
 RoxygenNote: 7.2.3
-URL: https://qile0317.github.io/scballpack/
+URL: https://qile0317.github.io/APackOfTheClones/
 Config/rextendr/version: 0.2.0.9000

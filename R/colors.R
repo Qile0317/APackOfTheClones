@@ -26,6 +26,8 @@ gen_cluster_color_hashmap <- function(num_clusters) {
 
 # inserts a list of colors into a column in the cluster df by label
 # in future ill make it customizable colors
+#' @noRd
+#' @importFrom dplyr %>% 
 insert_colors <- function(cluster_dataframe, num_clusters) {
   color_hashmap <- gen_cluster_color_hashmap(num_clusters)
   color_vec <- cluster_dataframe[[1]] # 1 is label

@@ -7,7 +7,15 @@ library(ggforce)
 # 
 #' @noRd
 #' @import ggforce
-insert_legend <- function(plt, circ_scale_factor, sizes = c(1,5,50), pos = "top_left", buffer = 1.5, color = "#808080",n=360) {
+insert_legend <- function(
+    plt, circ_scale_factor, 
+    sizes = c(1,5,50),
+    pos = "top_left",
+    buffer = 1.5,
+    color = "#808080",
+    n = 360,
+    spacing = 0.25) {
+  
   sizes <- sort(unique(sizes))
   xr <- ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
   yr <- ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
@@ -34,7 +42,7 @@ insert_legend <- function(plt, circ_scale_factor, sizes = c(1,5,50), pos = "top_
   for (i in 1:m) {
     prev_r <- r
     r <- legend_list[[3]][i]
-    coord[2] <- coord[2] - prev_r - r - 0.25
+    coord[2] <- coord[2] - prev_r - r - spacing
     legend_list[[2]][i] <- coord[2]
     plt <- plt + ggplot2::annotate("text", x = coord[1] + r + 0.75, y = coord[2], label = as.character(sizes[i]))
   }
