@@ -104,10 +104,9 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
     }
   }
   
-  #repulsion, need to handle nulls
   if (repulse) {
-    if(progbar){message("repulsing clusters")}
-    ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter)
+    if(progbar){message("\nrepulsing clusters")}
+    ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar)
   }
   
   #joining list into df and color for plotting. in future make customizable
@@ -117,7 +116,5 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   #plotting
   plt <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
-  
-  # here, make and add legend to plt using ans for the legend
   return(plt)
 }

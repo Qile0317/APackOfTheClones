@@ -35,12 +35,10 @@ get_cluster_centroids <- function(seurat_obj) {
 
 #transform coordinates of a clusterlist from c(0, 0) to its own new centroid, or MOVE to new coord from current
 trans_coord <- function(cluster, new_coord = NULL) {
-
   if (!is.null(new_coord)) {
-    dx <- new_coord[1] - cluster[[4]][1]
-    dy <- new_coord[2] - cluster[[4]][2]
-    cluster[[4]] <- new_coord
-
+    dx <- new_coord[1]
+    dy <- new_coord[2]
+    cluster[[4]] <- cluster[[4]] + c(dx, dy)
   }else {
     dx <- cluster[[4]][1]
     dy <- cluster[[4]][2]

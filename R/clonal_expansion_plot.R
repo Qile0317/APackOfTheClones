@@ -23,11 +23,11 @@ library(utils)
 #' @param ORDER logical. Decides if the largest clones should be at the cluster centroids
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed circle to the origin
 #' @param verbose logical. Decides if visual cues print to the REPL of the packing progress
-#' @param repulse CURRENTLY BUGGED! DO NOT SET TO `TRUE`. The intented functionality is: If `TRUE`, will attempt to push overlapping clusters away from each other.
+#' @param repulse If `TRUE`, will attempt to push overlapping clusters away from each other.
 #' @param repulsion_threshold numeric. The radius that cluster overlap is acceptable
 #' @param repulsion_strength numeric. The smaller the value the less the clusters repulse each other
-#' @param max_repulsion_iter numeric. The number of repulsion iterations.
-#' @param use_default_theme If `TRUE`, the resulting plot will have the same theme as the seurat UMAP
+#' @param max_repulsion_iter numeric. The number of repulsion iterations, note that increasing this value may occasionally even lead to worse looking plots as clusters may repulse eachother too much
+#' @param use_default_theme If `TRUE`, the resulting plot will have the same theme as the seurat UMAP. Else, the plot will simply have a blank background
 #' @param show_origin logical. If `TRUE`, only the centers of each circle will be plotted
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP. However, it will only attempt to extend the axes and never shorten.
 #' @param add_size_legend If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones. 
@@ -68,10 +68,10 @@ clonal_expansion_plot <- function(
   ORDER = TRUE,
   try_place = FALSE,
   verbose = TRUE,
-  repulse = FALSE, # need to fix...
+  repulse = FALSE,
   repulsion_threshold = 1,
-  repulsion_strength = 0.0005,
-  max_repulsion_iter = 100,
+  repulsion_strength = 1,
+  max_repulsion_iter = 10,
   use_default_theme = TRUE,
   show_origin = FALSE,
   retain_axis_scales = FALSE,
@@ -82,7 +82,6 @@ clonal_expansion_plot <- function(
   legend_color = "#808080") {
 
   # errors/warnings:
-  if (repulse) {stop("Sorry, repulsion is currently bugged, please set the repulse argument to FALSE.")}
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
   if ((!is.data.frame(tcr_df)) && is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
     stop("Seurat object is missing the raw_clonotype_id data. Consider integrating the T-cell library into the seurat object again.")
@@ -137,6 +136,7 @@ clonal_expansion_plot <- function(
       )
     )
   }
+  if (verbose) {message("Plotting complete")}
   return(result_plot)
 }
 

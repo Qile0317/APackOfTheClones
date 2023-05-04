@@ -59,8 +59,8 @@ count_clone_sizes <- function(integrated_seurat_obj) {
 }
 
 # work in progress better version with rust
-rust_get_clone_sizes <- function (integrated_seurat_obj, scale_factor = 1) {
-  clusters <- as.numeric(integrated_seurat_obj@meta.data[["seurat_clusters"]])
-  clonotype_ids <- as.character(integrated_seurat_obj@meta.data[["raw_clonotype_id"]])
-  print("unfinished")
-}
+#fast_get_clone_sizes <- function (integrated_seurat_obj, scale_factor = 1) {
+#  clusters <- as.integer(integrated_seurat_obj@meta.data[["seurat_clusters"]])
+#  clonotype_ids <- as.character(integrated_seurat_obj@meta.data[["raw_clonotype_id"]])
+#  rust_get_clone_sizes(clusters,clonotype_ids)
+#}

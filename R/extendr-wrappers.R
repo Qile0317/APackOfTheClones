@@ -11,7 +11,5 @@
 #' @useDynLib APackOfTheClones, .registration = TRUE
 NULL
 
-placeholder <- function() invisible(.Call(wrap__placeholder))
-
 
 # nolint end
