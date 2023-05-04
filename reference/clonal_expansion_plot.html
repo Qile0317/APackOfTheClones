@@ -65,8 +65,8 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  repulse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  repulsion_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  repulsion_strength <span class="op">=</span> <span class="fl">5e-04</span>,</span>
-<span>  max_repulsion_iter <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  repulsion_strength <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  max_repulsion_iter <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_origin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  retain_axis_scales <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -113,7 +113,7 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 
 
 <dt>repulse</dt>
-<dd><p>CURRENTLY BUGGED! DO NOT SET TO `TRUE`. The intented functionality is: If `TRUE`, will attempt to push overlapping clusters away from each other.</p></dd>
+<dd><p>If `TRUE`, will attempt to push overlapping clusters away from each other.</p></dd>
 
 
 <dt>repulsion_threshold</dt>
@@ -125,11 +125,11 @@ the same UMAP coordinates and clusters into a ggplot object.</p>
 
 
 <dt>max_repulsion_iter</dt>
-<dd><p>numeric. The number of repulsion iterations.</p></dd>
+<dd><p>numeric. The number of repulsion iterations, note that increasing this value may occasionally even lead to worse looking plots as clusters may repulse eachother too much</p></dd>
 
 
 <dt>use_default_theme</dt>
-<dd><p>If `TRUE`, the resulting plot will have the same theme as the seurat UMAP</p></dd>
+<dd><p>If `TRUE`, the resulting plot will have the same theme as the seurat UMAP. Else, the plot will simply have a blank background</p></dd>
 
 
 <dt>show_origin</dt>
