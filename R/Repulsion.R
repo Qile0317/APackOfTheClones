@@ -85,24 +85,16 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   centroid_euc_dist <- sqrt((centroid_xdif^2) + (centroid_ydif^2))
   
   # return
-  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad))
+  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad)) # this returns logical(0) when false...
 }
 
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (length(inp) != 0) {
-      if (length(inp[[i]]) != 0) {
-        if (length(inp[[j]]) != 0) {
-          if (length(thr) != 0) {
-            if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
-              return(TRUE)
-            }
-          }
-        }
-      }
+    if (identical(do_cl_intersect(inp[[i]], inp[[j]], thr), TRUE)) {
+      return(TRUE)
     }
   }
-  FALSE
+  return(FALSE) 
 }
 
 # O(N^2) operation to calculate all repulsion vectors for each cluster
