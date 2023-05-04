@@ -15,8 +15,8 @@ clonal_expansion_plot(
   verbose = TRUE,
   repulse = FALSE,
   repulsion_threshold = 1,
-  repulsion_strength = 5e-04,
-  max_repulsion_iter = 100,
+  repulsion_strength = 1,
+  max_repulsion_iter = 10,
   use_default_theme = TRUE,
   show_origin = FALSE,
   retain_axis_scales = FALSE,
@@ -44,15 +44,15 @@ clonal_expansion_plot(
 
 \item{verbose}{logical. Decides if visual cues print to the REPL of the packing progress}
 
-\item{repulse}{CURRENTLY BUGGED! DO NOT SET TO `TRUE`. The intented functionality is: If `TRUE`, will attempt to push overlapping clusters away from each other.}
+\item{repulse}{If `TRUE`, will attempt to push overlapping clusters away from each other.}
 
 \item{repulsion_threshold}{numeric. The radius that cluster overlap is acceptable}
 
 \item{repulsion_strength}{numeric. The smaller the value the less the clusters repulse each other}
 
-\item{max_repulsion_iter}{numeric. The number of repulsion iterations.}
+\item{max_repulsion_iter}{numeric. The number of repulsion iterations, note that increasing this value may occasionally even lead to worse looking plots as clusters may repulse eachother too much}
 
-\item{use_default_theme}{If `TRUE`, the resulting plot will have the same theme as the seurat UMAP}
+\item{use_default_theme}{If `TRUE`, the resulting plot will have the same theme as the seurat UMAP. Else, the plot will simply have a blank background}
 
 \item{show_origin}{logical. If `TRUE`, only the centers of each circle will be plotted}
 

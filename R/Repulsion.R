@@ -84,13 +84,12 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   centroid_ydif <- (Cn$centroid[2] - Cm$centroid[2])
   centroid_euc_dist <- sqrt((centroid_xdif^2) + (centroid_ydif^2))
   
-  # return
-  return((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad)) # this returns logical(0) when false...
+  return(identical((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad), TRUE)) #idk why without identical() it returns logical(0) when false
 }
 
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (identical(do_cl_intersect(inp[[i]], inp[[j]], thr), TRUE)) {
+    if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
       return(TRUE)
     }
   }
