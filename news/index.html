@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Clonal_expansion_plotting.html">Clonal expansion plotting tutorial</a>
+  </div>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -43,9 +49,28 @@
 <p>Initial semi-stable release. The main functions of the package are working with their default parameters. The package currently exports three functions: * <code>integrate_tcr</code> * <code>count_clone_sizes</code> * <code>clonal_expansion_plot</code></p>
 <p>All of which have documentation, including on the documentation site.</p>
 <p>Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily</p>
-<p>Upcoming features/plans are: * Customizable cluster coloration, not just based on the original Seurat/ggplot palette * User-controlled cluster shifting * Comprehensive cluster repulsion * better legends and optional legend border * automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code> * BCR library integration * User vignette * Developer vignette * Submission to CRAN or Bioconductor * Rewrite of certain circle packing functions in <code>rust</code> to improve performance</p>
+<div class="section level3">
+<h3 id="upcoming-featuresplans-are-0-1-0">Upcoming features/plans are:<a class="anchor" aria-label="anchor" href="#upcoming-featuresplans-are-0-1-0"></a></h3>
+<ul><li>Customizable cluster coloration, not just based on the original Seurat/ggplot palette</li>
+<li>User-controlled cluster shifting</li>
+<li>Comprehensive cluster repulsion</li>
+<li>better legends and optional legend border</li>
+<li>automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code>
+</li>
+<li>BCR library integration</li>
+<li>User vignette</li>
+<li>Developer vignette</li>
+<li>Submission to CRAN or Bioconductor</li>
+<li>Rewrite of certain circle packing functions in <code>rust</code> to improve performance</li>
+</ul></div>
 </div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="apackoftheclones-011">APackOfTheClones 0.1.1<a class="anchor" aria-label="anchor" href="#apackoftheclones-011"></a></h2>
+<p>Initial versions of Automated cluster repulsion and the size legend have now been fully implemented, and these arguments have been “unlocked” in the <code>clonal_expansion_plot</code>. See the documentation reference for more details on the utilization of those arguments.</p>
+<p>Documentation and the README in general has been slightly improved and a preliminary user vignette has been introduced as well, and can both be viewed on the documentation website and by calling the <code>vignette</code> function in R.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

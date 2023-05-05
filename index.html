@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,12 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/Clonal_expansion_plotting.html">Clonal expansion plotting tutorial</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
@@ -59,7 +65,7 @@
 <!-- badges: start -->
 
 <p><code>APackOfTheClones</code> is an R package to produce “ball-packing” visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling.</p>
-<p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of <code>APackOfTheClones</code> being used on a public 10X genomics dataset:</p>
+<p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of <code>APackOfTheClones</code> being used on a <a href="https://www.10xgenomics.com/resources/datasets/pbm-cs-from-bal-bc-mice-tcr-enrichment-from-amplified-c-dna-1-standard-3-0-0" class="external-link">public 10X genomics dataset</a>:</p>
 <p><img src="reference/figures/example.png" width="100%" align="center"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -77,7 +83,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/scballpack/">APackOfTheClones</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/APackOfTheClones/" class="external-link">APackOfTheClones</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># run sc-RNAseq pipeline to produce a seurat_object</span></span>
 <span></span>
@@ -158,6 +164,8 @@
 <li><a href="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main" class="external-link"><img src="https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/" class="external-link"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation"></a></li>
+<li><a href="https://github.com/Qile0317/APackOfTheClones/releases/latest" class="external-link"><img src="https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg" alt="Latest Release"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
 
