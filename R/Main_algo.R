@@ -240,11 +240,11 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
 
   lenCirc <- length(circles)
-  progress_bar(0,1)
+  if (progbar) {progress_bar(0,1)}
 
   #Taking care of "degenerate" cases when there are only one or two circles
   if (lenCirc == 1) {
-    progress_bar(1,1)
+    if (progbar) {progress_bar(1,1)}
     return(list("x" = circles[[1]]$val[[2]] + centroid[1],
                 "y" = circles[[1]]$val[[3]] + centroid[2],
                 "rad" = circles[[1]]$val[[6]] * rad_decrease,
@@ -253,7 +253,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
 
   if (lenCirc == 2) {
-    progress_bar(1,1)
+    if (progbar) {progress_bar(1,1)}
     # transform the x coordinates to place left and right of center
     circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
     circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]

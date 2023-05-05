@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = FALSE)
 options(rmarkdown.html_vignette.check_title = FALSE)
 
+# choose cran mirror
+chooseCRANmirror(ind = 0)
+
 # function to install and load packages quietly
 quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
   if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
@@ -94,7 +97,7 @@ pbmc <- integrate_tcr(pbmc, tcr_dataframe, verbose = FALSE)
 
 By calling `integrate_tcr`, one can now find all the information from `all_contig_annotations.csv` within the `@meta.data` attribute. Let's take a quick look on what it looks like:
 
-```{r, echo = FALSE, results = 'asis'}
+```{r}
 view_head(pbmc@meta.data)
 ```
 From this snippet of the meta data, we can see that for this particular seurat object, the first 5 columns  `orig.ident, nCount_RNA, nFeature_RNA, RNA_snn_res.0.6, seurat_clusters` were originally present. What we care about is all the new columns after them. A few key things to note:
