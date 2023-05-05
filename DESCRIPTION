@@ -6,6 +6,8 @@ Author: Qile Yang
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
 Description: A circle packing package for visualizing T-cell clonal expansion by integrating scRNAseq and TCR library data.
+Depends:
+    R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-US

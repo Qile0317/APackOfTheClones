@@ -21,3 +21,5 @@
 ^a.exe$
 ^cran-comments\.md$
 ^src/\.cargo$
+^doc$
+^Meta$
