@@ -102,8 +102,8 @@ By calling `integrate_tcr`, one can now find all the information from `all_conti
 view_head(pbmc@meta.data)
 ```
 From this snippet of the meta data, we can see that for this particular seurat object, the first 5 columns  `orig.ident, nCount_RNA, nFeature_RNA, RNA_snn_res.0.6, seurat_clusters` were originally present. What we care about is all the new columns after them. A few key things to note:
-- There are a lot of `NA` values, and that is due to 1) some cells aren't T cells, 2) some T cell receptors do not end up being sequenced for many possible reasons, 3) Of the sequenced T cells in the TCR library, there are usually a lot of duplicate barcodes (repeated TCR sequencing of the same cell) as each individual cell may have several TCR types and/or need several contigs to assemble the final sequence.
-- unique data about TCRs of the same cell (same barcode) are collapsed together with `__` in the order of the contigs
+* There are a lot of `NA` values, and that is due to 1) some cells aren't T cells, 2) some T cell receptors do not end up being sequenced for many possible reasons, 3) Of the sequenced T cells in the TCR library, there are usually a lot of duplicate barcodes (repeated TCR sequencing of the same cell) as each individual cell may have several TCR types and/or need several contigs to assemble the final sequence.
+* unique data about TCRs of the same cell (same barcode) are collapsed together with `__` in the order of the contigs
 
 Now, the seurat object can be analyzed downstream with the new itegrated information however we wish. It also is now ready to have its clonotypes counted and the clonal expansion visualized.
 
@@ -129,19 +129,29 @@ pbmc_expansion_plot
 ```
 
 A few things to note about the plot:
-- The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
-- The most expanded clonotypes are in the center of each circle cluste with larger sizes, symbolizing increased expansion
-- There are less circles than the scRNAseq cell count partly due to some cells are a part of the same circle, but mainly because most barcodes were for one reason or another, never detected during the immune profiling procedure.
-- On the top left, there is a somewhat covered visual legend of the relative clone sizes
-- The red and green clusters have considerable visual overlap
-- The returned plot is a fully customizable `ggplot` object
+* The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
+* The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
+* There are less circles than the scRNAseq cell count due to aforementioned reasons.
+* On the top left, there is a somewhat covered visual legend of the relative clone sizes
+* The red and green clusters have considerable visual overlap
+* The returned plot is a fully customizable `ggplot` object
 
 As `APackOfTheClones` is in a rapid-development phase, the resulting clonal expansion plot will usually not be visually satisfactory on the first run without customizations. However, there are many optional arguments and `ggplot` tricks that we are about to explore that will help us make it publication quality.
 
 # Plot refinement and customization
 
-Unfinished
+*Unfinished*
 
+## Adjusting intra-cluster spacing
+The considerable overlap between clusters (due to the algorithm's attempt to fit clusters to the original UMAP coordinates) may sometimes obstruct eachother excessively.
+
+## Adjusting and customizing size legend
+
+## Adjusting and customizing circle size and scaling
+
+## Possible ggplot-based modifications
+
+# Final product
 ```{r}
 library(ggplot2)
 library(cowplot)
