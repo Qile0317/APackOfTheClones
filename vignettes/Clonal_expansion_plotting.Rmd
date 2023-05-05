@@ -17,20 +17,18 @@ knitr::opts_chunk$set(echo = FALSE)
 options(rmarkdown.html_vignette.check_title = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
-# choose cran mirror - not needed after setting repos?
-# chooseCRANmirror(ind = 0)
-
 # function to install and load packages quietly
 quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
   if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
     if (CRAN) {
       invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
     }else {
-      quiet_load("devtools")
-      suppressMessages(invisible(devtools::install_github(paste(dev_dir, pkg, sep = ""))))
+      suppressWarnings(suppressMessages(
+        devtools::install_github(paste(dev_dir, pkg, sep = ""))
+      ))
     }
   }
-  suppressPackageStartupMessages(invisible(library(pkg, character.only = TRUE)))
+  suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
 }
 
 # redefine "head" to output a nicer dataframe
@@ -44,6 +42,7 @@ quiet_load("cowplot")
 quiet_load("Seurat")
 
 # load packages and data
+quiet_load("devtools") # ugh, had to add devtools to import
 quiet_load("SCIPData", CRAN = FALSE)
 if(!exists("pbmc")) {data("pbmc")}
 if(!exists("tcr_dataframe")) {data("tcr_dataframe")}
@@ -51,7 +50,7 @@ if(!exists("tcr_dataframe")) {data("tcr_dataframe")}
 
 # Introduction
 
-Single-cell RNA sequencing (scRNA-seq) and T cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide insights into clonal expansion. `APackOfTheClones` provides a simple, publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot`, and can be easily slotted into any analysis pipeline.
+Single-cell RNA sequencing (scRNA-seq) and T cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide insights into clonal expansion. `APackOfTheClones` provides a simple, publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot2`, and can be easily slotted into any analysis pipeline.
 
 In this user vignette, we will assume basic familiarity with `Seurat` and `R`, and a `Seurat` object has already been processed through the basic pipeline until at least the UMAP reduction has been obtained. Most importantly, clonal expansion can only be analyzed if the biosample has been run through the 10X genomics [Chromium Single Cell Immune Profiling](https://www.10xgenomics.com/products/single-cell-immune-profiling) service, and the resulting data processed by [Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger).
 
@@ -61,7 +60,7 @@ We will be showing basic usage of the main function of the package, Namely, in t
 
 Before anything else can be done, we need a `Seurat` object with a UMAP reduction. 
 
-```{r init}
+```{r}
 library(Seurat)
 library(APackOfTheClones)
 
