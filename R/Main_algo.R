@@ -224,7 +224,7 @@ est_rad <- function(coords){
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                           rad_decrease = 1, # scale factor
                           ORDER = TRUE, try_place = TRUE,
-                          progbar = TRUE, print_BL = FALSE) {
+                          progbar = TRUE) {
 
   if (identical(input_rad_vec, list())) {return(NA)}
 
@@ -312,13 +312,8 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
         }
       }
     }
-    if (print_BL) {print(clength(circles[[j-1]]))} #for debugging
   }
   
-  if (progbar) {
-    progress_bar(1,1)
-  }
-
   ans <- list() #in the future i can put the colors in the prior functions.
   cc <- 1
   Rvec <- c()
@@ -350,5 +345,6 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if (rad_decrease != 1) {
     ans[[3]] <- Rvec * rad_decrease
   }
+  if (progbar) {progress_bar(1,1)}
   ans
 }

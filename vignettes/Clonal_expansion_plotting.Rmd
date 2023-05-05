@@ -15,9 +15,10 @@ knitr::opts_chunk$set(
 )
 knitr::opts_chunk$set(echo = FALSE)
 options(rmarkdown.html_vignette.check_title = FALSE)
+options(repos = c(CRAN = "http://cran.rstudio.com"))
 
-# choose cran mirror
-chooseCRANmirror(ind = 0)
+# choose cran mirror - not needed after setting repos?
+# chooseCRANmirror(ind = 0)
 
 # function to install and load packages quietly
 quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
@@ -29,7 +30,7 @@ quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
       suppressMessages(invisible(devtools::install_github(paste(dev_dir, pkg, sep = ""))))
     }
   }
-  suppressPackageStartupMessages(library(pkg, character.only = TRUE))
+  suppressPackageStartupMessages(invisible(library(pkg, character.only = TRUE)))
 }
 
 # redefine "head" to output a nicer dataframe
@@ -38,6 +39,7 @@ view_head <- function(df) {
 }
 
 # load misc packages
+quiet_load("ggplot2")
 quiet_load("cowplot")
 quiet_load("Seurat")
 
@@ -145,7 +147,7 @@ Unfinished
 library(ggplot2)
 library(cowplot)
 
-comparison_plot <- plot_grid(umap_plot + ggtitle("scRNA-seq UMAP"),
+comparison_plot <- cowplot::plot_grid(umap_plot + ggtitle("scRNA-seq UMAP"),
                         pbmc_expansion_plot + ylim(-12,17) +
                           theme(legend.position = "none") +
                           ggtitle("APackOfTheClones clonal expansion plot"),

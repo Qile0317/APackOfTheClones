@@ -102,16 +102,17 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
   return(new_seurat_obj)
 }
 
-#optional function to check how many didn't have matches
+#' Alias to count the number of valid integrated TCR barcodes
+#' 
+#' @param seurat_obj A seurat object integrated with a t cell receptor library via \code{\link{integrate_tcr}}
+#' 
+#' @return Returns an integer indicating the number of valid barcodes that are not NA's
+#' 
+#' @noRd # maybe export this in the future but not much point atm
+count_tcr_barcodes <- function(seurat_obj) sum(!is.na(seurat_obj@meta.data[["barcode"]])) # faster than looping
+
+# get the percent of NA's in the metadata barcode column for the message
 percent_na <- function(seurat_obj) {
-  d <- seurat_obj@meta.data[["barcode"]]
-  len <- 0
-  na <- 0
-  for (i in d) {
-    len <- len + 1
-    if (is.na(i)) {
-      na <- na + 1
-    }
-  }
-  return(100 * na / len)
+  num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
+  100 * (num_barcodes - count_tcr_barcodes(seurat_obj)) / num_barcodes
 }

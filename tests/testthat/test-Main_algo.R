@@ -30,14 +30,14 @@ test_that("circle_layout() handles edge cases", {
   expect_true(is.na(circle_layout(list())))
 
   #input length = 1
-  expect_equal(circle_layout(c(69)),
+  expect_equal(circle_layout(c(69), progbar = F),
                list(
                  "x" = 0,
                  "y" = 0,
                  "rad" = 69,
                  "centroid" = c(0, 0),
                  "clRad" = 69))
-  expect_equal(circle_layout(c(420), c(6, 9)),
+  expect_equal(circle_layout(c(420), c(6, 9), progbar = F),
                list(
                  "x" = 6,
                  "y" = 9,
@@ -46,13 +46,13 @@ test_that("circle_layout() handles edge cases", {
                  "clRad" = 420))
 
   # input length = 2
-  expect_equal(circle_layout(c(69, 420)),
+  expect_equal(circle_layout(c(69, 420), progbar = F),
                list("x" = c(-420, 69),
                     "y" = c(0, 0),
                     "rad" = c(420, 69),
                     "centroid" = c(0, 0),
                     "clRad" = 244.5))
-  expect_equal(circle_layout(c(69,420), c(420, 69)),
+  expect_equal(circle_layout(c(69,420), c(420, 69), progbar = F),
                list("x" = c(0, 489),
                     "y" = c(69, 69),
                     "rad" = c(420, 69),
