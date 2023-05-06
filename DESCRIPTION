@@ -24,7 +24,6 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Imports: 
     data.table,
-    devtools,
     dplyr,
     ggforce,
     ggplot2,
@@ -36,4 +35,3 @@ Imports:
     utils
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/APackOfTheClones/
-Config/rextendr/version: 0.2.0.9000
