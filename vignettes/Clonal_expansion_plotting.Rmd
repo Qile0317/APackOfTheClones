@@ -216,31 +216,86 @@ Here, we can adjust the argument `legend_buffer`, which indicates the amount of 
 
 ```{r, adj_legend, echo = TRUE}
 # the previous arguments have to be maintained!
-pbmc_expansion_plot <- clonal_expansion_plot(pbmc, legend_buffer = 3, legend_spacing = 0.6, repulse = TRUE, verbose = FALSE)
+pbmc_expansion_plot <- clonal_expansion_plot(
+  pbmc,
+  legend_buffer = 3,
+  legend_spacing = 0.6,
+  repulse = TRUE,
+  verbose = FALSE
+)
+pbmc_expansion_plot
+```
+We can even change the circle (clone) sizes displayed in the legend by changing the vector `legend_sizes`:
+
+```{r, adj_legend_sizes, echo = TRUE}
+pbmc_expansion_plot <- clonal_expansion_plot(
+  pbmc,
+  legend_sizes = c(1, 5, 25, 50),
+  legend_buffer = 3,
+  legend_spacing = 0.6,
+  repulse = TRUE,
+  verbose = FALSE
+)
 pbmc_expansion_plot
 ```
 
-*unfinished*
+More details about these arguments can be read in the function documentation.
 
 ## Adjusting and customizing circle size and scaling
 
-*unfinished*
+So far, the sizes of the individual circles (clones) have seemed to look quite pleasant, fitting roughly into their UMAP cluster centroids snugly. However, this may not always be the case. A likely very common issue upon the initialization of the plot with default arguments is that the circles may be too small or too large. 
 
-## Possible ggplot-based modifications
+In these cases, the argument `clone_scale_factor` should be changed. The argument defaults to 0.1, which is the multiplicative scale factor for the square root radius of a clone. So if a clone size is four, and the factor is 0.1, then the actual radius of the circle on the plot would be `sqrt(4) * 0.1` which equates to 0.2. 
 
-*unfinished*
+Additionally, `rad_scale_factor` can optionally be changed to adjust the intra-circular spacing. The factor defaults to 0.95 and indicates the multiplicative amount to adjust the radius of the circles after they have been placed. decreasing this value (slightly) will basically make each circle smaller in place, inceasing the spacing between then,
+
+For demonstration sake, we'll change the `clone_scale_factor` to 0.07 and `rad_scale_factor` to 0.9:
+```{r, scale_fac, echo = TRUE}
+pbmc_expansion_plot <- clonal_expansion_plot(
+  pbmc,
+  clone_scale_factor = 0.07,
+  rad_scale_factor = 0.9,
+  legend_sizes = c(1, 5, 25, 50),
+  legend_buffer = 3,
+  legend_spacing = 0.6,
+  repulse = TRUE,
+  verbose = FALSE
+)
+pbmc_expansion_plot
+```
+
+## Other possible modifications
+
+There are a few other arguments this vignette did not cover which can be read in the function documentation. However, to end off, one more important argument to consider is `use_default_theme = TRUE`. It makes the plot have the same axis labels and general theme as the original UMAP plot. If this isn't to your liking or you want to customize the plot your own way (since `clonal_expansion_plot` generates a `ggplot` object!), simply set it to `FALSE` and you'll have a very minimally themed plot:
+```{r, blankplt, echo = TRUE}
+clonal_expansion_plot(
+  pbmc,
+  use_default_theme = FALSE,
+  clone_scale_factor = 0.07,
+  rad_scale_factor = 0.9,
+  legend_sizes = c(1, 5, 25, 50),
+  legend_buffer = 3,
+  legend_spacing = 0.6,
+  repulse = TRUE,
+  verbose = FALSE
+)
+```
+
+Additionally, if you really want the plot to reflect the original UMAP plot, you could try using `ggplot2`'s `xlim` and `ylim` functions.
 
 # Final product
+That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready. 
+
+For fun, here's a side-by-side comparison of the UMAP plot and the clonal expansion plot:
 ```{r, final, echo = TRUE}
 library(ggplot2)
 library(cowplot)
 
-comparison_plot <- cowplot::plot_grid(umap_plot + ggtitle("scRNA-seq UMAP"),
-                        pbmc_expansion_plot +
-                          theme(legend.position = "none") +
-                          ggtitle("APackOfTheClones clonal expansion plot"),
-                        labels = "AUTO")
-comparison_plot
+cowplot::plot_grid(
+  umap_plot + ggtitle("scRNA-seq UMAP"),
+  pbmc_expansion_plot + ggtitle("APackOfTheClones clonal expansion plot"),
+  labels = "AUTO"
+)
 ```
 
 # Appendix
@@ -254,4 +309,4 @@ devtools::install_github("Qile0317/SCIPData")
 data("pbmc")
 data("tcr_dataframe")
 ```
-And the rest of the code can be copied and used accordingly. 
+And the rest of the code can be copied and used accordingly. (it's also recommended to set `verbose` to `TRUE` for personal use)
