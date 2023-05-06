@@ -26,11 +26,6 @@ Alternatively, to download the latest development edition, run
 library(devtools)
 devtools::install_github("Qile0317/APackOfTheClones")
 ```
-If you also want the vignettes to be built locally, instead run:
-```R
-devtools::install_github("Qile0317/APackOfTheClones", build_vignettes = TRUE)
-```
-
 ## Usage
 The main ball packing function `clonal_expansion_plot` in the package takes two main arguments: 
 - a Seurat object with a UMAP reduction
@@ -70,7 +65,9 @@ The function also takes care of multiple rows of data for the same cell barcode.
 ## Documentation
 Comprehensive documentation, vignettes, and a changelog is deployed at https://qile0317.github.io/APackOfTheClones/
 
-All exported functions has function level documentation which can be called with `?function`. Additionally, as mentioned in the `Installation` section earlier, vignettes can also be built locally. Currently, there is only one vignette named `"Clonal_expansion_plotting"` which is a walkthrough on the clonal expansion visualization workflow. All vignettes can also be viewed online at https://qile0317.github.io/APackOfTheClones/articles/
+All exported functions has function level documentation which can be called with `?function`.
+
+Currently, there is only one introductory vignette named `"Clonal_expansion_plotting"` which is a walkthrough on the clonal expansion visualization workflow. The vignette is ONLINE-ONLY and can be viewed at https://qile0317.github.io/APackOfTheClones/articles/
 
 ## Contributing
 `APackOfTheClones` is currently incomplete, and more features, tests, bugfixes, and documentation are to come. However, pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
