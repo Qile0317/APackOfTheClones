@@ -714,35 +714,115 @@ an argument specifying the vertical distance between circles in the
 legend.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the previous arguments have to be maintained!</span></span>
-<span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, legend_buffer <span class="op">=</span> <span class="fl">3</span>, legend_spacing <span class="op">=</span> <span class="fl">0.6</span>, repulse <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>,</span>
+<span>  legend_buffer <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  legend_spacing <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  repulse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">pbmc_expansion_plot</span></span></code></pre></div>
-<p><img src="Clonal_expansion_plotting_files/figure-html/adj_legend-1.png" width="700"></p>
-<p><em>unfinished</em></p>
+<p><img src="Clonal_expansion_plotting_files/figure-html/adj_legend-1.png" width="700">
+We can even change the circle (clone) sizes displayed in the legend by
+changing the vector <code>legend_sizes</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>,</span>
+<span>  legend_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>  legend_buffer <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  legend_spacing <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  repulse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">pbmc_expansion_plot</span></span></code></pre></div>
+<p><img src="Clonal_expansion_plotting_files/figure-html/adj_legend_sizes-1.png" width="700"></p>
+<p>More details about these arguments can be read in the function
+documentation.</p>
 </div>
 <div class="section level3">
 <h3 id="adjusting-and-customizing-circle-size-and-scaling">Adjusting and customizing circle size and scaling<a class="anchor" aria-label="anchor" href="#adjusting-and-customizing-circle-size-and-scaling"></a>
 </h3>
-<p><em>unfinished</em></p>
+<p>So far, the sizes of the individual circles (clones) have seemed to
+look quite pleasant, fitting roughly into their UMAP cluster centroids
+snugly. However, this may not always be the case. A likely very common
+issue upon the initialization of the plot with default arguments is that
+the circles may be too small or too large.</p>
+<p>In these cases, the argument <code>clone_scale_factor</code> should
+be changed. The argument defaults to 0.1, which is the multiplicative
+scale factor for the square root radius of a clone. So if a clone size
+is four, and the factor is 0.1, then the actual radius of the circle on
+the plot would be <code>sqrt(4) * 0.1</code> which equates to 0.2.</p>
+<p>Additionally, <code>rad_scale_factor</code> can optionally be changed
+to adjust the intra-circular spacing. The factor defaults to 0.95 and
+indicates the multiplicative amount to adjust the radius of the circles
+after they have been placed. decreasing this value (slightly) will
+basically make each circle smaller in place, inceasing the spacing
+between then,</p>
+<p>For demonstration sake, we’ll change the
+<code>clone_scale_factor</code> to 0.07 and
+<code>rad_scale_factor</code> to 0.9:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>,</span>
+<span>  clone_scale_factor <span class="op">=</span> <span class="fl">0.07</span>,</span>
+<span>  rad_scale_factor <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  legend_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>  legend_buffer <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  legend_spacing <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  repulse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">pbmc_expansion_plot</span></span></code></pre></div>
+<p><img src="Clonal_expansion_plotting_files/figure-html/scale_fac-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="possible-ggplot-based-modifications">Possible ggplot-based modifications<a class="anchor" aria-label="anchor" href="#possible-ggplot-based-modifications"></a>
+<h3 id="other-possible-modifications">Other possible modifications<a class="anchor" aria-label="anchor" href="#other-possible-modifications"></a>
 </h3>
-<p><em>unfinished</em></p>
+<p>There are a few other arguments this vignette did not cover which can
+be read in the function documentation. However, to end off, one more
+important argument to consider is <code>use_default_theme = TRUE</code>.
+It makes the plot have the same axis labels and general theme as the
+original UMAP plot. If this isn’t to your liking or you want to
+customize the plot your own way (since
+<code>clonal_expansion_plot</code> generates a <code>ggplot</code>
+object!), simply set it to <code>FALSE</code> and you’ll have a very
+minimally themed plot:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>,</span>
+<span>  use_default_theme <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clone_scale_factor <span class="op">=</span> <span class="fl">0.07</span>,</span>
+<span>  rad_scale_factor <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  legend_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>  legend_buffer <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  legend_spacing <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  repulse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="Clonal_expansion_plotting_files/figure-html/blankplt-1.png" width="700"></p>
+<p>Additionally, if you really want the plot to reflect the original
+UMAP plot, you could try using <code>ggplot2</code>’s <code>xlim</code>
+and <code>ylim</code> functions.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="final-product">Final product<a class="anchor" aria-label="anchor" href="#final-product"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<p>That’s about it for the most basic functionalities of the clonal
+expansion visualization function. Remember to save the plot first as an
+<code>.svg</code> file for maximal resolution, and it should be
+publication ready.</p>
+<p>For fun, here’s a side-by-side comparison of the UMAP plot and the
+clonal expansion plot:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">comparison_plot</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">umap_plot</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"scRNA-seq UMAP"</span><span class="op">)</span>,</span>
-<span>                        <span class="va">pbmc_expansion_plot</span> <span class="op">+</span></span>
-<span>                          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>                          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"APackOfTheClones clonal expansion plot"</span><span class="op">)</span>,</span>
-<span>                        labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></span>
-<span><span class="va">comparison_plot</span></span></code></pre></div>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>  <span class="va">umap_plot</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"scRNA-seq UMAP"</span><span class="op">)</span>,</span>
+<span>  <span class="va">pbmc_expansion_plot</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"APackOfTheClones clonal expansion plot"</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="st">"AUTO"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="Clonal_expansion_plotting_files/figure-html/final-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -752,7 +832,7 @@ legend.</p>
 you will need to install the data used in this vignette which has been
 compiled in an R package <code>SCIPData</code>. You can do so with the
 following code</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install the data package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/SCIPData"</span><span class="op">)</span></span>
@@ -760,7 +840,9 @@ following code</p>
 <span><span class="co"># load the package data directly into R objects in memory</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pbmc"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tcr_dataframe"</span><span class="op">)</span></span></code></pre></div>
-<p>And the rest of the code can be copied and used accordingly.</p>
+<p>And the rest of the code can be copied and used accordingly. (it’s
+also recommended to set <code>verbose</code> to <code>TRUE</code> for
+personal use)</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
