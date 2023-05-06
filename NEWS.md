@@ -9,6 +9,7 @@
 
 # APackOfTheClones 0.1.0 
 Initial semi-stable release. The main functions of the package are working with their default parameters. The package currently exports three functions:
+
 * `integrate_tcr`
 * `count_clone_sizes`
 * `clonal_expansion_plot`
