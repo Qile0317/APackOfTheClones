@@ -153,6 +153,7 @@ repulse_cluster <- function(
     }
     # with the transformation vectors established, each cluster is moved
     for (i in 1:num_clusters) {
+      print(inp[[i]])
       inp[[i]] <- trans_coord(inp[[i]],transformation_vectors[[i]])
     }
     if (verbose) {

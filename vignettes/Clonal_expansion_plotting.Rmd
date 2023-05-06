@@ -145,6 +145,20 @@ As `APackOfTheClones` is in a rapid-development phase, the resulting clonal expa
 ## Adjusting intra-cluster spacing
 The considerable overlap between clusters (due to the algorithm's attempt to fit clusters to the original UMAP coordinates) may sometimes obstruct eachother excessively.
 
+To account for this, there are four optional arguments in `clonal_expansion plot`:
+```
+repulse = FALSE,
+repulsion_threshold = 1,
+repulsion_strength = 1,
+max_repulsion_iter = 10
+```
+For more details on them, read the "Arguments" section in the function documentation (`?clonal_expansion_plot`). But to summarize, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form, please make an issue on the github page.) 
+
+Setting repulse to TRUE with those default parameters should probably yield something like the following:
+```{r}
+pbmc_expansion_plot <- clonal_expansion_plot(pbmc, repulse = TRUE, verbose = FALSE)
+```
+
 ## Adjusting and customizing size legend
 
 ## Adjusting and customizing circle size and scaling
