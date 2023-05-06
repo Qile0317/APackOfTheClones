@@ -4,11 +4,11 @@
 \name{APackOfTheClones-package}
 \alias{APackOfTheClones}
 \alias{APackOfTheClones-package}
-\title{APackOfTheClones: Visualization Of T-cell Clonal Expansion}
+\title{APackOfTheClones: Visualization of T-Cell Clonal Expansion}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A circle packing package for visualizing T-cell clonal expansion by integrating scRNAseq and TCR library data.
+Visualize T-cell clonal expansion via cirlce-packing. APackOfTheClones can integrate single-cell RNA sequencing (scRNAseq) and T-cell receptor (TCR) libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: * Ma et al. (2021) \doi{10.1126/sciimmunol.abg6356}
 }
 \seealso{
 Useful links:

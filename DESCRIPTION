@@ -1,8 +1,7 @@
 Package: APackOfTheClones
 Type: Package
-Title: Visualization Of T-cell Clonal Expansion
+Title: Visualization of T-Cell Clonal Expansion
 Version: 0.1.1
-Author: Qile Yang
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
 Description: Visualize T-cell clonal expansion via cirlce-packing.
