@@ -571,6 +571,21 @@ to explore that will help us make it publication quality.</p>
 <p>The considerable overlap between clusters (due to the algorithm’s
 attempt to fit clusters to the original UMAP coordinates) may sometimes
 obstruct eachother excessively.</p>
+<p>To account for this, there are four optional arguments in
+<code>clonal_expansion plot</code>:</p>
+<pre><code>repulse = FALSE,
+repulsion_threshold = 1,
+repulsion_strength = 1,
+max_repulsion_iter = 10</code></pre>
+<p>For more details on them, read the “Arguments” section in the
+function documentation (<code><a href="../reference/clonal_expansion_plot.html">?clonal_expansion_plot</a></code>). But to
+summarize, first, to make the circle clusters move away from eachother,
+<code>repulse</code> should be set to <code>TRUE</code>, and the
+function should be ran AGAIN. (If you feel this excessive re-running
+takes too long or is inefficient for your workflow in its current form,
+please make an issue on the github page.)</p>
+<p>Setting repulse to TRUE with those default parameters should probably
+yield something like the following:</p>
 </div>
 <div class="section level3">
 <h3 id="adjusting-and-customizing-size-legend">Adjusting and customizing size legend<a class="anchor" aria-label="anchor" href="#adjusting-and-customizing-size-legend"></a>
@@ -588,7 +603,12 @@ obstruct eachother excessively.</p>
 <div class="section level2">
 <h2 id="final-product">Final product<a class="anchor" aria-label="anchor" href="#final-product"></a>
 </h2>
-<p><img src="Clonal_expansion_plotting_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; Warning: Removed 115 rows containing non-finite values</span></span>
+<span><span class="co">#&gt; (`stat_circle()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (`stat_circle()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 1 rows containing missing values (`geom_text()`).</span></span>
+<span><span class="co">#&gt; Removed 1 rows containing missing values (`geom_text()`).</span></span></code></pre>
+<p><img src="Clonal_expansion_plotting_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
