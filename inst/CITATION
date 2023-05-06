@@ -1,7 +1,7 @@
 citHeader("To cite APackOfTheClones in publications, please use:")
 
-citEntry(
-  entry    = "manual",
+bibentry(
+  bibtype  = "manual",
   title    = "APackOfTheClones: Visualize T cell clonal expansion via circle packing",
   author   = "Qile Yang",
   year     = 2023,
