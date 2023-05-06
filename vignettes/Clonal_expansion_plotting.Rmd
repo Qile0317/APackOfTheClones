@@ -1,6 +1,8 @@
 ---
 title: "Clonal expansion plotting tutorial"
 output: rmarkdown::html_vignette
+description: >
+  A full walkthrough of the clonal expansion visualization workflow.
 vignette: >
   %\VignetteIndexEntry{Clonal_expansion_plotting}
   %\VignetteEngine{knitr::rmarkdown}
@@ -60,7 +62,7 @@ We will be showing basic usage of the main function of the package, Namely, in t
 
 Before anything else can be done, we need a `Seurat` object with a UMAP reduction. 
 
-```{r}
+```{r,  echo=TRUE}
 library(Seurat)
 library(APackOfTheClones)
 
