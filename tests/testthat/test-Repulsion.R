@@ -44,10 +44,7 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
   expect_false(do_cl_intersect(c1, c1_shifted_to_9_0))
 })
 
-test_that("do_cl_intersect() handles edge cases with NA and NULL", {
-  expect_false(do_cl_intersect(NA, c1))
-  expect_false(do_cl_intersect(NULL, c1))
-})
+# need to test do_proceed
 
 test_that("get_component_repulsion_vector works", {
   expect_equal(

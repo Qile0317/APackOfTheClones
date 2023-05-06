@@ -21,7 +21,7 @@ gen_cluster_color_hashmap <- function(num_clusters) {
     cluster_str <- paste("cluster", as.character(i-1))
     output[cluster_str] <- color_vec[i]
   }
-  return(output)
+  output
 }
 
 # inserts a list of colors into a column in the cluster df by label

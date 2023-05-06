@@ -55,7 +55,7 @@ get_component_repulsion_vector <- function(inp, i, j, G, dist_adjust = 0) {
 initialize_direction_vectors <- function(num_clusters) {
   direction_vectors <- vector("list", num_clusters)
   for (i in 1:num_clusters) {
-    direction_vectors[[i]]<-c(0, 0)
+    direction_vectors[[i]] <- c(0, 0)
   }
   direction_vectors
 }
@@ -71,26 +71,20 @@ initialize_list_of_transformation_vectors <- function(blank_vectors, num_cluster
 
 #function to check if 2 cluster lists overlap, with a threshold.
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
-  # super dumb, temp fix
-  if (any(is.na(Cn)) || any(is.na(Cm))) {
-    return(FALSE)
-  }
-  if (any(is.null(Cn)) || any(is.null(Cm))) {
-    return(FALSE)
-  }
-
-  #calculate euclidean distance of centroids
   centroid_xdif <- (Cn$centroid[1] - Cm$centroid[1])
   centroid_ydif <- (Cn$centroid[2] - Cm$centroid[2])
   centroid_euc_dist <- sqrt((centroid_xdif^2) + (centroid_ydif^2))
-  
   return(identical((centroid_euc_dist + thr) < (Cn$clRad + Cm$clRad), TRUE)) #idk why without identical() it returns logical(0) when false
 }
 
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
-      return(TRUE)
+    if (!any(is.na(inp[[i]]))) {
+      if (!any(is.na(inp[[j]]))) {
+        if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
+          return(TRUE)
+        }
+      }
     }
   }
   return(FALSE) 
@@ -131,11 +125,9 @@ calculate_transformation_vectors <- function(transformation_vectors, overall_rep
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, dist_adjust = 0, verbose = TRUE
   ) {
-  if (G <= 0) {
-    stop("repulsion strength must be a positive real number")
-  }
+  if (G <= 0) {stop("repulsion strength must be a positive real number")}
   
-  #init variables
+  #init variables - could use a class
   num_clusters <- length(inp)
   transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration. 
   overall_repulsion_vec <- initialize_list_of_transformation_vectors(transformation_vectors, num_clusters) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
@@ -153,8 +145,9 @@ repulse_cluster <- function(
     }
     # with the transformation vectors established, each cluster is moved
     for (i in 1:num_clusters) {
-      print(inp[[i]])
-      inp[[i]] <- trans_coord(inp[[i]],transformation_vectors[[i]])
+      if (!any(is.na(inp[[i]]))) {
+        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]]) # if theres nothing it becomes NA so it doesnt remove stuff
+      }
     }
     if (verbose) {
       progress_bar(curr_iteration, max_iter)

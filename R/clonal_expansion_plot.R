@@ -86,7 +86,7 @@ clonal_expansion_plot <- function(
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
   if ((!is.data.frame(tcr_df)) && is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
-    stop("Seurat object is missing the raw_clonotype_id data. Consider integrating the T-cell library into the seurat object again.")
+    stop("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
   }
   if (max_repulsion_iter > 1000) {
     warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
@@ -131,6 +131,7 @@ clonal_expansion_plot <- function(
     result_plot <- suppressMessages(invisible(retain_scale(seurat_obj, result_plot)))
   }
   
+  if (verbose) {message("\nPlotting completed successfully")}
   if (add_size_legend) {
     return(insert_legend(
       plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
@@ -139,7 +140,6 @@ clonal_expansion_plot <- function(
       )
     )
   }
-  if (verbose) {message("Plotting complete")}
   result_plot
 }
 
@@ -149,7 +149,7 @@ clonal_expansion_plot <- function(
 #' @noRd
 retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
   
-  test_umap_plt <- Seurat::DimPlot(object = seurat_obj,reduction = "umap")
+  test_umap_plt <- Seurat::DimPlot(object = seurat_obj, reduction = "umap")
   
   # get current ranges
   umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range

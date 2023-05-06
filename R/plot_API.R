@@ -13,19 +13,20 @@ df_full_join <- function(clstr_list) {
                    y = numeric(0),
                    r = numeric(0))
   
+  seurat_cluster_index <- 0 # impportant to skip empty cluster indicies for insert_colors, need testing
   for(i in 1:length(clstr_list)){
-    if (!any(is.null(clstr_list[[i]]))) {
-      
+    if (!any(is.na(clstr_list[[i]]))) {
       df <- dplyr::full_join(
-        df, data.frame("label" = rep(paste("cluster", as.character(i - 1)),
+        df, data.frame("label" = rep(paste("cluster", seurat_cluster_index),
                                      length(clstr_list[[i]][["x"]])),
                        "x" = clstr_list[[i]][["x"]],
                        "y" = clstr_list[[i]][["y"]],
                        "r" = clstr_list[[i]][["rad"]]),
         by = dplyr::join_by("label", "x", "y", "r"))
     }
+    seurat_cluster_index <- seurat_cluster_index + 1
   }
-  return(df)
+  df
 }
 
 #main plotting function
@@ -87,12 +88,11 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   #circle layout
   for(i in 1:length(sizes)){
     if (is.null(sizes[[i]])) {
-      ans[[i]] <- NULL
+      ans[[i]] <- NA # important!
     }else{
       if(progbar){
         message(paste("\npacking cluster", as.character(i-1)))
       }
-      
       ans[[i]] <- circle_layout(
         sizes[[i]],
         centroid = centroids[[i]],
@@ -105,7 +105,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   }
   
   if (repulse) {
-    if(progbar){message("\nrepulsing clusters")}
+    if(progbar){message(paste("\nrepulsing clusters | max iterations =", max_repulsion_iter))}
     ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar)
   }
   
@@ -116,5 +116,5 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
   #plotting
   plt <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
                        haslegend = haslegend, void = void, origin = origin)
-  return(plt)
+  plt
 }
