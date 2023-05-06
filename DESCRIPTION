@@ -5,7 +5,10 @@ Version: 0.1.1
 Author: Qile Yang
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
-Description: A circle packing package for visualizing T-cell clonal expansion by integrating scRNAseq and TCR library data.
+Description: Visualize T-cell clonal expansion via cirlce-packing.
+  APackOfTheClones can integrate single-cell RNA sequencing (scRNAseq) and T-cell receptor (TCR) libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. 
+  The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study:
+  * Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>
 Depends:
     R (>= 3.5.0)
 License: MIT + file LICENSE

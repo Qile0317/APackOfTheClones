@@ -7,22 +7,26 @@
 [![Latest Release](https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg)](https://github.com/Qile0317/APackOfTheClones/releases/latest)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 <!-- badges: end -->
 
-```APackOfTheClones``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a seurat(V4) object, based on its T-cell-receptor (TCR) library generated from a cellranger output of 10X single-cell immune profiling. 
+```APackOfTheClones``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a `Seurat` object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling. 
 
 The concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of `APackOfTheClones` being used on a [public 10X genomics dataset](https://www.10xgenomics.com/resources/datasets/pbm-cs-from-bal-bc-mice-tcr-enrichment-from-amplified-c-dna-1-standard-3-0-0):
 
 <img src="man/figures/example.png" width="100%" align="center" />
 
 ## Installation
+`APackOfTheClones` is registered on CRAN. To install the latest stable release, simply run the following
+```R
+install.packages("APackOfTheClones")
+```
+Alternatively, to download the latest development edition, run
 ```R
 library(devtools)
 devtools::install_github("Qile0317/APackOfTheClones")
 ```
-More complete versions of the package is projected to be registered on CRAN or Bioconductor.
-
-If you also want the vignettes to be built locally, instead use:
+If you also want the vignettes to be built locally, instead run:
 ```R
 devtools::install_github("Qile0317/APackOfTheClones", build_vignettes = TRUE)
 ```
