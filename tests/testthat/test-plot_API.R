@@ -44,7 +44,20 @@ test_that("df_full_join() works", {
   expect_equal(df_full_join(list(c1)),
                test_df[1:9, ])
   
-  expect_equal(df_full_join(list(c1, NULL)), test_df[1:9, ])
+  expect_equal(df_full_join(list(c1, NA)), test_df[1:9, ])
+  expect_equal(
+    df_full_join(list(NA, c1)),
+    structure(list(label = c("cluster 1", "cluster 1", "cluster 1", 
+                             "cluster 1", "cluster 1", "cluster 1", "cluster 1", "cluster 1", 
+                             "cluster 1"), x = c(-1.3, 1.3, -1.48029736616688e-16, -1.97727239868245, 
+                                                 1.97727239868245, 2.22044604925031e-16, 0.728260708834882, -1.24901168984757, 
+                                                 3.44242956206626), y = c(0.632455532033676, 0.632455532033676, 
+                                                                          -1.26491106406735, -1.56556678313579, -1.56556678313579, 2.5298221281347, 
+                                                                          -3.12760705106236, -3.4282627701308, -0.204201848011811), r = c(1.3, 
+                                                                                                                                          1.3, 1, 1, 1, 1, 1, 1, 1)), class = "data.frame", row.names = c(NA, 
+                                                                                                                                                                                                          -9L))
+  )
+  expect_identical(df_full_join(list(NA, c1)), df_full_join(list(NA, c1, NA)))
 })
 
 test_that("plot_clusters() works", {
