@@ -1,5 +1,3 @@
-# complete plotting and integration API, with functions from plot_API.R
-
 library(Seurat)
 library(ggplot2)
 library(ggforce)

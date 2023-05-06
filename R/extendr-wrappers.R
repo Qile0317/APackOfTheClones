@@ -11,5 +11,7 @@
 #' @useDynLib APackOfTheClones, .registration = TRUE
 NULL
 
+rust_sum <- function(component_vector) .Call(wrap__rust_sum, component_vector)
+
 
 # nolint end

@@ -2,7 +2,7 @@
 distV <- function(c1, c2){
   return(c(c1$centroid[1] - c2$centroid[1],
            c1$centroid[2] - c2$centroid[2]))
-} # works
+}
 
 #polar form conversion from component form. its with respect to x axis. - works
 polV <- function(vec) {
@@ -146,7 +146,7 @@ repulse_cluster <- function(
     # with the transformation vectors established, each cluster is moved
     for (i in 1:num_clusters) {
       if (!any(is.na(inp[[i]]))) {
-        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]]) # if theres nothing it becomes NA so it doesnt remove stuff
+        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
       }
     }
     if (verbose) {
@@ -156,5 +156,4 @@ repulse_cluster <- function(
   inp
 }
 
-# could be rewritten from scratch in rust - actually pretty fast lol
-# there could be a stackoverflow for big inputs? a bajilion functions are repeated called :P
+# could be rewritten from scratch in rust

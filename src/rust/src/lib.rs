@@ -1,18 +1,9 @@
 use extendr_api::prelude::*;
-use std::collections::HashMap;
 
-fn initialize_hashmap_vector(n: usize) -> Vec<HashMap<String, i32>> {
-    let mut vector = Vec::with_capacity(n);
-    for _ in 1..n {
-        vector.push(HashMap::new());
-    }
-    vector
-}
-
+// just a test
 #[extendr]
-fn rust_get_clone_sizes(clusters: Integers, clonotype_ids: Strings) {
-    let mut arr = initialize_hashmap_vector(clusters.len());
-    rprintln!("unfinished");
+fn rust_sum(component_vector: Integers) -> Rint {
+    component_vector.elt(0) + component_vector.elt(1)
 }
 
 // Macro to generate exports.
@@ -20,5 +11,5 @@ fn rust_get_clone_sizes(clusters: Integers, clonotype_ids: Strings) {
 // See corresponding C code in `entrypoint.c`.
 extendr_module! {
     mod APackOfTheClones;
-    //fn rust_get_clone_sizes;
+    fn rust_sum;
 }

@@ -6,6 +6,8 @@
 \alias{APackOfTheClones-package}
 \title{APackOfTheClones: Visualization Of T-cell Clonal Expansion}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 A circle packing package for visualizing T-cell clonal expansion by integrating scRNAseq and TCR library data.
 }
 \seealso{
