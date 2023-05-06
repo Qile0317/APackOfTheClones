@@ -514,13 +514,13 @@ looks like:</p>
 particular seurat object, the first 5 columns
 <code>orig.ident, nCount_RNA, nFeature_RNA, RNA_snn_res.0.6, seurat_clusters</code>
 were originally present. What we care about is all the new columns after
-them. A few key things to note: - There are a lot of <code>NA</code>
+them. A few key things to note: * There are a lot of <code>NA</code>
 values, and that is due to 1) some cells aren’t T cells, 2) some T cell
 receptors do not end up being sequenced for many possible reasons, 3) Of
 the sequenced T cells in the TCR library, there are usually a lot of
 duplicate barcodes (repeated TCR sequencing of the same cell) as each
 individual cell may have several TCR types and/or need several contigs
-to assemble the final sequence. - unique data about TCRs of the same
+to assemble the final sequence. * unique data about TCRs of the same
 cell (same barcode) are collapsed together with <code>__</code> in the
 order of the contigs</p>
 <p>Now, the seurat object can be analyzed downstream with the new
@@ -546,17 +546,15 @@ doing so. Check the documentation by running
 <p>All one has to do to produce the visualization is by simply running
 the following code:
 <img src="Clonal_expansion_plotting_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>A few things to note about the plot: - The clonotype counts for each
+<p>A few things to note about the plot: * The clonotype counts for each
 seurat cluster corresponds to their position and color in the original
-UMAP centroids - The most expanded clonotypes are in the center of each
-circle cluste with larger sizes, symbolizing increased expansion - There
-are less circles than the scRNAseq cell count partly due to some cells
-are a part of the same circle, but mainly because most barcodes were for
-one reason or another, never detected during the immune profiling
-procedure. - On the top left, there is a somewhat covered visual legend
-of the relative clone sizes - The red and green clusters have
-considerable visual overlap - The returned plot is a fully customizable
-<code>ggplot</code> object</p>
+UMAP centroids * The most expanded clonotypes are in the center of each
+circle cluster with larger sizes, symbolizing increased expansion *
+There are less circles than the scRNAseq cell count due to
+aforementioned reasons. * On the top left, there is a somewhat covered
+visual legend of the relative clone sizes * The red and green clusters
+have considerable visual overlap * The returned plot is a fully
+customizable <code>ggplot</code> object</p>
 <p>As <code>APackOfTheClones</code> is in a rapid-development phase, the
 resulting clonal expansion plot will usually not be visually
 satisfactory on the first run without customizations. However, there are
@@ -566,7 +564,30 @@ to explore that will help us make it publication quality.</p>
 <div class="section level2">
 <h2 id="plot-refinement-and-customization">Plot refinement and customization<a class="anchor" aria-label="anchor" href="#plot-refinement-and-customization"></a>
 </h2>
-<p>Unfinished</p>
+<p><em>Unfinished</em></p>
+<div class="section level3">
+<h3 id="adjusting-intra-cluster-spacing">Adjusting intra-cluster spacing<a class="anchor" aria-label="anchor" href="#adjusting-intra-cluster-spacing"></a>
+</h3>
+<p>The considerable overlap between clusters (due to the algorithm’s
+attempt to fit clusters to the original UMAP coordinates) may sometimes
+obstruct eachother excessively.</p>
+</div>
+<div class="section level3">
+<h3 id="adjusting-and-customizing-size-legend">Adjusting and customizing size legend<a class="anchor" aria-label="anchor" href="#adjusting-and-customizing-size-legend"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="adjusting-and-customizing-circle-size-and-scaling">Adjusting and customizing circle size and scaling<a class="anchor" aria-label="anchor" href="#adjusting-and-customizing-circle-size-and-scaling"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="possible-ggplot-based-modifications">Possible ggplot-based modifications<a class="anchor" aria-label="anchor" href="#possible-ggplot-based-modifications"></a>
+</h3>
+</div>
+</div>
+<div class="section level2">
+<h2 id="final-product">Final product<a class="anchor" aria-label="anchor" href="#final-product"></a>
+</h2>
 <p><img src="Clonal_expansion_plotting_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 <div class="section level2">
