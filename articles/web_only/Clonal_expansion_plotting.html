@@ -756,7 +756,7 @@ the plot would be <code>sqrt(4) * 0.1</code> which equates to 0.2.</p>
 to adjust the intra-circular spacing. The factor defaults to 0.95 and
 indicates the multiplicative amount to adjust the radius of the circles
 after they have been placed. decreasing this value (slightly) will
-basically make each circle smaller in place, inceasing the spacing
+basically make each circle smaller in place, increasing the spacing
 between then,</p>
 <p>For demonstration sake, we’ll change the
 <code>clone_scale_factor</code> to 0.07 and
@@ -824,11 +824,8 @@ clonal expansion plot:</p>
 <span>  labels <span class="op">=</span> <span class="st">"AUTO"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Clonal_expansion_plotting_files/figure-html/final-1.png" width="700"></p>
-</div>
-<div class="section level2">
-<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
-</h2>
-<p>If you really want to reproduce the plots and code in this vignette,
+<details><summary><strong>How do I reproduce the plots in this vignette?</strong>
+</summary><p>If you really want to reproduce the plots and code in this vignette,
 you will need to install the data used in this vignette which has been
 compiled in an R package <code>SCIPData</code>. You can do so with the
 following code</p>
@@ -838,11 +835,13 @@ following code</p>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/SCIPData"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load the package data directly into R objects in memory</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pbmc"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tcr_dataframe"</span><span class="op">)</span></span></code></pre></div>
-<p>And the rest of the code can be copied and used accordingly. (it’s
-also recommended to set <code>verbose</code> to <code>TRUE</code> for
-personal use)</p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pbmc"</span>, <span class="st">"tcr_dataframe"</span><span class="op">)</span></span></code></pre></div>
+<p>And the rest of the code can be copied and used accordingly.</p>
+Alternatively, there are two smaller, minimal, artificial versions of
+the seurat object and clonotype data that can be loaded in
+<code>APackOfTheClones</code>, run <code><a href="../../reference/mini_seurat_obj.html">?mini_seurat_obj</a></code> and
+<code><a href="../../reference/mini_clonotype_data.html">?mini_clonotype_data</a></code> for more details.
+</details>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

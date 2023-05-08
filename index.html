@@ -73,6 +73,7 @@
 </div>
 <!-- badges: start -->
 
+<!-- [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones) -->
 <p><code>APackOfTheClones</code> is an R package to produce “ball-packing” visualizations of the clonal expansion of T-cells in a <code>Seurat</code> object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling.</p>
 <p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of <code>APackOfTheClones</code> being used on a <a href="https://www.10xgenomics.com/resources/datasets/pbm-cs-from-bal-bc-mice-tcr-enrichment-from-amplified-c-dna-1-standard-3-0-0" class="external-link">public 10X genomics dataset</a>:</p>
 <p><img src="reference/figures/example.png" width="100%" align="center"></p>
