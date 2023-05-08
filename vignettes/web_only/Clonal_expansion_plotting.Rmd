@@ -247,7 +247,7 @@ So far, the sizes of the individual circles (clones) have seemed to look quite p
 
 In these cases, the argument `clone_scale_factor` should be changed. The argument defaults to 0.1, which is the multiplicative scale factor for the square root radius of a clone. So if a clone size is four, and the factor is 0.1, then the actual radius of the circle on the plot would be `sqrt(4) * 0.1` which equates to 0.2. 
 
-Additionally, `rad_scale_factor` can optionally be changed to adjust the intra-circular spacing. The factor defaults to 0.95 and indicates the multiplicative amount to adjust the radius of the circles after they have been placed. decreasing this value (slightly) will basically make each circle smaller in place, inceasing the spacing between then,
+Additionally, `rad_scale_factor` can optionally be changed to adjust the intra-circular spacing. The factor defaults to 0.95 and indicates the multiplicative amount to adjust the radius of the circles after they have been placed. decreasing this value (slightly) will basically make each circle smaller in place, increasing the spacing between then,
 
 For demonstration sake, we'll change the `clone_scale_factor` to 0.07 and `rad_scale_factor` to 0.9:
 ```{r, scale_fac, echo = TRUE}
@@ -298,7 +298,9 @@ cowplot::plot_grid(
 )
 ```
 
-# Appendix
+<details>
+  <summary>**How do I reproduce the plots in this vignette?**</summary>
+
 If you really want to reproduce the plots and code in this vignette, you will need to install the data used in this vignette which has been compiled in an R package `SCIPData`. You can do so with the following code
 ```{r, echo = TRUE, eval = FALSE}
 # install the data package
@@ -306,7 +308,9 @@ library(devtools)
 devtools::install_github("Qile0317/SCIPData")
 
 # load the package data directly into R objects in memory
-data("pbmc")
-data("tcr_dataframe")
+data("pbmc", "tcr_dataframe")
 ```
-And the rest of the code can be copied and used accordingly. (it's also recommended to set `verbose` to `TRUE` for personal use)
+And the rest of the code can be copied and used accordingly. 
+
+Alternatively, there are two smaller, minimal, artificial versions of the seurat object and clonotype data that can be loaded in `APackOfTheClones`, run `?mini_seurat_obj` and `?mini_clonotype_data` for more details. 
+</details>

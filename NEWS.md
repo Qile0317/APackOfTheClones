@@ -1,6 +1,9 @@
+# APackOfTheClones 0.1.2
+CRAN release and minor documentation changes.
+
 # APackOfTheClones 0.1.1
 ## Additions
-* A preliminary user vignette can be viewed on the documentation website, but the code chunks are missing on the site. It is unclear currently if it can be viewed in R either. Future patches will  improve this.
+* A preliminary user vignette can be viewed on the documentation website, but not locally.
 
 ## Changes
 * An initial version of automated cluster repulsion is correctly implemented and the related arguments in `clonal_expansion_plot` has been "unlocked".

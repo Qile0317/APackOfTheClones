@@ -7,7 +7,7 @@ if (requireNamespace("vdiffr", quietly = TRUE) && utils::packageVersion('testtha
 } else {
   # If vdiffr is not available and visual tests are explicitly required, raise error.
   if (identical(Sys.getenv("VDIFFR_RUN_TESTS"), "true")) {
-    abort("vdiffr is not installed")
+    rlang::abort("vdiffr is not installed")
   }
 
   # Otherwise, assign a dummy function

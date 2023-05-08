@@ -15,7 +15,7 @@ test_that("gg_color_hue() works", {
 
 test_that("gen_cluster_color_hashmap() works", {
   
-  test_hashmap <- hash()
+  test_hashmap <- hash::hash()
   test_hashmap["cluster 0"] <- "#F8766D"
   test_hashmap["cluster 1"] <- "#00BA38"
   test_hashmap["cluster 2"] <- "#619CFF"

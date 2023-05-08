@@ -16,13 +16,14 @@ Returns a list of `table` objects, where each element is tabled clonotype freque
 count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library
 }
 \examples{
-\dontrun{
+\donttest{
 library(Seurat)
 library(APackOfTheClones)
+data("mini_clonotype_data","mini_seurat_obj")
 
 # produce an integrated seurat_object
-seurat_object <- integrate_tcr(seurat_obj, tcr_dataframe)
-clonotype_counts <- count_clone_sizes(seurat_obj)
+integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
+clonotype_counts <- count_clone_sizes(integrated_seurat_object)
 }
 }
 \seealso{

@@ -39,3 +39,8 @@ test_that("trans_coord() works WITH new_coord",{
 })
 
 # need to test if it doesn't work when the input is null/na!
+
+test_that("move_cluster() works", {
+  expect_equal(move_cluster(c1,c(4,5)), c1_shifted_by_4_5)
+  expect_equal(move_cluster(c1,c(9,0)), c1_shifted_to_9_0)
+})

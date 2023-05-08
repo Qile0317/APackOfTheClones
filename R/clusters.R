@@ -33,7 +33,7 @@ get_cluster_centroids <- function(seurat_obj) {
   ))
 }
 
-#transform coordinates of a clusterlist from c(0, 0) to its own new centroid, or MOVE to new coord from current
+# TRANSFORM coordinates of a clusterlist from c(0, 0) to its own new centroid, or MOVE to new coord from current
 trans_coord <- function(cluster, new_coord = NULL) {
   if (!is.null(new_coord)) {
     dx <- new_coord[1]
@@ -43,10 +43,21 @@ trans_coord <- function(cluster, new_coord = NULL) {
     dx <- cluster[[4]][1]
     dy <- cluster[[4]][2]
   }
-  return(list("x" = cluster[[1]] + dx,
-              "y" = cluster[[2]] + dy,
-              "rad" = cluster[[3]],
-              "centroid" = cluster[[4]],
-              "clRad" = cluster[[5]])
-  )
+  # vectorized addition of xy changes
+  cluster[[1]] <- cluster[[1]] + dx
+  cluster[[2]] <- cluster[[2]] + dy
+  cluster
 }
+
+# MOVE clusterlist to a new centroid, irrespective of previous centroid
+move_cluster <- function(cluster, new_coord) {
+  dx <- cluster[[4]][1] - new_coord[1]
+  dy <- cluster[[4]][2] - new_coord[2]
+  
+  cluster[[1]] <- cluster[[1]] - dx
+  cluster[[2]] <- cluster[[2]] - dy
+  cluster[[4]] <- new_coord
+  cluster
+}
+  
+# it might also be a nicer idea to create a class "Cluster" and have these to be member functions instead

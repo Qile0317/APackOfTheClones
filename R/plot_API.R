@@ -41,18 +41,18 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
                           origin = FALSE){ #, label=TRUE (labels each individual circle, yikes)
   if (!origin) {
     p1 <- ggplot2::ggplot(data = clusters) +
-      ggforce::geom_circle(ggplot2::aes(
-        x0 = x, y0 = y, r = r, fill = color),
+      ggforce::geom_circle(aes_string(
+        x0 = "x", y0 = "y", r = "r", fill = "color"),
         n = n, linetype = linetype) +
       ggplot2::scale_fill_identity() +
       
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
-    
-    #if(label){p1 <- p1 + geom_text(data = clusters, aes(x,y, label = .data[["label"]]))} #this should only be near a cluster. can make simple function to put it on bottom right.
-
   }else {
-    p1 <- ggplot2::ggplot(clusters, mapping=ggplot2::aes(x,y)) +
+    p1 <- ggplot2::ggplot(
+      clusters, 
+      mapping = aes_string(x = "x", y = "y")
+      ) + 
       ggplot2::geom_point() +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()

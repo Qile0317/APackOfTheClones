@@ -2,11 +2,9 @@
 
 library(ggplot2)
 library(ggforce)
+library(rlang)
 
 # inert a circle size legend into a clonal expansion plot
-# 
-#' @noRd
-#' @import ggforce
 insert_legend <- function(
     plt, circ_scale_factor, 
     sizes = c(1,5,50),
@@ -46,10 +44,15 @@ insert_legend <- function(
     legend_list[[2]][i] <- coord[2]
     plt <- plt + ggplot2::annotate("text", x = coord[1] + r + 0.75, y = coord[2], label = as.character(sizes[i]))
   }
-  return(plt + geom_circle(
+  
+  plt + ggforce::geom_circle(
     data = data.frame(legend_list), 
-    mapping = ggplot2::aes(x0 = x, y0 = y, r = r, fill = color),
+    mapping = aes_string(
+      x0 = "x",
+      y0 = "y",
+      r = "r",
+      fill = "color"
+    ),
     linetype ="blank",
     n = n)
-  )
 }

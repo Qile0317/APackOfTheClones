@@ -27,13 +27,14 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
 #' @export
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(Seurat)
 #' library(APackOfTheClones)
+#' data("mini_clonotype_data","mini_seurat_obj")
 #'
 #' # produce an integrated seurat_object
-#' seurat_object <- integrate_tcr(seurat_obj, tcr_dataframe)
-#' clonotype_counts <- count_clone_sizes(seurat_obj)
+#' integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
+#' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
 #' }
 count_clone_sizes <- function(integrated_seurat_obj) {
   if (is.null(integrated_seurat_obj@meta.data[["seurat_clusters"]])) {
