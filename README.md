@@ -71,7 +71,11 @@ All exported functions has function level documentation which can be called with
 Currently, there is only one introductory vignette named `"Clonal_expansion_plotting"` which is a walkthrough on the clonal expansion visualization workflow. The vignette is ONLINE-ONLY and can be viewed at https://qile0317.github.io/APackOfTheClones/articles/
 
 ## Contributing
-`APackOfTheClones` is currently incomplete, and more features, tests, bugfixes, and documentation are to come. However, pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
+`APackOfTheClones` is currently incomplete, and more features, tests, bugfixes, and documentation are to come. 
+
+There also are plans to refactor quite a bit of the codebase to increase inter-operability with both `Seurat` and `scRepertoire`.
+
+However, github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
 
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
 

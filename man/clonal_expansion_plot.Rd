@@ -86,7 +86,6 @@ Check out the web-only user vignette at
 for a walkthrough on using this function, and additional details.
 }
 \examples{
-\donttest{
 library(Seurat)
 library(APackOfTheClones)
 data("mini_clonotype_data","mini_seurat_obj")
@@ -99,7 +98,6 @@ ball_pack_plot
 integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
 ball_pack_plot <- clonal_expansion_plot(integrated_seurat_object)
 ball_pack_plot
-}
 
 }
 \seealso{

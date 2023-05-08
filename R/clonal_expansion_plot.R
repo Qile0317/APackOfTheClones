@@ -46,7 +46,6 @@ library(utils)
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' library(Seurat)
 #' library(APackOfTheClones)
 #' data("mini_clonotype_data","mini_seurat_obj")
@@ -59,7 +58,6 @@ library(utils)
 #' integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
 #' ball_pack_plot <- clonal_expansion_plot(integrated_seurat_object)
 #' ball_pack_plot
-#' }
 #'
 clonal_expansion_plot <- function(
   seurat_obj, tcr_df = "seurat_obj_already_integrated",

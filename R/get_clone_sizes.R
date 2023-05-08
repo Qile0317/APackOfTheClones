@@ -27,7 +27,6 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
 #' @export
 #' 
 #' @examples
-#' \donttest{
 #' library(Seurat)
 #' library(APackOfTheClones)
 #' data("mini_clonotype_data","mini_seurat_obj")
@@ -35,7 +34,8 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
 #' # produce an integrated seurat_object
 #' integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
 #' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
-#' }
+#' clonotype_counts
+#' 
 count_clone_sizes <- function(integrated_seurat_obj) {
   if (is.null(integrated_seurat_obj@meta.data[["seurat_clusters"]])) {
     stop("A UMAP must first be run on the seurat object")

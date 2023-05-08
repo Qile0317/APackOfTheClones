@@ -29,14 +29,13 @@ from the TCR library that had no matches to barcodes in the `seurat_obj` will
 add `NA`s for all elements of the same index.
 }
 \examples{
-\donttest{
 library(Seurat)
 library(APackOfTheClones)
 data("mini_clonotype_data","mini_seurat_obj")
 
 # integrate the TCR data into new seurat object
 integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
-}
+integrated_seurat_object
 
 }
 \references{

@@ -27,13 +27,14 @@ All of which have documentation, including on the documentation site.
 Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily
 
 ##  Future features/plans:
-* Customizable cluster coloration, not just based on the original Seurat/ggplot palette
-* User-controlled cluster shifting
-* Comprehensive cluster repulsion
-* better legends and optional legend border
-* automated optimization of the initial parameters of `clonal_expansion_plot`, especially the `clone_scale_factor`
-* BCR library integration
-* User vignette
-* Developer vignette
-* Submission to CRAN or Bioconductor
-* Rewrite of certain circle packing functions in `rust` to improve performance
+[ ] Customizable cluster coloration, not just based on the original Seurat/ggplot palette
+[ ] User-controlled cluster shifting
+[x] Comprehensive cluster repulsion
+[x] better legends and optional legend border
+[ ] automated optimization of the initial parameters of `clonal_expansion_plot`, especially the `clone_scale_factor`
+[ ] BCR library integration
+[x] User vignette
+[ ] Developer vignette
+[ ] Submission to CRAN or Bioconductor
+[ ] Rewrite of certain circle packing functions in `rust` or `c++` to improve performance
+[ ] Increase interoperability with `Seurat` and `scRepertoire`
