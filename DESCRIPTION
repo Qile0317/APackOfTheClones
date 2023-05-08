@@ -1,10 +1,11 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization of T-Cell Clonal Expansion
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Qile", "Yang", email = "qile0317@gmail.com", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
-Description: Visualize T-cell clonal expansion via circle-packing. APackOfTheClones can integrate single-cell RNA sequencing (sc-RNAseq) and T-cell receptor (TCR) libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
+Description: Visualize T-cell clonal expansion via circle-packing. 'APackOfTheClones' can integrate single-cell RNA sequencing and T-cell receptor libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
+BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
 Depends:
     R (>= 3.5.0)
 License: MIT + file LICENSE
@@ -15,9 +16,9 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
+    spelling,
     testthat (>= 3.0.0),
     vdiffr
-VignetteBuilder: knitr
 Config/testthat/edition: 3
 Imports: 
     data.table,
@@ -27,6 +28,7 @@ Imports:
     grDevices,
     hash,
     R6,
+    rlang,
     Seurat,
     stats,
     utils

@@ -1,5 +1,10 @@
 # APackOfTheClones 0.1.2
-CRAN release and minor documentation changes.
+## Additions
+* Two new datasets previously in the test folder have now moved to `\data` and are available to users and can be called via `data("mini_seurat_obj")` and `data("mini_clonotype_data")`.
+
+## Changes
+* Released package to CRAN .
+* Minor documentation changes to adhere to CRAN standards.
 
 # APackOfTheClones 0.1.1
 ## Additions
