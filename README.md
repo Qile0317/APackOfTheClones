@@ -2,10 +2,10 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
+[![Latest Release](https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg)](https://github.com/Qile0317/APackOfTheClones/releases/latest)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
-[![Latest Release](https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg)](https://github.com/Qile0317/APackOfTheClones/releases/latest)
-[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
@@ -21,10 +21,13 @@ The concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christ
 ```R
 install.packages("APackOfTheClones")
 ```
-Alternatively, to download the latest development edition, run
+Alternatively, to download the latest development edition on the development (`dev`) branch, run
 ```R
-library(devtools)
-devtools::install_github("Qile0317/APackOfTheClones")
+if (require(devtools), quietly = TRUE) {
+  install.packages('devtools')
+  library(devtools)
+}
+devtools::install_github("Qile0317/APackOfTheClones@dev")
 ```
 ## Usage
 The main ball packing function `clonal_expansion_plot` in the package takes two main arguments: 

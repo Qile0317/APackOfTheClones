@@ -1,8 +1,9 @@
-# it creates the OPPOSITE vector so there is no need for G to be negative
-distV <- function(c1, c2){
-  return(c(c1$centroid[1] - c2$centroid[1],
-           c1$centroid[2] - c2$centroid[2]))
-}
+# creates the OPPOSITE direction vector of two clusterlists
+# A faster rust version has been implemented
+#distV <- function(c1, c2){
+#  return(c(c1[[4]][1] - c2[[4]][1],
+#           c1[[4]][2] - c2[[4]][2]))
+#}
 
 #polar form conversion from component form. its with respect to x axis. - works
 polV <- function(vec) {
