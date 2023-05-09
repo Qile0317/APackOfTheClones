@@ -5,11 +5,10 @@
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Latest Release](https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg)](https://github.com/Qile0317/APackOfTheClones/releases/latest)
+[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
-
-<!-- [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones) -->
 
 ```APackOfTheClones``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a `Seurat` object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling. 
 
