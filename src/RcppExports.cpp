@@ -10,45 +10,35 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// pdV
-std::vector<double> pdV(List c1, List c2);
-RcppExport SEXP _APackOfTheClones_pdV(SEXP c1SEXP, SEXP c2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type c1(c1SEXP);
-    Rcpp::traits::input_parameter< List >::type c2(c2SEXP);
-    rcpp_result_gen = Rcpp::wrap(pdV(c1, c2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// comV
-std::vector<double> comV(std::vector<double> polar_vec);
-RcppExport SEXP _APackOfTheClones_comV(SEXP polar_vecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type polar_vec(polar_vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(comV(polar_vec));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cpp_get_average_vector
-std::vector<double> cpp_get_average_vector(List vec_list);
-RcppExport SEXP _APackOfTheClones_cpp_get_average_vector(SEXP vec_listSEXP) {
+// get_average_vector
+std::vector<double> get_average_vector(List vec_list);
+RcppExport SEXP _APackOfTheClones_get_average_vector(SEXP vec_listSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type vec_list(vec_listSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_get_average_vector(vec_list));
+    rcpp_result_gen = Rcpp::wrap(get_average_vector(vec_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_component_repulsion_vector
+std::vector<double> get_component_repulsion_vector(List inp, int i, int j, double G);
+RcppExport SEXP _APackOfTheClones_get_component_repulsion_vector(SEXP inpSEXP, SEXP iSEXP, SEXP jSEXP, SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type inp(inpSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< double >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_component_repulsion_vector(inp, i, j, G));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_APackOfTheClones_pdV", (DL_FUNC) &_APackOfTheClones_pdV, 2},
-    {"_APackOfTheClones_comV", (DL_FUNC) &_APackOfTheClones_comV, 1},
-    {"_APackOfTheClones_cpp_get_average_vector", (DL_FUNC) &_APackOfTheClones_cpp_get_average_vector, 1},
+    {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
+    {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {NULL, NULL, 0}
 };
 

@@ -1,15 +1,5 @@
 source("testdata/cluster_lists.R")
 
-test_that("pdV() can get polar direction vector", {
-  expect_equal(pdV(c1, c2), c(5,-2.2142974),
-               tolerance = 1e-6)
-})
-
-test_that("comV() can convert from polar to component form", {
-  expect_equal(comV(c(1.41421356, 0.78539816)),
-               c(1, 1))
-})
-
 test_that("get_average_vector() works", {
   expect_equal(get_average_vector(list(c(1, 1), c(1, 2), c(-1, -9))), c(1/3, -2))
   expect_equal(get_average_vector(list(c(0,0),c(0,0),c(0,0))), c(0,0))
@@ -36,7 +26,7 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
 test_that("get_component_repulsion_vector works", {
   expect_equal(
     get_component_repulsion_vector(
-      list(c1,c2), 1, 2, 1, 0
+      list(c1,c2), 1, 2, 1
     ),
     c(-0.1091579, -0.1455439),
     tolerance = 1e-5
@@ -99,7 +89,7 @@ test_that("repulse_cluster() works", {
     repulse_cluster(
       list(c1, c1_shifted_by_4_5),
       thr = 1, G = 1, max_iter = 10,
-      dist_adjust = 0, verbose = F
+      verbose = F
     ),
     list(list(x = c(-1.792939452373, 0.807060547627004, -0.492939452372996, 
                     -2.47021185105545, 1.48433294630945, -0.492939452372996, 0.235321256461886, 
