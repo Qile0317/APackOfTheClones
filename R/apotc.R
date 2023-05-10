@@ -1,3 +1,5 @@
+library(methods)
+
 #' The apotc (APackOfTheClones) reduction class
 #'
 #' A class for storing information about T cell clonal expansion in the seurat
@@ -15,6 +17,7 @@
 #' @slot rad_scale_factor scale factor to multiply the radii in clusterlis  ts by
 #' after they have all been computed to incr ease spacing between circles. Might
 #' also be better in the future to instead just have a number to subtract :/
+#' @slot cluster_colors character vector indicating coloration of each cluster
 #'
 #' @keywords internal
 #'
@@ -26,7 +29,8 @@ setClass(
     centroids = 'list', 
     clone_sizes = 'list', 
     clone_scale_factor = 'numeric',
-    rad_scale_factor = 'numeric'
+    rad_scale_factor = 'numeric',
+    cluster_colors = 'character' 
   )
 )
 
@@ -43,27 +47,32 @@ get_centroid_list <- function(clusterlists, num_clusters) {
   centroid_list
 }
 
-# initialize the reduction object
+# initialize the reduction object from precomputed clusterlists
 create_apotc <- function(
   clusters,
   clone_sizes,
   centroids = NULL,
   clone_scale_factor = 1,
-  rad_scale_factor = 1) {
+  rad_scale_factor = 1,
+  cluster_colors = NULL) {
   
   num_clusters <- length(clusters)
   if (is.null(centroids)) {
     centroids <- get_centroid_list(clusters,num_clusters)
   }
+  if (is.null(cluster_colors)) {
+    cluster_colors <- gg_color_hue(num_clusters)
+  }
   
-  new(
+  methods::new(
     Class = 'apotc',
     clusters = clusters, 
     num_clusters = num_clusters,
     centroids = centroids, 
     clone_sizes = clone_sizes, 
     clone_scale_factor = clone_scale_factor,
-    rad_scale_factor = rad_scale_factor
+    rad_scale_factor = rad_scale_factor,
+    cluster_colors = cluster_colors
   )
 }
 

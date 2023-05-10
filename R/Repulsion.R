@@ -1,43 +1,7 @@
-# creates the OPPOSITE direction vector of two clusterlists
-# A faster rust version has been implemented
-#distV <- function(c1, c2){
-#  return(c(c1[[4]][1] - c2[[4]][1],
-#           c1[[4]][2] - c2[[4]][2]))
-#}
-
-# 2d vector polar form conversion from component form. its with respect to x axis.
-# The first number in the output is the magnitude/modulus
-# The second number is the direction in radians
-polV <- function(vec) {
-  return(c("magnitude" = sqrt(sum(vec^2)),
-           "direction" = atan2(vec[2], vec[1])))
-  }
-
-#polar distance vector - works
-pdV <- function(c1, c2) {
-  polV(distV(c1, c2))
-}
-
-#converts polar form to component form of vector - works
-comV <- function(Pvec) {
-  unname(c(Pvec[1] * cos(Pvec[2]), Pvec[1] * sin(Pvec[2])))
-}
-
-# get the average vector (basically decrease magnitude geometrically) (inefficient)
-get_average_vector <- function(vec_list) {
-  sum_vector <- c(0, 0)
-  num_non_zero_vectors <- 0
-  for (vec in vec_list) {
-    if (!identical(vec, c(0,0))) {
-      num_non_zero_vectors <- num_non_zero_vectors + 1
-      sum_vector <- sum_vector + vec
-    }
-  }
-  if (num_non_zero_vectors > 0) {
-    return(sum_vector / num_non_zero_vectors)
-  }
-  c(0, 0)
-}
+# Functions defined in src/repulsion.cpp
+# pdV(c1,c2) | get the polar repulsion vector of 2 clusterlists
+# comV(v) | convert from polar to component form
+# get_average_vector(vec_list) | avg vector of a list of vectors
 
 # compute component form of repulsion vector between two clusters in the
 # clusterlist `inp`, assuming do_proceed(inp,i,j) == TRUE

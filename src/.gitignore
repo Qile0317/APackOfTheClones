@@ -1,5 +1,4 @@
 *.o
 *.so
 *.dll
-target
-.cargo
+testing.cpp

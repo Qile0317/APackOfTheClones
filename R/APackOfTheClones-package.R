@@ -11,5 +11,7 @@
 #' @importFrom data.table .SD
 #' @importFrom data.table :=
 #' @importFrom data.table data.table
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib APackOfTheClones, .registration = TRUE
 ## usethis namespace: end
 NULL
