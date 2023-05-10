@@ -1,6 +1,6 @@
 # Script for managing the color scheme
-library(hash)
-library(dplyr)
+suppressPackageStartupMessages(library(hash))
+suppressPackageStartupMessages(library(dplyr))
 
 # wrapper to get the number of identified clusters:
 count_umap_clusters <- function(seurat_obj) {

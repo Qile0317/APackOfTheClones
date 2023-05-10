@@ -3,6 +3,8 @@ library(rlang)
 
 # the following code is copied and modified from ggplot2
 # under the R/aes.R file (under MIT license, like this package)
+# It just implements the soft deprecated aes_string() function
+
 rename_aes <- function(x) {
   names(x) <- ggplot2::standardise_aes_names(names(x))
   duplicated_names <- names(x)[duplicated(names(x))]

@@ -1,4 +1,10 @@
-# memory and speed inefficient counting of clonotypes within each cluster
+# raw clone size counter that modifies the 'apotc' reduction in the Seurat obj
+compute_clone_sizes <- function(integrated_seurat_obj, reduction = "apotc") {
+  
+}
+
+# memory and speed inefficient counting of clonotypes within each cluster,
+# for the old version of the package
 # there needs to be testcases for when clusters have no clones
 get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
   df <- data.frame(

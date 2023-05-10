@@ -5,7 +5,9 @@
 #           c1[[4]][2] - c2[[4]][2]))
 #}
 
-#polar form conversion from component form. its with respect to x axis. - works
+# 2d vector polar form conversion from component form. its with respect to x axis.
+# The first number in the output is the magnitude/modulus
+# The second number is the direction in radians
 polV <- function(vec) {
   return(c("magnitude" = sqrt(sum(vec^2)),
            "direction" = atan2(vec[2], vec[1])))
@@ -37,13 +39,18 @@ get_average_vector <- function(vec_list) {
   c(0, 0)
 }
 
+# compute component form of repulsion vector between two clusters in the
+# clusterlist `inp`, assuming do_proceed(inp,i,j) == TRUE
+# uses a modified version of coulombs law except its addition in the numerator
+# to compute the magnitude of the repulsion vector / 2 with the same direction
 get_component_repulsion_vector <- function(inp, i, j, G, dist_adjust = 0) {
+  
   # find polar distance vector between centroids
   polar_dist_vec <- pdV(inp[[i]], inp[[j]])
   
   #Find polar repulsion vec - half the magnitude due to repeated i and j
   polar_repulsion_vec <- c(
-    0.5 * (G * (inp[[i]][[5]] + inp[[j]][[5]])) /
+    0.5 * G * (inp[[i]][[5]] + inp[[j]][[5]]) /
       (unname(polar_dist_vec["magnitude"]) + dist_adjust)^2,
     unname(polar_dist_vec["direction"])
   )
@@ -82,9 +89,7 @@ do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
     if (!any(is.na(inp[[i]]))) {
       if (!any(is.na(inp[[j]]))) {
-        if (do_cl_intersect(inp[[i]], inp[[j]], thr)) {
-          return(TRUE)
-        }
+        return(do_cl_intersect(inp[[i]], inp[[j]], thr))
       }
     }
   }

@@ -10,10 +10,13 @@
 #' everytime the plotting function is called. but it wont be slow probably
 #' @slot clone_sizes the original unscaled clone sizes. Not sure if I should
 #' leave it named
-#' @slot clone_scale_factor self explanatory
-#' @slot rad_scale_factor self explanatory
+#' @slot clone_scale_factor scale factor to multiply `clone_sizes` by when
+#' running the clonal expansion plotting algorithmd
+#' @slot rad_scale_factor scale factor to multiply the radii in clusterlis  ts by
+#' after they have all been computed to incr ease spacing between circles. Might
+#' also be better in the future to instead just have a number to subtract :/
 #'
-#' @noRd
+#' @keywords internal
 #'
 setClass(
   Class = "apotc",
@@ -40,17 +43,24 @@ get_centroid_list <- function(clusterlists, num_clusters) {
   centroid_list
 }
 
+# initialize the reduction object
 create_apotc <- function(
-    clusters,
-    clone_sizes,
-    centroids = NULL,
-    clone_scale_factor = 1,
-    rad_scale_factor = 1) {
+  clusters,
+  clone_sizes,
+  centroids = NULL,
+  clone_scale_factor = 1,
+  rad_scale_factor = 1) {
+  
+  num_clusters <- length(clusters)
+  if (is.null(centroids)) {
+    centroids <- get_centroid_list(clusters,num_clusters)
+  }
   
   new(
     Class = 'apotc',
     clusters = clusters, 
-    centroids = NULL, 
+    num_clusters = num_clusters,
+    centroids = centroids, 
     clone_sizes = clone_sizes, 
     clone_scale_factor = clone_scale_factor,
     rad_scale_factor = rad_scale_factor
@@ -58,4 +68,7 @@ create_apotc <- function(
 }
 
 # there needs to be a RunAPOTC() and tune_apotc_param() or something like that
-# # unginished script
+# the goal is: given a seurat obj w/a dim reduction, and tcr_df,
+# pbmc <- RunAPOTC(pbmc,tcr) 
+# clonal_expansion_plot(pbmc, ...)
+# # unfinished script

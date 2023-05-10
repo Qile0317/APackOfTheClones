@@ -3,6 +3,19 @@ source("testdata/cluster_lists.R")
 # need to test prerequisite functions as well
 # probably need another testdata file for nodes
 
+library(R6)
+
+test_that("Node initialization works", {
+  test_node <- node$new(
+    val = list(1, 1, 2, 3, "color" = "#5318008", 3)
+  )
+  
+  expect_true(R6::is.R6(test_node))
+  expect_equal(test_node$val[[2]], 1)
+  expect_equal(test_node$val[[4]], 3)
+})
+
+
 test_that("est_rad() works", {
   expect_equal(est_rad(c1), c1[[5]])
   expect_equal(est_rad(c2), c2[[5]], tolerance = 3e-7)

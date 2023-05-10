@@ -3,7 +3,7 @@ use extendr_api::wrapper::List;
 
 #[extendr]
 fn distV(c1: List, c2: List) -> Doubles {
-    // extract 4th element
+    // extract centroid vectors (4th element)
     let c1_centroid = c1.elt(3).unwrap();
     let c2_centroid = c2.elt(3).unwrap();
 
@@ -12,12 +12,10 @@ fn distV(c1: List, c2: List) -> Doubles {
     let c1_centroid_vec = Doubles::try_from(c1_centroid).unwrap();
     let c2_centroid_vec = Doubles::try_from(c2_centroid).unwrap();
 
-    // there is no vector operations in rust
-    // work in "iterators"
+    // there is no vector operations in rust; work in "iterators"
     c1_centroid_vec
         .iter()
-        // combine x and y into one iterator
-        // to iterate over it together
+        // combine x and y into one iterator to iterate over it together
         .zip(c2_centroid_vec.iter())
         // take only the first 2 iterator items
         .take(2)
@@ -27,11 +25,6 @@ fn distV(c1: List, c2: List) -> Doubles {
         })
         // collect into a Double vec
         .collect::<Doubles>()
-}
-
-#[extendr]
-fn polV(component_vec: Doubles) -> Doubles {
-    
 }
 
 // Macro to generate exports.

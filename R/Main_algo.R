@@ -1,8 +1,30 @@
-#This script is functions to mathematically form a SINGLE cluster from an array
-#of numbers that represent radii of circles, Of course, this radii array is
-#generated from the integrated sc-RNAseq and TCR library.
+# This script contain functions to pack a single cluster from a vector of 
+# numbers that represent radii of circles. The radii vector would be generated 
+# from the integrated sc-RNAseq and TCR library.
 
-#function to initialize list into the circular doubly linked list.
+suppressPackageStartupMessages(library(dplyr))
+library(R6)
+
+# Node constructor for the circularly doubly linked list
+node <- R6::R6Class(
+  "Node",
+  public = list(
+    val = NULL,
+    nxt = NULL,
+    prv = NULL,
+    
+    initialize = function(
+    val = NULL,
+    nxt = NULL,
+    prv = NULL) {
+      self$val <- val
+      self$nxt <- nxt
+      self$prv <- prv
+    }
+  )
+)
+
+# link the Nodes circularly and to each other in a given list of nodes "a"
 init_boundary <- function(a) {
   for (i in 1:(length(a) - 1)) {
     a[[i + 1]]$prv <- a[[i]]

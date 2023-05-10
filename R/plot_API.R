@@ -77,7 +77,7 @@ plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
                      progbar = TRUE, 
                      repulse = FALSE,
                      thr = 1, G = 0.05, 
-                     max_repulsion_iter = 100, #repulsion parameters
+                     max_repulsion_iter = 100,
                      n = 360, linetype = "blank",
                      plot_title = "Sizes of clones within each cluster",
                      haslegend = TRUE,
