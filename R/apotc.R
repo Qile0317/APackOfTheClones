@@ -1,4 +1,10 @@
 library(methods)
+library(Seurat)
+library(ggplot2)
+library(ggforce)
+library(dplyr)
+library(data.table)
+library(utils)
 
 #' The apotc (APackOfTheClones) reduction class
 #'
@@ -34,50 +40,80 @@ setClass(
   )
 )
 
-# impl in rust or c++ and see if theres speed improvement
-get_centroid_list <- function(clusterlists, num_clusters) {
-  centroid_list <- vector(mode = "list", length = num_clusters)
-  for (i in 1:num_clusters) {
-    if (!is.na(clusterlists[[i]])) {
-      centroid_list[[i]] <- clusterlists[[i]][[5]]
-    }else {
-      centroid_list[[i]] <- NA
-    }
-  }
-  centroid_list
-}
-
 # initialize the reduction object from precomputed clusterlists
-create_apotc <- function(
-  clusters,
-  clone_sizes,
-  centroids = NULL,
-  clone_scale_factor = 1,
-  rad_scale_factor = 1,
-  cluster_colors = NULL) {
-  
-  num_clusters <- length(clusters)
-  if (is.null(centroids)) {
-    centroids <- get_centroid_list(clusters,num_clusters)
-  }
-  if (is.null(cluster_colors)) {
-    cluster_colors <- gg_color_hue(num_clusters)
-  }
-  
+initialize_apotc <- function(
+    num_clusters, clone_scale_factor = 1, rad_scale_factor = 1
+) {
+  empty_list <- vector("list", num_clusters)
   methods::new(
     Class = 'apotc',
-    clusters = clusters, 
+    clusters = empty_list, 
     num_clusters = num_clusters,
-    centroids = centroids, 
-    clone_sizes = clone_sizes, 
+    centroids = empty_list, 
+    clone_sizes = empty_list, 
     clone_scale_factor = clone_scale_factor,
     rad_scale_factor = rad_scale_factor,
-    cluster_colors = cluster_colors
+    cluster_colors = gg_color_hue(num_clusters)
   )
 }
 
-# there needs to be a RunAPOTC() and tune_apotc_param() or something like that
-# the goal is: given a seurat obj w/a dim reduction, and tcr_df,
-# pbmc <- RunAPOTC(pbmc,tcr) 
-# clonal_expansion_plot(pbmc, ...)
-# # unfinished script
+# run all the packing algorithms and modify the apotc object
+# should be ran after initialize_apotc
+run_packing_algos <- function(
+  apotc_obj, integrated_seurat_obj
+) {
+  apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
+  apotc_obj@centroids <- get_cluster_centroids(integrated_seurat_obj)
+  
+}
+
+RunAPOTC <- function(
+    seurat_obj,
+    tcr_df = "seurat_obj_already_integrated",
+    reduction_base = "umap",
+    clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
+    rad_scale_factor = 0.95, 
+    ORDER = TRUE,
+    try_place = FALSE,
+    verbose = TRUE,
+    repulse = FALSE, # repulsion args should also be in 
+    repulsion_threshold = 1,
+    repulsion_strength = 1,
+    max_repulsion_iter = 10) {
+  
+  # errors/warnings:
+  if (is.null(seurat_obj@reductions[[reduction_base]])) {
+    stop(paste("No", reduction_base, "reduction found on the seurat object"))
+  }
+  if ((!is.data.frame(tcr_df)) && is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
+    stop("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
+  }
+  if (max_repulsion_iter > 1000) {
+    warning("Repulsion iteration count > 1000, consider reducing max_repulsion_iter if runtime is too long")
+  }
+  
+  # integrate TCR
+  if (is.data.frame(tcr_df)) {
+    seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
+  }
+  
+  ## could put everything below here into 1 function
+  # get number of seurat clusters
+  num_clusters <- get_num_clusters(seurat_obj)
+  
+  # initialize apotc S4 class
+  apotc_obj <- initialize_apotc(
+    num_clusters, clone_scale_factor, rad_scale_factor
+  )
+  
+  # run all packing algos 
+  apotc_obj <- run_packing_algos(apotc_obj, seurat_obj)
+  
+  # more stuff...
+  
+  # add the finished apotc object to reductions
+  seurat_obj@reductions[['apotc']] <- apotc_obj
+  seurat_obj
+}
+
+# not sure if its the best in this script, but need some tune_params() function 

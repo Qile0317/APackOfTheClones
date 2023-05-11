@@ -1,6 +1,18 @@
-# raw clone size counter that modifies the 'apotc' reduction in the Seurat obj
-compute_clone_sizes <- function(integrated_seurat_obj, reduction = "apotc") {
-  print()
+# inefficient counting of raw clonotype sizes, and adding
+# it to the apotc object. needs testing
+add_raw_clone_sizes <- function(apotc_obj, integrated_seurat_obj) {
+  df <- data.frame(
+    "clusters" = integrated_seurat_obj@meta.data[["seurat_clusters"]],
+    "clonotype_ids" = integrated_seurat_obj@meta.data[["raw_clonotype_id"]]
+  )
+  # aggregate the raw counts
+  freq_df <- aggregate(clonotype_ids ~ clusters, data = df, function(x) table(x))
+  
+  # make the counts numeric vectors
+  for (i in 1:apotc_obj@num_clusters) {
+    apotc_obj@clone_sizes[[freq_df[[1]][i]]] <- as.numeric(freq_df[[2]][[i]])
+  }
+  apotc_obj
 }
 
 # memory and speed inefficient counting of clonotypes within each cluster,

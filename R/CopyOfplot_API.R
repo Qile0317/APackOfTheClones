@@ -20,7 +20,7 @@ pack_clonal_clusters <- function(
   #circle layout
   for(i in 1:clonedat@num_clusters){
     if (is.null(sizes[[i]])) {
-      ans[[i]] <- NA # important!
+      ans[[i]] <- list() # important! used to be NA
     }else{
       if(progbar){
         message(paste("\npacking cluster", as.character(i-1)))

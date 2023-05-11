@@ -9,3 +9,11 @@ get_component_repulsion_vector <- function(inp, i, j, G) {
     .Call(`_APackOfTheClones_get_component_repulsion_vector`, inp, i, j, G)
 }
 
+do_cluster_intersect <- function(Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, thr = 1) {
+    .Call(`_APackOfTheClones_do_cluster_intersect`, Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, thr)
+}
+
+calculate_transformation_vectors <- function(transformation_vectors, overall_repulsion_vec, num_clusters) {
+    .Call(`_APackOfTheClones_calculate_transformation_vectors`, transformation_vectors, overall_repulsion_vec, num_clusters)
+}
+

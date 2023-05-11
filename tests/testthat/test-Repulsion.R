@@ -1,8 +1,8 @@
 source("testdata/cluster_lists.R")
 
 test_that("get_average_vector() works", {
-  expect_equal(get_average_vector(list(c(1, 1), c(1, 2), c(-1, -9))), c(1/3, -2))
-  expect_equal(get_average_vector(list(c(0,0),c(0,0),c(0,0))), c(0,0))
+  expect_equal(get_average_vector(list(c(1, 1), c(1, 2), c(-1, -9))), c(1/3,-2))
+  expect_equal(get_average_vector(list(c(0, 0), c(0, 0), c(0, 0))), c(0, 0))
 })
 
 # test cluster intersection function
@@ -26,7 +26,7 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
 test_that("get_component_repulsion_vector works", {
   expect_equal(
     get_component_repulsion_vector(
-      list(c1,c2), 1, 2, 1
+      list(c1, c2), 1, 2, 1
     ),
     c(-0.1091579, -0.1455439),
     tolerance = 1e-5
@@ -80,6 +80,18 @@ test_that("calculate_transformation_vectors() works", {
       c(-1.703407, -1.662057)
     ),
     tolerance = 1e-6
+  )
+  
+  expect_identical(
+    calculate_transformation_vectors(
+      initialize_direction_vectors(2),
+      list(
+        list(c(0,0),c(0,0)),
+        list(c(0,0),c(0,0))
+      ),
+      2
+    ),
+    list()
   )
 })
 
