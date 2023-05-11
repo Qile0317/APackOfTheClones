@@ -23,12 +23,13 @@ public:
     nxt = nullptr;
   }
   
-  // printer and traverser for debugging
+  // node printer for debugging
   friend ostream& operator<<(std::ostream& os, const Node& node) {
     os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
     return os;
   }
   
+  // traverse and print method for debugging
   void traverse() {
     Node* curr = this;
     while (curr != nullptr && curr->nxt != this) {
@@ -49,7 +50,7 @@ void init_boundary(Node& c1, Node& c2, Node& c3) {
 // insert a node cn in-between c1 and c2
 void insert_circle(Node& c1, Node& c2, Node& cn) {
   if (c1.nxt != &c2 || c2.prv != &c1) {
-    throw invalid_argument("Two circles not adjacent");
+    Rcpp::stop("Two circles not adjacent");
   } else {
     c1.nxt = &cn;
     cn.prv = &c1;
@@ -72,17 +73,17 @@ int fwd_dist(Node& c1, Node& c2) {
 // removes all nodes between c1 and c2 inlusive, and links everything else. Purposefully doesn't de-allocate the segment.
 // this one simplies the original though doesnt unlink the removed segment. if there are bugs then this may be the cause.
 void fwd_remove(Node& c1, Node& c2) {
-  if (&c1 == &c2) { throw invalid_argument("Circles are the same."); }
-  if (c1.nxt == &c2) { throw invalid_argument("Circles are consecutive."); }
+  if (&c1 == &c2) {  Rcpp::stop("Circles are the same."); }
+  if (c1.nxt == &c2) { Rcpp::stop("Circles are consecutive."); }
   c1.prv->nxt = c2.nxt;
-}
-
-inline double centre_dist(Node& c) {
-  return sqrt(c.x*c.x + c.y*c.y);
 }
 
 inline double sqr(double n) {
   return n*n;
+}
+
+inline double centre_dist(Node& c) {
+  return sqrt(c.x*c.x + c.y*c.y);
 }
 
 // fit C3 tangent to C1 and C2, modified C3. Unsure about the return statement but works in R. probably will get errors later 
@@ -95,7 +96,7 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   double distance = sqrt(sqr(x1 - x2) + sqr(y1 - y2));
   
   if (distance > (r1 + r2 + r + r)) {
-    throw invalid_argument("Gap too large.");
+    Rcpp::stop("Gap too large.");
   }
   
   double cos_sig = (x2 - x1) / distance;
@@ -183,7 +184,7 @@ pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   llui n = obstruct.size(); 
   if (n > 0) { 
     Node* nearest = obstruct[0];
-    for (llui i = 1; i < n; i++) {
+    for (int i = 1; i < n; i++) {
       if (geod_dist(Cm, Cn, *(obstruct[i])) < geod_dist(Cm, Cn, *(nearest))) {
         nearest = obstruct[i];
       }
@@ -195,6 +196,7 @@ pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
       C_em = nearest;
     }
   }
-  //if ((C_em == &Cm) && (C_en == &Cn)) {return make_pair(nullptr, nullptr);}
-  return make_pair(C_em, C_en);
+  if ((C_em == &Cm) && (C_en == &Cn)) {return std::make_pair(nullptr, nullptr);}
+  return std::make_pair(C_em, C_en);
 }
+

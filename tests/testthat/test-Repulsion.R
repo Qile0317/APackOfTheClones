@@ -64,10 +64,9 @@ test_that("calculate_repulsion_vectors() works", {
 })
 
 test_that("calculate_transformation_vectors() works", {
-  transvec <- initialize_direction_vectors(3)
   expect_equal(
     calculate_transformation_vectors(
-      transvec,
+      initialize_direction_vectors(3),
       list(
         list(c(0,0), c(-0.1503472, -0.1879340), c(-0.2481042, -0.3308055)),
         list(c(0.1503472, 0.1879340), c(0,0), c(3.654919, 3.654919)),

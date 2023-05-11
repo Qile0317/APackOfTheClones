@@ -72,7 +72,7 @@ calculate_transformation_vectors <- function(transformation_vectors, overall_rep
   "no_change"
 }
 
-# iterative repulsion. inp is a list of clusterlists. works but still destroys the structure
+# iterative repulsion. inp is a list of clusterlists.
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
   ) {

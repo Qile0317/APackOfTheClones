@@ -25,18 +25,24 @@ std::vector<double> component_form(std::vector<double> polar_vec) {
   return {polar_vec[0] * cos(polar_vec[1]), polar_vec[0] * sin(polar_vec[1])};
 }
 
-// avg vector of a list of 2D vectors
+// calculate avg vector of an R list of 2D vectors, skipping vectors of 0, 0
 // [[Rcpp::export]]
 std::vector<double> get_average_vector(List vec_list) {
   std::vector<double> sum_vector = {0, 0};
-  int n = vec_list.size();
-  for (int i = 0; i < n; i++) {
+  std::vector<double> blank = {0, 0};
+  int num_non_zero_vectors = 0;
+  for (int i = 0; i < vec_list.size(); i++) {
     std::vector<double> curr_vec = vec_list[i];
-    sum_vector[0] += curr_vec[0];
-    sum_vector[1] += curr_vec[1];
+    if (curr_vec != blank) {
+      num_non_zero_vectors++;
+      sum_vector[0] += curr_vec[0];
+      sum_vector[1] += curr_vec[1];
+    }
   }
-  sum_vector[0] /= n;
-  sum_vector[1] /= n;
+  if (num_non_zero_vectors) {
+    sum_vector[0] /= num_non_zero_vectors;
+    sum_vector[1] /= num_non_zero_vectors;
+  }
   return sum_vector;
 }
 
@@ -52,6 +58,6 @@ std::vector<double> get_component_repulsion_vector(
   double c1_rad = c1[4], c2_rad = c2[4];
   std::vector<double> neg_polar_vec = neg_polar_dist_vec(c1, c2);
   std::vector<double> polar_repulsion_vec = {0, neg_polar_vec[1]};
-  polar_repulsion_vec[0] = 0.5*G*(c1_rad+c2_rad) / sqr(neg_polar_vec[0]);
+  polar_repulsion_vec[0] = 0.5 * G * (c1_rad + c2_rad) / sqr(neg_polar_vec[0]);
   return component_form(polar_repulsion_vec);
 }
