@@ -201,6 +201,8 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
 // temporary place for R version of est_rad
 // lesson learned: dont mess with long long unsigned int
 // for some reason there was some under/flowflow when resetting max_ind sometimes??
+// ok... may be zeroing in on why... R CMD check gave a segmentation fault, so
+// theres some problem with memory adresses....
 // [[Rcpp::export]]
 double est_rad(Rcpp::List clusterlist) {
   std::vector<double> x_vals = clusterlist[0];
@@ -214,5 +216,6 @@ double est_rad(Rcpp::List clusterlist) {
   }
   std::vector<double> rad_vals = clusterlist[2];
   std::vector<double> centroid_vals = clusterlist[3];
-  return max_x + rad_vals[max_ind] - centroid_vals[0];
+  double result_num = max_x + rad_vals[max_ind] - centroid_vals[0];
+  return result_num;
 }
