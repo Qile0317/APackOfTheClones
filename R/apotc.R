@@ -60,26 +60,39 @@ initialize_apotc <- function(
 # run all the packing algorithms and modify the apotc object
 # should be ran after initialize_apotc
 run_packing_algos <- function(
-  apotc_obj, integrated_seurat_obj
+  apotc_obj, integrated_seurat_obj,
+  rad_scale_factor = 1, ORDER = TRUE,
+  try_place = TRUE, verbose = TRUE
 ) {
   apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
   apotc_obj@centroids <- get_cluster_centroids(integrated_seurat_obj)
-  
+  apotc_obj <- pack_clonal_clusters(
+    apotc_obj, integrated_seurat_obj,
+    rad_scale_factor, ORDER,
+    try_place, verbose
+  )
+  apotc_obj
+}
+
+# alias to add the apotc object to the seurat obj for readability
+combined_obj <- function(seurat_obj, apotc_obj) {
+  seurat_obj@reductions[['apotc']] <- apotc_obj
+  seurat_obj
 }
 
 RunAPOTC <- function(
-    seurat_obj,
-    tcr_df = "seurat_obj_already_integrated",
-    reduction_base = "umap",
-    clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
-    rad_scale_factor = 0.95, 
-    ORDER = TRUE,
-    try_place = FALSE,
-    verbose = TRUE,
-    repulse = FALSE, # repulsion args should also be in 
-    repulsion_threshold = 1,
-    repulsion_strength = 1,
-    max_repulsion_iter = 10) {
+  seurat_obj,
+  tcr_df = "seurat_obj_already_integrated",
+  reduction_base = "umap",
+  clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
+  rad_scale_factor = 0.95, 
+  ORDER = TRUE,
+  try_place = FALSE,
+  verbose = TRUE,
+  repulse = FALSE, # repulsion args should also be in 
+  repulsion_threshold = 1,
+  repulsion_strength = 1,
+  max_repulsion_iter = 10) {
   
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction_base]])) {
@@ -97,7 +110,6 @@ RunAPOTC <- function(
     seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
   }
   
-  ## could put everything below here into 1 function
   # get number of seurat clusters
   num_clusters <- get_num_clusters(seurat_obj)
   
@@ -107,13 +119,14 @@ RunAPOTC <- function(
   )
   
   # run all packing algos 
-  apotc_obj <- run_packing_algos(apotc_obj, seurat_obj)
+  apotc_obj <- run_packing_algos(
+    apotc_obj, seurat_obj, rad_scale_factor, ORDER, try_place, verbose
+  )
   
-  # more stuff...
+  # put the tuning function api here for legends and stuff
   
-  # add the finished apotc object to reductions
-  seurat_obj@reductions[['apotc']] <- apotc_obj
-  seurat_obj
+  # add the finished apotc object to reductions and return
+  combined_obj(seurat_obj, apotc_obj)
 }
 
 # not sure if its the best in this script, but need some tune_params() function 

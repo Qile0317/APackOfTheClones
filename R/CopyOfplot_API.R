@@ -7,6 +7,7 @@
 # multi-sample data, BCR, and SCE objects from scRepertoire.
 
 pack_clonal_clusters <- function(
+  apotc_obj,
   integrated_seurat_obj,
   rad_decrease = 1,
   ORDER = TRUE,
@@ -14,8 +15,8 @@ pack_clonal_clusters <- function(
   progbar = TRUE){
   
   ans <- list()
-  clonedat <- integrated_seurat_obj@reductions[["apotc"]]
-  sizes <- sqrt(clonedat@clone_sizes) * clonedat@clone_scale_factor
+  # lapply
+  sizes <- sqrt(apotc_obj@clone_sizes) * clonedat@clone_scale_factor
 
   #circle layout
   for(i in 1:clonedat@num_clusters){

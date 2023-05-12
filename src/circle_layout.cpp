@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 
-using namespace std;
+using Llui = long long unsigned int;
 
 // node of circular linked list where each node is a circle
 class Node {
@@ -24,7 +24,7 @@ public:
   }
   
   // node printer for debugging
-  friend ostream& operator<<(std::ostream& os, const Node& node) {
+  friend std::ostream& operator<<(std::ostream& os, const Node& node) {
     os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
     return os;
   }
@@ -159,17 +159,15 @@ inline bool do_intersect(Node& c1, Node& c2) {
 }
 
 inline int geod_dist(Node& Cm, Node& Cn, Node& C) {
-  return min(fwd_dist(Cn, C), fwd_dist(C, Cm));
+  return std::min(fwd_dist(Cn, C), fwd_dist(C, Cm));
 }
-
-typedef long long unsigned int llui;
 
 // overlap check of three circles and returns either a vector of two pointers to nodes or nothing
 // unfinished
-pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
+std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   Node* C_em = &Cm;
   Node* C_en = &Cn;
-  vector<Node*> obstruct;
+  std::vector<Node*> obstruct;
   
   // collect circles that C intersects (if any) by adding intersectors to 'obstruct'
   Node* circ = Cn.nxt;
@@ -181,10 +179,10 @@ pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   }
   
   // find the one closest to {Cm, Cn}, (distance is in number of steps)
-  llui n = obstruct.size(); 
+  Llui n = obstruct.size(); 
   if (n > 0) { 
     Node* nearest = obstruct[0];
-    for (int i = 1; i < n; i++) {
+    for (Llui i = 1; i < n; i++) {
       if (geod_dist(Cm, Cn, *(obstruct[i])) < geod_dist(Cm, Cn, *(nearest))) {
         nearest = obstruct[i];
       }
@@ -200,3 +198,21 @@ pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   return std::make_pair(C_em, C_en);
 }
 
+// temporary place for R version of est_rad
+// lesson learned: dont mess with long long unsigned int
+// for some reason there was some under/flowflow when resetting max_ind sometimes??
+// [[Rcpp::export]]
+double est_rad(Rcpp::List clusterlist) {
+  std::vector<double> x_vals = clusterlist[0];
+  double max_x = 0;
+  int max_ind, n = x_vals.size();
+  for (int i = 0; i < n; i++) {
+    if (x_vals[i] > max_x) {
+      max_x = x_vals[i];
+      max_ind = i;
+    }
+  }
+  std::vector<double> rad_vals = clusterlist[2];
+  std::vector<double> centroid_vals = clusterlist[3];
+  return max_x + rad_vals[max_ind] - centroid_vals[0];
+}

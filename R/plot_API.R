@@ -68,27 +68,30 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
 #now: be able to group by color...
 
 #API for plotting size vectors .
-plot_API <- function(sizes, # list of size vectors,[[1]] c(a,b,..)
-                     centroids, # centroids of size vectors [[1]] c(x,y)
-                     num_clusters,
-                     rad_decrease = 1,
-                     ORDER = TRUE,
-                     try_place = TRUE,
-                     progbar = TRUE, 
-                     repulse = FALSE,
-                     thr = 1, G = 0.05, 
-                     max_repulsion_iter = 100,
-                     n = 360, linetype = "blank",
-                     plot_title = "Sizes of clones within each cluster",
-                     haslegend = TRUE,
-                     void = TRUE,
-                     origin = FALSE){
+plot_API <- function(
+  sizes, # list of size vectors,[[1]] c(a,b,..)
+  centroids, # centroids of size vectors [[1]] c(x,y)
+  num_clusters,
+  rad_decrease = 1,
+  ORDER = TRUE,
+  try_place = TRUE,
+  progbar = TRUE, 
+  repulse = FALSE,
+  thr = 1, G = 0.05, 
+  max_repulsion_iter = 100,
+  n = 360, linetype = "blank",
+  plot_title = "Sizes of clones within each cluster",
+  haslegend = TRUE,
+  void = TRUE,
+  origin = FALSE
+) {
+  
   ans <- list()
   
   #circle layout
   for(i in 1:length(sizes)){
     if (is.null(sizes[[i]])) {
-      ans[[i]] <- NA # important!
+      ans[[i]] <- list() # important!
     }else{
       if(progbar){
         message(paste("\npacking cluster", as.character(i-1)))

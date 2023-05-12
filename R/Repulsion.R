@@ -8,6 +8,8 @@
 #     returns `list()` if all zeros
 # - do_cluster_intersect(cn_c,cn_r,cm_c,cm_r,thr):
 #     check if two clusterlists overlap in c++
+# - do_proceed
+#     check if two clusters need to be repulsed
 
 # Alias to initialize direction vectors in a list
 initialize_direction_vectors <- function(num_clusters) {
@@ -28,25 +30,19 @@ initialize_list_of_transformation_vectors <- function(blank_vectors, num_cluster
 }
 
 # do_cl_intersect has been replaced by do_cluster_intersect, this is a wrapper 
-# for testing
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
   do_cluster_intersect(
     Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
   )
 }
 
-# function to tell whether the repulsion vector be calculated for 2 clusters?
+isnt_empty <- function(inp) !identical(inp, list())
+
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (!any(is.na(inp[[i]]))) {
-      if (!any(is.na(inp[[j]]))) {
-        return(
-          do_cluster_intersect(
-            inp[[i]][[4]], inp[[i]][[5]],
-            inp[[j]][[4]], inp[[j]][[5]],
-            thr
-          )
-        )
+    if (isnt_empty(inp[[i]])) {
+      if (isnt_empty(inp[[j]])) {
+        return(do_cl_intersect(inp[[i]], inp[[j]], thr))
       }
     }
   }
@@ -73,7 +69,8 @@ calculate_repulsion_vectors <- function(
 }
 
 # iterative repulsion. inp is a list of clusterlists.
-# near future: make it modify an apotc class
+# missing members of clusterlists are NA right now
+# near future: make it modify an apotc class and in Rcpp
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
 ) {
@@ -91,41 +88,8 @@ repulse_cluster <- function(
     transformation_vectors <- calculate_transformation_vectors(
       transformation_vectors, overall_repulsion_vec, num_clusters
     )
-    if (identical(transformation_vectors, list())) {
-      if(verbose) {progress_bar(1,1)}
-      return(inp)
-    }
-    # with the transformation vectors established, each cluster is moved
-    for (i in 1:num_clusters) {
-      if (!any(is.na(inp[[i]]))) {
-        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
-      }
-    }
-    if (verbose) {
-      progress_bar(curr_iteration, max_iter)
-    }
-  }
-  inp
-}
-
-# modified iterative repulsion
-repulse_cluster <- function(
-    inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
-) {
-  if (G <= 0) {stop("repulsion strength must be a positive real number")}
-  
-  #init variables - could use a class
-  num_clusters <- length(inp)
-  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration. 
-  overall_repulsion_vec <- initialize_list_of_transformation_vectors(transformation_vectors, num_clusters) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
-  
-  for(curr_iteration in 1:max_iter){ 
-    overall_repulsion_vec <- calculate_repulsion_vectors(
-      overall_repulsion_vec, inp, num_clusters, G, thr
-    )
-    transformation_vectors <- calculate_transformation_vectors(
-      transformation_vectors, overall_repulsion_vec, num_clusters
-    )
+    
+    #transformation vectors is an empty list() if everything was c(0,0)
     if (identical(transformation_vectors, list())) {
       if(verbose) {progress_bar(1,1)}
       return(inp)

@@ -21,7 +21,11 @@ test_that("do_cl_intersect() = FALSE for non-overlapping lists", {
   expect_false(do_cl_intersect(c1, c1_shifted_to_9_0))
 })
 
-# need to test do_proceed
+test_that("do_proceed() works", {
+  expect_false(do_proceed(test_cluster_lists, 1, 5, 0))
+  expect_true(do_proceed(test_cluster_lists, 1, 2, 0))
+  expect_false(do_proceed(test_cluster_lists, 1, 2, 20))
+})
 
 test_that("get_component_repulsion_vector works", {
   expect_equal(

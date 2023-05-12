@@ -18,7 +18,9 @@ test_that("retain_scale() works with verbose = TRUE", {
     suppressMessages(invisible(
       clonal_expansion_plot(
         test_integrated_pbmc, verbose = T, clone_scale_factor = 0.5, retain_axis_scales = T, add_size_legend = F
-        ))))
+      )
+    ))
+  )
 })
 
 test_that("repulsion and try_place works", {

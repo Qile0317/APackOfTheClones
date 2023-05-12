@@ -2,6 +2,8 @@
 #include <vector>
 #include <cmath>
 
+using Rvec = Rcpp::Nullable<Rcpp::NumericVector>;
+
 inline double sqr(double n) {
   return n*n;
 }
@@ -44,10 +46,12 @@ std::vector<double> get_average_vector(Rcpp::List vec_list) {
   return sum_vector;
 }
 
-// compute component form of repulsion vector between two clusters in the
-// clusterRcpp::List `inp`, assuming do_proceed(inp,i,j,thr) == TRUE
-// uses a modified version of coulombs law except its addition in the numerator
-// to compute the magnitude of the repulsion vector / 2 with the same direction
+/*
+compute component form of repulsion vector between two clusters in the
+clusterRcpp::List `inp`, assuming do_proceed(inp,i,j,thr) == TRUE
+uses a modified version of coulombs law except its addition in the numerator
+to compute the magnitude of the repulsion vector / 2 with the same direction
+*/
 // [[Rcpp::export]]
 std::vector<double> get_component_repulsion_vector(
   Rcpp::List inp, int i, int j, double G
@@ -60,10 +64,8 @@ std::vector<double> get_component_repulsion_vector(
   return component_form(polar_repulsion_vec);
 } 
 
-// TODO: initialize_direction_vectors, initialize_list_of_transformation_vectors
-
 // Check if 2 cluster lists overlap, with a threshold, give their centroids and
-// radii.
+// radii. thr should be the amount of acceptable overlap
 // [[Rcpp::export]]
 bool do_cluster_intersect(
   std::vector<double> Cn_centroid, double Cn_clRad,
@@ -75,7 +77,25 @@ bool do_cluster_intersect(
   return (sqrt(x_dif + y_dif) + thr) < (Cn_clRad + Cm_clRad);
 }
 
-// TODO: do_proceed, calculate_repulsion_vectors
+/*
+// cant handle NA elements in list
+bool do_proceed(Rcpp::List inp, int i, int j, double thr) {
+  if (i != j) {
+    Rcpp::Nullable<Rcpp::List> Cn = inp[i-1], Cm = inp[j-1];
+    if (Cn.isNotNull()) {
+      if (Cm.isNotNull()) {
+        Rcpp::List Cn (Cn), Cm (Cm);
+        std::vector<double> Cn_centroid = Cn[3], Cm_centroid = Cm[3];
+        double Cn_rad = Cn[4], Cm_rad = Cm[4];
+        return do_cluster_intersect(
+          Cn_centroid, Cn_rad, Cm_centroid, Cm_rad, thr
+        );
+      }
+    }
+  }
+  return false;
+}
+*/
 
 // function to just get the average vectors from a list of list of repulsion
 // vectors within 1 iteration

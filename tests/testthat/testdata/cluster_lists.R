@@ -37,7 +37,6 @@ c3 <- list(x = c(19.2380952380952, 20.6380952380952, 20.1238095238095,
                                                            19.2771936776758, 19.076228764298, 21.3260856192269), rad = c(0.8, 
                                                                                                                          0.6, 0.6, 0.5, 0.5), centroid = c(20, 20), clRad = 1.23809523809524)
 
-# aggregate them. this has to work
 test_cluster_lists <- list(
   c1, c1_shifted_by_4_5, c1_shifted_to_9_0, c2, c3
 )

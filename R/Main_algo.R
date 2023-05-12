@@ -213,22 +213,23 @@ overlap_check <- function(Cm, Cn, C) {
   }
 }
 
+# has been implemented in src/circle_layout.cpp
 #Cluster radius estimator that assumes imput is a list of x,y,r. Runs in linear time by 1 scan as list isnt sorted
 #the x or y MUST BE the first in the list, and assumes centeroid at 0,0
-est_rad <- function(coords){
-  cc <- 0
-  max_x <- 0
-  for(i in 1:length(coords$x)){ # x should be the first in the coord list
-    current_coord <- coords$x[i]
-    if(current_coord > max_x){
-      max_x <- current_coord
-      cc <- i
-    }
-  }
-  max_radius <- coords$rad[cc] #radii should be third in the list
-  centroid_x <- coords$centroid[1] #centroid should be fourth in the list
-  return(max_x + max_radius - centroid_x)
-}
+#est_rad <- function(coords){
+#  cc <- 0
+#  max_x <- 0
+#  for(i in 1:length(coords[[1]])){ # x should be the first in the coord list
+#    current_coord <- coords[[1]][i]
+#    if(current_coord > max_x){
+#      max_x <- current_coord
+#      cc <- i
+#    }
+#  }
+#  max_radius <- coords[[3]][cc]
+#  centroid_x <- coords[[4]][1]
+#  return(max_x + max_radius - centroid_x)
+#}
 
 #The circle layout function.###################################
 #It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
@@ -241,15 +242,12 @@ est_rad <- function(coords){
 #if true the algorithm tries to place each new circle to be added to the packing as close to the origin as possilble,
 #if false the algorithm tries to place each new circle to be added to the packing tangent to the closest circle on the boundary.
 
-#   this function does not account for colors yet 
+# assumes valid imputs!
 
 circle_layout <- function(input_rad_vec, centroid = c(0, 0),
                           rad_decrease = 1, # scale factor
                           ORDER = TRUE, try_place = TRUE,
                           progbar = TRUE) {
-
-  if (identical(input_rad_vec, list())) {return(NA)}
-
   if (ORDER) {input_rad_vec <- sort(input_rad_vec, decreasing = TRUE)}
 
   # Initialise the circles with radii as specified in input_rad_vec, and no boundary relations.
@@ -361,7 +359,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
 
   # estimate radius of cluster for repulsion
-  ans[[5]] <- est_rad(ans) # can speed up if done alongside
+  ans[[5]] <- est_rad(ans)
 
   # scale radius
   if (rad_decrease != 1) {
