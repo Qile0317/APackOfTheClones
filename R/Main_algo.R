@@ -253,9 +253,11 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   # Initialise the circles with radii as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here
   for (i in 1:length(input_rad_vec)) {
-    currCirc <- node$new(val = list(area = NULL, x = 0, y = 0,
-                         color = NULL, label = NULL,
-                         rad = input_rad_vec[i]))
+    currCirc <- node$new(val = list(
+      area = NULL, x = 0, y = 0,
+      color = NULL, label = NULL,
+      rad = input_rad_vec[i]
+    ))
     circles <- append(circles, currCirc)
   }
 
@@ -359,7 +361,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   }
   
   # estimate radius of cluster for repulsion
-  ans[[5]] <- est_rad(ans)
+  ans[[5]] <- estimate_rad(ans[[1]], ans[[3]], ans[[4]][1])
 
   # scale radius
   if (rad_decrease != 1) {

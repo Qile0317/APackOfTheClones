@@ -15,7 +15,6 @@
 ^codecov\.yml$
 ^\.vscode$
 ^\.RDataTmp$
-^a.exe$
 ^cran-comments\.md$
 ^doc$
 ^Meta$

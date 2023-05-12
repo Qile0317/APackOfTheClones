@@ -10,14 +10,16 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// est_rad
-double est_rad(Rcpp::List clusterlist);
-RcppExport SEXP _APackOfTheClones_est_rad(SEXP clusterlistSEXP) {
+// estimate_rad
+double estimate_rad(std::vector<double> x_vals, std::vector<double> rad_vals, double centroid_x);
+RcppExport SEXP _APackOfTheClones_estimate_rad(SEXP x_valsSEXP, SEXP rad_valsSEXP, SEXP centroid_xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type clusterlist(clusterlistSEXP);
-    rcpp_result_gen = Rcpp::wrap(est_rad(clusterlist));
+    Rcpp::traits::input_parameter< std::vector<double> >::type x_vals(x_valsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type rad_vals(rad_valsSEXP);
+    Rcpp::traits::input_parameter< double >::type centroid_x(centroid_xSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_rad(x_vals, rad_vals, centroid_x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -89,7 +91,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_APackOfTheClones_est_rad", (DL_FUNC) &_APackOfTheClones_est_rad, 1},
+    {"_APackOfTheClones_estimate_rad", (DL_FUNC) &_APackOfTheClones_estimate_rad, 3},
     {"_APackOfTheClones_get_transformed_clone_sizes", (DL_FUNC) &_APackOfTheClones_get_transformed_clone_sizes, 3},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},

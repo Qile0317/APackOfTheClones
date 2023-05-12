@@ -1,11 +1,3 @@
-library(Seurat)
-library(ggplot2)
-library(ggforce)
-library(dplyr)
-library(data.table)
-library(R6)
-library(utils)
-
 #' Visualize T cell clonal expansion with a ball-packing plot.
 #'
 #' Integrates a cell ranger T cell library into a Seurat object with a UMAP

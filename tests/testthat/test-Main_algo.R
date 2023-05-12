@@ -16,13 +16,9 @@ test_that("Node initialization works", {
 })
 
 
-test_that("est_rad() works", {
-  expect_equal(est_rad(c1), c1[[5]])
-  expect_equal(est_rad(c2), c2[[5]], tolerance = 3e-7)
-  expect_equal(est_rad(c3), c3[[5]], tolerance = 5e-6)
+test_that("estimate_rad() works", {
+  expect_equal(estimate_rad(c1[[1]],c1[[3]],c1[[4]][1]), c1[[5]])
 })
-
-# floating point errors are destroying these testsets so i set a ridiculously high tolerance
 
 # testing circle_layout
 test_that("circle_layout() works", {

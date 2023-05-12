@@ -204,18 +204,19 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
 // ok... may be zeroing in on why... R CMD check gave a segmentation fault, so
 // theres some problem with memory adresses....
 // [[Rcpp::export]]
-double est_rad(Rcpp::List clusterlist) {
-  std::vector<double> x_vals = clusterlist[0];
+double estimate_rad(
+    std::vector<double> x_vals,
+    std::vector<double> rad_vals,
+    double centroid_x
+) {
   double max_x = 0;
-  int max_ind, n = x_vals.size();
+  int max_ind = 0, n = x_vals.size();
   for (int i = 0; i < n; i++) {
     if (x_vals[i] > max_x) {
       max_x = x_vals[i];
-      max_ind = i;
+      max_ind += i - max_ind;
     }
   }
-  std::vector<double> rad_vals = clusterlist[2];
-  std::vector<double> centroid_vals = clusterlist[3];
-  double result_num = max_x + rad_vals[max_ind] - centroid_vals[0];
+  double result_num = max_x + rad_vals[max_ind] - centroid_x;
   return result_num;
 }
