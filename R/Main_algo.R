@@ -357,7 +357,7 @@ circle_layout <- function(input_rad_vec, centroid = c(0, 0),
   if (!identical(centroid, c(0, 0))) {
     ans <- trans_coord(ans)
   }
-
+  
   # estimate radius of cluster for repulsion
   ans[[5]] <- est_rad(ans)
 

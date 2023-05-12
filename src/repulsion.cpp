@@ -46,12 +46,10 @@ std::vector<double> get_average_vector(Rcpp::List vec_list) {
   return sum_vector;
 }
 
-/*
-compute component form of repulsion vector between two clusters in the
-clusterRcpp::List `inp`, assuming do_proceed(inp,i,j,thr) == TRUE
-uses a modified version of coulombs law except its addition in the numerator
-to compute the magnitude of the repulsion vector / 2 with the same direction
-*/
+// compute component form of repulsion vector between two clusters in the
+// clusterRcpp::List `inp`, assuming do_proceed(inp,i,j,thr) == TRUE
+// uses a modified version of coulombs law except its addition in the numerator
+// to compute the magnitude of the repulsion vector / 2 with the same direction
 // [[Rcpp::export]]
 std::vector<double> get_component_repulsion_vector(
   Rcpp::List inp, int i, int j, double G
@@ -63,6 +61,8 @@ std::vector<double> get_component_repulsion_vector(
   polar_repulsion_vec[0] = 0.5 * G * (c1_rad + c2_rad) / sqr(neg_polar_vec[0]);
   return component_form(polar_repulsion_vec);
 } 
+
+// TODO: initialize_direction_vectors, initialize_list_of_transformation_vectors
 
 // Check if 2 cluster lists overlap, with a threshold, give their centroids and
 // radii. thr should be the amount of acceptable overlap
@@ -77,14 +77,11 @@ bool do_cluster_intersect(
   return (sqrt(x_dif + y_dif) + thr) < (Cn_clRad + Cm_clRad);
 }
 
-/*
-// cant handle NA elements in list
 bool do_proceed(Rcpp::List inp, int i, int j, double thr) {
   if (i != j) {
-    Rcpp::Nullable<Rcpp::List> Cn = inp[i-1], Cm = inp[j-1];
-    if (Cn.isNotNull()) {
-      if (Cm.isNotNull()) {
-        Rcpp::List Cn (Cn), Cm (Cm);
+    Rcpp::List Cn = inp[i], Cm = inp[j];
+    if (Cn.size()) {
+      if (Cm.size()) {
         std::vector<double> Cn_centroid = Cn[3], Cm_centroid = Cm[3];
         double Cn_rad = Cn[4], Cm_rad = Cm[4];
         return do_cluster_intersect(
@@ -94,6 +91,26 @@ bool do_proceed(Rcpp::List inp, int i, int j, double thr) {
     }
   }
   return false;
+}
+
+/* O(N^2) operation to calculate all repulsion vectors for each cluster in list
+
+Rcpp::List calculate_repulsion_vectors(
+  Rcpp::List overall_repulsion_vec,
+  Rcpp::List inp,
+  int num_clusters,
+  double G = 1,
+  double thr = 0
+) {
+  for (int i = 0; i < num_clusters; i++) {
+    
+    for (int j = 0; j < num_clusters; j++) {
+      
+      if (do_proceed(inp, i, j, thr)) {
+        
+      }
+    }
+  }
 }
 */
 
