@@ -69,7 +69,7 @@ test_cluster_lists <- list(
 )
 
 test_centroids <- list(
-  "c1" = c(4, 5),
+  "c1" = c(0, 0),
   "c1_shifted_by_4_5" = c(4, 5),
   "c1_shifted_to_9_0" = c(9, 0),
   "c2" = c(3, 4),

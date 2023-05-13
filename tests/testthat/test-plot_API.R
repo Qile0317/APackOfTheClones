@@ -45,7 +45,7 @@ test_that("plot_clusters() works", {
 
 test_that("plot_API() works", {
   test_plot <- plot_API(
-    test_radii[-1], test_centroids[-1], 5,
+    test_radii, test_centroids, 5,
     progbar = F, repulse = F
   )
   expect_doppelganger("plot_API_all", test_plot)
@@ -53,7 +53,7 @@ test_that("plot_API() works", {
 
 test_that("plot_API(rad_decrease = 0.8) works", {
   test_plot <- plot_API(
-    test_radii[-1], test_centroids[-1], 5,
+    test_radii, test_centroids, 5,
     progbar = F, repulse = F,
     rad_decrease = 0.8
   )
@@ -65,7 +65,7 @@ test_that("plot_API(rad_decrease = 0.8) works", {
 
 test_that("plot_API(try_place = TRUE) works", {
   test_plot <- plot_API(
-    test_radii[-1], test_centroids[-1], 5,
+    test_radii, test_centroids, 5,
     progbar = F, repulse = F,
     try_place = T
   )

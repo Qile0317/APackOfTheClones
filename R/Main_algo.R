@@ -244,11 +244,18 @@ overlap_check <- function(Cm, Cn, C) {
 
 # assumes valid imputs!
 
-circle_layout <- function(input_rad_vec, centroid = c(0, 0),
-                          rad_decrease = 1, # scale factor
-                          ORDER = TRUE, try_place = TRUE,
-                          progbar = TRUE) {
-  if (ORDER) {input_rad_vec <- sort(input_rad_vec, decreasing = TRUE)}
+circle_layout <- function(
+  input_rad_vec, centroid = c(0, 0),
+  rad_decrease = 1, # scale factor
+  ORDER = TRUE, try_place = TRUE,
+  progbar = TRUE
+) {
+  
+  if (ORDER) {
+    input_rad_vec <- base::sort(
+      input_rad_vec, decreasing = TRUE, method = "radix"
+    )
+  }
 
   # Initialise the circles with radii as specified in input_rad_vec, and no boundary relations.
   circles <- list() #not sure if list of vector is better/faster here

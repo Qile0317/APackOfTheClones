@@ -11,7 +11,7 @@ df_full_join <- function(clstr_list) {
     'r' = numeric(0)
   )
   
-  seurat_cluster_index <- 0 # impportant to skip empty cluster indicies for insert_colors, need testing
+  seurat_cluster_index <- 0
   for(i in 1:length(clstr_list)){
     if (isnt_empty_nor_na(clstr_list[[i]])) {
       df <- dplyr::full_join(
@@ -68,9 +68,6 @@ plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #l
   return(p1 + ggplot2::theme(legend.position = "none"))
 }
 
-#now: be able to group by color...
-
-#API for plotting size vectors .
 plot_API <- function(
   sizes, # list of size vectors,[[1]] c(a,b,..)
   centroids, # centroids of size vectors [[1]] c(x,y)
