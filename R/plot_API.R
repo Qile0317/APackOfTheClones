@@ -1,6 +1,6 @@
 #The API functions for generating the ggplot
 
-load_packages("dplyr", "data.table", "utils", "ggplot2", "ggforce")
+#load_packages("dplyr", "data.table", "utils", "ggplot2", "ggforce")
 
 #full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
 df_full_join <- function(clstr_list) {
