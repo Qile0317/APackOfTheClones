@@ -1,27 +1,30 @@
 #The API functions for generating the ggplot
 
-library(dplyr)
-library(data.table)
-library(utils)
-library(ggplot2)
-library(ggforce)
+load_packages("dplyr", "data.table", "utils", "ggplot2", "ggforce")
 
 #full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
 df_full_join <- function(clstr_list) {
-  df <- data.frame(label = character(0),
-                   x = numeric(0),
-                   y = numeric(0),
-                   r = numeric(0))
+  df <- data.frame(
+    'label' = character(0),
+    'x' = numeric(0),
+    'y' = numeric(0),
+    'r' = numeric(0)
+  )
   
   seurat_cluster_index <- 0 # impportant to skip empty cluster indicies for insert_colors, need testing
   for(i in 1:length(clstr_list)){
-    if (!any(is.na(clstr_list[[i]]))) {
+    if (isnt_empty_nor_na(clstr_list[[i]])) {
       df <- dplyr::full_join(
-        df, data.frame("label" = rep(paste("cluster", seurat_cluster_index),
-                                     length(clstr_list[[i]][["x"]])),
-                       "x" = clstr_list[[i]][["x"]],
-                       "y" = clstr_list[[i]][["y"]],
-                       "r" = clstr_list[[i]][["rad"]]),
+        df,
+        data.frame(
+          "label" = rep(
+            paste("cluster", seurat_cluster_index),
+            length(clstr_list[[i]][["x"]])
+          ),
+          "x" = clstr_list[[i]][["x"]],
+          "y" = clstr_list[[i]][["y"]],
+          "r" = clstr_list[[i]][["rad"]]
+        ),
         by = dplyr::join_by("label", "x", "y", "r"))
     }
     seurat_cluster_index <- seurat_cluster_index + 1

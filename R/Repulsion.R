@@ -36,11 +36,9 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
   )
 }
 
-isnt_empty <- function(inp) !identical(inp, list())
-
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (isnt_empty(inp[[i]])) {
+    if (isnt_empty(inp[[i]])) { #isnt_empty is in utils.R
       if (isnt_empty(inp[[j]])) {
         return(do_cl_intersect(inp[[i]], inp[[j]], thr))
       }

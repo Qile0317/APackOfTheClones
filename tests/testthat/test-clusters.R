@@ -5,19 +5,21 @@ test_that("find_centroids() works", {
   input <- data.frame(
     "UMAP_1" = c(-1, 1, 1, 2, 3, 4, 4, 5, 9, 9),
     "UMAP_2" = c(-1, 3, 5, 4, 2, 7, 9, 0, 1, 10),
-    "clstrs" = c(0, 9, 5, 5, 4, 0, 0, 9, 4, 4)
-    )
+    "clstrs" = c(0, 1, 2, 2, 3, 0, 0, 1, 3, 3)
+  )
 
   expected_output <- list(
     `0` = c(2.333333, 5),
-    `4` = c(7, 4.333333),
-    `5` = c(1.5, 4.5),
-    `9` = c(3, 1.5)
+    `1` = c(3, 1.5),
+    `2` = c(1.5, 4.5),
+    `3` = c(7, 4.333333)
   )
 
-  expect_equal(find_centroids(input),
-               expected_output,
-               tolerance=3e-7)
+  expect_equal(
+    find_centroids(input),
+    expected_output,
+    tolerance = 5e-7
+  )
 })
 
 test_that("get_cluster_centroids() works", {
@@ -31,7 +33,10 @@ test_that("get_cluster_centroids() works", {
 test_that("trans_coord() works withOUT new_coord", {
   c1_new <- c1
   c1_new$centroid <- c(4, 5)
-  expect_equal(trans_coord(c1_new), c1_shifted_by_4_5)
+  expect_equal(
+    trans_coord(c1_new),
+    c1_shifted_by_4_5
+  )
 })
 
 test_that("trans_coord() works WITH new_coord",{

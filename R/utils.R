@@ -10,3 +10,26 @@ progress_bar <- function (x, max = 100) {
 get_num_clusters <- function(seurat_obj) {
   length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
+
+isnt_empty <- function(inp) {
+  !identical(inp, list())
+}
+
+isnt_na <- function(inp) {
+  !any(is.na(inp))
+}
+
+isnt_empty_nor_na <- function(inp) {
+  isnt_empty(inp) && isnt_na(inp)
+}
+
+load_packages <- function(...) {
+  packages <- list(...)
+  n <- length(packages)
+  for (i in 1:n) {
+    suppressPackageStartupMessages(require(
+      packages[[i]], character.only = T
+    ))
+    progress_bar(i, n)
+  }
+}
