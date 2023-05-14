@@ -136,7 +136,6 @@ place_starting_three <- function(C1, C2, C3) {
 closest <- function(c){
   closest <- c
   circ <- c$nxt
-
   while (!identical(circ, c)) {
     if (centre_dist(closest) > centre_dist(circ)) {
       closest <- circ
@@ -146,10 +145,15 @@ closest <- function(c){
   closest
 }
 
-#Locating the pair of successive circles, c, c.s, with the following property: amongst all pairs of
-#successive circles on the boundary, this pair minimizes distance from the center of d to the origin, when d is
-#fitted tangent to this pair.
-
+#' place circle for try_place = TRUE - bugged maybe
+#'
+#' Locating the pair of successive circles, c, c$nxt, with the following
+#' property: amongst all pairs of successive circles on the boundary, this pair
+#' minimizes distance from the center of d to the origin, when d is fitted
+#' tangent to this pair.
+#' 
+#' @noRd
+#' 
 closest_place <- function(c, d){
   closest <- c
   circ <- c$nxt
@@ -392,9 +396,6 @@ circle_layout <- function(
   ans
 }
 
-# found problem; maybe somethingt do w the different R CMD check environment,
-# but, fors some reason, the 6th and 7th x coordinates for each cluster are
-# packed differently in test() and check()
 pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_scale = 1,
     ORDER = TRUE, try_place = FALSE, verbose = TRUE

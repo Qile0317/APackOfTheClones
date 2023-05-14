@@ -20,6 +20,8 @@ test_that("estimate_rad() works", {
   expect_equal(estimate_rad(c3[[1]],c3[[3]],c3[[4]][1]), c3[[5]])
 })
 
+# need to test everything else here, esp try_place (closest_place)
+
 # testing circle_layout
 test_that("circle_layout() works", {
   expect_equal(circle_layout(c(1, 1, 1, 1, 1.3, 1, 1, 1, 1.3),
@@ -101,19 +103,22 @@ test_that("circle_layout(rad_decrease = 0.9) works", {
                tolerance = 1)
 })
 
-# if this fails, plot_API fails
 test_that("pack_into_clusterlists works", {
   expect_equal(
     pack_into_clusterlists(test_radii, test_centroids, 5, verbose = F),
     test_cluster_lists,
     tolerance = 1e-8
   )
-  
+})
+
+test_that("pack_into_clusterlists handles NULLS", {
   expect_equal(
-    pack_into_clusterlists(test_radii[-1], test_centroids[-1], 4, verbose = F),
-    test_cluster_lists[-1],
+    pack_into_clusterlists(
+      list(NULL,c1[[3]]),
+      list(c(0,0),c(0,0)),
+      2, verbose = F
+    ),
+    list(list(),c1),
     tolerance = 1e-8
   )
 })
-
-# need to test try_place but its pretty reliable.
