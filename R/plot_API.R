@@ -35,13 +35,15 @@ df_full_join <- function(clstr_list) {
 #main plotting function
 
 # result plotting function. clusters is a list of clusterlists TRANSFORM into a dataframe, which are clusters.
-# A cluster list includes $x, $y, $rad, $centroid.
+# A cluster list includes x, y, rad, centroid, clRad.
 #the clusters imput is a dataframe. #move into seperate script
 
-plot_clusters <- function(clusters, n = 360, linetype ="blank", #linewidth=1, #linewidth doesnt work lol.
-                          title = "Sizes of clones within each cluster",
-                          haslegend = FALSE, void = TRUE,
-                          origin = FALSE){ #, label=TRUE (labels each individual circle, yikes)
+plot_clusters <- function(
+  clusters, n = 360, linetype ="blank", 
+  title = "Sizes of clones within each cluster",
+  haslegend = FALSE, void = TRUE,
+  origin = FALSE){
+  
   if (!origin) {
     p1 <- ggplot2::ggplot(data = clusters) +
       ggforce::geom_circle(aes_string(
@@ -77,8 +79,8 @@ plot_API <- function(
   try_place = TRUE,
   progbar = TRUE, 
   repulse = FALSE,
-  thr = 1, G = 0.05, 
-  max_repulsion_iter = 100,
+  thr = 1, G = 1, 
+  max_repulsion_iter = 10,
   n = 360, linetype = "blank",
   plot_title = "Sizes of clones within each cluster",
   haslegend = TRUE,
@@ -86,38 +88,27 @@ plot_API <- function(
   origin = FALSE
 ) {
   
-  ans <- list()
-  
-  #circle layout
-  for(i in 1:length(sizes)){
-    if (is.null(sizes[[i]])) {
-      ans[[i]] <- list() # important!
-    }else{
-      if(progbar){
-        message(paste("\npacking cluster", as.character(i-1)))
-      }
-      ans[[i]] <- circle_layout(
-        sizes[[i]],
-        centroid = centroids[[i]],
-        rad_decrease = rad_decrease,
-        ORDER = ORDER,
-        try_place = try_place,
-        progbar = progbar
-      )
-    }
-  }
+  ans <- pack_into_clusterlists(
+    sizes, centroids, num_clusters, rad_decrease, ORDER, try_place, progbar
+  )
   
   if (repulse) {
-    if(progbar){message(paste("\nrepulsing clusters | max iterations =", max_repulsion_iter))}
-    ans <- repulse_cluster(ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar)
+    if(progbar){
+      message(paste(
+        "\nrepulsing clusters | max iterations =", max_repulsion_iter
+      ))
+    }
+    ans <- repulse_cluster(
+      ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar
+    )
   }
-  
-  #joining list into df and color for plotting. in future make customizable
+
+  #joining list into df, add color, then plot.
   ans <- df_full_join(ans)
   ans <- insert_colors(ans, num_clusters)
-  
-  #plotting
-  plt <- plot_clusters(ans, n = n, linetype = linetype, title = plot_title,
-                       haslegend = haslegend, void = void, origin = origin)
+  plt <- plot_clusters(
+    ans, n = n, linetype = linetype, title = plot_title, haslegend = haslegend,
+    void = void, origin = origin
+  )
   plt
 }

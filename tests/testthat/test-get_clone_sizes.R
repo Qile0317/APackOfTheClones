@@ -1,5 +1,4 @@
 source("testdata/SCIP.R")
-library(data.table)
 
 untable <- function(a) {
   as.numeric(unname(a))

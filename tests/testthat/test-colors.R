@@ -1,6 +1,3 @@
-library(dplyr)
-library(hash)
-
 source("testdata/SCIP.R")
 
 test_that("count_umap_clusters() works", {
@@ -29,8 +26,8 @@ test_that("insert_colors() works", {
   
   expect_identical(
     new_df,
-    test_cluster_df %>% 
-      mutate('color' = c(
+    test_cluster_df %>% dplyr::mutate(
+      'color' = c(
         "#F8766D", "#F8766D", "#F8766D", "#F8766D",
         "#F8766D", "#F8766D", "#F8766D", "#F8766D",
         "#F8766D", "#A3A500", "#A3A500", "#A3A500", 
@@ -40,5 +37,8 @@ test_that("insert_colors() works", {
         "#00BF7D", "#00BF7D", "#00BF7D", "#00B0F6",
         "#00B0F6", "#00B0F6", "#00B0F6", "#00B0F6", 
         "#00B0F6", "#E76BF3", "#E76BF3", "#E76BF3", 
-        "#E76BF3", "#E76BF3")))
+        "#E76BF3", "#E76BF3"
+      )
+    )
+  )
 })

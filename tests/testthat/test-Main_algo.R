@@ -3,8 +3,6 @@ source("testdata/cluster_lists.R")
 # need to test prerequisite functions as well
 # probably need another testdata file for nodes
 
-library(R6)
-
 test_that("Node initialization works", {
   test_node <- node$new(
     val = list(1, 1, 2, 3, "color" = "#5318008", 3)
@@ -18,6 +16,8 @@ test_that("Node initialization works", {
 
 test_that("estimate_rad() works", {
   expect_equal(estimate_rad(c1[[1]],c1[[3]],c1[[4]][1]), c1[[5]])
+  expect_equal(estimate_rad(c2[[1]],c2[[3]],c2[[4]][1]), c2[[5]])
+  expect_equal(estimate_rad(c3[[1]],c3[[3]],c3[[4]][1]), c3[[5]])
 })
 
 # testing circle_layout
@@ -32,6 +32,12 @@ test_that("circle_layout() works", {
 
   expect_false(identical(c3, circle_layout(c(0.8,0.6,0.6,0.5,0.5),
                                            progbar = FALSE)))
+})
+
+test_that("is_degenerate_case works", {
+  expect_true(is_degenerate_case(1))
+  expect_true(is_degenerate_case(2))
+  expect_false(is_degenerate_case(3))
 })
 
 test_that("circle_layout() handles edge cases", {
@@ -96,6 +102,15 @@ test_that("circle_layout(rad_decrease = 0.9) works", {
                              progbar = FALSE),
                new_c1,
                tolerance = 1)
+})
+
+# if this fails, plot_API fails
+test_that("pack_into_clusterlists works", {
+  expect_equal(
+    pack_into_clusterlists(test_radii, test_centroids, 5, verbose = F),
+    test_cluster_lists,
+    tolerance = 1e-8
+  )
 })
 
 # need to test try_place but its pretty reliable.

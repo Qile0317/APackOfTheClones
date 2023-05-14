@@ -69,21 +69,19 @@ test_cluster_lists <- list(
 )
 
 test_centroids <- list(
-  "c1" = c(0, 0),
-  "c1_shifted_by_4_5" = c(4, 5),
-  "c1_shifted_to_9_0" = c(9, 0),
-  "c2" = c(3, 4),
-  "c3" = c(20, 20)
+  "c1" = c1[[4]],
+  "c1_shifted_by_4_5" = c1_shifted_by_4_5[[4]],
+  "c1_shifted_to_9_0" = c1_shifted_to_9_0[[4]],
+  "c2" = c2[[4]],
+  "c3" = c3[[4]]
 )
 
 test_radii <- list(
-  "c1" = c(), "c1_shifted_by_4_5" = c(),
-  "c1_shifted_to_9_0" = c(), "c2" = c(),
-  "c3" = c()
+  "c1" = c1[[3]], 
+  "c1_shifted_by_4_5" = c1_shifted_by_4_5[[3]],
+  "c1_shifted_to_9_0" = c1_shifted_to_9_0[[3]], 
+  "c2" = c2[[3]],
+  "c3" = c3[[3]]
 )
-
-for (i in 1:length(test_cluster_lists)) {
-  test_radii[[i]] <- test_cluster_lists[[i]][[3]]
-}
 
 #plot_clusters(test_cluster_lists)

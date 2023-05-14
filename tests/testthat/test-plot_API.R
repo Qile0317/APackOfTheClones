@@ -1,10 +1,6 @@
 source("testdata/cluster_lists.R")
-suppressPackageStartupMessages(library(dplyr))
-library(vdiffr)
-library(ggforce)
 
 test_that("df_full_join() works", {
-  
   test_df <- readRDS("testdata/df_full_join_test_df.rds")
     
   expect_equal(
@@ -41,6 +37,10 @@ test_that("plot_clusters() works", {
   test_plot <- plot_clusters(
     insert_colors(df_full_join(list(c1,c2,c3)),3))
   expect_doppelganger("plot_c1_c2_c3", test_plot)
+  
+  test_plot <- plot_clusters(
+    insert_colors(df_full_join(test_cluster_lists),5))
+  expect_doppelganger("plot_API_all", test_plot)
 })
 
 test_that("plot_API() works", {

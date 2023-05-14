@@ -1,7 +1,3 @@
-suppressPackageStartupMessages(library(Seurat))
-library(data.table)
-library(utils)
-
 source("testdata/SCIP.R")
 
 test_that("integrate_tcr() works", {

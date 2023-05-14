@@ -143,7 +143,7 @@ closest <- function(c){
     }
     circ <- circ$nxt
   }
-  return(closest)
+  closest
 }
 
 #Locating the pair of successive circles, c, c.s, with the following property: amongst all pairs of
@@ -159,7 +159,7 @@ closest_place <- function(c, d){
     }
     circ <- circ$nxt
   }
-  return(closest)
+  closest
 }
 
 #Checking for overlaps between a fitted circle and others on the boundary.
@@ -213,37 +213,72 @@ overlap_check <- function(Cm, Cn, C) {
   }
 }
 
-# has been implemented in src/circle_layout.cpp
-#Cluster radius estimator that assumes imput is a list of x,y,r. Runs in linear time by 1 scan as list isnt sorted
-#the x or y MUST BE the first in the list, and assumes centeroid at 0,0
-#est_rad <- function(coords){
-#  cc <- 0
-#  max_x <- 0
-#  for(i in 1:length(coords[[1]])){ # x should be the first in the coord list
-#    current_coord <- coords[[1]][i]
-#    if(current_coord > max_x){
-#      max_x <- current_coord
-#      cc <- i
-#    }
-#  }
-#  max_radius <- coords[[3]][cc]
-#  centroid_x <- coords[[4]][1]
-#  return(max_x + max_radius - centroid_x)
-#}
+# handling of degenerate cases of 1 or 2 circles for circle layout
+is_degenerate_case <- function(lenCirc) {
+  lenCirc == 1 || lenCirc == 2
+} 
 
-#The circle layout function.###################################
-#It takes an input vector of radii, and returns a vector of centre coordinates of the corresponding circles in the layout.
+handle_degenerate_cases <- function(
+  lenCirc, circles, centroid, rad_scale, verbose
+) {
+  if (lenCirc == 1) {
+    if (verbose) {progress_bar(1,1)}
+    return(list(
+      "x" = circles[[1]]$val[[2]] + centroid[1],
+      "y" = circles[[1]]$val[[3]] + centroid[2],
+      "rad" = circles[[1]]$val[[6]] * rad_scale,
+      "centroid" = centroid,
+      "clRad" = circles[[1]]$val[[6]]
+    ))
+  }
+  
+  if (lenCirc == 2) {
+    if (verbose) {progress_bar(1,1)}
+    # transform the x coordinates to place left and right of center
+    circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
+    circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
+    
+    return(list(
+      "x" = c(circles[[1]]$val[[2]], circles[[2]]$val[[2]]) + centroid[1],
+      "y" = rep(centroid[2], 2),
+      "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
+      "centroid" = centroid,
+      "clRad" = 0.5 * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
+    ))
+  }
+}
 
-#Optional arguments are:
-# rad decrease: after packing, if the circles should be slightly smaller to have a small gap of the input value between them
-#"order": default = true
-#if true it sorts the input vector in descending order before packing
-#"try_place":  default is true
-#if true the algorithm tries to place each new circle to be added to the packing as close to the origin as possilble,
-#if false the algorithm tries to place each new circle to be added to the packing tangent to the closest circle on the boundary.
-
-# assumes valid imputs!
-
+#' The circle layout function - bugged
+#' 
+#' Currently returns different results in devtools::check() compared to test()
+#' but only in plot_API. Its likely something with how R CMD CHECK uses a
+#' different environment and treats some function/method differently??
+#' 
+#' It takes an input vector of radii, and returns a vector of centre coordinates
+#' of the corresponding circles in the layout. It is done for a single cluster,
+#' and packs the input radii into circles in a circular cluster. Note that it 
+#' assumes the inputs are valid!
+#' 
+#' @param input_rad_vec a numeric vector of radii
+#' @param centroid the centroid of the final cluster
+#' @param rad_decrease a SCALE FACTOR to indicate how much smaller circles
+#' should get after the packing
+#' @param ORDER logical. Indicates whether the radii should be sorted. If so,
+#' the larger circles will be in the centre
+#' @param try_place if true the algorithm tries to place each new circle to be
+#' added to the packing as close to the origin as possilble. If false, the
+#' algorithm tries to place each new circle to be added to the packing tangent
+#' to the closest circle on the boundary
+#' 
+#' @return A clusterlist. A list with 5 named elements. [[1]] is `x`, [[2]] is
+#' `y`, [[3]] is `rad`, and all these are numeric vectors indicating the x and y
+#' coordinates and radii of the packed circles based on the input radii. [[4]]
+#' is `centroid`, numeric vector of length 2 of the x and y coordinates of the 
+#' centroid of the cluster. [[5]] is `clRad`, the estimated radius of the entire
+#' cluster.
+#' 
+#' @noRd
+#' 
 circle_layout <- function(
   input_rad_vec, centroid = c(0, 0),
   rad_decrease = 1, # scale factor
@@ -271,30 +306,10 @@ circle_layout <- function(
   lenCirc <- length(circles)
   if (progbar) {progress_bar(0,1)}
 
-  #Taking care of "degenerate" cases when there are only one or two circles
-  if (lenCirc == 1) {
-    if (progbar) {progress_bar(1,1)}
-    return(list("x" = circles[[1]]$val[[2]] + centroid[1],
-                "y" = circles[[1]]$val[[3]] + centroid[2],
-                "rad" = circles[[1]]$val[[6]] * rad_decrease,
-                "centroid" = centroid,
-                "clRad" = circles[[1]]$val[[6]]))
-  }
-
-  if (lenCirc == 2) {
-    if (progbar) {progress_bar(1,1)}
-    # transform the x coordinates to place left and right of center
-    circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
-    circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
-
-    return(list("x" = c(circles[[1]]$val[[2]] + centroid[1],
-                        circles[[2]]$val[[2]] + centroid[1]),
-                "y" = c(centroid[2], centroid[2]),
-                "rad" = c(circles[[1]]$val[[6]],
-                          circles[[2]]$val[[6]]) * rad_decrease,
-                "centroid" = centroid,
-                "clRad" = 0.5 * (circles[[1]]$val[[6]] +
-                                  circles[[2]]$val[[6]])))
+  if (is_degenerate_case(lenCirc)) {
+    return(handle_degenerate_cases(
+      lenCirc, circles, centroid, rad_decrease, progbar
+    ))
   }
 
   # Place the first three circles to be mutually tangent, with centroid at the origin.
@@ -303,7 +318,7 @@ circle_layout <- function(
   # Initialise the boundary
   init_boundary(list(circles[[1]], circles[[2]], circles[[3]]))
 
-  #Loop through the remaining circles,fitting them
+  #Loop through the remaining circles,fitting them - bug is in here...
   j <- 4
   while (j <= lenCirc) {
     if (try_place) {
@@ -343,7 +358,7 @@ circle_layout <- function(
     }
   }
   
-  ans <- list() #in the future i can put the colors in the prior functions.
+  ans <- list()
   cc <- 1
   Rvec <- c()
   Xvec <- c()
@@ -355,25 +370,52 @@ circle_layout <- function(
       Yvec <- c(Yvec, c$val[[3]])
   }
 
-  # construct output cluster list
-  ans <- list("x" = Xvec,
-              "y" = Yvec,
-              "rad" = Rvec,
-              "centroid" = centroid,
-              "clRad" = 0)
+  # construct output cluster list with estimated cluster radius
+  ans <- list(
+    "x" = Xvec,
+    "y" = Yvec,
+    "rad" = Rvec,
+    "centroid" = centroid,
+    "clRad" = estimate_rad(Xvec, Rvec, 0)
+  )
 
   # transform the x and y coordinates to the centroid if its not 0,0.
   if (!identical(centroid, c(0, 0))) {
     ans <- trans_coord(ans)
   }
   
-  # estimate radius of cluster for repulsion
-  ans[[5]] <- estimate_rad(ans[[1]], ans[[3]], ans[[4]][1])
-
   # scale radius
   if (rad_decrease != 1) {
     ans[[3]] <- Rvec * rad_decrease
   }
   if (progbar) {progress_bar(1,1)}
   ans
+}
+
+# found problem; maybe somethingt do w the different R CMD check environment,
+# but, fors some reason, the 6th and 7th x coordinates for each cluster are
+# packed differently in test() and check()
+pack_into_clusterlists <- function(
+    sizes, centroids, num_clusters, rad_scale = 1,
+    ORDER = TRUE, try_place = TRUE, verbose = TRUE
+){
+  output_list <- list()
+  for(i in 1:num_clusters){
+    if (is.null(sizes[[i]])) {
+      output_list[[i]] <- list()
+    }else{
+      if(verbose){
+        message(paste("\npacking cluster", as.character(i-1)))
+      }
+      output_list[[i]] <- circle_layout(
+        sizes[[i]],
+        centroid = centroids[[i]],
+        rad_decrease = rad_scale,
+        ORDER = ORDER,
+        try_place = try_place,
+        progbar = verbose
+      )
+    }
+  }
+  output_list
 }

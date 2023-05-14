@@ -9,4 +9,4 @@
 library(testthat)
 library(APackOfTheClones)
 
-test_check("APackOfTheClones")
+testthat::test_check("APackOfTheClones")
