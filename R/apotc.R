@@ -62,7 +62,7 @@ initialize_apotc <- function(
 run_packing_algos <- function(
   apotc_obj, integrated_seurat_obj,
   rad_scale_factor = 1, ORDER = TRUE,
-  try_place = TRUE, verbose = TRUE
+  try_place = FALSE, verbose = TRUE
 ) {
   apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
   apotc_obj@centroids <- get_cluster_centroids(integrated_seurat_obj)

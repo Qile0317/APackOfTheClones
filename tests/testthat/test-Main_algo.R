@@ -82,14 +82,11 @@ test_that("circle_layout() handles edge cases", {
 # Testing optional args
 test_that("circle_layout(ORDER = FALSE) works", {
   expect_equal(
-    circle_layout(c(6,9,4,2,7), ORDER = FALSE, progbar = FALSE),
+    circle_layout(c(6,9,4,2,7), ORDER = F, progbar = F, try_place = F),
     list(x = c(-6.73333333333333, 8.26666666666667, -1.53333333333333, 
-               4.22415396998617, -12.0149282860133), 
-         y = c(2.84722086720835, 2.84722086720835, -5.6944417344167,
-               -7.38303284896003, -9.03153137180334),
-         rad = c(6, 9, 4, 2, 7),
-         centroid = c(0, 0),
-         clRad = 17.2666666666667),
+               -7.50533138211336, -8.70501097444157), y = c(2.84722086720835, 
+                                                            2.84722086720835, -5.6944417344167, -5.11544319783168, -14.0351275462686
+               ), rad = c(6, 9, 4, 2, 7), centroid = c(0, 0), clRad = 17.2666666666667),
     tolerance = 3e-6)
 })
 
@@ -109,6 +106,12 @@ test_that("pack_into_clusterlists works", {
   expect_equal(
     pack_into_clusterlists(test_radii, test_centroids, 5, verbose = F),
     test_cluster_lists,
+    tolerance = 1e-8
+  )
+  
+  expect_equal(
+    pack_into_clusterlists(test_radii[-1], test_centroids[-1], 4, verbose = F),
+    test_cluster_lists[-1],
     tolerance = 1e-8
   )
 })

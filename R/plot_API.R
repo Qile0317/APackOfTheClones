@@ -76,7 +76,7 @@ plot_API <- function(
   num_clusters,
   rad_decrease = 1,
   ORDER = TRUE,
-  try_place = TRUE,
+  try_place = FALSE,
   progbar = TRUE, 
   repulse = FALSE,
   thr = 1, G = 1, 
@@ -94,9 +94,9 @@ plot_API <- function(
   
   if (repulse) {
     if(progbar){
-      message(paste(
-        "\nrepulsing clusters | max iterations =", max_repulsion_iter
-      ))
+      message(
+        paste("\nrepulsing all clusters | max iterations =", max_repulsion_iter)
+      )
     }
     ans <- repulse_cluster(
       ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar

@@ -282,7 +282,7 @@ handle_degenerate_cases <- function(
 circle_layout <- function(
   input_rad_vec, centroid = c(0, 0),
   rad_decrease = 1, # scale factor
-  ORDER = TRUE, try_place = TRUE,
+  ORDER = TRUE, try_place = FALSE,
   progbar = TRUE
 ) {
   
@@ -397,7 +397,7 @@ circle_layout <- function(
 # packed differently in test() and check()
 pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_scale = 1,
-    ORDER = TRUE, try_place = TRUE, verbose = TRUE
+    ORDER = TRUE, try_place = FALSE, verbose = TRUE
 ){
   output_list <- list()
   for(i in 1:num_clusters){

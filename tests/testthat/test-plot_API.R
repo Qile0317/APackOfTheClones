@@ -45,7 +45,7 @@ test_that("plot_clusters() works", {
 
 test_that("plot_API() works", {
   test_plot <- plot_API(
-    test_radii, test_centroids, 5,
+    test_radii, test_centroids, 5, try_place = F,
     progbar = F, repulse = F
   )
   expect_doppelganger("plot_API_all", test_plot)
@@ -53,7 +53,7 @@ test_that("plot_API() works", {
 
 test_that("plot_API(rad_decrease = 0.8) works", {
   test_plot <- plot_API(
-    test_radii, test_centroids, 5,
+    test_radii, test_centroids, 5, try_place = F,
     progbar = F, repulse = F,
     rad_decrease = 0.8
   )
@@ -63,11 +63,14 @@ test_that("plot_API(rad_decrease = 0.8) works", {
   )
 })
 
+# i have a hypothesis - this might be failing in the r cmd check
+# environment because there sometimes might be multiple best ways
+# to place "as close as possible"? As evidenced by previous tests too
 test_that("plot_API(try_place = TRUE) works", {
   test_plot <- plot_API(
     test_radii, test_centroids, 5,
-    progbar = F, repulse = F,
-    try_place = T
+    ORDER = T, try_place = T,
+    progbar = F, repulse = F
   )
   expect_doppelganger(
     "plot_API_try_place_TRUE",
