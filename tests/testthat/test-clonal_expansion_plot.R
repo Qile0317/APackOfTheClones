@@ -25,10 +25,22 @@ test_that("retain_scale() works with verbose = TRUE", {
 
 test_that("repulsion and try_place works", {
   expect_doppelganger(
+    "try_place_plot",
+    clonal_expansion_plot(
+      test_integrated_pbmc, verbose = F, repulse = F,
+      clone_scale_factor = 0.5, retain_axis_scales = F, try_place = T,
+      add_size_legend = T, legend_buffer = 1.5, legend_spacing = 0.25,
+      legend_position = "bottom_right", legend_sizes = c(1,5)
+    )
+  )
+  expect_doppelganger(
     "repulsed_tight_plot",
       clonal_expansion_plot(
-        test_integrated_pbmc, verbose = F, repulse = T, clone_scale_factor = 0.5, retain_axis_scales = F, try_place = T,
+        test_integrated_pbmc, verbose = F, repulse = T,
+        clone_scale_factor = 0.5, retain_axis_scales = F, try_place = T,
         add_size_legend = T, legend_buffer = 1.5, legend_spacing = 0.25
       )
   )
 }) 
+
+# incredibly weird, try_place = TRUE works here but not on plot_API... WHAT?!?!

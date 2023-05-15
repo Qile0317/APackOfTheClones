@@ -212,9 +212,8 @@ overlap_check <- function(Cm, Cn, C) {
 
   if ((identical(C_em, Cm)) && (identical(C_en, Cn))) {
     return("clear")
-  }else {
-    return(c(C_em, C_en))
   }
+  return(c(C_em, C_en))
 }
 
 # handling of degenerate cases of 1 or 2 circles for circle layout
@@ -225,8 +224,8 @@ is_degenerate_case <- function(lenCirc) {
 handle_degenerate_cases <- function(
   lenCirc, circles, centroid, rad_scale, verbose
 ) {
+  if (verbose) {progress_bar(1,1)}
   if (lenCirc == 1) {
-    if (verbose) {progress_bar(1,1)}
     return(list(
       "x" = circles[[1]]$val[[2]] + centroid[1],
       "y" = circles[[1]]$val[[3]] + centroid[2],
@@ -236,20 +235,18 @@ handle_degenerate_cases <- function(
     ))
   }
   
-  if (lenCirc == 2) {
-    if (verbose) {progress_bar(1,1)}
-    # transform the x coordinates to place left and right of center
-    circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
-    circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
-    
-    return(list(
-      "x" = c(circles[[1]]$val[[2]], circles[[2]]$val[[2]]) + centroid[1],
-      "y" = rep(centroid[2], 2),
-      "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
-      "centroid" = centroid,
-      "clRad" = 0.5 * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
-    ))
-  }
+  # if lenCirc == 2
+  # transform the x coordinates to place left and right of center
+  circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
+  circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
+  
+  return(list(
+    "x" = c(circles[[1]]$val[[2]], circles[[2]]$val[[2]]) + centroid[1],
+    "y" = rep(centroid[2], 2),
+    "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
+    "centroid" = centroid,
+    "clRad" = 0.5 * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
+  ))
 }
 
 #' The circle layout function - bugged

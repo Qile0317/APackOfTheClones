@@ -105,8 +105,40 @@ test_that("circle_layout(rad_decrease = 0.9) works", {
 
 test_that("pack_into_clusterlists works", {
   expect_equal(
-    pack_into_clusterlists(test_radii, test_centroids, 5, verbose = F),
+    pack_into_clusterlists(
+      test_radii,
+      test_centroids,
+      5,
+      verbose = F
+    ),
     test_cluster_lists,
+    tolerance = 1e-8
+  )
+  
+  expect_equal(
+    pack_into_clusterlists(
+      test_radii[1:4],
+      test_centroids[1:4],
+      4,
+      verbose = F
+    ),
+    test_cluster_lists[1:4],
+    tolerance = 1e-8
+  )
+  
+  expect_equal(
+    pack_into_clusterlists(
+      test_radii[1:4],
+      test_centroids[1:4],
+      4,
+      verbose = F
+    ),
+    pack_into_clusterlists(
+      test_radii,
+      test_centroids,
+      5,
+      verbose = F
+    )[1:4],
     tolerance = 1e-8
   )
 })

@@ -71,11 +71,18 @@ int fwd_dist(Node& c1, Node& c2) {
 }
 
 // removes all nodes between c1 and c2 inlusive, and links everything else. Purposefully doesn't de-allocate the segment.
-// this one simplies the original though doesnt unlink the removed segment. if there are bugs then this may be the cause.
 void fwd_remove(Node& c1, Node& c2) {
-  if (&c1 == &c2) {  Rcpp::stop("Circles are the same."); }
+  if (&c1 == &c2) { Rcpp::stop("Circles are the same."); }
   if (c1.nxt == &c2) { Rcpp::stop("Circles are consecutive."); }
-  c1.prv->nxt = c2.nxt;
+  
+  //c1.prv->nxt = c2.nxt;
+  
+  Node* circ = c1.nxt;
+  while (circ != &c2) {
+    circ->prv->nxt = circ->nxt;
+    circ->nxt->prv = circ->prv;
+    circ = circ->nxt;
+  }
 }
 
 inline double sqr(double n) {
@@ -179,10 +186,10 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   }
   
   // find the one closest to {Cm, Cn}, (distance is in number of steps)
-  Llui n = obstruct.size(); 
-  if (n > 0) { 
+  int LenObs = obstruct.size(); 
+  if (LenObs > 0) { 
     Node* nearest = obstruct[0];
-    for (Llui i = 1; i < n; i++) {
+    for (int i = 0; i < LenObs; i++) {
       if (geod_dist(Cm, Cn, *(obstruct[i])) < geod_dist(Cm, Cn, *(nearest))) {
         nearest = obstruct[i];
       }
@@ -194,8 +201,29 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
       C_em = nearest;
     }
   }
-  if ((C_em == &Cm) && (C_en == &Cn)) {return std::make_pair(nullptr, nullptr);}
+  if ((C_em == &Cm) && (C_en == &Cn)) {
+    return std::make_pair(nullptr, nullptr);
+  }
   return std::make_pair(C_em, C_en);
+}
+
+inline bool is_degenerate_case(int lenCirc) {
+  bool res = (lenCirc == 1) || (lenCirc == 2);
+  return res;
+}
+
+// unfinished
+Rcpp::List handle_degenerate_cases(
+  int lenCirc,
+  std::vector<Node>& circles,
+  std::pair<double, double>& centroid,
+  double rad_scale_factor,
+  bool verbose
+) {
+  if (lenCirc == 1) {
+    return Rcpp::List::create();
+  }
+  return Rcpp::List::create();
 }
 
 // temporary place for R version of est_rad

@@ -66,16 +66,17 @@ test_that("plot_API(rad_decrease = 0.8) works", {
 # i have a hypothesis - this might be failing in the r cmd check
 # environment because there sometimes might be multiple best ways
 # to place "as close as possible"? As evidenced by previous tests too
+# 
+# wait - when using devtools::load_all() it fails
+# the snapshot shows that bottom two circles being differently placed
 test_that("plot_API(try_place = TRUE) works", {
   test_plot <- plot_API(
     test_radii, test_centroids, 5,
     ORDER = T, try_place = T,
-    progbar = F, repulse = F
+    progbar = F, repulse = F,debug_mode = T
   )
   expect_doppelganger(
     "plot_API_try_place_TRUE",
     test_plot
   )
 })
-
-# need to test more edge cases
