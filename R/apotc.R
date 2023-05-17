@@ -1,11 +1,3 @@
-library(methods)
-library(Seurat)
-library(ggplot2)
-library(ggforce)
-library(dplyr)
-library(data.table)
-library(utils)
-
 #' The apotc (APackOfTheClones) reduction class
 #'
 #' A class for storing information about T cell clonal expansion in the seurat

@@ -1,9 +1,5 @@
 # script to make a custom circle size legend overlay
 
-library(ggplot2)
-library(ggforce)
-library(rlang)
-
 # inert a circle size legend into a clonal expansion plot
 insert_legend <- function(
   plt, circ_scale_factor, 

@@ -44,14 +44,14 @@ test_that("is_degenerate_case works", {
 
 test_that("circle_layout() handles edge cases", {
   #input length = 1
-  expect_equal(circle_layout(c(69), progbar = F),
+  expect_equal(circle_layout(c(69), progbar = FALSE),
                list(
                  "x" = 0,
                  "y" = 0,
                  "rad" = 69,
                  "centroid" = c(0, 0),
                  "clRad" = 69))
-  expect_equal(circle_layout(c(420), c(6, 9), progbar = F),
+  expect_equal(circle_layout(c(420), c(6, 9), progbar = FALSE),
                list(
                  "x" = 6,
                  "y" = 9,
@@ -60,13 +60,13 @@ test_that("circle_layout() handles edge cases", {
                  "clRad" = 420))
 
   # input length = 2
-  expect_equal(circle_layout(c(69, 420), progbar = F),
+  expect_equal(circle_layout(c(69, 420), progbar = FALSE),
                list("x" = c(-420, 69),
                     "y" = c(0, 0),
                     "rad" = c(420, 69),
                     "centroid" = c(0, 0),
                     "clRad" = 244.5))
-  expect_equal(circle_layout(c(69,420), c(420, 69), progbar = F),
+  expect_equal(circle_layout(c(69,420), c(420, 69), progbar = FALSE),
                list("x" = c(0, 489),
                     "y" = c(69, 69),
                     "rad" = c(420, 69),
@@ -84,12 +84,24 @@ test_that("circle_layout() handles edge cases", {
 # Testing optional args
 test_that("circle_layout(ORDER = FALSE) works", {
   expect_equal(
-    circle_layout(c(6,9,4,2,7), ORDER = F, progbar = F, try_place = F),
-    list(x = c(-6.73333333333333, 8.26666666666667, -1.53333333333333, 
-               -7.50533138211336, -8.70501097444157), y = c(2.84722086720835, 
-                                                            2.84722086720835, -5.6944417344167, -5.11544319783168, -14.0351275462686
-               ), rad = c(6, 9, 4, 2, 7), centroid = c(0, 0), clRad = 17.2666666666667),
-    tolerance = 3e-6)
+    circle_layout(
+      c(6,9,4,2,7), ORDER = FALSE, progbar = FALSE, try_place = FALSE
+    ),
+    list(
+      x = c(
+        -6.73333333333333, 8.26666666666667, -1.53333333333333, 
+        -7.50533138211336, -8.70501097444157
+      ),
+      y = c(
+        2.84722086720835, 2.84722086720835, -5.6944417344167, -5.11544319783168,
+        -14.0351275462686
+      ),
+      rad = c(6, 9, 4, 2, 7),
+      centroid = c(0, 0),
+      clRad = 17.2666666666667
+    ),
+    tolerance = 3e-6
+  )
 })
 
 test_that("circle_layout(rad_decrease = 0.9) works", {
@@ -109,7 +121,7 @@ test_that("pack_into_clusterlists works", {
       test_radii,
       test_centroids,
       5,
-      verbose = F
+      verbose = FALSE
     ),
     test_cluster_lists,
     tolerance = 1e-8
@@ -120,7 +132,7 @@ test_that("pack_into_clusterlists works", {
       test_radii[1:4],
       test_centroids[1:4],
       4,
-      verbose = F
+      verbose = FALSE
     ),
     test_cluster_lists[1:4],
     tolerance = 1e-8
@@ -131,13 +143,13 @@ test_that("pack_into_clusterlists works", {
       test_radii[1:4],
       test_centroids[1:4],
       4,
-      verbose = F
+      verbose = FALSE
     ),
     pack_into_clusterlists(
       test_radii,
       test_centroids,
       5,
-      verbose = F
+      verbose = FALSE
     )[1:4],
     tolerance = 1e-8
   )
@@ -146,11 +158,12 @@ test_that("pack_into_clusterlists works", {
 test_that("pack_into_clusterlists handles NULLS", {
   expect_equal(
     pack_into_clusterlists(
-      list(NULL,c1[[3]]),
-      list(c(0,0),c(0,0)),
-      2, verbose = F
+      list(NULL, c1[[3]]),
+      list(c(0, 0), c(0, 0)),
+      2,
+      verbose = FALSE
     ),
-    list(list(),c1),
+    list(list(), c1),
     tolerance = 1e-8
   )
 })

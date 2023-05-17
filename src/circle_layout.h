@@ -1,11 +1,11 @@
+/*
 #include <Rcpp.h>
 #include <vector>
 #include <string>
 #include <cmath>
 #include <iostream>
-
-using Llui = long long unsigned int;
-
+*/
+ 
 // node of circular linked list where each node is a circle
 class Node {
 public:
@@ -40,11 +40,15 @@ public:
   }
 };
 
-// initialize 3 nodes(ptrs) into the circular boundary linked list
-void init_boundary(Node& c1, Node& c2, Node& c3) {
-  c1.nxt = &c2; c1.prv = &c3;
-  c2.nxt = &c3; c2.prv = &c1;
-  c3.nxt = &c1; c3.prv = &c2;
+// initialize node vector into the circular boundary linked list
+void init_boundary(std::vector<Node*> nodes) {
+  int n = nodes.size() - 1;
+  for (int i = 0; i < n; i++) {
+    nodes[i+1]->prv = nodes[i];
+    nodes[i]->nxt = nodes[i+1];
+  }
+  nodes[n]->nxt = nodes[0];
+  nodes[0]->prv = nodes[n];
 }
 
 // insert a node cn in-between c1 and c2
@@ -59,7 +63,7 @@ void insert_circle(Node& c1, Node& c2, Node& cn) {
   }
 }
 
-// function to find "distance" between 2 elements of linked list
+// function to find forward "distance" between 2 elements of linked list
 int fwd_dist(Node& c1, Node& c2) {
   int count = 0;
   Node* circ = &c1;
@@ -70,27 +74,26 @@ int fwd_dist(Node& c1, Node& c2) {
   return count;
 }
 
-// removes all nodes between c1 and c2 inlusive, and links everything else. Purposefully doesn't de-allocate the segment.
+// removes segment between c1 and c2 as one moves forwards
 void fwd_remove(Node& c1, Node& c2) {
   if (&c1 == &c2) { Rcpp::stop("Circles are the same."); }
   if (c1.nxt == &c2) { Rcpp::stop("Circles are consecutive."); }
   
-  //c1.prv->nxt = c2.nxt;
+  c1.nxt = &c2;
+  c2.prv= &c1;
   
+  /*
   Node* circ = c1.nxt;
   while (circ != &c2) {
     circ->prv->nxt = circ->nxt;
     circ->nxt->prv = circ->prv;
     circ = circ->nxt;
   }
-}
-
-inline double sqr(double n) {
-  return n*n;
+  */
 }
 
 inline double centre_dist(Node& c) {
-  return sqrt(c.x*c.x + c.y*c.y);
+  return sqrt(sqr(c.x) + sqr(c.y));
 }
 
 // fit C3 tangent to C1 and C2, modified C3. Unsure about the return statement but works in R. probably will get errors later 
@@ -226,11 +229,6 @@ Rcpp::List handle_degenerate_cases(
   return Rcpp::List::create();
 }
 
-// temporary place for R version of est_rad
-// lesson learned: dont mess with long long unsigned int
-// for some reason there was some under/flowflow when resetting max_ind sometimes??
-// ok... may be zeroing in on why... R CMD check gave a segmentation fault, so
-// theres some problem with memory adresses....
 // [[Rcpp::export]]
 double estimate_rad(
     std::vector<double> x_vals,

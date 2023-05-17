@@ -104,7 +104,7 @@ test_that("repulse_cluster() works", {
     repulse_cluster(
       list(c1, c1_shifted_by_4_5),
       thr = 1, G = 1, max_iter = 10,
-      verbose = F
+      verbose = FALSE
     ),
     list(list(x = c(-1.85085353933408, 0.749146460665919, -0.550853539334081, 
                     -2.52812593801653, -1.27911424816896, 0.698158150513489, 1.99266321363309, 

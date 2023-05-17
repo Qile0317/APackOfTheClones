@@ -45,17 +45,16 @@ test_that("plot_clusters() works", {
 
 test_that("plot_API() works", {
   test_plot <- plot_API(
-    test_radii, test_centroids, 5, try_place = F,
-    progbar = F, repulse = F
+    test_radii, test_centroids, 5, try_place = FALSE,
+    progbar = FALSE, repulse = FALSE
   )
   expect_doppelganger("plot_API_all", test_plot)
 })
 
 test_that("plot_API(rad_decrease = 0.8) works", {
   test_plot <- plot_API(
-    test_radii, test_centroids, 5, try_place = F,
-    progbar = F, repulse = F,
-    rad_decrease = 0.8
+    test_radii, test_centroids, 5, try_place = FALSE,
+    progbar = FALSE, repulse = FALSE, rad_decrease = 0.8
   )
   expect_doppelganger(
     "plot_API_all_scaled_0.8",
@@ -74,9 +73,8 @@ test_that("plot_API(rad_decrease = 0.8) works", {
 # the changed snapshot shows that bottom two circles being differently placed
 test_that("plot_API(try_place = TRUE) works", {
   test_plot <- plot_API(
-    test_radii, test_centroids, 5,
-    ORDER = T, try_place = T,
-    progbar = F, repulse = F,debug_mode = T
+    test_radii, test_centroids, 5, ORDER = TRUE, try_place = TRUE,
+    progbar = FALSE, repulse = FALSE
   )
   expect_doppelganger(
     "plot_API_try_place_TRUE",

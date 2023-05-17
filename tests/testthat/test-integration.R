@@ -1,7 +1,11 @@
 source("testdata/SCIP.R")
 
 test_that("integrate_tcr() works", {
-  capture_output(integration_attempt <- suppressMessages(integrate_tcr(test_pbmc, test_tcr)))
+  capture_output(
+    integration_attempt <- suppressMessages(
+      integrate_tcr(test_pbmc, test_tcr)
+    )
+  )
   expect_identical(
     integration_attempt,
     test_integrated_pbmc
@@ -11,7 +15,8 @@ test_that("integrate_tcr() works", {
 test_that("integrate_tcr() works with verbose = FALSE", {
   expect_identical(
     integrate_tcr(test_pbmc, test_tcr, verbose = FALSE),
-    test_integrated_pbmc)
+    test_integrated_pbmc
+  )
 })
 
 test_that("percent_na() works", {

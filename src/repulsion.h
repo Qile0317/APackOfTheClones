@@ -1,12 +1,8 @@
-#include <Rcpp.h>
-#include <vector>
-#include <cmath>
+//#include <Rcpp.h>
+//#include <vector>
+//#include <cmath>
 
 using Rvec = Rcpp::Nullable<Rcpp::NumericVector>;
-
-inline double sqr(double n) {
-  return n*n;
-}
 
 std::vector<double> neg_dir_vec(Rcpp::List c1, Rcpp::List c2) {
   std::vector<double> c1_centroid = c1[3], c2_centroid = c2[3];

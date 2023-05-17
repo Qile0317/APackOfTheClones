@@ -2,9 +2,6 @@
 # numbers that represent radii of circles. The radii vector would be generated 
 # from the integrated sc-RNAseq and TCR library.
 
-suppressPackageStartupMessages(library(dplyr))
-library(R6)
-
 # Node constructor for the circularly doubly linked list
 node <- R6::R6Class(
   "Node",
@@ -14,9 +11,10 @@ node <- R6::R6Class(
     prv = NULL,
     
     initialize = function(
-    val = NULL,
-    nxt = NULL,
-    prv = NULL) {
+      val = NULL,
+      nxt = NULL,
+      prv = NULL
+    ) {
       self$val <- val
       self$nxt <- nxt
       self$prv <- prv
@@ -163,7 +161,7 @@ closest_place <- function(c, d){
     }
     circ <- circ$nxt
   }
-  closest
+  return(closest)
 }
 
 #Checking for overlaps between a fitted circle and others on the boundary.

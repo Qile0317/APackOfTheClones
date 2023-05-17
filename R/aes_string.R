@@ -1,10 +1,7 @@
 # the following code is copied and modified from ggplot2under the R/aes.R file
 # (under MIT license, like this package) It just implements the soft deprecated
 # `aes_string()` function as `apotc_aes_string()`
-
-suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(rlang))
-
+# 
 apotc_rename_aes <- function(x) {
   names(x) <- ggplot2::standardise_aes_names(names(x))
   duplicated_names <- names(x)[duplicated(names(x))]

@@ -1,9 +1,3 @@
-library(Seurat)
-library(ggplot2)
-library(ggforce)
-library(data.table)
-library(utils)
-
 #' Integrate a TCR library into Seurat object metadata
 #'
 #' Modifies a `Seurat` object's metadata by taking all the columns
@@ -29,7 +23,8 @@ library(utils)
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
 #' @importFrom utils setTxtProgressBar 
-#' @import data.table
+#' @importFrom data.table .GRP
+#' @importFrom data.table .SD
 #'
 #' @examples
 #' library(Seurat)
