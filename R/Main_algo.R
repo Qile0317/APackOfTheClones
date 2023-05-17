@@ -393,6 +393,7 @@ circle_layout <- function(
   ans
 }
 
+# circle_layout but handles lists of inputs
 pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_scale = 1,
     ORDER = TRUE, try_place = FALSE, verbose = TRUE

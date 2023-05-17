@@ -91,19 +91,21 @@ clonal_expansion_plot <- function(
   centroid_list <- get_cluster_centroids(seurat_obj)
 
   # pack the plot
-  result_plot <- plot_API(sizes = clone_size_list,
-                          centroids = centroid_list,
-                          num_clusters = count_umap_clusters(seurat_obj),
-                          rad_decrease = rad_scale_factor,
-                          ORDER = ORDER,
-                          try_place = try_place,
-                          progbar = verbose,
-                          repulse = repulse,
-                          thr = repulsion_threshold,
-                          G = repulsion_strength,
-                          max_repulsion_iter = max_repulsion_iter,
-                          n = res,
-                          origin = show_origin)
+  result_plot <- plot_API(
+    sizes = clone_size_list,
+    centroids = centroid_list,
+    num_clusters = count_umap_clusters(seurat_obj),
+    rad_decrease = rad_scale_factor,
+    ORDER = ORDER,
+    try_place = try_place,
+    progbar = verbose,
+    repulse = repulse,
+    thr = repulsion_threshold,
+    G = repulsion_strength,
+    max_repulsion_iter = max_repulsion_iter,
+    n = res,
+    origin = show_origin
+  )
   
   #set theme
   if (use_default_theme) {

@@ -46,17 +46,20 @@ plot_clusters <- function(
   
   if (!origin) {
     p1 <- ggplot2::ggplot(data = clusters) +
-      ggforce::geom_circle(aes_string(
-        x0 = "x", y0 = "y", r = "r", fill = "color"),
-        n = n, linetype = linetype) +
+      ggforce::geom_circle(
+        mapping = apotc_aes_string(
+          x0 = "x", y0 = "y", r = "r", fill = "color"
+        ),
+        n = n,
+        linetype = linetype
+      ) +
       ggplot2::scale_fill_identity() +
-      
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
   }else {
     p1 <- ggplot2::ggplot(
       clusters, 
-      mapping = aes_string(x = "x", y = "y")
+      mapping = apotc_aes_string(x = "x", y = "y")
       ) + 
       ggplot2::geom_point() +
       ggplot2::labs(title = title) +
@@ -106,29 +109,8 @@ plot_API <- function(
   }
 
   #joining list into df, add color, then plot.
-  if (debug_mode) {
-    list_ans <- ans
-    list_ans_c1_x <- list_ans[[1]][[1]]
-    list_ans_cl1_x <- list_ans[[2]][[1]]
-    list_ans_cl2_x <- list_ans[[3]][[1]]
-    list_ans_cl3_x <- list_ans[[4]][[1]]
-  }
   ans <- df_full_join(ans)
   ans <- insert_colors(ans, num_clusters)
-  
-  if (debug_mode) {
-    df_ans <- list("x"=ans[2],"y"=ans[3],"rad"=ans[4])
-    df_ans_x <- df_ans[[1]]
-    df_ans_c1_x <- as.numeric(df_ans_x[1:9,])
-    df_ans_cl1_x <- as.numeric(df_ans_x[10:18,])
-    df_ans_cl2_x <- as.numeric(df_ans_x[19:27,])
-    df_ans_cl3_x <- as.numeric(df_ans_x[28:33,])
-    
-    print(sum(list_ans_c1_x - df_ans_c1_x))
-    print(sum(list_ans_cl1_x - df_ans_cl1_x))
-    print(sum(list_ans_cl2_x - df_ans_cl2_x))
-    print(sum(list_ans_cl3_x - df_ans_cl3_x))
-  }
   
   plt <- plot_clusters(
     ans, n = n, linetype = linetype, title = plot_title, haslegend = haslegend,

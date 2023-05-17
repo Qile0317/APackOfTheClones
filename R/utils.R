@@ -1,4 +1,4 @@
-progress_bar <- function (x, max = 100) {
+progress_bar <- function (x = 0, max = 100) {
   percent <- 100 * (x / max)
   cat(sprintf(
     '\r[%-50s] %d%%',
