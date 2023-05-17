@@ -91,12 +91,29 @@ library(APackOfTheClones)
 data("mini_clonotype_data","mini_seurat_obj")
 
 # produce and show the ball-packing plot by integrating the data
-ball_pack_plot <- clonal_expansion_plot(mini_seurat_obj, mini_clonotype_data)
+ball_pack_plot <- clonal_expansion_plot(
+  mini_seurat_obj, mini_clonotype_data, verbose = FALSE
+)
+
+#> integrating TCR library into seurat object
+#>   |===============================================| 100\%
+#> Percent of unique barcodes: 100 \%
+#>
+#> packing cluster 0
+#> [==================================================] 100\%
+#> packing cluster 1
+#> [==================================================] 100\%
+#> Plotting completed successfully
+
 ball_pack_plot
 
-# it's also possible to input an integrated Seurat object
-integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
-ball_pack_plot <- clonal_expansion_plot(integrated_seurat_object)
+# it's also possible (and preferable) to input an integrated Seurat object
+integrated_seurat_object <- integrate_tcr(
+  mini_seurat_obj, mini_clonotype_data, verbose = FALSE
+)
+ball_pack_plot <- clonal_expansion_plot(
+  integrated_seurat_object, verbose = FALSE
+)
 ball_pack_plot
 
 }

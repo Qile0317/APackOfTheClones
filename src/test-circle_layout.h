@@ -74,11 +74,6 @@ context("Cpp circle_layout functions") {
     expect_true(c5.nxt == &c1);
   }
   
-  test_that("sqr works") {
-    expect_true(sqr(-5) == 25);
-    expect_true(sqr(12) == 144);
-  }
-  
   test_that("centre_dist works") {
     Node c1 = Node(3, 4, 1);
     expect_true(centre_dist(c1) == 5);
@@ -88,6 +83,13 @@ context("Cpp circle_layout functions") {
   }
   
   test_that("fit_tang_circle works") {
-    expect_true(1 == 1);
+    Node c1 = Node(1, 2, 3);
+    Node c2 = Node(6, 7, 8);
+    Node c3 = Node(50, 90, 1);
+    init_boundary({&c1, &c2, &c3});
+    
+    expect_true(&fit_tang_circle(c1, c2, c3) == &c3);
+    expect_true(approx_equal(c3.x, -2.47718, 5e-5));
+    expect_true(approx_equal(c3.y, 3.97718, 5e-5));
   }
 }

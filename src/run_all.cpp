@@ -15,6 +15,10 @@ inline double sqr(double n) {
   return n*n;
 }
 
+inline bool approx_equal(double a, double b, double epsilon = 5e-5) {
+  return std::abs(a - b) <= epsilon;
+}
+
 // function scripts
 #include "get_clone_sizes.h"
 #include "circle_layout.h"
