@@ -66,11 +66,11 @@ run_packing_algos <- function(
 ) {
   apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
   apotc_obj@centroids <- get_cluster_centroids(integrated_seurat_obj)
-  apotc_obj <- pack_clonal_clusters(
-    apotc_obj, integrated_seurat_obj,
-    rad_scale_factor, ORDER,
-    try_place, verbose
-  )
+  #apotc_obj <- pack_clonal_clusters(
+  #  apotc_obj, integrated_seurat_obj,
+  #  rad_scale_factor, ORDER,
+  #  try_place, verbose
+  #)
   apotc_obj
 }
 

@@ -67,8 +67,11 @@ test_that("plot_API(rad_decrease = 0.8) works", {
 # environment because there sometimes might be multiple best ways
 # to place "as close as possible"? As evidenced by previous tests too
 # 
-# wait - when using devtools::load_all() it fails
-# the snapshot shows that bottom two circles being differently placed
+# it fails when running devtools::test() on opening RStudio, but not a bit after
+# when more packages are stuff are loading in. It might be some hidden dumb dep
+# problem that alters the behaviour of a function? No idea.
+# 
+# the changed snapshot shows that bottom two circles being differently placed
 test_that("plot_API(try_place = TRUE) works", {
   test_plot <- plot_API(
     test_radii, test_centroids, 5,
