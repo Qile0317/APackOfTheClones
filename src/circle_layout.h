@@ -120,6 +120,7 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
 }
 
 // place three mutually tangent circles to 0,0
+// fits C3 such that C1,C2,C3 are arranged counterclockwise
 void place_starting_three(Node& C1, Node& C2, Node& C3) {
   C1.x = -1 * C1.rad;
   C2.x = C2.rad;

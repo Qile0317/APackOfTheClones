@@ -107,7 +107,6 @@ fit_tang_circle <- function(C1, C2, C3) {
 }
 
 #Note: fit_tang_circle! fits C3 such that C1,C2,C3 are arranged counterclockwise
-
 # place three circles in the center
 place_starting_three <- function(C1, C2, C3) {
   C1$val$x <- -1 * (C1$val$rad)

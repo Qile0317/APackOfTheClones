@@ -1,5 +1,14 @@
 #include <testthat.h>
 
+// some of these tests should probably also test what happens to the pointers :/
+
+// quick simple testing function of two nodes
+bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
+  return approx_equal(c1.x, c2.x, thr) && 
+    approx_equal(c1.y, c2.y, thr) && 
+    approx_equal(c1.rad, c2.rad, thr);
+}
+
 class Testdata {
 public:
   Node c1;
@@ -89,7 +98,19 @@ context("Cpp circle_layout functions") {
     init_boundary({&c1, &c2, &c3});
     
     expect_true(&fit_tang_circle(c1, c2, c3) == &c3);
-    expect_true(approx_equal(c3.x, -2.47718, 5e-5));
-    expect_true(approx_equal(c3.y, 3.97718, 5e-5));
+    expect_true(approx_equal(c3.x, -2.47718));
+    expect_true(approx_equal(c3.y, 3.97718));
+  } 
+  
+  test_that("place_starting_three works") {
+    Node c1 = Node(1, 2, 3);
+    Node c2 = Node(6, 7, 8);
+    Node c3 = Node(50, 90, 1);
+    init_boundary({&c1, &c2, &c3});
+    
+    place_starting_three(c1, c2, c3);
+    expect_true(xyr_are_equal(c1, Node(-4.984898, -1.466558, 3)));
+    expect_true(xyr_are_equal(c2, Node(6.015102, 3.533442, 8)));
+    expect_true(xyr_are_equal(c3, Node(-1.030204, -2.066885, 1)));
   }
 }
