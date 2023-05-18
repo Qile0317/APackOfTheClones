@@ -92,6 +92,7 @@ void fwd_remove(Node& c1, Node& c2) {
   */
 }
 
+// euclidean distnce of circle center to (0, 0)
 inline double centre_dist(Node& c) {
   return sqrt(sqr(c.x) + sqr(c.y));
 }
@@ -117,6 +118,12 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   C3.x = x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam);
   C3.y = y1 + (r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam);
   return C3;
+}
+
+// convenience function for closest_place
+// could this be the error? It modifies the objects
+inline double tang_circle_dist(Node& C1, Node& C2, Node& C3) {
+  return centre_dist(fit_tang_circle(C1, C2, C3));
 }
 
 // place three mutually tangent circles to 0,0
@@ -156,13 +163,17 @@ Node* closest_place(Node& c1, Node& c2) {
   Node* closest = &c1;
   Node* circ = c1.nxt;
   while (circ != &c1) {
-    if (centre_dist(fit_tang_circle(*(closest), *(closest->nxt), c2)) > centre_dist(fit_tang_circle(*(circ), *(circ->nxt), c2))) {
+    double dist_closest = tang_circle_dist(*(closest),*(closest->nxt),c2);
+    double dist_circ = tang_circle_dist(*(circ), *(circ->nxt), c2);
+    
+    if (dist_closest > dist_circ) {
       closest = circ;
     }
     circ = circ->nxt;
   }
   return closest;
 }
+
 
 // check if two circle nodes overlap geometrically
 inline bool do_intersect(Node& c1, Node& c2) {

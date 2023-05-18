@@ -18,6 +18,10 @@ node <- R6::R6Class(
       self$val <- val
       self$nxt <- nxt
       self$prv <- prv
+    },
+    
+    print = function() {
+      cat("x:", self$val$x, "y:", self$val$y, "rad:", self$val$rad, "\n")
     }
   )
 )
@@ -142,6 +146,11 @@ closest <- function(c){
   closest
 }
 
+# alias function for closest_place that DOESNT mutate
+tang_circle_dist <- function(c,d,e){
+  centre_dist(fit_tang_circle(c$clone(),d$clone(),e$clone()))
+}
+
 #' place circle for try_place = TRUE - bugged maybe
 #'
 #' Locating the pair of successive circles, c, c$nxt, with the following
@@ -155,7 +164,7 @@ closest_place <- function(c, d){
   closest <- c
   circ <- c$nxt
   while (!identical(circ,c)) {
-    if (centre_dist(fit_tang_circle(closest, closest$nxt, d)) > centre_dist(fit_tang_circle(circ, circ$nxt, d))) {
+    if (tang_circle_dist(closest, closest$nxt, d) > tang_circle_dist(circ, circ$nxt, d)) {
       closest <- circ
     }
     circ <- circ$nxt

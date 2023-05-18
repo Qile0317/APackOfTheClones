@@ -9,20 +9,18 @@ bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
     approx_equal(c1.rad, c2.rad, thr);
 }
 
+// testdata, assuming init_boundary works
 class Testdata {
 public:
-  Node c1;
-  Node c2;
-  Node c3;
-  
+  Node c1; Node c2; Node c3; Node c4; Node c5;
   Testdata(
     const Node& a = Node(1, 2, 3),
     const Node& b = Node(6, 7, 8),
-    const Node& c = Node(50, 90, 1)
-  ) : c1(a), c2(b), c3(c) {
-    c1.nxt = &c2; c1.prv = &c3;
-    c2.nxt = &c3; c2.prv = &c1;
-    c3.nxt = &c1; c3.prv = &c2;
+    const Node& c = Node(50, 90, 1),
+    const Node& d = Node(-1, -3, 3),
+    const Node& e = Node(-10, -69, 4)
+  ) : c1(a), c2(b), c3(c), c4(d), c5(e) {
+    init_boundary({&c1, &c2, &c3, &c4, &c5});
   }
 };
 
@@ -62,25 +60,23 @@ context("Cpp circle_layout functions") {
   }
   
   test_that("fwd_dist works") {
-    Testdata foo = Testdata();
-    expect_true(fwd_dist(foo.c3, foo.c1) == 1);
-    expect_true(fwd_dist(foo.c1, foo.c2) == 1);
-    expect_true(fwd_dist(foo.c2, foo.c1) == 2);
-  }
- 
-  test_that("fwd_remove works") {
     Node c1 = Node(1, 2, 3);
     Node c2 = Node(6, 7, 8);
     Node c3 = Node(50, 90, 1);
-    Node c4 = Node(-1, -2, -3);
-    Node c5 = Node(-10, -69, 4);
-    std::vector<Node*> nodes = {&c1, &c2, &c3, &c4, &c5};
-    init_boundary(nodes);
+    init_boundary({&c1, &c2, &c3});
+    
+    expect_true(fwd_dist(c3, c1) == 1);
+    expect_true(fwd_dist(c1, c2) == 1);
+    expect_true(fwd_dist(c2, c1) == 2);
+  }
+ 
+  test_that("fwd_remove works") {
+    Testdata nodes = Testdata();
    
-    fwd_remove(c2, c5);
-    expect_true(c2.nxt == &c5);
-    expect_true(c5.prv == &c2);
-    expect_true(c5.nxt == &c1);
+    fwd_remove(nodes.c2, nodes.c5);
+    expect_true(nodes.c2.nxt == &nodes.c5);
+    expect_true(nodes.c5.prv == &nodes.c2);
+    expect_true(nodes.c5.nxt == &nodes.c1);
   }
   
   test_that("centre_dist works") {
@@ -100,7 +96,11 @@ context("Cpp circle_layout functions") {
     expect_true(&fit_tang_circle(c1, c2, c3) == &c3);
     expect_true(approx_equal(c3.x, -2.47718));
     expect_true(approx_equal(c3.y, 3.97718));
-  } 
+  }
+  
+  //test_that("tang_circle_dist works") {
+  //
+  //}
   
   test_that("place_starting_three works") {
     Node c1 = Node(1, 2, 3);
@@ -112,5 +112,20 @@ context("Cpp circle_layout functions") {
     expect_true(xyr_are_equal(c1, Node(-4.984898, -1.466558, 3)));
     expect_true(xyr_are_equal(c2, Node(6.015102, 3.533442, 8)));
     expect_true(xyr_are_equal(c3, Node(-1.030204, -2.066885, 1)));
+  }
+  
+  test_that("closest works") {
+    Testdata nodes = Testdata();
+    expect_true(closest(nodes.c3) == &nodes.c1);
+    expect_true(closest(nodes.c1) == closest(nodes.c5));
+    expect_true(closest(nodes.c2) == closest(nodes.c4));
+  }
+  
+  // this is the buggy function 
+  test_that("closest_place works") {
+    Testdata nodes = Testdata();
+    expect_true(closest(nodes.c3) == &nodes.c1);
+    expect_true(closest(nodes.c1) == closest(nodes.c5));
+    expect_true(closest(nodes.c2) == closest(nodes.c4));
   }
 }
