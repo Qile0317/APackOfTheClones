@@ -1,5 +1,16 @@
 data("mini_seurat_obj")
 
+test_that("progress_bar works", {
+  expect_identical(
+    capture.output(progress_bar(1, 1)),
+    "\r[==================================================] 100%"
+  )
+  expect_identical(
+    capture.output(progress_bar(69, 420)),
+    "\r[========                                          ] 16%"
+  )
+})
+
 test_that("get_num_clusters works", {
   expect_equal(get_num_clusters(mini_seurat_obj), 2L)
 })

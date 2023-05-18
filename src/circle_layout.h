@@ -8,36 +8,36 @@
  
 // node of circular linked list where each node is a circle
 class Node {
-public:
-  double x;      
-  double y;      
-  double rad;    
-  Node* prv; 
-  Node* nxt; 
-  
-  Node(double x_val, double y_val, double rad_val) {
-    x = x_val;
-    y = y_val;
-    rad = rad_val;
-    prv = nullptr;
-    nxt = nullptr;
-  }
-  
-  // node printer for debugging
-  friend std::ostream& operator<<(std::ostream& os, const Node& node) {
-    os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
-    return os;
-  }
-  
-  // traverse and print method for debugging
-  void traverse() {
-    Node* curr = this;
-    while (curr != nullptr && curr->nxt != this) {
-      std::cout << *curr << std::endl;
-      curr = curr->nxt;
+  public:
+    double x;      
+    double y;      
+    double rad;    
+    Node* prv; 
+    Node* nxt; 
+    
+    Node(double x_val, double y_val, double rad_val) {
+      x = x_val;
+      y = y_val;
+      rad = rad_val;
+      prv = nullptr;
+      nxt = nullptr;
     }
-    std::cout << *curr << std::endl;
-  }
+  
+  private:
+    // node traverser and printer for debugging in pure C++
+    friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+      os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
+      return os;
+    }
+    
+    void traverse() {
+      Node* curr = this;
+      while (curr != nullptr && curr->nxt != this) {
+        std::cout << *curr << std::endl;
+        curr = curr->nxt;
+      }
+      std::cout << *curr << std::endl;
+    }
 };
 
 // initialize node vector into the circular boundary linked list
@@ -105,14 +105,15 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   
   double r = C3.rad;
   double distance = sqrt(sqr(x1 - x2) + sqr(y1 - y2));
+  double invdist = 1/distance; // could use the fast inverse square root here
   
   if (distance > (r1 + r2 + r + r)) {
     Rcpp::stop("Gap too large.");
   }
   
-  double cos_sig = (x2 - x1) / distance;
-  double sin_sig = (y2 - y1) / distance;
-  double cos_gam = (sqr(distance) + sqr(r + r1) - sqr(r + r2)) / (2 * distance * (r + r1));
+  double cos_sig = (x2 - x1) * invdist;
+  double sin_sig = (y2 - y1) * invdist;
+  double cos_gam = (sqr(distance)+sqr(r+r1) - sqr(r+r2)) * 0.5 * invdist/(r+r1);
   double sin_gam = sqrt(1 - sqr(cos_gam));
   
   C3.x = x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam);
@@ -121,7 +122,7 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
 }
 
 // convenience function for closest_place
-// could this be the error? It modifies the objects
+// It modifies the objects but when its used later, it "cancels out"
 inline double tang_circle_dist(Node& C1, Node& C2, Node& C3) {
   return centre_dist(fit_tang_circle(C1, C2, C3));
 }
@@ -156,8 +157,12 @@ Node* closest(Node& c) {
 
 /* 
  Locating the pair of successive circles, c, c.nxt, with the following property: 
- amongst all pairs of successive circles on the boundary, this pair minimizes distance from the center of d to the origin, when d is
- fitted tangent to this pair. Returns a pointer to the output node.
+ amongst all pairs of successive circles on the boundary, this pair minimizes
+ distance from the center of d to the origin, when d is fitted tangent to this
+ pair. Returns a pointer to the output node. 
+ 
+ The function will modify some nodes but when used later in circle_layout, the
+ changes will be overwritten immediately after
  */
 Node* closest_place(Node& c1, Node& c2) {
   Node* closest = &c1;
@@ -180,6 +185,7 @@ inline bool do_intersect(Node& c1, Node& c2) {
   return sqrt(sqr(c1.x - c2.x) + sqr(c1.y - c2.y)) < ((c1.rad + c2.rad));
 }
 
+// convenience function for overlap_check
 inline int geod_dist(Node& Cm, Node& Cn, Node& C) {
   return std::min(fwd_dist(Cn, C), fwd_dist(C, Cm));
 }
@@ -227,7 +233,6 @@ inline bool is_degenerate_case(int lenCirc) {
   return res;
 }
 
-// unfinished
 Rcpp::List handle_degenerate_cases(
   int lenCirc,
   std::vector<Node>& circles,
@@ -238,6 +243,8 @@ Rcpp::List handle_degenerate_cases(
   if (lenCirc == 1) {
     return Rcpp::List::create();
   }
+  
+  // if lenCirc = 2, transform the x coordinates to place left and right of 0, 0
   return Rcpp::List::create();
 }
 
@@ -258,3 +265,6 @@ double estimate_rad(
   double result_num = max_x + rad_vals[max_ind] - centroid_x;
   return result_num;
 }
+
+// TODO: circle_layout
+// TOOD: pack_into_clusterlists

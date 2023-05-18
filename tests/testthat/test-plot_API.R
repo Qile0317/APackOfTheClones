@@ -77,7 +77,7 @@ test_that("plot_API(try_place = TRUE) works", {
     progbar = FALSE, repulse = FALSE
   )
   expect_doppelganger(
-    "plot_API_try_place_TRUE",
+    "plot_API_try_place",
     test_plot
   )
 })
