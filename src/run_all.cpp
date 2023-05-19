@@ -25,4 +25,4 @@ bool approx_equal(double a, double b, double epsilon = 5e-5) {
 #include "repulsion.h"
 
 // test scripts for testthat
-#include "test-circle_layout.h"
+#include "tests/test-circle_layout.h"

@@ -144,9 +144,35 @@ context("Cpp circle_layout functions") {
     expect_true(geod_dist(nodes.c4, nodes.c1, nodes.c5) == 4);
   }
   
-  // unfinished
+  test_that("make_sentinel_pair works") {
+    std::pair<Node*, Node*> trial = make_sentinel_pair();
+    expect_true(trial.first == nullptr);
+    expect_true(trial.second == nullptr);
+  }
+  
+  test_that("is_clear works") {
+    std::pair<Node*, Node*> sentinel_pair = make_sentinel_pair();
+    expect_true(is_clear(sentinel_pair));
+    
+    Node node1 = Node(1, 2, 3), node2 = Node(3, 2, 1);
+    std::pair<Node*, Node*> false_pair = std::make_pair(&node1, &node2);
+    expect_false(is_clear(false_pair));
+  }
+  
   test_that("overlap_check works") {
-    expect_true(1==1);
+    Testdata nodes = Testdata();
+    std::pair<Node*, Node*> trial, expected;
+    
+    trial = overlap_check(nodes.c1, nodes.c2, nodes.c5);
+    expected = std::make_pair(&nodes.c5, &nodes.c2);
+    expect_true(trial == expected);
+    
+    trial = overlap_check(nodes.c3, nodes.c5, nodes.c4);
+    expected = std::make_pair(&nodes.c3, &nodes.c1);
+    expect_true(trial == expected);
+    
+    trial = overlap_check(nodes.c4, nodes.c2, nodes.c5);
+    expect_true(is_clear(trial));
   }
   
   test_that("is_degenerate_case works") {

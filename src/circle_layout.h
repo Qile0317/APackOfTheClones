@@ -22,10 +22,17 @@ class Node {
       prv = nullptr;
       nxt = nullptr;
     }
+    
+    bool operator==(Node& other) {
+      return (x == other.x)
+        && (y == other.y)
+        && (rad == other.rad)
+        && (prv == other.prv)
+        && (nxt == other.nxt);
+    }
   
   private:
-    // node traverser and printer for debugging in pure C++
-    friend std::ostream& operator<<(std::ostream& os, const Node& node) {
+    friend std::ostream& operator<<(std::ostream& os, Node& node) {
       os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
       return os;
     }
@@ -97,7 +104,7 @@ inline double centre_dist(Node& c) {
   return sqrt(sqr(c.x) + sqr(c.y));
 }
 
-// fit C3 tangent to C1 and C2, modified C3. Unsure about the return statement but works in R. probably will get errors later 
+// fit C3 tangent to C1 and C2, modifies C3. 
 Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   double x1 = C1.x, x2 = C2.x;
   double y1 = C1.y, y2 = C2.y;
@@ -190,8 +197,23 @@ inline int geod_dist(Node& Cm, Node& Cn, Node& C) {
   return std::min(fwd_dist(Cn, C), fwd_dist(C, Cm));
 }
 
-// overlap check of three circles and returns either a vector of two pointers to nodes or nothing
-// unfinished
+// helper function for overlap_check to create a sentinel node pointer pair
+std::pair<Node*, Node*> make_sentinel_pair() {
+  Node* nullPtr = nullptr;
+  std::pair<Node*, Node*> SENTINEL_PAIR = std::make_pair(nullPtr, nullPtr);
+  return SENTINEL_PAIR;
+}
+
+// helper function for overlap check to check if a pair is sentinel (clear)
+// I actually think this probably takes advantage of a "bug" since to my
+// understanding the pointers from make_sentinel_pair are null due to automatic
+// memory deallocation but if it works it works :/
+bool is_clear(std::pair<Node*, Node*>& inp) {
+  return (inp.first == nullptr) && (inp.second == nullptr);
+}
+
+// overlap check of three circles and returns either a vector of two pointers
+// or the sentinel node pair if check is "clear"
 std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   Node* C_em = &Cm;
   Node* C_en = &Cn;
@@ -200,7 +222,7 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   // collect circles that C intersects (if any) by adding intersectors to 'obstruct'
   Node* circ = Cn.nxt;
   while (circ != &Cm) {
-    if (do_intersect(*(circ), C)) { // not sure if doing *(circ) here still makes reference obj
+    if (do_intersect(*(circ), C)) { 
       obstruct.push_back(circ);
     }
     circ = circ->nxt;
@@ -223,13 +245,15 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
     }
   }
   if ((C_em == &Cm) && (C_en == &Cn)) {
-    return std::make_pair(nullptr, nullptr);
+    return make_sentinel_pair();
   }
   return std::make_pair(C_em, C_en);
 }
 
-inline bool is_degenerate_case(int lenCirc) {
-  bool res = (lenCirc == 1) || (lenCirc == 2);
+// functions for handling "degenerate cases" when theres only 1 or 2 nodes in
+// the radii list
+inline bool is_degenerate_case(int n) {
+  bool res = (n == 1) || (n == 2);
   return res;
 }
 
