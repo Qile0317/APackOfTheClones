@@ -237,7 +237,7 @@ handle_degenerate_cases <- function(
       "y" = circles[[1]]$val[[3]] + centroid[2],
       "rad" = circles[[1]]$val[[6]] * rad_scale,
       "centroid" = centroid,
-      "clRad" = circles[[1]]$val[[6]]
+      "clRad" = circles[[1]]$val[[6]] * rad_scale
     ))
   }
   
@@ -251,7 +251,7 @@ handle_degenerate_cases <- function(
     "y" = rep(centroid[2], 2),
     "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
     "centroid" = centroid,
-    "clRad" = 0.5 * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
+    "clRad" = 0.5 * rad_scale * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
   ))
 }
 
@@ -372,9 +372,9 @@ circle_layout <- function(
   Yvec <- c()
 
   for (c in circles) { #better practisce would be to initialize vectors of zeros first
-      Rvec <- c(Rvec, c$val[[6]])
-      Xvec <- c(Xvec, c$val[[2]])
-      Yvec <- c(Yvec, c$val[[3]])
+    Rvec <- c(Rvec, c$val[[6]])
+    Xvec <- c(Xvec, c$val[[2]])
+    Yvec <- c(Yvec, c$val[[3]])
   }
 
   # construct output cluster list with estimated cluster radius
@@ -401,8 +401,8 @@ circle_layout <- function(
 
 # circle_layout but handles lists of inputs
 pack_into_clusterlists <- function(
-    sizes, centroids, num_clusters, rad_scale = 1,
-    ORDER = TRUE, try_place = FALSE, verbose = TRUE
+  sizes, centroids, num_clusters, rad_scale = 1,
+  ORDER = TRUE, try_place = FALSE, verbose = TRUE
 ){
   output_list <- list()
   for(i in 1:num_clusters){

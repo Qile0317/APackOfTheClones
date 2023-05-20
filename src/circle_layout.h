@@ -1,50 +1,42 @@
-/*
-#include <Rcpp.h>
-#include <vector>
-#include <string>
-#include <cmath>
-#include <iostream>
-*/
- 
 // node of circular linked list where each node is a circle
 class Node {
-  public:
-    double x;      
-    double y;      
-    double rad;    
-    Node* prv; 
-    Node* nxt; 
-    
-    Node(double x_val, double y_val, double rad_val) {
-      x = x_val;
-      y = y_val;
-      rad = rad_val;
-      prv = nullptr;
-      nxt = nullptr;
-    }
-    
-    bool operator==(Node& other) {
-      return (x == other.x)
-        && (y == other.y)
-        && (rad == other.rad)
-        && (prv == other.prv)
-        && (nxt == other.nxt);
-    }
+public:
+  double x;      
+  double y;      
+  double rad;    
+  Node* prv; 
+  Node* nxt; 
   
-  private:
-    friend std::ostream& operator<<(std::ostream& os, Node& node) {
-      os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
-      return os;
-    }
-    
-    void traverse() {
-      Node* curr = this;
-      while (curr != nullptr && curr->nxt != this) {
-        std::cout << *curr << std::endl;
-        curr = curr->nxt;
-      }
+  Node(double x_val, double y_val, double rad_val) {
+    x = x_val;
+    y = y_val;
+    rad = rad_val;
+    prv = nullptr;
+    nxt = nullptr;
+  }
+  
+  bool operator==(Node& other) {
+    return (x == other.x)
+    && (y == other.y)
+    && (rad == other.rad)
+    && (prv == other.prv)
+    && (nxt == other.nxt);
+  }
+  
+private:
+  friend std::ostream& operator<<(std::ostream& os, Node& node) {
+    os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
+    return os;
+  }
+  
+  void traverse() {
+    Node* curr = this;
+    while (curr != nullptr && curr->nxt != this) {
       std::cout << *curr << std::endl;
+      curr = curr->nxt;
     }
+    std::cout << *curr << std::endl;
+  }
 };
 
 // initialize node vector into the circular boundary linked list
@@ -90,13 +82,13 @@ void fwd_remove(Node& c1, Node& c2) {
   c2.prv= &c1;
   
   /*
-  Node* circ = c1.nxt;
-  while (circ != &c2) {
-    circ->prv->nxt = circ->nxt;
-    circ->nxt->prv = circ->prv;
-    circ = circ->nxt;
-  }
-  */
+   Node* circ = c1.nxt;
+   while (circ != &c2) {
+   circ->prv->nxt = circ->nxt;
+   circ->nxt->prv = circ->prv;
+   circ = circ->nxt;
+   }
+   */
 }
 
 // euclidean distnce of circle center to (0, 0)
@@ -120,7 +112,7 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   
   double cos_sig = (x2 - x1) * invdist;
   double sin_sig = (y2 - y1) * invdist;
-  double cos_gam = (sqr(distance)+sqr(r+r1) - sqr(r+r2)) * 0.5 * invdist/(r+r1);
+  double cos_gam = (sqr(distance)+sqr(r+r1) - sqr(r+r2)) * 0.5*invdist / (r+r1);
   double sin_gam = sqrt(1 - sqr(cos_gam));
   
   C3.x = x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam);
@@ -150,7 +142,7 @@ void place_starting_three(Node& C1, Node& C2, Node& C3) {
 }
 
 // finds the closest circle to the origin in the linked list containing c. Returns a pointer to the node.
-Node* closest(Node& c) {
+Node& closest(Node& c) {
   Node* closest = &c;
   Node* circ = c.nxt;
   while (circ != &c) {
@@ -159,7 +151,7 @@ Node* closest(Node& c) {
     }
     circ = circ->nxt;
   }
-  return closest;
+  return *(closest);
 }
 
 /* 
@@ -171,7 +163,7 @@ Node* closest(Node& c) {
  The function will modify some nodes but when used later in circle_layout, the
  changes will be overwritten immediately after
  */
-Node* closest_place(Node& c1, Node& c2) {
+Node& closest_place(Node& c1, Node& c2) {
   Node* closest = &c1;
   Node* circ = c1.nxt;
   while (circ != &c1) {
@@ -183,7 +175,7 @@ Node* closest_place(Node& c1, Node& c2) {
     }
     circ = circ->nxt;
   }
-  return closest;
+  return *(closest);
 }
 
 
@@ -208,7 +200,7 @@ std::pair<Node*, Node*> make_sentinel_pair() {
 // I actually think this probably takes advantage of a "bug" since to my
 // understanding the pointers from make_sentinel_pair are null due to automatic
 // memory deallocation but if it works it works :/
-bool is_clear(std::pair<Node*, Node*>& inp) {
+inline bool is_clear(std::pair<Node*, Node*>& inp) {
   return (inp.first == nullptr) && (inp.second == nullptr);
 }
 
@@ -257,21 +249,67 @@ inline bool is_degenerate_case(int n) {
   return res;
 }
 
+// needs testing
 Rcpp::List handle_degenerate_cases(
-  int lenCirc,
-  std::vector<Node>& circles,
-  std::pair<double, double>& centroid,
-  double rad_scale_factor,
-  bool verbose
+    int lenCirc,
+    std::vector<Node>& circles, // not sure if node should be referenced
+    std::vector<double>& centroid,
+    double rad_scale_factor,
+    bool verbose
 ) {
-  if (lenCirc == 1) {
-    return Rcpp::List::create();
-  }
   
-  // if lenCirc = 2, transform the x coordinates to place left and right of 0, 0
-  return Rcpp::List::create();
+  if (verbose) {progress_bar(1, 1);}
+  
+  Rcpp::NumericVector x, y, r;
+  Rcpp::NumericVector c = {centroid[0], centroid[1]};
+  double clrad;
+  
+  if (lenCirc == 1) {
+    x = {circles[0].x + centroid[0]};
+    y = {circles[0].y + centroid[1]};
+    r = {circles[0].rad * rad_scale_factor};
+    clrad = r[0];
+  } else {
+    x = {(-1*circles[0].rad) + centroid[0], circles[1].rad + centroid[0]};
+    y = {centroid[1], centroid[1]};
+    r = {circles[0].rad * rad_scale_factor, circles[1].rad * rad_scale_factor};
+    clrad = 0.5 * Rcpp::sum(r);
+  }
+  return Rcpp::List::create(
+    _["x"] = x, _["y"] = y, _["rad"] = r, _["centroid"] = c, _["clRad"] = clrad
+  );
 }
 
+// overlap check, update, refit, and recheck until "clear", for reducing nesting
+// needs testing
+void clear_overlap(
+    Node& curr_circ, std::vector<Node>& circles,int j,int num_circles,bool progbar
+) {
+  std::pair<Node*, Node*> check = overlap_check(
+    curr_circ, *(curr_circ.nxt), circles[j]
+  );
+  
+  if (is_clear(check)) {
+    insert_circle(curr_circ, *(curr_circ.nxt), circles[j]);
+    j++;
+    if (progbar && (j <= num_circles)) {
+      progress_bar(j, num_circles);
+    }
+  } else {
+    while (!is_clear(check)) {
+      Node& Cm = *(check.first), Cn = *(check.second);
+      fwd_remove(Cm, Cn);
+      fit_tang_circle(Cm, Cn, circles[j]);
+      check = overlap_check(Cm, Cn, circles[j]);
+      if (is_clear(check)) {
+        insert_circle(Cm, Cn, circles[j]);
+        j++;
+      }
+    }
+  }
+}
+
+// this can be removed soon as its been acconted for in the subsequent function
 // [[Rcpp::export]]
 double estimate_rad(
     std::vector<double> x_vals,
@@ -290,5 +328,96 @@ double estimate_rad(
   return result_num;
 }
 
-// TODO: circle_layout
-// TOOD: pack_into_clusterlists
+// return the R list from a packed vector of circles - needs testing
+Rcpp::List process_into_clusterlist(
+    std::vector<Node>& circles,
+    std::vector<double> centroid,
+    double rad_scale_factor,
+    int num_circles,
+    bool progbar
+) {
+  Rcpp::NumericVector x (num_circles), y (num_circles), rad (num_circles);
+  bool do_shift_x = (centroid[0] != 0), do_shift_y = (centroid[1] != 0);
+  bool do_scale_rad = (rad_scale_factor != 1);
+  double max_x = circles[0].x + centroid[0];
+  int max_x_index = 0;
+  
+  for (int i = 0; i < num_circles; i++) {
+    if (do_shift_x) {
+      x[i] = circles[i].x + centroid[0];
+    } else {
+      x[i] = circles[i].x;
+    }
+    if (x[i] > max_x) {
+      max_x = x[i];
+      max_x_index = i;
+    }
+    if (do_shift_y) {
+      y[i] = circles[i].y + centroid[1];
+    } else {
+      y[i] = circles[i].y;
+    }
+    if (do_scale_rad) {
+      rad[i] = circles[i].rad * rad_scale_factor;
+    } else {
+      rad[i] = circles[i].rad;
+    }
+  }
+  if (progbar) {progress_bar(1, 1);}
+  return Rcpp::List::create(
+    _["x"] = x, _["y"] = y, _["rad"] = rad, _["centroid"] = centroid,
+    _["clRad"] = max_x + rad[max_x_index]
+  );
+}
+
+// to be exported - although its bugged atm :/
+Rcpp::List circle_layout(
+    std::vector<double> input_rad_vec,
+    std::vector<double> centroid,
+    double rad_scale_factor = 1,
+    bool ORDER = true,
+    bool try_place = false,
+    bool progbar = true
+) {
+  if (progbar) {progress_bar(0, 1);}
+  if (ORDER) {
+    std::sort(all(input_rad_vec), std::greater<int>());
+  }
+  
+  std::vector<Node> circles;
+  int num_circles = input_rad_vec.size();
+  for (int i = 0; i < num_circles; i++) {
+    circles.push_back(Node(0, 0, input_rad_vec[i]));
+  }
+  
+  if (is_degenerate_case(num_circles)) {
+    return handle_degenerate_cases(
+      num_circles, circles, centroid, rad_scale_factor, progbar
+    );
+  }
+  
+  // Place the first three circles to be mutually tangent,
+  // with centroid at the origin, and link the nodes
+  place_starting_three(circles[0], circles[1], circles[2]);
+  init_boundary({&circles[0], &circles[1], &circles[2]});
+  
+  // loop through the remaining circles, fitting them
+  int j = 3; Node curr_circ = Node(0, 0, 0);
+  while (j < num_circles) {
+    if (try_place) {
+      curr_circ = closest_place(circles[j-1], circles[j]);
+    } else {
+      curr_circ = closest(circles[j-1]);
+    }
+    
+    // fit circle, check for overlap, and refit till condition satisfied
+    fit_tang_circle(curr_circ, *(curr_circ.nxt), circles[j]);
+    clear_overlap(curr_circ, circles, j, num_circles, progbar);
+  }
+  return process_into_clusterlist(
+    circles, centroid, rad_scale_factor, num_circles, progbar
+  );
+}
+
+// I wonder whats the best practisce for these "intermediate functions". Maybe
+// pass an input class around? But thats a bit clunky it feels like.

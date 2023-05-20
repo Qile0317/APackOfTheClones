@@ -118,7 +118,7 @@ context("Cpp circle_layout functions") {
   
   test_that("closest works") {
     Testdata nodes = Testdata();
-    expect_true(closest(nodes.c3) == &nodes.c1);
+    expect_true(closest(nodes.c3) == nodes.c1);
     expect_true(closest(nodes.c1) == closest(nodes.c5));
     expect_true(closest(nodes.c2) == closest(nodes.c4));
   }
