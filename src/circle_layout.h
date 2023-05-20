@@ -271,8 +271,10 @@ Rcpp::List handle_degenerate_cases(
   } else {
     x = {(-1*circles[0].rad) + centroid[0], circles[1].rad + centroid[0]};
     y = {centroid[1], centroid[1]};
-    r = {circles[0].rad * rad_scale_factor, circles[1].rad * rad_scale_factor};
-    clrad = 0.5 * Rcpp::sum(r);
+    r = {circles[0].rad * rad_scale_factor,
+         circles[1].rad * rad_scale_factor
+        };
+    clrad = 0.5 * (r[0] + r[1]);
   }
   return Rcpp::List::create(
     _["x"] = x, _["y"] = y, _["rad"] = r,

@@ -50,14 +50,16 @@ test_that("circle_layout() handles edge cases", {
                  "y" = 0,
                  "rad" = 69,
                  "centroid" = c(0, 0),
-                 "clRad" = 69))
+                 "clRad" = 69)
+               )
   expect_equal(circle_layout(c(420), c(6, 9), progbar = FALSE),
                list(
                  "x" = 6,
                  "y" = 9,
                  "rad" = 420,
                  "centroid" = c(6, 9),
-                 "clRad" = 420))
+                 "clRad" = 420)
+               )
 
   # input length = 2
   expect_equal(circle_layout(c(69, 420), progbar = FALSE),
@@ -65,13 +67,17 @@ test_that("circle_layout() handles edge cases", {
                     "y" = c(0, 0),
                     "rad" = c(420, 69),
                     "centroid" = c(0, 0),
-                    "clRad" = 244.5))
+                    "clRad" = 244.5
+                    )
+               )
   expect_equal(circle_layout(c(69,420), c(420, 69), progbar = FALSE),
                list("x" = c(0, 489),
                     "y" = c(69, 69),
                     "rad" = c(420, 69),
                     "centroid" = c(420, 69),
-                    "clRad" = 244.5))
+                    "clRad" = 244.5
+                    )
+               )
 
   # input length = 3 (not really an edge case but rather a test of the while loop)
   expect_equal(circle_layout(c(1, 2, 3), progbar = FALSE),

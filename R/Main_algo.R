@@ -251,7 +251,9 @@ handle_degenerate_cases <- function(
     "y" = rep(centroid[2], 2),
     "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
     "centroid" = centroid,
-    "clRad" = 0.5 * rad_scale * (circles[[1]]$val[[6]] + circles[[2]]$val[[6]])
+    "clRad" = 0.5 * rad_scale * (
+      circles[[1]]$val[[6]] + circles[[2]]$val[[6]]
+    )
   ))
 }
 

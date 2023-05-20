@@ -174,6 +174,7 @@ context("Cpp circle_layout functions") {
   }
   
   test_that("handle_degenerate_cases for n = 1 works") {
+    // generating test trial 1 values
     std::vector<Node> circles = {Node(0, 0, 69)};
     Rcpp::NumericVector centroid = {0, 0};
     Rcpp::List trial = handle_degenerate_cases(
@@ -183,18 +184,71 @@ context("Cpp circle_layout functions") {
     Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
     double trial_clRad = trial[4];
     
-    // expected values
+    // testing for equivalence to expected values for trial 1
     Rcpp::NumericVector x = {0}, y = {0}, rad = {69};
 
     expect_true(elements_are_equal(trial_x, x));
     expect_true(elements_are_equal(trial_y, y));
     expect_true(elements_are_equal(trial_rad, rad));
     expect_true(elements_are_equal(trial_centroid, centroid));
-    expect_true(trial_clRad == 69);
+    expect_true(approx_equal(trial_clRad, 69.0));
+    
+    // generating test trial 2 values with new centroid and rad_scale_factor
+    circles = {Node(0, 0, 69)};
+    centroid = {4, 5};
+    trial = handle_degenerate_cases(
+      1, circles, centroid, 0.8, false
+    );
+    trial_x = trial[0], trial_y = trial[1], trial_rad = trial[2];
+    trial_centroid = trial[3], trial_clRad = trial[4];
+    
+    // testing for equivalence to expected values for trial 1
+    x = {4}, y = {5}, rad = {69 * 0.8};
+    
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(approx_equal(trial_clRad, 69 * 0.8));
   }
   
   test_that("handle_degenerate_cases for n = 2 works") {
-    expect_true(1==1);
+    // generating test trial 1 values
+    std::vector<Node> circles = {Node(0, 0, 69), Node(0, 0, 420)};
+    Rcpp::NumericVector centroid = {0, 0};
+    Rcpp::List trial = handle_degenerate_cases(
+      2, circles, centroid, 1, false
+    );
+    Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
+    Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
+    double trial_clRad = trial[4];
+    
+    // testing for equivalence to expected values for trial 1
+    Rcpp::NumericVector x = {-69, 420}, y = {0, 0}, rad = {69, 420};
+    
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(approx_equal(trial_clRad, 244.5));
+    
+    // generating test trial 2 values with new centroid and rad_scale_factor
+    circles = {Node(0, 0, 4), Node(0, 0, 3)};
+    centroid = {1, 2};
+    trial = handle_degenerate_cases(
+      2, circles, centroid, 0.8, false
+    );
+    trial_x = trial[0], trial_y = trial[1], trial_rad = trial[2];
+    trial_centroid = trial[3], trial_clRad = trial[4];
+    
+    // testing for equivalence to expected values for trial 1
+    x = {-3, 4}, y = {2, 2}, rad = {3.2, 2.4};
+    
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(approx_equal(trial_clRad, 2.8));
   }
   
   test_that("clear_overlap works") {
