@@ -1,11 +1,11 @@
-// testing of two nodes' numeric parameters
+// function for testing of two nodes' numeric parameters x, y, rad.
 bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
   return approx_equal(c1.x, c2.x, thr) && 
     approx_equal(c1.y, c2.y, thr) && 
     approx_equal(c1.rad, c2.rad, thr);
 }
 
-// some linked test nodes, assuming init_boundary works
+// some linked test nodes for testing, assuming init_boundary works
 class Testdata {
   public:
     Node c1; Node c2; Node c3; Node c4; Node c5;
@@ -17,7 +17,7 @@ class Testdata {
       const Node& e = Node(-10, -69, 4)
     ) : c1(a), c2(b), c3(c), c4(d), c5(e) {
       init_boundary({&c1, &c2, &c3, &c4, &c5});
-  }
+    }
 };
 
 context("Cpp circle_layout functions") {
@@ -250,13 +250,30 @@ context("Cpp circle_layout functions") {
     expect_true(elements_are_equal(trial_centroid, centroid));
     expect_true(approx_equal(trial_clRad, 2.8));
   }
-  
-  test_that("clear_overlap works") {
-    expect_true(1==1);
-  }
-  
+
   test_that("process_into_clusterlist works") {
-    expect_true(1==1);
+    // create trial data, 5 circles, centroid (1,1), rad_scale_factor 0.8
+    Testdata circs = Testdata();
+    std::vector<Node> circles = {
+      circs.c1, circs.c2, circs.c3, circs.c4, circs.c5
+    };
+    Rcpp::NumericVector centroid = {1, 1};
+    Rcpp::List trial = process_into_clusterlist(
+      circles, centroid, 0.8, 5, false
+    );
+    Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
+    Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
+    double trial_clRad = trial[4];
+    
+    // test for equivalence to expected data
+    Rcpp::NumericVector x = {2, 7, 51, 0, -9}, y = {3, 8, 91, -2, -68};
+    Rcpp::NumericVector rad = {2.4, 6.4, 0.8, 2.4, 3.2};
+    
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(approx_equal(trial_clRad, 52));
   }
   
   // circle layout is tested in R

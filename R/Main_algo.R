@@ -257,151 +257,9 @@ handle_degenerate_cases <- function(
   ))
 }
 
-#' The circle layout function - bugged
-#' 
-#' Currently returns different results in devtools::check() compared to test()
-#' but only in plot_API. Its likely something with how R CMD CHECK uses a
-#' different environment and treats some function/method differently??
-#' 
-#' It takes an input vector of radii, and returns a vector of centre coordinates
-#' of the corresponding circles in the layout. It is done for a single cluster,
-#' and packs the input radii into circles in a circular cluster. Note that it 
-#' assumes the inputs are valid!
-#' 
-#' @param input_rad_vec a numeric vector of radii
-#' @param centroid the centroid of the final cluster
-#' @param rad_decrease a SCALE FACTOR to indicate how much smaller circles
-#' should get after the packing
-#' @param ORDER logical. Indicates whether the radii should be sorted. If so,
-#' the larger circles will be in the centre
-#' @param try_place if true the algorithm tries to place each new circle to be
-#' added to the packing as close to the origin as possilble. If false, the
-#' algorithm tries to place each new circle to be added to the packing tangent
-#' to the closest circle on the boundary
-#' 
-#' @return A clusterlist. A list with 5 named elements. [[1]] is `x`, [[2]] is
-#' `y`, [[3]] is `rad`, and all these are numeric vectors indicating the x and y
-#' coordinates and radii of the packed circles based on the input radii. [[4]]
-#' is `centroid`, numeric vector of length 2 of the x and y coordinates of the 
-#' centroid of the cluster. [[5]] is `clRad`, the estimated radius of the entire
-#' cluster.
-#' 
-#' @noRd
-#' 
-circle_layout <- function(
-  input_rad_vec, centroid = c(0, 0),
-  rad_decrease = 1, # scale factor
-  ORDER = TRUE, try_place = FALSE,
-  progbar = TRUE
-) {
-  
-  if (ORDER) {
-    input_rad_vec <- base::sort(
-      input_rad_vec, decreasing = TRUE, method = "radix"
-    )
-  }
+# removed original circle_layout
 
-  # Initialise the circles with radii as specified in input_rad_vec, and no boundary relations.
-  circles <- list() #not sure if list of vector is better/faster here
-  for (i in 1:length(input_rad_vec)) {
-    currCirc <- node$new(val = list(
-      area = NULL, x = 0, y = 0,
-      color = NULL, label = NULL,
-      rad = input_rad_vec[i]
-    ))
-    circles <- append(circles, currCirc)
-  }
-
-  lenCirc <- length(circles)
-  if (progbar) {progress_bar(0,1)}
-
-  if (is_degenerate_case(lenCirc)) {
-    return(handle_degenerate_cases(
-      lenCirc, circles, centroid, rad_decrease, progbar
-    ))
-  }
-
-  # Place the first three circles to be mutually tangent, with centroid at the origin.
-  place_starting_three(circles[[1]], circles[[2]], circles[[3]])
-
-  # Initialise the boundary
-  init_boundary(list(circles[[1]], circles[[2]], circles[[3]]))
-
-  #Loop through the remaining circles,fitting them - bug is in here...
-  j <- 4
-  while (j <= lenCirc) {
-    if (try_place) {
-      cl <- closest_place(circles[[j-1]], circles[[j]])
-    }else {
-      cl <- closest(circles[[j-1]])
-    }
-
-    fit_tang_circle(cl, cl$nxt, circles[[j]])
-
-    # Check for overlaps and update, refit and recheck until "clear"
-    check <- overlap_check(cl, cl$nxt, circles[[j]])
-
-    if (identical(check, "clear")) {
-      insert_circle(cl, cl$nxt, circles[[j]])
-      j <- j + 1
-      if (progbar && (j <= lenCirc)) {
-        progress_bar(j, lenCirc)
-      }
-
-    }else {
-      while(!identical(check,"clear")){
-        Cm <- check[[1]]
-        Cn <- check[[2]]
-
-        fwd_remove(Cm,Cn)
-
-        fit_tang_circle(Cm, Cn, circles[[j]])
-
-        check <- overlap_check(Cm, Cn, circles[[j]])
-
-        if (identical(check, "clear")){
-          insert_circle(Cm, Cn, circles[[j]])
-          j <- j + 1
-        }
-      }
-    }
-  }
-  
-  ans <- list()
-  cc <- 1
-  Rvec <- c()
-  Xvec <- c()
-  Yvec <- c()
-
-  for (c in circles) { #better practisce would be to initialize vectors of zeros first
-    Rvec <- c(Rvec, c$val[[6]])
-    Xvec <- c(Xvec, c$val[[2]])
-    Yvec <- c(Yvec, c$val[[3]])
-  }
-
-  # construct output cluster list with estimated cluster radius
-  ans <- list(
-    "x" = Xvec,
-    "y" = Yvec,
-    "rad" = Rvec,
-    "centroid" = centroid,
-    "clRad" = estimate_rad(Xvec, Rvec, 0)
-  )
-
-  # transform the x and y coordinates to the centroid if its not 0,0.
-  if (!identical(centroid, c(0, 0))) {
-    ans <- trans_coord(ans)
-  }
-  
-  # scale radius
-  if (rad_decrease != 1) {
-    ans[[3]] <- Rvec * rad_decrease
-  }
-  if (progbar) {progress_bar(1,1)}
-  ans
-}
-
-# circle_layout but handles lists of inputs
+# vectorized circle_layout - outputs list
 pack_into_clusterlists <- function(
   sizes, centroids, num_clusters, rad_scale = 1,
   ORDER = TRUE, try_place = FALSE, verbose = TRUE
@@ -417,7 +275,7 @@ pack_into_clusterlists <- function(
       output_list[[i]] <- circle_layout(
         sizes[[i]],
         centroid = centroids[[i]],
-        rad_decrease = rad_scale,
+        rad_scale_factor = rad_scale,
         ORDER = ORDER,
         try_place = try_place,
         progbar = verbose

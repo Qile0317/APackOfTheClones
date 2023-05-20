@@ -5,6 +5,10 @@ estimate_rad <- function(x_vals, rad_vals, centroid_x) {
     .Call(`_APackOfTheClones_estimate_rad`, x_vals, rad_vals, centroid_x)
 }
 
+circle_layout <- function(input_rad_vec, centroid, rad_scale_factor = 1, ORDER = TRUE, try_place = FALSE, progbar = TRUE) {
+    .Call(`_APackOfTheClones_circle_layout`, input_rad_vec, centroid, rad_scale_factor, ORDER, try_place, progbar)
+}
+
 get_transformed_clone_sizes <- function(sizelist, clone_scale_factor, num_clusters) {
     .Call(`_APackOfTheClones_get_transformed_clone_sizes`, sizelist, clone_scale_factor, num_clusters)
 }
