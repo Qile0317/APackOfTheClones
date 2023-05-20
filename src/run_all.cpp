@@ -17,4 +17,6 @@
 #include "repulsion.h"
 
 // test scripts for testthat
+#include "tests/test-utils.h"
 #include "tests/test-circle_layout.h"
+#include "tests/test-repulsion.h"

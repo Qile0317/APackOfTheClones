@@ -283,7 +283,7 @@ Rcpp::List handle_degenerate_cases(
 // overlap check, update, refit, and recheck until "clear", for reducing nesting
 // needs testing
 void clear_overlap(
-    Node& curr_circ, std::vector<Node>& circles,int j,int num_circles,bool progbar
+    Node& curr_circ, std::vector<Node>& circles,int& j,int num_circles,bool progbar
 ) {
   std::pair<Node*, Node*> check = overlap_check(
     curr_circ, *(curr_circ.nxt), circles[j]

@@ -1,7 +1,3 @@
-#include <testthat.h>
-
-// some of these tests should probably also test what happens to the pointers :/
-
 // testing of two nodes' numeric parameters
 bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
   return approx_equal(c1.x, c2.x, thr) && 
@@ -9,7 +5,7 @@ bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
     approx_equal(c1.rad, c2.rad, thr);
 }
 
-// testdata, assuming init_boundary works
+// some linked test nodes, assuming init_boundary works
 class Testdata {
   public:
     Node c1; Node c2; Node c3; Node c4; Node c5;
@@ -23,10 +19,6 @@ class Testdata {
       init_boundary({&c1, &c2, &c3, &c4, &c5});
   }
 };
-
-bool coords_are_equal(const Node& c1, const Node& c2) {
-  return c1.x == c2.x && c1.y == c2.y && c1.rad == c2.rad;
-}
 
 context("Cpp circle_layout functions") {
   test_that("init_boundary works") {
@@ -185,4 +177,16 @@ context("Cpp circle_layout functions") {
   test_that("handle_degenerate_cases works") {
     expect_true(1==1);
   }
+  
+  test_that("clear_overlap works") {
+    expect_true(1==1);
+  }
+  
+  test_that("process_into_clusterlist works") {
+    expect_true(1==1);
+  }
+  
+  // circle layout is tested in R
 }
+
+// some of these tests should probably also test what happens to the pointers :/
