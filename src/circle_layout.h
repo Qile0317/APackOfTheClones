@@ -253,7 +253,7 @@ inline bool is_degenerate_case(int n) {
 Rcpp::List handle_degenerate_cases(
     int lenCirc,
     std::vector<Node>& circles, // not sure if node should be referenced
-    std::vector<double>& centroid,
+    Rcpp::NumericVector& centroid,
     double rad_scale_factor,
     bool verbose
 ) {
@@ -261,12 +261,11 @@ Rcpp::List handle_degenerate_cases(
   if (verbose) {progress_bar(1, 1);}
   
   Rcpp::NumericVector x, y, r;
-  Rcpp::NumericVector c = {centroid[0], centroid[1]};
   double clrad;
   
   if (lenCirc == 1) {
-    x = {circles[0].x + centroid[0]};
-    y = {circles[0].y + centroid[1]};
+    x = {centroid[0]};
+    y = {centroid[1]};
     r = {circles[0].rad * rad_scale_factor};
     clrad = r[0];
   } else {
@@ -276,7 +275,8 @@ Rcpp::List handle_degenerate_cases(
     clrad = 0.5 * Rcpp::sum(r);
   }
   return Rcpp::List::create(
-    _["x"] = x, _["y"] = y, _["rad"] = r, _["centroid"] = c, _["clRad"] = clrad
+    _["x"] = x, _["y"] = y, _["rad"] = r,
+    _["centroid"] = centroid, _["clRad"] = clrad
   );
 }
 
@@ -331,7 +331,7 @@ double estimate_rad(
 // return the R list from a packed vector of circles - needs testing
 Rcpp::List process_into_clusterlist(
     std::vector<Node>& circles,
-    std::vector<double> centroid,
+    Rcpp::NumericVector centroid,
     double rad_scale_factor,
     int num_circles,
     bool progbar
@@ -370,10 +370,10 @@ Rcpp::List process_into_clusterlist(
   );
 }
 
-// to be exported - although its bugged atm :/
+// to be exported - although its likely bugged atm :/
 Rcpp::List circle_layout(
     std::vector<double> input_rad_vec,
-    std::vector<double> centroid,
+    Rcpp::NumericVector centroid,
     double rad_scale_factor = 1,
     bool ORDER = true,
     bool try_place = false,

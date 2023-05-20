@@ -173,8 +173,27 @@ context("Cpp circle_layout functions") {
     expect_false(is_degenerate_case(3));
   }
   
-  // unfinished
-  test_that("handle_degenerate_cases works") {
+  test_that("handle_degenerate_cases for n = 1 works") {
+    std::vector<Node> circles = {Node(0, 0, 69)};
+    Rcpp::NumericVector centroid = {0, 0};
+    Rcpp::List trial = handle_degenerate_cases(
+      1, circles, centroid, 1, false
+    );
+    Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
+    Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
+    double trial_clRad = trial[4];
+    
+    // expected values
+    Rcpp::NumericVector x = {0}, y = {0}, rad = {69};
+
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(trial_clRad == 69);
+  }
+  
+  test_that("handle_degenerate_cases for n = 2 works") {
     expect_true(1==1);
   }
   

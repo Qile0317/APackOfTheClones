@@ -12,6 +12,18 @@ bool approx_equal(double a, double b, double epsilon = 5e-5) {
   return std::abs(a - b) <= epsilon;
 }
 
+// function to compare two numericvectors of the same length
+bool elements_are_equal(
+    Rcpp::NumericVector vec1, Rcpp::NumericVector vec2, double epsilon = 5e-5
+) {
+  for (int i = 0; i < vec1.size(); i++) {
+    if (!approx_equal(vec1[i], vec2[i], epsilon)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // copy of the R progress_bar. not unit tested but works perfectly
 void progress_bar(int x, int max) {
   double percent = 100.0 * (double(x) / double(max));
