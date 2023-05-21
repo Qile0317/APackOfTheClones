@@ -257,6 +257,32 @@ handle_degenerate_cases <- function(
   ))
 }
 
+# function to abstract the overlap checking and refitting process if an initial
+# circle fitting attempt overlaps during iteration
+fit_circle <- function(cl, nxt_cl, circles, j, progbar, num_circles) {
+  check <- overlap_check(cl, nxt_cl, circles[[j]])
+  if (identical(check, "clear")) {
+    insert_circle(cl, nxt_cl, circles[[j]])
+    j <- j + 1
+    if (progbar && j <= num_circles) {progress_bar(j, num_circles)}
+  }else {
+    while(!identical(check,"clear")){
+      Cm <- check[[1]]
+      Cn <- check[[2]]
+      
+      fwd_remove(Cm, Cn)
+      fit_tang_circle(Cm, Cn, circles[[j]])
+      check <- overlap_check(Cm, Cn, circles[[j]])
+      
+      if (identical(check, "clear")){
+        insert_circle(Cm, Cn, circles[[j]])
+        j <- j + 1
+      }
+    }
+  }
+  j
+}
+
 #' The circle layout function - bugged
 #' 
 #' Currently returns different results in devtools::check() compared to test()
@@ -290,10 +316,12 @@ handle_degenerate_cases <- function(
 #' 
 circle_layout <- function(
     input_rad_vec, centroid = c(0, 0),
-    rad_decrease = 1, # scale factor
+    rad_decrease = 1,# scale factor
     ORDER = TRUE, try_place = FALSE,
     progbar = TRUE
 ) {
+  if (progbar) {progress_bar(0,1)}
+  lenCirc <- length(input_rad_vec)
   
   if (ORDER) {
     input_rad_vec <- base::sort(
@@ -311,9 +339,6 @@ circle_layout <- function(
     ))
     circles <- append(circles, currCirc)
   }
-  
-  lenCirc <- length(circles)
-  if (progbar) {progress_bar(0,1)}
   
   if (is_degenerate_case(lenCirc)) {
     return(handle_degenerate_cases(
@@ -339,32 +364,7 @@ circle_layout <- function(
     fit_tang_circle(cl, cl$nxt, circles[[j]])
     
     # Check for overlaps and update, refit and recheck until "clear"
-    check <- overlap_check(cl, cl$nxt, circles[[j]])
-    
-    if (identical(check, "clear")) {
-      insert_circle(cl, cl$nxt, circles[[j]])
-      j <- j + 1
-      if (progbar && (j <= lenCirc)) {
-        progress_bar(j, lenCirc)
-      }
-      
-    }else {
-      while(!identical(check,"clear")){
-        Cm <- check[[1]]
-        Cn <- check[[2]]
-        
-        fwd_remove(Cm,Cn)
-        
-        fit_tang_circle(Cm, Cn, circles[[j]])
-        
-        check <- overlap_check(Cm, Cn, circles[[j]])
-        
-        if (identical(check, "clear")){
-          insert_circle(Cm, Cn, circles[[j]])
-          j <- j + 1
-        }
-      }
-    }
+    j <- fit_circle(cl, cl$nxt, circles, j, progbar, lenCirc)
   }
   
   ans <- list()
@@ -417,7 +417,7 @@ pack_into_clusterlists <- function(
       output_list[[i]] <- circle_layout(
         sizes[[i]],
         centroid = centroids[[i]],
-        rad_scale_factor = rad_scale,
+        rad_decrease = rad_scale,
         ORDER = ORDER,
         try_place = try_place,
         progbar = verbose

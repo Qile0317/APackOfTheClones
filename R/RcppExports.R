@@ -5,10 +5,6 @@ estimate_rad <- function(x_vals, rad_vals, centroid_x) {
     .Call(`_APackOfTheClones_estimate_rad`, x_vals, rad_vals, centroid_x)
 }
 
-circle_layout <- function(input_rad_vec, centroid, rad_scale_factor = 1, ORDER = TRUE, try_place = FALSE, progbar = TRUE) {
-    .Call(`_APackOfTheClones_circle_layout`, input_rad_vec, centroid, rad_scale_factor, ORDER, try_place, progbar)
-}
-
 get_transformed_clone_sizes <- function(sizelist, clone_scale_factor, num_clusters) {
     .Call(`_APackOfTheClones_get_transformed_clone_sizes`, sizelist, clone_scale_factor, num_clusters)
 }
@@ -23,6 +19,10 @@ get_component_repulsion_vector <- function(inp, i, j, G) {
 
 do_cluster_intersect <- function(Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, thr) {
     .Call(`_APackOfTheClones_do_cluster_intersect`, Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, thr)
+}
+
+do_proceed <- function(inp, i, j, thr) {
+    .Call(`_APackOfTheClones_do_proceed`, inp, i, j, thr)
 }
 
 calculate_transformation_vectors <- function(transformation_vectors, overall_repulsion_vec, num_clusters) {

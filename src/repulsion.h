@@ -69,43 +69,6 @@ bool do_cluster_intersect(
   return (sqrt(x_dif + y_dif) + thr) < (Cn_clRad + Cm_clRad);
 }
 
-bool do_proceed(Rcpp::List inp, int i, int j, double thr) {
-  if (i != j) {
-    Rcpp::List Cn = inp[i], Cm = inp[j];
-    if (Cn.size()) {
-      if (Cm.size()) {
-        std::vector<double> Cn_centroid = Cn[3], Cm_centroid = Cm[3];
-        double Cn_rad = Cn[4], Cm_rad = Cm[4];
-        return do_cluster_intersect(
-          Cn_centroid, Cn_rad, Cm_centroid, Cm_rad, thr
-        );
-      }
-    }
-  }
-  return false;
-}
-
-/* O(N^2) operation to calculate all repulsion vectors for each cluster in list
-
-Rcpp::List calculate_repulsion_vectors(
-  Rcpp::List overall_repulsion_vec,
-  Rcpp::List inp,
-  int num_clusters,
-  double G = 1,
-  double thr = 0
-) {
-  for (int i = 0; i < num_clusters; i++) {
-    
-    for (int j = 0; j < num_clusters; j++) {
-      
-      if (do_proceed(inp, i, j, thr)) {
-        
-      }
-    }
-  }
-}
-*/
-
 // function to just get the average vectors from a list of list of repulsion
 // vectors within 1 iteration
 // [[Rcpp::export]]

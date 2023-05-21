@@ -294,6 +294,42 @@ Rcpp::List handle_degenerate_cases(
   );
 }
 
+// function to abstract the overlap checking and refitting process if an initial
+// circle fitting attempt overlaps during iteration
+int fit_circle(
+  Node& curr_circ, Node& nxt_circ, std::vector<Node>& circles, int& j,
+  int interupt_check_modulo, bool progbar, int num_circles
+) {
+  std::pair<Node*, Node*> check = overlap_check(
+    curr_circ, nxt_circ, circles[j]
+  );
+  
+  if (is_clear(check)) {
+    insert_circle(curr_circ, nxt_circ, circles[j]);
+    j++;
+    periodic_interupt_check(j, interupt_check_modulo);
+    if (progbar && (j <= num_circles)) {
+      progress_bar(j, num_circles);
+    }
+  } else {
+    while (!is_clear(check)) {
+      Node& Cm = *(check.first);
+      Node& Cn = *(check.second);
+      
+      fwd_remove(Cm, Cn);
+      fit_tang_circle(Cm, Cn, circles[j]);
+      check = overlap_check(Cm, Cn, circles[j]);
+      
+      if (is_clear(check)) {
+        insert_circle(Cm, Cn, circles[j]);
+        j++;
+        periodic_interupt_check(j, interupt_check_modulo);
+      }
+    }
+  }
+  return j;
+}
+
 // this can be removed soon as its been accounted for in the subsequent function
 // [[Rcpp::export]]
 double estimate_rad(
@@ -316,7 +352,7 @@ double estimate_rad(
 // return the R list from a packed vector of circles for at least 3 circles
 Rcpp::List process_into_clusterlist(
     std::vector<Node>& circles,
-    Rcpp::NumericVector centroid,
+    Rcpp::NumericVector& centroid,
     double rad_scale_factor,
     int num_circles,
     bool progbar
@@ -352,13 +388,6 @@ Rcpp::List process_into_clusterlist(
     _["x"] = x, _["y"] = y, _["rad"] = rad, _["centroid"] = centroid,
     _["clRad"] = clRad
   );
-}
-
-// simple alias for an user interupt checker
-inline void periodic_interupt_check(int num, int factor) {
-  if ((num % factor) == 0) {
-    Rcpp::checkUserInterrupt();
-  }
 }
 
 // Not exported because it causes an infinite loop atm :/
@@ -397,12 +426,12 @@ Rcpp::List circle_layout(
   
   // loop through the remaining circles, fitting them
   int j = 3;
-  int interupt_check_modulo = int(std::round(num_circles * 0.1));
+  int interupt_factor = int(std::round(num_circles * 0.1));
   
   while (j < num_circles) {
     Rcpp::Rcout << "\nloop " << j << "\n";
     
-    periodic_interupt_check(j, interupt_check_modulo);
+    periodic_interupt_check(j, interupt_factor);
     Node& curr_circ = circles[j];
     Rcpp::Rcout << "curr_circ done, preplacement\n";
     if (try_place) {
@@ -419,36 +448,10 @@ Rcpp::List circle_layout(
     // seems like the problem is actually here in overlap_check??? But sometimes not??
     Rcpp::Rcout << "pre-overlap_check done\n";
 
-    // need to add a test in overlap_check :/
-    std::pair<Node*, Node*> check = overlap_check(
-      curr_circ, nxt_circ, circles[j]
+    // check for overlaps and update, refit, and recheck until clear.
+    j = fit_circle(
+      curr_circ, nxt_circ, circles, j, interupt_factor, progbar, num_circles
     );
-    
-    Rcpp::Rcout << "initial overlap_check done\n";
-    
-    if (is_clear(check)) {
-      insert_circle(curr_circ, nxt_circ, circles[j]);
-      j++;
-      periodic_interupt_check(j, interupt_check_modulo);
-      if (progbar && (j <= num_circles)) {
-        progress_bar(j, num_circles);
-      }
-    } else {
-      while (!is_clear(check)) {
-        Node& Cm = *(check.first);
-        Node& Cn = *(check.second);
-        
-        fwd_remove(Cm, Cn);
-        fit_tang_circle(Cm, Cn, circles[j]);
-        check = overlap_check(Cm, Cn, circles[j]);
-        
-        if (is_clear(check)) {
-          insert_circle(Cm, Cn, circles[j]);
-          j++;
-          periodic_interupt_check(j, interupt_check_modulo);
-        }
-      }
-    }
   }
   return process_into_clusterlist(
     circles, centroid, rad_scale_factor, num_circles, progbar

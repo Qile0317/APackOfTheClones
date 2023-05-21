@@ -37,3 +37,10 @@ void progress_bar(int x, int max) {
   
   Rcpp::Rcout << progressBar;
 }
+
+// simple alias for an user interupt checker
+inline void periodic_interupt_check(int num, int factor) {
+  if ((num % factor) == 0) {
+    Rcpp::checkUserInterrupt();
+  }
+}

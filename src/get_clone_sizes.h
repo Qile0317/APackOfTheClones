@@ -1,12 +1,3 @@
-/*
-#include <Rcpp.h>
-#include <vector>
-#include <cmath>
-*/
- 
-using Rvec = Rcpp::Nullable<Rcpp::NumericVector>;
-using Llui = long long unsigned int;
-
 // interesting property: calling .size() on a NumericVector with NULLs
 // will ignore the null values
 
