@@ -1,42 +1,42 @@
 // node of circular linked list where each node is a circle
 class Node {
-public:
-  double x;      
-  double y;      
-  double rad;    
-  Node* prv; 
-  Node* nxt; 
+  public:
+    double x;      
+    double y;      
+    double rad;    
+    Node* prv; 
+    Node* nxt; 
   
-  Node(double x_val, double y_val, double rad_val) {
-    x = x_val;
-    y = y_val;
-    rad = rad_val;
-    prv = nullptr;
-    nxt = nullptr;
-  }
-  
-  bool operator==(Node& other) {
-    return (x == other.x)
-    && (y == other.y)
-    && (rad == other.rad)
-    && (prv == other.prv)
-    && (nxt == other.nxt);
-  }
-  
-private:
-  friend std::ostream& operator<<(std::ostream& os, Node& node) {
-    os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
-    return os;
-  }
-  
-  void traverse() {
-    Node* curr = this;
-    while (curr != nullptr && curr->nxt != this) {
-      std::cout << *curr << std::endl;
-      curr = curr->nxt;
+    Node(double x_val = 0, double y_val = 0, double rad_val = 0) {
+      x = x_val;
+      y = y_val;
+      rad = rad_val;
+      prv = nullptr;
+      nxt = nullptr;
     }
-    std::cout << *curr << std::endl;
-  }
+  
+    bool operator==(Node& other) {
+      return (x == other.x)
+        && (y == other.y)
+        && (rad == other.rad)
+        && (prv == other.prv)
+        && (nxt == other.nxt);
+    }
+  
+  private:
+    friend std::ostream& operator<<(std::ostream& os, Node& node) {
+      os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
+      return os;
+    }
+    
+    void traverse() {
+      Node* curr = this;
+      while (curr != nullptr && curr->nxt != this) {
+        std::cout << *curr << std::endl;
+        curr = curr->nxt;
+      }
+      std::cout << *curr << std::endl;
+    }
 };
 
 // initialize node vector into the circular boundary linked list
@@ -66,7 +66,8 @@ void insert_circle(Node& c1, Node& c2, Node& cn) {
 int fwd_dist(Node& c1, Node& c2) {
   int count = 0;
   Node* circ = &c1;
-  while (circ != &c2) {
+  Node* target_circ = &c2;
+  while (circ != target_circ) {
     count++;
     circ = circ->nxt;
   }
@@ -79,16 +80,16 @@ void fwd_remove(Node& c1, Node& c2) {
   if (c1.nxt == &c2) { Rcpp::stop("Circles are consecutive."); }
   
   c1.nxt = &c2;
-  c2.prv= &c1;
+  c2.prv = &c1;
   
   /*
-   Node* circ = c1.nxt;
-   while (circ != &c2) {
-   circ->prv->nxt = circ->nxt;
-   circ->nxt->prv = circ->prv;
-   circ = circ->nxt;
-   }
-   */
+  Node* circ = c1.nxt, target_circ = &c2;;
+  while (circ != target_circ) {
+    circ->prv->nxt = circ->nxt;
+    circ->nxt->prv = circ->prv;
+    circ = circ->nxt;
+  }
+  */
 }
 
 // euclidean distance of circle center to (0, 0)
@@ -131,7 +132,7 @@ double tang_circle_dist(Node& C1, Node& C2, Node& C3) {
 void place_starting_three(Node& C1, Node& C2, Node& C3) {
   C1.x = -1 * C1.rad;
   C2.x = C2.rad;
-  fit_tang_circle(C2, C1, C3); // the order is incredibly important. Also, surprised that there were no compiler/runtime errors though fit_tang_circle returns a ndoe reference.
+  fit_tang_circle(C2, C1, C3); // the order is incredibly important
   
   double centroid_x = (C1.x + C2.x + C3.x) / 3;
   double centroid_y = (C1.y + C2.y + C3.y) / 3;
@@ -205,36 +206,50 @@ bool is_clear(std::pair<Node*, Node*>& inp) {
 
 // overlap check of three circles and returns either a vector of two pointers
 // or the sentinel node pair if check is "clear"
+// Problem: assumes valid inputs where iterating over Cn will actually get to Cm
+// will be infinite loop if not
 std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   Node* C_em = &Cm;
   Node* C_en = &Cn;
   std::vector<Node*> obstruct;
   
+  Rcpp::Rcout << "overlap check: initialized vars, starting while loop of death\n";
   // collect circles that C intersects (if any) by adding intersectors to 'obstruct'
   Node* circ = Cn.nxt;
-  while (circ != &Cm) {
-    if (do_intersect(*(circ), C)) { 
+  Rcpp::Rcout << "starting circ: " << circ << " C_em: " << C_em << "\n";
+  while (circ != C_em) {
+    Rcpp::checkUserInterrupt();
+    Rcpp::Rcout << "-------------------------\ncirc: " << circ << "\ncirc.nxt: " << circ->nxt << "\n";
+
+    Node& curr_circ = *(circ);
+    Rcpp::Rcout << "intersect with C?: " << do_intersect(curr_circ, C) << "\n";
+    if (do_intersect(curr_circ, C)) {
       obstruct.push_back(circ);
+      Rcpp::Rcout << obstruct.size() << "\n";
     }
     circ = circ->nxt;
   }
   
+  Rcpp::Rcout << "obstruct list construction complete\n";
+  
   // find the one closest to {Cm, Cn}, (distance is in number of steps)
-  int LenObs = obstruct.size(); 
-  if (LenObs > 0) { 
-    Node* nearest = obstruct[0];
-    for (int i = 0; i < LenObs; i++) {
-      if (geod_dist(Cm, Cn, *(obstruct[i])) < geod_dist(Cm, Cn, *(nearest))) {
-        nearest = obstruct[i];
+  int n = obstruct.size(); 
+  if (n > 0) { 
+    Node& nearest = *(obstruct[0]);
+    for (int i = 0; i < n; i++) {
+      Node& curr_obstruct_node = *(obstruct[i]);
+      if (geod_dist(Cm, Cn, curr_obstruct_node) < geod_dist(Cm, Cn, nearest)) {
+        nearest = curr_obstruct_node;
       }
     }
     
-    if (fwd_dist(Cn, *(nearest)) <= fwd_dist(*(nearest), Cm)) { // if the distance is realized fwd, change C_en
-      C_en = nearest;
+    if (fwd_dist(Cn, nearest) <= fwd_dist(nearest, Cm)) { // if the distance is realized fwd, change C_en
+      C_en = &nearest;
     } else { // if distance is realized bkwd and not fwd, change C_em
-      C_em = nearest;
+      C_em = &nearest;
     }
   }
+  Rcpp::Rcout << "pretty much done\n";
   if ((C_em == &Cm) && (C_en == &Cn)) {
     return make_sentinel_pair();
   }
@@ -346,7 +361,7 @@ inline void periodic_interupt_check(int num, int factor) {
   }
 }
 
-// [[Rcpp::export]]
+// Not exported because it causes an infinite loop atm :/
 Rcpp::List circle_layout(
   std::vector<double> input_rad_vec,
   Rcpp::NumericVector centroid,
@@ -358,13 +373,15 @@ Rcpp::List circle_layout(
   if (progbar) {progress_bar(0, 1);}
   int num_circles = input_rad_vec.size();
   
+  // if ORDER, decreasing sort of input_rad_vec
   if (ORDER && (num_circles > 1)) {
     std::sort(all(input_rad_vec), std::greater<int>());
   }
   
-  std::vector<Node> circles;
+  // initialize list of circle nodes with radii
+  std::vector<Node> circles (num_circles);
   for (int i = 0; i < num_circles; i++) {
-    circles.push_back(Node(0, 0, input_rad_vec[i]));
+    circles[i] = Node(0, 0, input_rad_vec[i]);
   }
   
   if (is_degenerate_case(num_circles)) {
@@ -380,31 +397,37 @@ Rcpp::List circle_layout(
   
   // loop through the remaining circles, fitting them
   int j = 3;
-  Node curr_circ = Node(0, 0, 0);
   int interupt_check_modulo = int(std::round(num_circles * 0.1));
   
-  // heres the infinite loop problem location
   while (j < num_circles) {
+    Rcpp::Rcout << "\nloop " << j << "\n";
+    
     periodic_interupt_check(j, interupt_check_modulo);
+    Node& curr_circ = circles[j];
+    Rcpp::Rcout << "curr_circ done, preplacement\n";
     if (try_place) {
-      curr_circ = closest_place(circles[j - 1], circles[j]);
+      curr_circ = closest_place(circles[j-1], circles[j]);
     } else {
-      curr_circ = closest(circles[j - 1]);
+      curr_circ = closest(circles[j-1]);
     }
+    Rcpp::Rcout << "placed\n";
     
     // fit circle, check for overlap, and refit till condition satisfied
-    fit_tang_circle(curr_circ, *(curr_circ.nxt), circles[j]);
+    Node& nxt_circ = *(curr_circ.nxt);
+    fit_tang_circle(curr_circ, nxt_circ, circles[j]);
     
-    Rcpp::Rcout << "iteration " << j << " pre-check done\n";
-    
+    // seems like the problem is actually here in overlap_check??? But sometimes not??
+    Rcpp::Rcout << "pre-overlap_check done\n";
+
+    // need to add a test in overlap_check :/
     std::pair<Node*, Node*> check = overlap_check(
-      curr_circ, *(curr_circ.nxt), circles[j]
+      curr_circ, nxt_circ, circles[j]
     );
     
     Rcpp::Rcout << "initial overlap_check done\n";
     
     if (is_clear(check)) {
-      insert_circle(curr_circ, *(curr_circ.nxt), circles[j]);
+      insert_circle(curr_circ, nxt_circ, circles[j]);
       j++;
       periodic_interupt_check(j, interupt_check_modulo);
       if (progbar && (j <= num_circles)) {
@@ -412,10 +435,13 @@ Rcpp::List circle_layout(
       }
     } else {
       while (!is_clear(check)) {
-        Node& Cm = *(check.first), Cn = *(check.second);
+        Node& Cm = *(check.first);
+        Node& Cn = *(check.second);
+        
         fwd_remove(Cm, Cn);
         fit_tang_circle(Cm, Cn, circles[j]);
         check = overlap_check(Cm, Cn, circles[j]);
+        
         if (is_clear(check)) {
           insert_circle(Cm, Cn, circles[j]);
           j++;
