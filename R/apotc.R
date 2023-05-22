@@ -52,17 +52,47 @@ initialize_apotc <- function(
 # run all the packing algorithms and modify the apotc object
 # should be ran after initialize_apotc
 run_packing_algos <- function(
-  apotc_obj, integrated_seurat_obj,
+  apotc_obj, integrated_seurat_obj, clone_scale_factor,
   rad_scale_factor = 1, ORDER = TRUE,
-  try_place = FALSE, verbose = TRUE
+  try_place = FALSE, verbose = TRUE,
+  repulse = FALSE,
+  repulsion_threshold = 1,
+  repulsion_strength = 1,
+  max_repulsion_iter = 10
 ) {
   apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
-  apotc_obj@centroids <- get_cluster_centroids(integrated_seurat_obj)
-  #apotc_obj <- pack_clonal_clusters(
-  #  apotc_obj, integrated_seurat_obj,
-  #  rad_scale_factor, ORDER,
-  #  try_place, verbose
-  #)
+  initial_centroids <- get_cluster_centroids(integrated_seurat_obj)
+  
+  packed_clusters <- pack_into_clusterlists(
+    multiply_all(
+      apotc_obj@clone_sizes, apotc_obj@num_clusters, clone_scale_factor
+    ),
+    initial_centroids,
+    apotc_obj@num_clusters,
+    rad_scale_factor,
+    ORDER,
+    try_place,
+    verbose
+  )
+  
+  if (repulse) {
+    if(verbose){
+      message(
+        paste("\nrepulsing all clusters | max iterations =", max_repulsion_iter)
+      )
+    }
+    packed_clusters <- repulse_cluster(
+      packed_clusters, repulsion_threshold, repulsion_strength,
+      max_repulsion_iter, verbose
+    )
+    initial_centroids <- read_centroids(
+      packed_clusters, initial_centroids, apotc_obj@num_clusters
+    )
+  }
+  
+  apotc_obj@clusters <- packed_clusters
+  apotc_obj@centroids <- initial_centroids
+  
   apotc_obj
 }
 
@@ -72,6 +102,7 @@ combined_obj <- function(seurat_obj, apotc_obj) {
   seurat_obj
 }
 
+# function to imitate RunUMAP
 RunAPOTC <- function(
   seurat_obj,
   tcr_df = "seurat_obj_already_integrated",
@@ -81,10 +112,13 @@ RunAPOTC <- function(
   ORDER = TRUE,
   try_place = FALSE,
   verbose = TRUE,
-  repulse = FALSE, # repulsion args should also be in 
+  repulse = FALSE, 
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 10) {
+  
+  # add seurat command
+  seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command()
   
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction_base]])) {
@@ -97,7 +131,7 @@ RunAPOTC <- function(
     warning("Repulsion iteration count > 1000, consider reducing max_repulsion_iter if runtime is too long")
   }
   
-  # integrate TCR
+  # integrate TCR - in future remake to be compatible with scRepertoire
   if (is.data.frame(tcr_df)) {
     seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
   }
@@ -112,13 +146,11 @@ RunAPOTC <- function(
   
   # run all packing algos 
   apotc_obj <- run_packing_algos(
-    apotc_obj, seurat_obj, rad_scale_factor, ORDER, try_place, verbose
+    apotc_obj, seurat_obj, rad_scale_factor, ORDER, try_place, verbose,
+    repulse, repulsion_threshold, repulsion_strength, max_repulsion_iter
   )
-  
-  # put the tuning function api here for legends and stuff
-  
-  # add the finished apotc object to reductions and return
-  combined_obj(seurat_obj, apotc_obj)
-}
 
-# not sure if its the best in this script, but need some tune_params() function 
+  # add the finished apotc object to reductions and return
+  seurat_obj <- combined_obj(seurat_obj, apotc_obj)
+  seurat_obj
+}

@@ -23,6 +23,14 @@ isnt_empty_nor_na <- function(inp) {
   isnt_empty(inp) && isnt_na(inp)
 }
 
+# multiply all numeric vectors in a list by a scale factor
+multiply_all <- function(inp, n, num) {
+  for (i in 1:n) {
+    inp[[i]] <- inp[[i]] * num
+  }
+  inp
+}
+
 #load_packages <- function(...) {
 #  packages <- list(...)
 #  n <- length(packages)

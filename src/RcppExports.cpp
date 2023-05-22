@@ -76,20 +76,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// do_proceed
-bool do_proceed(Rcpp::List inp, int i, int j, double thr);
-RcppExport SEXP _APackOfTheClones_do_proceed(SEXP inpSEXP, SEXP iSEXP, SEXP jSEXP, SEXP thrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type inp(inpSEXP);
-    Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    Rcpp::traits::input_parameter< int >::type j(jSEXP);
-    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
-    rcpp_result_gen = Rcpp::wrap(do_proceed(inp, i, j, thr));
-    return rcpp_result_gen;
-END_RCPP
-}
 // calculate_transformation_vectors
 Rcpp::List calculate_transformation_vectors(Rcpp::List transformation_vectors, Rcpp::List overall_repulsion_vec, int num_clusters);
 RcppExport SEXP _APackOfTheClones_calculate_transformation_vectors(SEXP transformation_vectorsSEXP, SEXP overall_repulsion_vecSEXP, SEXP num_clustersSEXP) {
@@ -112,7 +98,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},
-    {"_APackOfTheClones_do_proceed", (DL_FUNC) &_APackOfTheClones_do_proceed, 4},
     {"_APackOfTheClones_calculate_transformation_vectors", (DL_FUNC) &_APackOfTheClones_calculate_transformation_vectors, 3},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

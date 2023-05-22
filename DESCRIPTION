@@ -33,6 +33,7 @@ Imports:
     Rcpp,
     rlang,
     Seurat,
+    SeuratObject,
     stats,
     utils
 RoxygenNote: 7.2.3

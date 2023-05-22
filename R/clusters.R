@@ -71,6 +71,18 @@ move_cluster <- function(cluster, new_coord) {
   cluster[[4]] <- new_coord
   cluster
 }
-  
-# it might also be a nicer idea to create a class "Cluster" and have these to be member functions instead
-# but its probably too late as everything operates on clusterlists now.
+
+# function to GET a list of centroids from a list of clusterlists - needs tests
+read_centroids <- function(
+  list_of_clusterlists, initial_centroids, num_clusters
+) {
+  centroids <- vector("list", num_clusters)
+  for (i in 1:num_clusters) {
+    if (isnt_empty(list_of_clusterlists[[i]])) {
+      centroids[[i]] <- list_of_clusterlists[[i]][[4]]
+    }else {
+      centroids[[i]] <- initial_centroids[[i]]
+    }
+  }
+  centroids
+}

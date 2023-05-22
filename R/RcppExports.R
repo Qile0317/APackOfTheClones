@@ -21,10 +21,6 @@ do_cluster_intersect <- function(Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, t
     .Call(`_APackOfTheClones_do_cluster_intersect`, Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, thr)
 }
 
-do_proceed <- function(inp, i, j, thr) {
-    .Call(`_APackOfTheClones_do_proceed`, inp, i, j, thr)
-}
-
 calculate_transformation_vectors <- function(transformation_vectors, overall_repulsion_vec, num_clusters) {
     .Call(`_APackOfTheClones_calculate_transformation_vectors`, transformation_vectors, overall_repulsion_vec, num_clusters)
 }
