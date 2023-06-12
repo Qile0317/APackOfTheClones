@@ -1,7 +1,5 @@
 #The API functions for generating the ggplot
 
-#load_packages("dplyr", "data.table", "utils", "ggplot2", "ggforce")
-
 #full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
 df_full_join <- function(clstr_list) {
   df <- data.frame(
@@ -92,7 +90,6 @@ plot_API <- function(
   debug_mode = FALSE
 ) {
   
-  # is this wrong then?????? 
   ans <- pack_into_clusterlists(
     sizes, centroids, num_clusters, rad_decrease, ORDER, try_place, progbar
   )

@@ -22,10 +22,10 @@ everytime the plotting function is called. but it wont be slow probably}
 leave it named}
 
 \item{\code{clone_scale_factor}}{scale factor to multiply `clone_sizes` by when
-running the clonal expansion plotting algorithmd}
+running the clonal expansion plotting algorithms}
 
-\item{\code{rad_scale_factor}}{scale factor to multiply the radii in clusterlis  ts by
-after they have all been computed to incr ease spacing between circles. Might
+\item{\code{rad_scale_factor}}{scale factor to multiply the radii in clusterlists by
+after they have all been computed to increase spacing between circles. Might
 also be better in the future to instead just have a number to subtract :/}
 
 \item{\code{cluster_colors}}{character vector indicating coloration of each cluster}

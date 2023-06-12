@@ -136,3 +136,5 @@ RunAPOTC <- function(
   if (verbose) {print_completion_time(call_time)}
   seurat_obj
 }
+
+# need functions for readjusting the apotc reduction for better visuals

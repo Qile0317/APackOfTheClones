@@ -33,6 +33,29 @@ insert_colors <- function(cluster_dataframe, num_clusters) {
   return(cluster_dataframe %>% dplyr::mutate("color" = color_vec))
 }
 
+# new version that simply takes the readily existing colors in an seurat
+# object, and adds the colors to the dataframe
+
+# pair colors to hashmap
+pair_colors_to_hash <- function(seurat_obj) {
+  color_vec <- seurat_obj@reductions[["apotc"]]@cluster_colors
+  output <- hash::hash()
+  for (i in 1:seurat_obj@reductions[["apotc"]]@num_clusters) {
+    cluster_str <- paste("cluster", as.character(i-1))
+    output[cluster_str] <- color_vec[i]
+  }
+  output
+}
+
+extract_and_add_colors <- function(seurat_obj, plot_df) {
+  color_hashmap <- pair_colors_to_hash(seurat_obj)
+  color_vec <- plot_df[[1]] # 1 is label
+  for (i in 1:length(color_vec)) {
+    color_vec[i] <- color_hashmap[[color_vec[i]]]
+  }
+  plot_df %>% dplyr::mutate("color" = color_vec)
+}
+
 # in the future should probably make a fake ggplot cluster legend on the right
 # side by inserting scatterplt points? (like in the seurat UMPA plot) But also, 
 # the problem is that it becomes inconsistent with the clone size legend :/

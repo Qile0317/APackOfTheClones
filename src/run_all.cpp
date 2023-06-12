@@ -30,10 +30,10 @@ double estimate_rad(
 }
 
 // function scripts
-#include "utils.hpp"
-#include "get_clone_sizes.hpp"
-#include "circle_layout.hpp"
-#include "repulsion.hpp"
+#include "utils.h"
+#include "get_clone_sizes.h"
+#include "circle_layout.h"
+#include "repulsion.h"
 
 // test scripts for testthat
 #include "tests/test-utils.hpp"
