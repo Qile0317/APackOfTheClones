@@ -23,7 +23,7 @@ class Node {
         && (nxt == other.nxt);
     }
   
-  private:
+  private: // for debugging
     friend std::ostream& operator<<(std::ostream& os, Node& node) {
       os << "x: " << node.x << ", y: " << node.y << ", rad: " << node.rad;
       return os;
@@ -105,9 +105,9 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   
   double r = C3.rad;
   double distance = sqrt(sqr(x1 - x2) + sqr(y1 - y2));
-  double invdist = 1/distance; // could use the fast inverse square root here
+  double invdist = 1/distance;
   
-  if (distance > (r1 + r2 + r + r)) {
+  if (distance > (r1 + r2 + r + r)) { // probably not needed
     Rcpp::stop("Gap too large.");
   }
   
@@ -116,8 +116,8 @@ Node& fit_tang_circle(Node& C1, Node& C2, Node& C3) {
   double cos_gam = (sqr(distance)+sqr(r+r1) - sqr(r+r2)) * 0.5*invdist / (r+r1);
   double sin_gam = sqrt(1 - sqr(cos_gam));
   
-  C3.x = x1 + (r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam);
-  C3.y = y1 + (r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam);
+  C3.x = x1 + ((r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam));
+  C3.y = y1 + ((r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam));
   return C3;
 }
 
@@ -207,30 +207,25 @@ bool is_clear(std::pair<Node*, Node*>& inp) {
 // overlap check of three circles and returns either a vector of two pointers
 // or the sentinel node pair if check is "clear"
 // Problem: assumes valid inputs where iterating over Cn will actually get to Cm
-// will be infinite loop if not
+// will be infinite loop if not. Right now in fit_circle, the initialized nodes
+// are all linked infinitely. I dont understand how this is not the case
+// in the R version of the code.
 std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
   Node* C_em = &Cm;
   Node* C_en = &Cn;
   std::vector<Node*> obstruct;
   
-  Rcpp::Rcout << "overlap check: initialized vars, starting while loop of death\n";
   // collect circles that C intersects (if any) by adding intersectors to 'obstruct'
   Node* circ = Cn.nxt;
-  Rcpp::Rcout << "starting circ: " << circ << " C_em: " << C_em << "\n";
   while (circ != C_em) {
-    Rcpp::checkUserInterrupt();
-    Rcpp::Rcout << "-------------------------\ncirc: " << circ << "\ncirc.nxt: " << circ->nxt << "\n";
-
+    //Rcpp::checkUserInterrupt();
     Node& curr_circ = *(circ);
-    Rcpp::Rcout << "intersect with C?: " << do_intersect(curr_circ, C) << "\n";
     if (do_intersect(curr_circ, C)) {
       obstruct.push_back(circ);
       Rcpp::Rcout << obstruct.size() << "\n";
     }
     circ = circ->nxt;
   }
-  
-  Rcpp::Rcout << "obstruct list construction complete\n";
   
   // find the one closest to {Cm, Cn}, (distance is in number of steps)
   int n = obstruct.size(); 
@@ -249,7 +244,6 @@ std::pair<Node*, Node*> overlap_check(Node& Cm, Node& Cn, Node& C) {
       C_em = &nearest;
     }
   }
-  Rcpp::Rcout << "pretty much done\n";
   if ((C_em == &Cm) && (C_en == &Cn)) {
     return make_sentinel_pair();
   }
@@ -263,13 +257,11 @@ bool is_degenerate_case(int n) {
   return res;
 }
 
-// needs testing
 Rcpp::List handle_degenerate_cases(
-    int lenCirc,
-    std::vector<Node>& circles, // not sure if node should be referenced
-    Rcpp::NumericVector& centroid,
-    double rad_scale_factor,
-    bool verbose
+  int lenCirc,
+  std::vector<Node>& circles, // not sure if node should be referenced
+  Rcpp::NumericVector& centroid,
+  double rad_scale_factor
 ) {
   Rcpp::NumericVector x, y, r;
   double clrad;
@@ -287,7 +279,7 @@ Rcpp::List handle_degenerate_cases(
         };
     clrad = 0.5 * (r[0] + r[1]);
   }
-  if (verbose) {progress_bar(1, 1);}
+  
   return Rcpp::List::create(
     _["x"] = x, _["y"] = y, _["rad"] = r,
     _["centroid"] = centroid, _["clRad"] = clrad
@@ -330,25 +322,6 @@ int fit_circle(
   return j;
 }
 
-// this can be removed soon as its been accounted for in the subsequent function
-// [[Rcpp::export]]
-double estimate_rad(
-    std::vector<double> x_vals,
-    std::vector<double> rad_vals,
-    double centroid_x
-) {
-  double max_x = 0;
-  int max_ind = 0, n = x_vals.size();
-  for (int i = 0; i < n; i++) {
-    if (x_vals[i] > max_x) {
-      max_x = x_vals[i];
-      max_ind += i - max_ind;
-    }
-  }
-  double result_num = max_x + rad_vals[max_ind] - centroid_x;
-  return result_num;
-}
-
 // return the R list from a packed vector of circles for at least 3 circles
 Rcpp::List process_into_clusterlist(
     std::vector<Node>& circles,
@@ -363,26 +336,20 @@ Rcpp::List process_into_clusterlist(
   int max_x_index = 0;
   
   for (int i = 0; i < num_circles; i++) {
-    if (do_shift_x) {
-      x[i] = circles[i].x + centroid[0];
-    } else {
-      x[i] = circles[i].x;
-    }
-    if (x[i] > x[max_x_index]) {
-      max_x_index = i;
-    }
-    if (do_shift_y) {
-      y[i] = circles[i].y + centroid[1];
-    } else {
-      y[i] = circles[i].y;
-    }
-    if (do_scale_rad) {
-      rad[i] = circles[i].rad * rad_scale_factor;
-    } else {
-      rad[i] = circles[i].rad;
-    }
+    x[i] = circles[i].x;
+    y[i] = circles[i].y;
+    rad[i] = circles[i].rad;
+    
+    if (do_shift_x) {x[i] += centroid[0];}
+    if (do_shift_y) {y[i] += centroid[1];}
+    if (do_scale_rad) {rad[i] *= rad_scale_factor;}
+    if (x[i] > x[max_x_index]) {max_x_index = i;}
   }
-  double clRad = x[max_x_index] + (rad[max_x_index]/rad_scale_factor);
+  
+  // estimate cluster radius based on the max x coordinate
+  double clRad = x[max_x_index]+(rad[max_x_index]/rad_scale_factor)-centroid[0];
+
+  // return the finished list
   if (progbar) {progress_bar(1, 1);}
   return Rcpp::List::create(
     _["x"] = x, _["y"] = y, _["rad"] = rad, _["centroid"] = centroid,
@@ -390,7 +357,34 @@ Rcpp::List process_into_clusterlist(
   );
 }
 
-// Not exported because it causes an infinite loop atm :/
+// functions to fit the rest of the circles in the node vector
+void fit_all_circles(
+  int num_circles, std::vector<Node>& circles, bool try_place, bool progbar
+) {
+  int j = 3;
+  int interupt_factor = int(std::round(num_circles * 0.1));
+  
+  while (j < num_circles) {
+    periodic_interupt_check(j, interupt_factor);
+    Node& curr_circ = circles[j];
+    if (try_place) {
+      curr_circ = closest_place(circles[j-1], circles[j]);
+    } else {
+      curr_circ = closest(circles[j-1]);
+    }
+
+    // fit circle, check for overlap, and refit till condition satisfied
+    Node& nxt_circ = *(curr_circ.nxt);
+    fit_tang_circle(curr_circ, nxt_circ, circles[j]);
+    
+    // check for overlaps and update, refit, and recheck until clear.
+    j = fit_circle(
+      curr_circ, nxt_circ, circles, j, interupt_factor, progbar, num_circles
+    );
+  }
+}
+
+// Not exported because it causes an infinite loop atm for more than 3 circles
 Rcpp::List circle_layout(
   std::vector<double> input_rad_vec,
   Rcpp::NumericVector centroid,
@@ -399,6 +393,7 @@ Rcpp::List circle_layout(
   bool try_place = false,
   bool progbar = true
 ) {
+  
   if (progbar) {progress_bar(0, 1);}
   int num_circles = input_rad_vec.size();
   
@@ -414,49 +409,20 @@ Rcpp::List circle_layout(
   }
   
   if (is_degenerate_case(num_circles)) {
+    if (progbar) {progress_bar(1, 1);}
     return handle_degenerate_cases(
-      num_circles, circles, centroid, rad_scale_factor, progbar
+      num_circles, circles, centroid, rad_scale_factor
     );
   }
   
-  // Place the first three circles to be mutually tangent,
-  // with centroid at the origin, and link the nodes
+  // Place the first three circles to be mutually tangent, with centroid at the
+  // origin, and link the nodes. Finally,  loop through the remaining circles,
+  // fitting them
   place_starting_three(circles[0], circles[1], circles[2]);
   init_boundary({&circles[0], &circles[1], &circles[2]});
+  fit_all_circles(num_circles, circles, try_place, progbar);
   
-  // loop through the remaining circles, fitting them
-  int j = 3;
-  int interupt_factor = int(std::round(num_circles * 0.1));
-  
-  while (j < num_circles) {
-    Rcpp::Rcout << "\nloop " << j << "\n";
-    
-    periodic_interupt_check(j, interupt_factor);
-    Node& curr_circ = circles[j];
-    Rcpp::Rcout << "curr_circ done, preplacement\n";
-    if (try_place) {
-      curr_circ = closest_place(circles[j-1], circles[j]);
-    } else {
-      curr_circ = closest(circles[j-1]);
-    }
-    Rcpp::Rcout << "placed\n";
-    
-    // fit circle, check for overlap, and refit till condition satisfied
-    Node& nxt_circ = *(curr_circ.nxt);
-    fit_tang_circle(curr_circ, nxt_circ, circles[j]);
-    
-    // seems like the problem is actually here in overlap_check??? But sometimes not??
-    Rcpp::Rcout << "pre-overlap_check done\n";
-
-    // check for overlaps and update, refit, and recheck until clear.
-    j = fit_circle(
-      curr_circ, nxt_circ, circles, j, interupt_factor, progbar, num_circles
-    );
-  }
   return process_into_clusterlist(
     circles, centroid, rad_scale_factor, num_circles, progbar
   );
 }
-
-// I wonder whats the best practisce for these "intermediate functions". Maybe
-// pass an input class around? But thats a bit clunky it feels like.

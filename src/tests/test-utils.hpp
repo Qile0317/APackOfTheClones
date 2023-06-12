@@ -1,4 +1,4 @@
-context("Cpp utils") {
+context("C++ utils") {
   test_that("sqr works") {
     expect_true(sqr(-5) == 25);
     expect_true(sqr(12) == 144);
@@ -13,7 +13,7 @@ context("Cpp utils") {
   
   test_that("elements_are_equal works") {
     Rcpp::NumericVector v1 = {1,2,3};
-    Rcpp::NumericVector v2= {1,2,3};
+    Rcpp::NumericVector v2 = {1,2,3};
     expect_true(elements_are_equal(v1, v2));
     
     v2 = {1.1,2.1,3.1};

@@ -11,9 +11,9 @@
 #' @slot clone_sizes the original unscaled clone sizes. Not sure if I should
 #' leave it named
 #' @slot clone_scale_factor scale factor to multiply `clone_sizes` by when
-#' running the clonal expansion plotting algorithmd
-#' @slot rad_scale_factor scale factor to multiply the radii in clusterlis  ts by
-#' after they have all been computed to incr ease spacing between circles. Might
+#' running the clonal expansion plotting algorithms
+#' @slot rad_scale_factor scale factor to multiply the radii in clusterlists by
+#' after they have all been computed to increase spacing between circles. Might
 #' also be better in the future to instead just have a number to subtract :/
 #' @slot cluster_colors character vector indicating coloration of each cluster
 #'
@@ -49,59 +49,6 @@ initialize_apotc <- function(
   )
 }
 
-# run all the packing algorithms and modify the apotc object
-# should be ran after initialize_apotc
-run_packing_algos <- function(
-  apotc_obj, integrated_seurat_obj, clone_scale_factor,
-  rad_scale_factor = 1, ORDER = TRUE,
-  try_place = FALSE, verbose = TRUE,
-  repulse = FALSE,
-  repulsion_threshold = 1,
-  repulsion_strength = 1,
-  max_repulsion_iter = 10
-) {
-  apotc_obj <- add_raw_clone_sizes(apotc_obj, integrated_seurat_obj)
-  initial_centroids <- get_cluster_centroids(integrated_seurat_obj)
-  
-  packed_clusters <- pack_into_clusterlists(
-    multiply_all(
-      apotc_obj@clone_sizes, apotc_obj@num_clusters, clone_scale_factor
-    ),
-    initial_centroids,
-    apotc_obj@num_clusters,
-    rad_scale_factor,
-    ORDER,
-    try_place,
-    verbose
-  )
-  
-  if (repulse) {
-    if(verbose){
-      message(
-        paste("\nrepulsing all clusters | max iterations =", max_repulsion_iter)
-      )
-    }
-    packed_clusters <- repulse_cluster(
-      packed_clusters, repulsion_threshold, repulsion_strength,
-      max_repulsion_iter, verbose
-    )
-    initial_centroids <- read_centroids(
-      packed_clusters, initial_centroids, apotc_obj@num_clusters
-    )
-  }
-  
-  apotc_obj@clusters <- packed_clusters
-  apotc_obj@centroids <- initial_centroids
-  
-  apotc_obj
-}
-
-# alias to add the apotc object to the seurat obj for readability
-combined_obj <- function(seurat_obj, apotc_obj) {
-  seurat_obj@reductions[['apotc']] <- apotc_obj
-  seurat_obj
-}
-
 # function to imitate RunUMAP
 RunAPOTC <- function(
   seurat_obj,
@@ -115,10 +62,10 @@ RunAPOTC <- function(
   repulse = FALSE, 
   repulsion_threshold = 1,
   repulsion_strength = 1,
-  max_repulsion_iter = 10) {
-  
-  # add seurat command
-  seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command()
+  max_repulsion_iter = 10
+) {
+  # call time for seurat commands
+  call_time = Sys.time()
   
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction_base]])) {
@@ -131,26 +78,61 @@ RunAPOTC <- function(
     warning("Repulsion iteration count > 1000, consider reducing max_repulsion_iter if runtime is too long")
   }
   
+  if (verbose) {message("Initializing APOTC run")}
+  
   # integrate TCR - in future remake to be compatible with scRepertoire
   if (is.data.frame(tcr_df)) {
-    seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
+    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
   }
   
-  # get number of seurat clusters
-  num_clusters <- get_num_clusters(seurat_obj)
-  
+  # add seurat command
+  seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)
+
   # initialize apotc S4 class
   apotc_obj <- initialize_apotc(
-    num_clusters, clone_scale_factor, rad_scale_factor
+    num_clusters = get_num_clusters(seurat_obj),
+    clone_scale_factor,
+    rad_scale_factor
   )
   
-  # run all packing algos 
-  apotc_obj <- run_packing_algos(
-    apotc_obj, seurat_obj, rad_scale_factor, ORDER, try_place, verbose,
-    repulse, repulsion_threshold, repulsion_strength, max_repulsion_iter
+  # infer clone sizes and centroids
+  apotc_obj <- add_raw_clone_sizes(apotc_obj, seurat_obj)
+  initial_centroids <- get_cluster_centroids(
+    seurat_obj, reduction = reduction_base
   )
+  
+  # use circle_layout to pack all clones into clusterlists
+  packed_clusters <- pack_into_clusterlists(
+    sizes = get_processed_clone_sizes(apotc_obj),
+    centroids = initial_centroids,
+    num_clusters = apotc_obj@num_clusters,
+    rad_scale = rad_scale_factor,
+    ORDER = ORDER,
+    try_place = try_place,
+    verbose = verbose
+  )
+  
+  if (repulse) {
+    if(verbose){
+      message(paste(
+        "\nrepulsing all clusters | max iterations =", max_repulsion_iter
+      ))
+    }
+    packed_clusters <- repulse_cluster(
+      packed_clusters, repulsion_threshold, repulsion_strength,
+      max_repulsion_iter, verbose
+    )
+    initial_centroids <- read_centroids(
+      packed_clusters, initial_centroids, apotc_obj@num_clusters
+    )
+  }
+  
+  # add the clusterlists and centroids to the obj
+  apotc_obj@clusters <- packed_clusters
+  apotc_obj@centroids <- initial_centroids
 
-  # add the finished apotc object to reductions and return
-  seurat_obj <- combined_obj(seurat_obj, apotc_obj)
+  # add the finished apotc object to reductions, print message, and return
+  seurat_obj@reductions[['apotc']] <- apotc_obj
+  if (verbose) {print_completion_time(call_time)}
   seurat_obj
 }

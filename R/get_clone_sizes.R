@@ -1,18 +1,36 @@
-# inefficient counting of raw clonotype sizes, and adding
-# it to the apotc object. needs testing
+# inefficient counting of raw clonotype sizes, and adding it to the apotc
+# object. works but needs testing
 add_raw_clone_sizes <- function(apotc_obj, integrated_seurat_obj) {
   df <- data.frame(
     "clusters" = integrated_seurat_obj@meta.data[["seurat_clusters"]],
     "clonotype_ids" = integrated_seurat_obj@meta.data[["raw_clonotype_id"]]
   )
   # aggregate the raw counts
-  freq_df <- aggregate(clonotype_ids ~ clusters, data = df, function(x) table(x))
+  freq_df <- aggregate(clonotype_ids ~ clusters, df, function(x) table(x))
   
-  # make the counts numeric vectors
+  # add the tabled counts, purposefully not modifying them
+  cluster_indicies <- as.numeric(freq_df[[1]]) # converts to one based indexing!
+  num_valid_clusters <- length(cluster_indicies)
+  index <- 1
   for (i in 1:apotc_obj@num_clusters) {
-    apotc_obj@clone_sizes[[freq_df[[1]][i]]] <- as.numeric(freq_df[[2]][[i]])
+    if (index > num_valid_clusters) {break}
+    if (i == cluster_indicies[index]) {
+      apotc_obj@clone_sizes[[i]] <- freq_df[[2]][index]
+      index <- index + 1
+    }
   }
   apotc_obj
+}
+
+# multiply all tables in a raw clonotype freq list by a scale factor and sqrt
+get_processed_clone_sizes <- function(apotc_obj) {
+  raw_tabled_clone_sizes <- apotc_obj@clone_sizes
+  processed_sizes <- vector("list", apotc_obj@num_clusters)
+  for (i in 1:apotc_obj@num_clusters) {
+    processed_sizes[[i]] <- sqrt(as.numeric(raw_tabled_clone_sizes[[i]][[1]])) *
+      apotc_obj@clone_scale_factor
+  }
+  processed_sizes
 }
 
 # memory and speed inefficient counting of clonotypes within each cluster,
@@ -34,7 +52,7 @@ get_clone_sizes <- function(integrated_seurat_obj, scale_factor = 0.001) {
   freq
 }
 
-#' count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library
+#' count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library (will be deprecated soon)
 #' 
 #' @param integrated_seurat_obj Seurat object that has been integrated with a T-cell receptor library with \code{\link{integrate_tcr}}. More specifically, in the metadata, there must at least be the elements `seurat_clusters` and `raw_clonotype_id`
 #' 

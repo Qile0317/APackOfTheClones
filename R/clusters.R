@@ -36,7 +36,7 @@ find_centroids <- function(df, return_mode = "list") { # or "df"
   return(list_output)
 }
 
-# get reduction centroids from seurat obj
+# get reduction centroids from seurat obj, could be tsne and pca too
 get_cluster_centroids <- function(seurat_obj, reduction = "umap") {
   find_centroids(
     data.frame(

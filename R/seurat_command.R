@@ -1,5 +1,5 @@
 # script for the function to add the APOTC command records to seurat objects
-# when running RunAPOTC
+# Is copied from SeuratObject R/command.R script, under the MIT license
 
 seurat_extractfield <- function(string, field = 1, delim = "_") {
   fields <- as.numeric(
@@ -13,8 +13,11 @@ seurat_extractfield <- function(string, field = 1, delim = "_") {
   ))
 }
 
-make_apotc_command <- function() {
-  call_time <- Sys.time()
+make_apotc_command <- function(call_time = "auto") {
+  if (identical(call_time, "auto")) {
+    call_time <- Sys.time()
+  }
+  
   if (as.character(x = sys.calls()[[1]])[1] == "do.call") {
     call_string <- deparse(expr = sys.calls()[[1]])
     command_name <- as.character(x = sys.calls()[[1]])[2]
@@ -75,8 +78,9 @@ make_apotc_command <- function() {
   command_name <- sub(
     pattern = "\\.\\.", replacement = "\\.", x = command_name, perl = TRUE
   )
+  
   # return the command object
-  new(
+  methods::new(
     Class = 'SeuratCommand',
     name = command_name,
     params = params,

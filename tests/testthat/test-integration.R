@@ -3,7 +3,7 @@ source("testdata/SCIP.R")
 test_that("integrate_tcr() works", {
   capture_output(
     integration_attempt <- suppressMessages(
-      integrate_tcr(test_pbmc, test_tcr)
+      dev_integrate_tcr(test_pbmc, test_tcr, TRUE, FALSE)
     )
   )
   expect_identical(
@@ -14,7 +14,7 @@ test_that("integrate_tcr() works", {
 
 test_that("integrate_tcr() works with verbose = FALSE", {
   expect_identical(
-    integrate_tcr(test_pbmc, test_tcr, verbose = FALSE),
+    dev_integrate_tcr(test_pbmc, test_tcr, verbose = FALSE, FALSE),
     test_integrated_pbmc
   )
 })

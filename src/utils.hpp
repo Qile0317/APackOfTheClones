@@ -1,6 +1,6 @@
 using Llui = long long unsigned int;
 using Rcpp::_; // for overlap_check
-using Rvec = Rcpp::Nullable<Rcpp::NumericVector>; // for repulsion
+using Rvec = Rcpp::Nullable<Rcpp::NumericVector>;
 
 #define all(x) (x).begin(), (x).end()
 

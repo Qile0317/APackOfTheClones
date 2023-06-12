@@ -1,4 +1,4 @@
-context("Cpp repulsion functions") {
+context("C++ repulsion") {
   test_that("neg_dir_vec works") {
     expect_true(1==1); // unfinished
   }

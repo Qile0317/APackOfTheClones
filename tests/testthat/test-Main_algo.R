@@ -115,7 +115,7 @@ test_that("circle_layout(rad_decrease = 0.9) works", {
   new_c1[[3]] <- c1[[3]] * 0.9
   expect_equal(circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
                              centroid = new_c1$centroid,
-                             rad_decrease = 0.9,
+                             rad_scale_factor = 0.9,
                              progbar = FALSE),
                new_c1,
                tolerance = 1)

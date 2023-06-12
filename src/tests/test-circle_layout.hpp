@@ -20,7 +20,7 @@ class Testdata {
     }
 };
 
-context("Cpp circle_layout functions") {
+context("C++ circle_layout") {
   test_that("init_boundary works") {
     Node c1 = Node(1, 2, 3);
     Node c2 = Node(6, 7, 8);
@@ -151,7 +151,7 @@ context("Cpp circle_layout functions") {
     expect_false(is_clear(false_pair));
   }
   
-  test_that("overlap_check works") {
+  test_that("overlap_check works for 5 connected nodes") {
     Testdata nodes = Testdata();
     std::pair<Node*, Node*> trial, expected;
     
@@ -167,6 +167,16 @@ context("Cpp circle_layout functions") {
     expect_true(is_clear(trial));
   }
   
+  test_that("overlap_check works for 3 connected nodes") {
+    Node n1 = Node(1,2,3), n2 = Node(6,7,8), n3 = Node(50,90,1);
+    init_boundary({&n1, &n2, &n3});
+    std::pair<Node*, Node*> trial, expected;
+    trial = overlap_check(n1, n2, n3);
+    
+    expected = std::make_pair(&n1, &n3);
+    expect_true(trial == expected);
+  }
+  
   test_that("is_degenerate_case works") {
     expect_true(is_degenerate_case(1));
     expect_true(is_degenerate_case(2));
@@ -178,7 +188,7 @@ context("Cpp circle_layout functions") {
     std::vector<Node> circles = {Node(0, 0, 69)};
     Rcpp::NumericVector centroid = {0, 0};
     Rcpp::List trial = handle_degenerate_cases(
-      1, circles, centroid, 1, false
+      1, circles, centroid, 1
     );
     Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
     Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
@@ -197,7 +207,7 @@ context("Cpp circle_layout functions") {
     circles = {Node(0, 0, 69)};
     centroid = {4, 5};
     trial = handle_degenerate_cases(
-      1, circles, centroid, 0.8, false
+      1, circles, centroid, 0.8
     );
     trial_x = trial[0], trial_y = trial[1], trial_rad = trial[2];
     trial_centroid = trial[3], trial_clRad = trial[4];
@@ -217,7 +227,7 @@ context("Cpp circle_layout functions") {
     std::vector<Node> circles = {Node(0, 0, 69), Node(0, 0, 420)};
     Rcpp::NumericVector centroid = {0, 0};
     Rcpp::List trial = handle_degenerate_cases(
-      2, circles, centroid, 1, false
+      2, circles, centroid, 1
     );
     Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
     Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
@@ -236,7 +246,7 @@ context("Cpp circle_layout functions") {
     circles = {Node(0, 0, 4), Node(0, 0, 3)};
     centroid = {1, 2};
     trial = handle_degenerate_cases(
-      2, circles, centroid, 0.8, false
+      2, circles, centroid, 0.8
     );
     trial_x = trial[0], trial_y = trial[1], trial_rad = trial[2];
     trial_centroid = trial[3], trial_clRad = trial[4];
@@ -253,9 +263,8 @@ context("Cpp circle_layout functions") {
 
   test_that("process_into_clusterlist works") {
     // create trial data, 5 circles, centroid (1,1), rad_scale_factor 0.8
-    Testdata circs = Testdata();
     std::vector<Node> circles = {
-      circs.c1, circs.c2, circs.c3, circs.c4, circs.c5
+      Node(1,2,3), Node(6,7,8), Node(50,90,1), Node(-1,-3,3), Node(-10,-69,4)
     };
     Rcpp::NumericVector centroid = {1, 1};
     Rcpp::List trial = process_into_clusterlist(
@@ -266,17 +275,36 @@ context("Cpp circle_layout functions") {
     double trial_clRad = trial[4];
     
     // test for equivalence to expected data
-    Rcpp::NumericVector x = {2, 7, 51, 0, -9}, y = {3, 8, 91, -2, -68};
+    Rcpp::NumericVector x = {2, 7, 51, 0, -9};
+    Rcpp::NumericVector y = {3, 8, 91, -2, -68};
     Rcpp::NumericVector rad = {2.4, 6.4, 0.8, 2.4, 3.2};
     
     expect_true(elements_are_equal(trial_x, x));
     expect_true(elements_are_equal(trial_y, y));
     expect_true(elements_are_equal(trial_rad, rad));
     expect_true(elements_are_equal(trial_centroid, centroid));
-    expect_true(approx_equal(trial_clRad, 52));
+    expect_true(approx_equal(trial_clRad, 51));
   }
   
-  // circle layout is tested in R
+  test_that("circle_layout for 3 circles works") {
+    Rcpp::NumericVector centroid = {4, 3};
+    Rcpp::List trial = circle_layout({6,9,2}, centroid, 1, true, false, false);
+    Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
+    Rcpp::NumericVector trial_rad = trial[2], trial_centroid = trial[3];
+    double trial_clRad = trial[4];
+    
+    Rcpp::NumericVector x = {-4.133333, 10.866667, 5.266667};
+    Rcpp::NumericVector y = {4.9043809, 4.9043809, -0.8087618};
+    Rcpp::NumericVector rad = {9, 6, 2};
+    
+    expect_true(elements_are_equal(trial_x, x));
+    expect_true(elements_are_equal(trial_y, y));
+    expect_true(elements_are_equal(trial_rad, rad));
+    expect_true(elements_are_equal(trial_centroid, centroid));
+    expect_true(approx_equal(trial_clRad, 12.86667));
+  }
+  
+  // circle layout needs to be tested more to avoid the infinite loop. Could also be done in R
 }
 
 // some of these tests should probably also test what happens to the pointers :/

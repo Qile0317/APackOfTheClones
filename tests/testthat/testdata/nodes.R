@@ -20,6 +20,7 @@ n5 <- node$new(val = list(
   "label" = "", "x" = -10, "y" = -69, "rad" = 4
 ))
 
+#init_boundary(list(n1,n2,n3))
 init_boundary(list(n1, n2, n3, n4, n5))
 
 #node1 <- node$new

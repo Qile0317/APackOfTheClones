@@ -38,8 +38,20 @@
 #' @references atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. `https://www.biostars.org/p/384640/`
 #'
 integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
+  time_called <- Sys.time()
+  dev_integrate_tcr(seurat_obj, tcr_file, verbose, TRUE, time_called)
+}
 
-  new_seurat_obj <- seurat_obj
+dev_integrate_tcr <- function(
+  seurat_obj, tcr_file, verbose, do_add_command, time_called = Sys.time()
+) {
+  
+  # this actually is kinda dumb, may need to write a custom function for this
+  # It defaults to litereally storing the entire tcr dataframe in the params
+  #if (do_add_command) {
+  #  seurat_obj@commands[["integrate_tcr"]] <- make_apotc_command(time_called)
+  #}
+  
   tcr <- data.table::as.data.table(tcr_file)
 
   # Prepare a progress bar to monitor progress (helpful for large aggregations)
@@ -75,17 +87,17 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
   # remove NA? - doesnt do anything
   tcr_collapsed <- na.omit(tcr_collapsed)
 
-  new_seurat_obj <- Seurat::AddMetaData(
-    new_seurat_obj,
+  seurat_obj <- Seurat::AddMetaData(
+    seurat_obj,
     metadata = tcr_collapsed
   )
   
   if (verbose) {
-    percent_integrated <- 100 - percent_na(new_seurat_obj)
+    percent_integrated <- 100 - percent_na(seurat_obj)
     message(paste("\nPercent of unique barcodes:", as.character(round(percent_integrated)), "%"))
   }
   
-  return(new_seurat_obj)
+  return(seurat_obj)
 }
 
 #' Alias to count the number of valid integrated TCR barcodes

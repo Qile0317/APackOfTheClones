@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_clone_sizes.R
 \name{count_clone_sizes}
 \alias{count_clone_sizes}
-\title{count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library}
+\title{count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library (will be deprecated soon)}
 \usage{
 count_clone_sizes(integrated_seurat_obj)
 }
@@ -13,7 +13,7 @@ count_clone_sizes(integrated_seurat_obj)
 Returns a list of `table` objects, where each element is tabled clonotype frequencies for the seurat cluster corresponding to the same index - 1. For example, the 5th element is a tabled frequency of counts that corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed). If an element is `NULL`, it indicates that there were no corresponding T-cell receptor barcode for the cells in the cluster.
 }
 \description{
-count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library
+count the number of clonotype sizes per cell cluster in a seurat object integrated with a TCR library (will be deprecated soon)
 }
 \examples{
 library(Seurat)

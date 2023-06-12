@@ -88,7 +88,10 @@ clonal_expansion_plot <- function(
   legend_position = "top_left",
   legend_buffer = 1.5,
   legend_color = "#808080",
-  legend_spacing = 0.4) {
+  legend_spacing = 0.4
+) {
+  # time called
+  time_called <- Sys.time()
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[["umap"]])) {stop("No UMAP reduction found on the seurat object")}
@@ -101,7 +104,7 @@ clonal_expansion_plot <- function(
 
   # integrate TCR and count clonotypes
   if (is.data.frame(tcr_df)) {
-    seurat_obj <- integrate_tcr(seurat_obj, tcr_df, verbose = verbose)
+    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, time_called)
   }
   
   clone_size_list <- get_clone_sizes(seurat_obj, scale_factor = clone_scale_factor)
@@ -140,7 +143,14 @@ clonal_expansion_plot <- function(
     result_plot <- suppressMessages(invisible(retain_scale(seurat_obj, result_plot)))
   }
   
-  if (verbose) {message("\nPlotting completed successfully")}
+  if (verbose) {
+    message(paste(
+      "\nPlotting completed successfully, time elapsed:",
+      round(as.numeric(Sys.time() - time_called), 2),
+      "seconds\n"
+    ))
+  }
+  
   if (add_size_legend) {
     return(insert_legend(
       plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
