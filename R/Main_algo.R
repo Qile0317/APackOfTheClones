@@ -220,7 +220,7 @@ overlap_check <- function(Cm, Cn, C) {
   if ((identical(C_em, Cm)) && (identical(C_en, Cn))) {
     return("clear")
   }
-  return(c(C_em, C_en))
+  c(C_em, C_en)
 }
 
 # handling of degenerate cases of 1 or 2 circles for circle layout
@@ -231,7 +231,9 @@ is_degenerate_case <- function(lenCirc) {
 handle_degenerate_cases <- function(
     lenCirc, circles, centroid, rad_scale, verbose
 ) {
-  if (verbose) {progress_bar(1,1)}
+  if (verbose) {
+    progress_bar(1, 1)
+  }
   if (lenCirc == 1) {
     return(list(
       "x" = circles[[1]]$val[[2]] + centroid[1],
@@ -247,7 +249,7 @@ handle_degenerate_cases <- function(
   circles[[1]]$val[[2]] <- -1 * (circles[[1]]$val[[6]])
   circles[[2]]$val[[2]] <- circles[[2]]$val[[6]]
   
-  return(list(
+  list(
     "x" = c(circles[[1]]$val[[2]], circles[[2]]$val[[2]]) + centroid[1],
     "y" = rep(centroid[2], 2),
     "rad" = c(circles[[1]]$val[[6]], circles[[2]]$val[[6]]) * rad_scale,
@@ -255,7 +257,7 @@ handle_degenerate_cases <- function(
     "clRad" = 0.5 * rad_scale * (
       circles[[1]]$val[[6]] + circles[[2]]$val[[6]]
     )
-  ))
+  )
 }
 
 # function to abstract the overlap checking and refitting process if an initial
@@ -421,7 +423,7 @@ pack_into_clusterlists <- function(
       if(verbose){
         message(paste("\npacking cluster", as.character(i-1)))
       }
-      output_list[[i]] <- circle_layout(
+      output_list[[i]] <- circle_layout( #
         sizes[[i]],
         centroid = centroids[[i]],
         rad_scale_factor = rad_scale,
