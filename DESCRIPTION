@@ -30,7 +30,6 @@ Imports:
     grDevices,
     hash,
     methods,
-    R6,
     Rcpp,
     rlang,
     Seurat,
