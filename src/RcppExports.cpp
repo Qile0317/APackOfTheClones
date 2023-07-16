@@ -25,19 +25,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// get_transformed_clone_sizes
-Rcpp::List get_transformed_clone_sizes(Rcpp::List sizelist, double clone_scale_factor, int num_clusters);
-RcppExport SEXP _APackOfTheClones_get_transformed_clone_sizes(SEXP sizelistSEXP, SEXP clone_scale_factorSEXP, SEXP num_clustersSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sizelist(sizelistSEXP);
-    Rcpp::traits::input_parameter< double >::type clone_scale_factor(clone_scale_factorSEXP);
-    Rcpp::traits::input_parameter< int >::type num_clusters(num_clustersSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_transformed_clone_sizes(sizelist, clone_scale_factor, num_clusters));
-    return rcpp_result_gen;
-END_RCPP
-}
 // get_average_vector
 std::vector<double> get_average_vector(Rcpp::List vec_list);
 RcppExport SEXP _APackOfTheClones_get_average_vector(SEXP vec_listSEXP) {
@@ -96,7 +83,6 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
-    {"_APackOfTheClones_get_transformed_clone_sizes", (DL_FUNC) &_APackOfTheClones_get_transformed_clone_sizes, 3},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},

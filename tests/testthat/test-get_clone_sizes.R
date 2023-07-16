@@ -29,6 +29,6 @@ test_that("get_transformed_clone_sizes works", {
   sizelist <- list(c(1,1,2), NULL, c(0.5,3))
   expect_equal(
     get_transformed_clone_sizes(sizelist, 0.5, 3),
-    list(c(0.5, 0.5, 1), list(), c(0.25, 1.5))
+    list(c(0.5, 0.5, sqrt(2)*0.5), list(), c(sqrt(0.5)*0.5, sqrt(3)*0.5))
   )
 })

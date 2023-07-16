@@ -5,10 +5,6 @@ cpp_circle_layout <- function(input_rad_vec, centroid, rad_scale_factor = 1, try
     .Call(`_APackOfTheClones_cpp_circle_layout`, input_rad_vec, centroid, rad_scale_factor, try_place, verbose)
 }
 
-get_transformed_clone_sizes <- function(sizelist, clone_scale_factor, num_clusters) {
-    .Call(`_APackOfTheClones_get_transformed_clone_sizes`, sizelist, clone_scale_factor, num_clusters)
-}
-
 get_average_vector <- function(vec_list) {
     .Call(`_APackOfTheClones_get_average_vector`, vec_list)
 }
