@@ -5,17 +5,26 @@ pack_into_clusterlists <- function(
 ){
   output_list <- list()
   for(i in 1:num_clusters){
-    if (is.null(sizes[[i]]) || identical(sizes[[i]], c(0))) {
+    input_rad_vec <- sizes[[i]]
+    
+    if (is.null(input_rad_vec) || identical(input_rad_vec, c(0))) {
       output_list[[i]] <- list()
     }else{
+      
       if(verbose){
         message(paste("\npacking cluster", as.character(i-1)))
       }
+      
+      if (ORDER) {
+        input_rad_vec <- sort(
+          input_rad_vec, decreasing = TRUE, method = "radix"
+        )
+      }
+      
       output_list[[i]] <- cpp_circle_layout( 
-        sizes[[i]],
+        input_rad_vec,
         centroid = centroids[[i]],
         rad_scale_factor = rad_scale,
-        ORDER = ORDER,
         try_place = try_place,
         verbose = verbose
       )

@@ -11,18 +11,17 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // cpp_circle_layout
-Rcpp::List cpp_circle_layout(std::vector<double> input_rad_vec, Rcpp::NumericVector centroid, double rad_scale_factor, bool ORDER, bool try_place, bool verbose);
-RcppExport SEXP _APackOfTheClones_cpp_circle_layout(SEXP input_rad_vecSEXP, SEXP centroidSEXP, SEXP rad_scale_factorSEXP, SEXP ORDERSEXP, SEXP try_placeSEXP, SEXP verboseSEXP) {
+Rcpp::List cpp_circle_layout(std::vector<double> input_rad_vec, Rcpp::NumericVector centroid, double rad_scale_factor, bool try_place, bool verbose);
+RcppExport SEXP _APackOfTheClones_cpp_circle_layout(SEXP input_rad_vecSEXP, SEXP centroidSEXP, SEXP rad_scale_factorSEXP, SEXP try_placeSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type input_rad_vec(input_rad_vecSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type centroid(centroidSEXP);
     Rcpp::traits::input_parameter< double >::type rad_scale_factor(rad_scale_factorSEXP);
-    Rcpp::traits::input_parameter< bool >::type ORDER(ORDERSEXP);
     Rcpp::traits::input_parameter< bool >::type try_place(try_placeSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_circle_layout(input_rad_vec, centroid, rad_scale_factor, ORDER, try_place, verbose));
+    rcpp_result_gen = Rcpp::wrap(cpp_circle_layout(input_rad_vec, centroid, rad_scale_factor, try_place, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -96,7 +95,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 6},
+    {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_get_transformed_clone_sizes", (DL_FUNC) &_APackOfTheClones_get_transformed_clone_sizes, 3},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},

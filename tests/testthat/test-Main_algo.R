@@ -16,6 +16,29 @@ test_that("cpp_circle_layout() works", {
       c(0.8,0.6,0.6,0.5,0.5), centroid = c(0,0), verbose = FALSE
     )
   ))
+  
+  expect_equal(
+    cpp_circle_layout(
+      c(6,9,4,2,7), centroid = c(0,0),
+      verbose = FALSE, try_place = FALSE
+    ),
+    
+    list(
+      x = c(
+        -6.73333333333333, 8.26666666666667, -1.53333333333333, 
+        -7.50533138211336, -8.70501097444157
+      ),
+      y = c(
+        2.84722086720835, 2.84722086720835, -5.6944417344167, -5.11544319783168,
+        -14.0351275462686
+      ),
+      rad = c(6, 9, 4, 2, 7),
+      centroid = c(0, 0),
+      clRad = 17.2666666666667
+    ),
+    
+    tolerance = 3e-6
+  )
 })
 
 test_that("cpp_circle_layout() handles edge cases", {
@@ -39,9 +62,9 @@ test_that("cpp_circle_layout() handles edge cases", {
 
   # input length = 2
   expect_equal(cpp_circle_layout(c(69, 420), centroid = c(0,0), verbose = FALSE),
-               list("x" = c(-420, 69),
+               list("x" = c(69, -420),
                     "y" = c(0, 0),
-                    "rad" = c(420, 69),
+                    "rad" = c(69, 420),
                     "centroid" = c(0, 0),
                     "clRad" = 244.5
                     )
@@ -63,33 +86,8 @@ test_that("cpp_circle_layout() handles edge cases", {
                tolerance = 3e-7)
 })
 
-# Testing optional args
-test_that("cpp_circle_layout(ORDER = FALSE) works", {
-  expect_equal(
-    cpp_circle_layout(
-      c(6,9,4,2,7), centroid = c(0,0),
-      ORDER = FALSE, verbose = FALSE, try_place = FALSE
-    ),
-    
-    list(
-      x = c(
-        -6.73333333333333, 8.26666666666667, -1.53333333333333, 
-        -7.50533138211336, -8.70501097444157
-      ),
-      y = c(
-        2.84722086720835, 2.84722086720835, -5.6944417344167, -5.11544319783168,
-        -14.0351275462686
-      ),
-      rad = c(6, 9, 4, 2, 7),
-      centroid = c(0, 0),
-      clRad = 17.2666666666667
-    ),
-    
-    tolerance = 3e-6
-  )
-})
-
-test_that("cpp_circle_layout(rad_decrease = 0.9) works", {
+# Testing optional args (needs more)
+test_that("cpp_circle_layout(rad_scale_factor = 0.9) works", {
   new_c1 <- c1
   new_c1[[3]] <- c1[[3]] * 0.9
   expect_equal(cpp_circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),

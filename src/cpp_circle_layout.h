@@ -23,6 +23,7 @@ public:
     }
 };
 
+// macros for slightly better syntax for accessing Node attributes
 #define _x(a) (data[a].x)
 #define _y(a) (data[a].y)
 #define _rad(a) (data[a].rad)
@@ -43,7 +44,7 @@ public:
     std::vector<Node> data;
     int num_nodes;
     
-    // Constructors w/overload (dispatch)
+    // Constructors
     NodeVector(const std::vector<Node> nodes) {
         num_nodes = nodes.size();
         data = nodes;
@@ -60,7 +61,7 @@ public:
         }
     }
     
-    // functions
+    // functions for cpp_circle_layout
     
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {
@@ -341,14 +342,10 @@ Rcpp::List cpp_circle_layout(
     std::vector<double> input_rad_vec,
     Rcpp::NumericVector centroid,
     double rad_scale_factor = 1,
-    bool ORDER = true,
     bool try_place = false,
     bool verbose = true
 ) {
     if(verbose) {progress_bar(0, 1);}
-    if (ORDER) {
-        std::sort(all(input_rad_vec), std::greater<int>());
-    }
 
     NodeVector nodes = NodeVector(input_rad_vec);
     if (nodes.is_degenerate_case()) {
