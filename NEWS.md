@@ -1,4 +1,12 @@
-# APackOfTheClones (development version)
+# APackOfTheClones 
+
+# APackOfTheClones 0.1.3
+##Additions
+* `clonal_expansion_plot` now displays time elapsed if `verbose = TRUE`
+* There are now package startup messages
+
+## Changes
+* Many functions have been rewritten in C++, improving the circle packing runtime of `clonal_expansion_plot` 70 ~ 140 fold. For reference, for a dataset with around 2500 viable T cells, the runtime averages 0.1s
 
 # APackOfTheClones 0.1.2
 ## Additions
@@ -30,7 +38,7 @@ Currently, Automated cluster repulsion uses a highly flawed mathematical formula
 
 ##  Future features/plans:
 [~] Customizable cluster coloration, not just based on the original Seurat/ggplot palette
-[ ] User-controlled cluster shifting
+[~] User-controlled cluster shifting
 [x] Comprehensive cluster repulsion
 [x] better legends and optional legend border
 [ ] automated optimization of the initial parameters of `clonal_expansion_plot`, especially the `clone_scale_factor`

@@ -16,6 +16,7 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
+    sf,
     spelling,
     testthat (>= 3.0.0),
     vdiffr,
