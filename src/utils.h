@@ -3,7 +3,6 @@ using Rcpp::_; // for overlap_check
 #define all(x) (x).begin(), (x).end()
 #define Llui long long unsigned int
 #define Rvec Rcpp::Nullable<Rcpp::NumericVector>
-#define _progbar(b,c) if(verbose) {progress_bar(b,c);}
 
 inline double sqr(double n) {
     return n*n;

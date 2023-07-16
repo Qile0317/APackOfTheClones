@@ -1,9 +1,3 @@
-#define x(a) (data[a].x)
-#define y(a) (data[a].y)
-#define rad(a) (data[a].rad)
-#define nxt(a) (data[a].nxt)
-#define prv(a) (data[a].prv)
-
 class Node {
 public:
     double x;      
@@ -29,9 +23,15 @@ public:
     }
 };
 
+#define _x(a) (data[a].x)
+#define _y(a) (data[a].y)
+#define _rad(a) (data[a].rad)
+#define nxt(a) (data[a].nxt)
+#define prv(a) (data[a].prv)
+
 // functions for readability
 inline double centre_dist(Node& c) {
-  return sqrt(sqr(c.x) + sqr(c.y));
+    return sqrt(sqr(c.x) + sqr(c.y));
 }
 
 inline bool is_clear(std::pair<int, int>& p) {
@@ -42,25 +42,25 @@ class NodeVector {
 public:
     std::vector<Node> data;
     int num_nodes;
-
-    // initializer to convert input rad_vec to NodeVector
-    NodeVector(std::vector<double>& input_rad_vec, int num_circles = 0) {
-        if (num_circles == 0) {
-            num_nodes = input_rad_vec.size();
+    
+    // Constructors w/overload (dispatch)
+    NodeVector(const std::vector<Node> nodes) {
+        num_nodes = nodes.size();
+        data = nodes;
+    }
+    
+    NodeVector(const std::vector<double>& input_rad_vec, int _num_nodes = 0) {
+        if (_num_nodes == 0) {
+            num_nodes = (int)input_rad_vec.size();
         }
         data.resize(num_nodes);
+        
         for (int i = 0; i < num_nodes; i++) {
             data[i] = Node(0, 0, input_rad_vec[i]);
         }
     }
     
-    // Constructor to create NodeVector from a vector of nodes
-    NodeVector(const std::vector<Node>& nodes) {
-      num_nodes = nodes.size();
-      data = nodes;
-    }
-    
-    // apparently C++ has multiple dispatch for class initializers???
+    // functions
     
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {
@@ -107,11 +107,11 @@ public:
 
     // fit c3 tangent to c1 and c2, modifies data[c3]. 
     int fit_tang_circle(int c1, int c2, int c3) {
-        double x1 = x(c1), x2 = x(c2);
-        double y1 = y(c1), y2 = y(c2);
-        double r1 = rad(c1), r2 = rad(c2);
+        double x1 = _x(c1), x2 = _x(c2);
+        double y1 = _y(c1), y2 = _y(c2);
+        double r1 = _rad(c1), r2 = _rad(c2);
         
-        double r = rad(c3);
+        double r = _rad(c3);
         double distance = sqrt(sqr(x1 - x2) + sqr(y1 - y2));
         double invdist = 1/distance;
         
@@ -124,8 +124,8 @@ public:
         double cos_gam = (sqr(distance)+sqr(r+r1) - sqr(r+r2)) * 0.5*invdist / (r+r1);
         double sin_gam = sqrt(1 - sqr(cos_gam));
         
-        x(c3) = x1 + ((r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam));
-        y(c3) = y1 + ((r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam));
+        _x(c3) = x1 + ((r + r1) * (cos_sig * cos_gam - sin_sig * sin_gam));
+        _y(c3) = y1 + ((r + r1) * (cos_sig * sin_gam + sin_sig * cos_gam));
         return c3;
     }
 
@@ -138,12 +138,12 @@ public:
     // place three mutually tangent circles to 0,0
     // fits c3 such that c1,c2,c3 are arranged counterclockwise
     void place_starting_three(int c1 = 0, int c2 = 1, int c3 = 2) {
-        data[c1].x = -1 * rad(c1);
-        data[c2].x = rad(c2);
+        data[c1].x = -1 * _rad(c1);
+        data[c2].x = _rad(c2);
         fit_tang_circle(c2, c1, c3); // the order is incredibly important
         
-        double centroid_x = (x(c1) + x(c2) + x(c3)) / 3;
-        double centroid_y = (y(c1) + y(c2) + y(c3)) / 3;
+        double centroid_x = (_x(c1) + _x(c2) + _x(c3)) / 3;
+        double centroid_y = (_y(c1) + _y(c2) + _y(c3)) / 3;
         
         data[c1].x -= centroid_x; data[c1].y -= centroid_y;
         data[c2].x -= centroid_x; data[c2].y -= centroid_y;
@@ -189,8 +189,8 @@ public:
 
     // check if two circle nodes overlap geometrically
     bool do_intersect(int c1, int c2) {
-        double centre_distance = sqrt(sqr(x(c1) - x(c2)) + sqr(y(c1) - y(c2)));
-        double rad_sum = rad(c1) + rad(c2);
+        double centre_distance = sqrt(sqr(_x(c1) - _x(c2)) + sqr(_y(c1) - _y(c2)));
+        double rad_sum = _rad(c1) + _rad(c2);
         return centre_distance < rad_sum;
     }
 
@@ -258,15 +258,20 @@ public:
         double clrad;
         
         if (num_nodes == 1) {
-            x = {centroid[0]};
-            y = {centroid[1]};
-            r = {rad(0) * rad_scale_factor};
-            clrad = rad(0);
-        } else { // 2
-            x = {(-1*rad(0)) + centroid[0], rad(1) + centroid[0]};
-            y = {centroid[1], centroid[1]};
-            r = {rad(0) * rad_scale_factor, rad(1) * rad_scale_factor};
-            clrad = 0.5 * (rad(0) + rad(1));
+            x = Rcpp::NumericVector::create(centroid[0]);
+            y = Rcpp::NumericVector::create(centroid[1]);
+            r = Rcpp::NumericVector::create(_rad(0) * rad_scale_factor);
+            clrad = _rad(0);
+            
+        } else if (num_nodes == 2) {
+            x = Rcpp::NumericVector::create(
+              (-1 * _rad(0)) + centroid[0], _rad(1) + centroid[0]
+            );
+            y = Rcpp::NumericVector::create(centroid[1], centroid[1]);
+            r = Rcpp::NumericVector::create(
+              _rad(0) * rad_scale_factor, _rad(1) * rad_scale_factor
+            );
+            clrad = 0.5 * (_rad(0) + _rad(1));
         }
         
         return Rcpp::List::create(
@@ -274,6 +279,45 @@ public:
             _["centroid"] = centroid, _["clRad"] = clrad
         );
     }
+
+    // return the R list from a packed vector of circles for at least 3 circles
+    Rcpp::List process_into_clusterlist(
+        Rcpp::NumericVector& centroid,
+        double rad_scale_factor,
+        bool verbose
+    ) {
+        Rcpp::NumericVector x (num_nodes), y (num_nodes), rad (num_nodes);
+        bool do_shift_x = (centroid[0] != 0), do_shift_y = (centroid[1] != 0);
+        bool do_scale_rad = (rad_scale_factor != 1);
+        int max_x_index = 0;
+        
+        for (int i = 0; i < num_nodes; i++) {
+            x[i] = _x(i); y[i] = _y(i); rad[i] = _rad(i);
+            
+            if (do_shift_x) {x[i] += centroid[0];}
+            if (do_shift_y) {y[i] += centroid[1];}
+            if (do_scale_rad) {rad[i] *= rad_scale_factor;}
+            if (x[i] > x[max_x_index]) {max_x_index = i;}
+        }
+        
+        // estimate cluster radius based on the max x coordinate
+        double clRad = x[max_x_index]+(rad[max_x_index]/rad_scale_factor)-centroid[0];
+        
+        // return the finished list
+        if(verbose) {progress_bar(1, 1);}
+        return Rcpp::List::create(
+            _["x"] = x, _["y"] = y, _["rad"] = rad, _["centroid"] = centroid,
+            _["clRad"] = clRad
+        );
+    }
+
+    /*
+    int fit_circle(
+        int curr_circ, int nxt_circ, int& j, int interupt_check_modulo, bool verbose
+    ) {
+
+    }
+    */
 };
 
 /* // [[Rcpp::export]]
@@ -285,14 +329,14 @@ Rcpp::List cpp_circle_layout(
     bool try_place = false,
     bool verbose = true
 ) {
-    _progbar(0, 1)
+    if(verbose) {progress_bar(0, 1);}
     if (ORDER) {
         std::sort(all(input_rad_vec), std::greater<int>());
     }
 
     NodeVector nodes = NodeVector(input_rad_vec);
     if (nodes.is_degenerate_case()) {
-        _progbar(1, 1)
+        if(verbose) {progress_bar(1, 1);}
         return nodes.handle_degenerate_cases(centroid, rad_scale_factor);
     }
 

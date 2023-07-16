@@ -18,5 +18,6 @@ context("C++ utils") {
     
     v2 = {1.1,2.1,3.1};
     expect_true(elements_are_equal(v1, v2, 0.15));
+    expect_false(elements_are_equal(v1, v2));
   }
 }
