@@ -6,12 +6,11 @@
 Rcpp::List get_transformed_clone_sizes(
   Rcpp::List sizelist, double clone_scale_factor, int num_clusters
 ) {
-  Rcpp::List output_sizes = Rcpp::List::create();
+  Rcpp::List output_sizes (num_clusters);
   for (int i = 0; i < num_clusters; i++) {
     Rvec curr_sizes = sizelist[i];
     if (curr_sizes.isNotNull()) {
-      std::vector<double> curr_sizes (curr_sizes); 
-      for (Llui j = 0; j < curr_sizes.size(); j++) {
+      for (int j = 0; j < (int)curr_sizes.size(); j++) {
         curr_sizes[j] = sqrt(curr_sizes[j]) * clone_scale_factor;
       }
       output_sizes[i] = curr_sizes;
@@ -21,3 +20,5 @@ Rcpp::List get_transformed_clone_sizes(
   }
   return output_sizes;
 }
+
+// tested in the R testthat folder

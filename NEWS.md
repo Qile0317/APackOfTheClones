@@ -1,8 +1,4 @@
 # APackOfTheClones 0.1.3
-
-# APackOfTheClones 
-
-# APackOfTheClones 0.1.3
 ##Additions
 * `clonal_expansion_plot` now displays time elapsed if `verbose = TRUE`
 * There are now package startup messages

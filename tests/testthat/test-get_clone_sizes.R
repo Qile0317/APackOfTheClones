@@ -24,3 +24,11 @@ test_that("count_clone_sizes works", {
   expect_equal(untable(trial[[1]]), c(12,12,2,2))
   expect_equal(untable(trial[[2]]), c(10,7,2))
 })
+
+test_that("get_transformed_clone_sizes works", {
+  sizelist <- list(c(1,1,2), NULL, c(0.5,3))
+  expect_equal(
+    get_transformed_clone_sizes(sizelist, 0.5, 3),
+    list(c(0.5, 0.5, 1), list(), c(0.25, 1.5))
+  )
+})
