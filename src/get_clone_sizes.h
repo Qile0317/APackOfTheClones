@@ -8,9 +8,10 @@ Rcpp::List get_transformed_clone_sizes(
 ) {
   Rcpp::List output_sizes (num_clusters);
   for (int i = 0; i < num_clusters; i++) {
+    int n = sizelist[i].size();
     Rvec curr_sizes = sizelist[i];
     if (curr_sizes.isNotNull()) {
-      for (int j = 0; j < (int)curr_sizes.size(); j++) {
+      for (int j = 0; j < n; j++) {
         curr_sizes[j] = sqrt(curr_sizes[j]) * clone_scale_factor;
       }
       output_sizes[i] = curr_sizes;
