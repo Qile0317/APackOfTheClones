@@ -2,4 +2,4 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* The DOI in DESCRIPTION is NOT invalid when visiting it manually
