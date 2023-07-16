@@ -42,7 +42,6 @@ customizations
 cytotoxic
 df
 doi
-eabg
 eachother
 et
 ggplot
@@ -65,7 +64,6 @@ seurat
 svg
 tSNE
 tcr
-th
 umap
 walkthrough
 www
@@ -75,3 +73,7 @@ unscaled
 codebase
 clusterlists
 operability
+julia
+Borcherding
+eabg
+th
