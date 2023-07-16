@@ -2,12 +2,12 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
-[![Latest Release](https://img.shields.io/github/release/Qile0317/APackOfTheClones.svg)](https://github.com/Qile0317/APackOfTheClones/releases/latest)
-[![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
-![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: end -->
 
 ```APackOfTheClones``` is an R package to produce "ball-packing" visualizations of the clonal expansion of T-cells in a `Seurat` object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling. 
@@ -21,11 +21,16 @@ The concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christ
 ```R
 install.packages("APackOfTheClones")
 ```
-Alternatively, to download the latest development edition, run
+Alternatively, to download the latest development edition on the development (`dev`) branch, run
 ```R
-library(devtools)
-devtools::install_github("Qile0317/APackOfTheClones")
+if (require(devtools), quietly = TRUE) {
+  install.packages('devtools')
+  library(devtools)
+}
+devtools::install_github("Qile0317/APackOfTheClones@dev")
 ```
+(Note: the package is about to undergo massive breaking changes in a subsequent CRAN release v1.0.0)
+
 ## Usage
 The main ball packing function `clonal_expansion_plot` in the package takes two main arguments: 
 - a Seurat object with a UMAP reduction
@@ -79,7 +84,7 @@ However, github pull requests from forked branches are more than welcome as it i
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
 
 ## Contact
-Qile Yang - qile0317@gmail.com
+Qile Yang - qile.yang@berkeley.edu
 
 ## References
 <a id="1">[1]</a> 
@@ -89,4 +94,4 @@ Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. 
 atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
-Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea and giving suggestions.
+Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, implementing julia code, debug support, and giving suggestions. Thanks to Nick Borcherding (@ncborcherding) for providing more insights,  suggestions, and promoting the package.
