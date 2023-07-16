@@ -12,7 +12,6 @@
 
 // function scripts
 #include "utils.h"
-#include "get_clone_sizes.h"
 #include "cpp_circle_layout.h"
 #include "repulsion.h"
 

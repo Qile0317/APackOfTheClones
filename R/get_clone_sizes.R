@@ -22,7 +22,22 @@ add_raw_clone_sizes <- function(apotc_obj, integrated_seurat_obj) {
   apotc_obj
 }
 
-# multiply all tables in a raw clonotype freq list by a scale factor and sqrt
+get_transformed_clone_sizes <- function(
+  sizelist, clone_scale_factor, num_clusters
+) {
+  output_sizes <- vector("list", num_clusters)
+  for (i in 1:num_clusters) {
+    curr_sizes <- sizelist[[i]]
+    if (is.null(curr_sizes)) {
+      output_sizes[[i]] <- list()
+      next
+    }
+    output_sizes[[i]] <- sqrt(curr_sizes) * clone_scale_factor
+  }
+  output_sizes
+}
+
+# multiply all tables in a raw clonotype freq list by a scale factor and sqrt (for the next update)
 get_processed_clone_sizes <- function(apotc_obj) {
   raw_tabled_clone_sizes <- apotc_obj@clone_sizes
   processed_sizes <- vector("list", apotc_obj@num_clusters)
