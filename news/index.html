@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="apackoftheclones-development-version">APackOfTheClones (development version)<a class="anchor" aria-label="anchor" href="#apackoftheclones-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.3" id="apackoftheclones-013">APackOfTheClones 0.1.3<a class="anchor" aria-label="anchor" href="#apackoftheclones-013"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.3" id="apackoftheclones-013-1">APackOfTheClones 0.1.3<a class="anchor" aria-label="anchor" href="#apackoftheclones-013-1"></a></h2>
+<p>##Additions * <code>clonal_expansion_plot</code> now displays time elapsed if <code>verbose = TRUE</code> * There are now package startup messages</p>
+<div class="section level3">
+<h3 id="changes-0-1-3">Changes<a class="anchor" aria-label="anchor" href="#changes-0-1-3"></a></h3>
+<ul><li>Many functions have been rewritten in C++, improving the circle packing runtime of <code>clonal_expansion_plot</code> 70 ~ 140 fold. For reference, for a dataset with around 2500 viable T cells, the runtime averages 0.1s</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="apackoftheclones-012">APackOfTheClones 0.1.2<a class="anchor" aria-label="anchor" href="#apackoftheclones-012"></a></h2><p class="text-muted">CRAN release: 2023-05-09</p>
@@ -88,7 +96,7 @@
 <p>Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily</p>
 <div class="section level3">
 <h3 id="future-featuresplans-0-1-0">Future features/plans:<a class="anchor" aria-label="anchor" href="#future-featuresplans-0-1-0"></a></h3>
-<p>[ ] Customizable cluster coloration, not just based on the original Seurat/ggplot palette [ ] User-controlled cluster shifting [x] Comprehensive cluster repulsion [x] better legends and optional legend border [ ] automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code> [ ] BCR library integration [x] User vignette [ ] Developer vignette [ ] Submission to CRAN or Bioconductor [ ] Rewrite of certain circle packing functions in <code>rust</code> or <code>c++</code> to improve performance [ ] Increase interoperability with <code>Seurat</code> and <code>scRepertoire</code></p>
+<p>[~] Customizable cluster coloration, not just based on the original Seurat/ggplot palette [~] User-controlled cluster shifting [x] Comprehensive cluster repulsion [x] better legends and optional legend border [ ] automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code> [ ] BCR library integration [x] User vignette [ ] Developer vignette [x] Submission to CRAN or Bioconductor [~] Rewrite of certain circle packing functions in <code>rust</code> or <code>c++</code> to improve performance [ ] Increase interoperability with <code>Seurat</code> and <code>scRepertoire</code></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
