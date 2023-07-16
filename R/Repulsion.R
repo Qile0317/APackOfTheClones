@@ -38,7 +38,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 
 do_proceed <- function(inp, i, j, thr) {
   if (i != j) {
-    if (isnt_empty(inp[[i]])) { #isnt_empty is in utils.R
+    if (isnt_empty(inp[[i]])) {
       if (isnt_empty(inp[[j]])) {
         return(do_cl_intersect(inp[[i]], inp[[j]], thr))
       }
@@ -72,7 +72,8 @@ calculate_repulsion_vectors <- function(
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
 ) {
-  if (G <= 0) {stop("repulsion strength must be a positive real number")}
+  #if (G <= 0) {stop("repulsion strength must be a positive real number")} # whynot let attraction be a thing too :/
+  start_progress_bar(verbose)
   
   #init variables - could use a class
   num_clusters <- length(inp)
@@ -89,12 +90,12 @@ repulse_cluster <- function(
     
     #transformation vectors is an empty list() if everything was c(0,0)
     if (identical(transformation_vectors, list())) {
-      if(verbose) {progress_bar(1,1)}
+      end_progress_bar(verbose)
       return(inp)
     }
     # with the transformation vectors established, each cluster is moved
     for (i in 1:num_clusters) {
-      if (!any(is.na(inp[[i]]))) {
+      if (isnt_empty(inp[[i]])) {
         inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
       }
     }
@@ -102,5 +103,6 @@ repulse_cluster <- function(
       progress_bar(curr_iteration, max_iter)
     }
   }
+  end_progress_bar(verbose)
   inp
 }

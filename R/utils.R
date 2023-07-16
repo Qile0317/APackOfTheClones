@@ -14,12 +14,16 @@ progress_bar <- function (x = 0, max = 100) {
   )
 }
 
-start_progress_bar <- function() {
-  progress_bar(0, 1)
+start_progress_bar <- function(verbose = TRUE) {
+  if (verbose) {
+    progress_bar(0, 1)
+  }
 }
 
-end_progress_bar <- function() {
-  progress_bar(1, 1)
+end_progress_bar <- function(verbose = TRUE) {
+  if (verbose) {
+    progress_bar(1, 1)
+  }
 }
 
 get_num_clusters <- function(seurat_obj) {

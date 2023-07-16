@@ -2,11 +2,11 @@ source("testdata/cluster_lists.R")
 
 # testing cpp_circle_layout
 test_that("cpp_circle_layout() works", {
-  expect_equal(cpp_circle_layout(c(1, 1, 1, 1, 1.3, 1, 1, 1, 1.3),
+  expect_equal(cpp_circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
                              c1$centroid, verbose = FALSE),
                c1, tolerance = 1)
 
-  expect_equal(cpp_circle_layout(c(1.9, 1.5, 1.6, 1.5, 2.0, 1.5),
+  expect_equal(cpp_circle_layout(c(2.0, 1.9, 1.6, 1.5, 1.5, 1.5),
                              c2$centroid, verbose = FALSE),
                c2, tolerance = 0.1)
 
@@ -62,14 +62,14 @@ test_that("cpp_circle_layout() handles edge cases", {
 
   # input length = 2
   expect_equal(cpp_circle_layout(c(69, 420), centroid = c(0,0), verbose = FALSE),
-               list("x" = c(69, -420),
+               list("x" = c(-69, 420),
                     "y" = c(0, 0),
                     "rad" = c(69, 420),
                     "centroid" = c(0, 0),
                     "clRad" = 244.5
                     )
                )
-  expect_equal(cpp_circle_layout(c(69,420), c(420, 69), verbose = FALSE),
+  expect_equal(cpp_circle_layout(c(420, 69), c(420, 69), verbose = FALSE),
                list("x" = c(0, 489),
                     "y" = c(69, 69),
                     "rad" = c(420, 69),
@@ -79,7 +79,7 @@ test_that("cpp_circle_layout() handles edge cases", {
                )
 
   # input length = 3 
-  expect_equal(cpp_circle_layout(c(1, 2, 3), centroid = c(0,0), verbose = FALSE),
+  expect_equal(cpp_circle_layout(c(3, 2, 1), centroid = c(0,0), verbose = FALSE),
                list(x = c(-2.73333333333333, 2.26666666666667, 0.466666666666667
                ), y = c(0.8, 0.8, -1.6), rad = c(3, 2, 1), centroid = c(0, 0
                ), clRad = 4.26666666666667),

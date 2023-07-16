@@ -1,10 +1,30 @@
+#progress_bar_with_text <- function(verbose, x, max, info, num = -1) {
+#  percent <- 100 * (x / max)
+#  if (num != -1) {
+#    info <- paste(info, num)
+#  }
+#  cat(sprintf(
+#    '\r%s [%-50s] %d%%',
+#    info,
+#    paste(rep('=', percent * 0.5), collapse = ''),
+#    round(percent)
+#  ))
+#}
+
 # vectorized circle_layout - outputs list of clusterlists
 pack_into_clusterlists <- function(
   sizes, centroids, num_clusters, rad_scale = 1,
   ORDER = TRUE, try_place = FALSE, verbose = TRUE
 ){
+  #if (verbose) {
+  #  progress_bar_with_text(0,1, "Initializing...")
+  #}
   output_list <- list()
   for(i in 1:num_clusters){
+    #if (verbose) {
+    #  progress_bar_with_text(i, num_clusters, "Packing Cluster", i)
+    #}
+    
     input_rad_vec <- sizes[[i]]
     
     if (is.null(input_rad_vec) || identical(input_rad_vec, c(0))) {
@@ -30,5 +50,8 @@ pack_into_clusterlists <- function(
       )
     }
   }
+  #if (verbose) {
+  #  progress_bar_with_text(1,1, "Packing complete")
+  #}
   output_list
 }
