@@ -334,11 +334,9 @@ public:
         }
         return j;
     }
-    
-    
 };
 
-/* // [[Rcpp::export]]
+// [[Rcpp::export]]
 Rcpp::List cpp_circle_layout(
     std::vector<double> input_rad_vec,
     Rcpp::NumericVector centroid,
@@ -357,9 +355,24 @@ Rcpp::List cpp_circle_layout(
         if(verbose) {progress_bar(1, 1);}
         return nodes.handle_degenerate_cases(centroid, rad_scale_factor);
     }
-
+    
     nodes.place_starting_three();
-    if (nodes.num_nodes > 3) {
-        nodes.init_boundary();
+ 
+    if (nodes.num_nodes == 3) {
+        return nodes.process_into_clusterlist(centroid, rad_scale_factor, verbose);
     }
-*/
+    
+    // for all nodes, fit circle, check for overlap, and refit till condition
+    // satisfied
+    
+    nodes.init_boundary();
+    
+    int j = 3;
+    while (j < nodes.num_nodes) {
+        int curr_circ = (try_place) ? nodes.closest_place(j-1, j) : nodes.closest(j-1);
+        int nxt_circ = nodes.data[curr_circ].nxt;
+        nodes.fit_tang_circle(curr_circ,nxt_circ , j);
+        j = nodes.fit_circle(curr_circ, nxt_circ, j, verbose);
+    }
+    return nodes.process_into_clusterlist(centroid, rad_scale_factor, verbose);
+}

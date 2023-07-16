@@ -10,6 +10,22 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// cpp_circle_layout
+Rcpp::List cpp_circle_layout(std::vector<double> input_rad_vec, Rcpp::NumericVector centroid, double rad_scale_factor, bool ORDER, bool try_place, bool verbose);
+RcppExport SEXP _APackOfTheClones_cpp_circle_layout(SEXP input_rad_vecSEXP, SEXP centroidSEXP, SEXP rad_scale_factorSEXP, SEXP ORDERSEXP, SEXP try_placeSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type input_rad_vec(input_rad_vecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type centroid(centroidSEXP);
+    Rcpp::traits::input_parameter< double >::type rad_scale_factor(rad_scale_factorSEXP);
+    Rcpp::traits::input_parameter< bool >::type ORDER(ORDERSEXP);
+    Rcpp::traits::input_parameter< bool >::type try_place(try_placeSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_circle_layout(input_rad_vec, centroid, rad_scale_factor, ORDER, try_place, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_transformed_clone_sizes
 Rcpp::List get_transformed_clone_sizes(Rcpp::List sizelist, double clone_scale_factor, int num_clusters);
 RcppExport SEXP _APackOfTheClones_get_transformed_clone_sizes(SEXP sizelistSEXP, SEXP clone_scale_factorSEXP, SEXP num_clustersSEXP) {
@@ -76,29 +92,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// estimate_rad
-double estimate_rad(std::vector<double> x_vals, std::vector<double> rad_vals, double centroid_x);
-RcppExport SEXP _APackOfTheClones_estimate_rad(SEXP x_valsSEXP, SEXP rad_valsSEXP, SEXP centroid_xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type x_vals(x_valsSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type rad_vals(rad_valsSEXP);
-    Rcpp::traits::input_parameter< double >::type centroid_x(centroid_xSEXP);
-    rcpp_result_gen = Rcpp::wrap(estimate_rad(x_vals, rad_vals, centroid_x));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 6},
     {"_APackOfTheClones_get_transformed_clone_sizes", (DL_FUNC) &_APackOfTheClones_get_transformed_clone_sizes, 3},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},
     {"_APackOfTheClones_calculate_transformation_vectors", (DL_FUNC) &_APackOfTheClones_calculate_transformation_vectors, 3},
-    {"_APackOfTheClones_estimate_rad", (DL_FUNC) &_APackOfTheClones_estimate_rad, 3},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

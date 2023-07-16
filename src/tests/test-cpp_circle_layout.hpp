@@ -345,12 +345,3 @@ context("C++ | cpp_circle_layout") {
         }
     }
 }
-
-
-
-
-
-
-
-
-
