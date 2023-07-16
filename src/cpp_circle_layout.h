@@ -301,7 +301,8 @@ public:
         }
         
         // estimate cluster radius based on the max x coordinate
-        double clRad = x[max_x_index]+(rad[max_x_index]/rad_scale_factor)-centroid[0];
+        double clRad = x[max_x_index] + (rad[max_x_index]/rad_scale_factor);
+        clRad -= centroid[0];
         
         // return the finished list
         if(verbose) {progress_bar(1, 1);}
@@ -310,14 +311,31 @@ public:
             _["clRad"] = clRad
         );
     }
-
-    /*
-    int fit_circle(
-        int curr_circ, int nxt_circ, int& j, int interupt_check_modulo, bool verbose
-    ) {
-
+    
+    // fit a new circle (node at index j) adjacent to curr_circ, nxt_circ
+    int fit_circle(int curr_circ, int nxt_circ, int& j, bool verbose) {
+        std::pair<int, int> check = overlap_check(curr_circ, nxt_circ, j);
+        int cm = curr_circ, cn = nxt_circ;
+        
+        while (!is_clear(check)) {
+            cm = check.first;
+            cn = check.second;
+            
+            fwd_remove(cm, cn);
+            fit_tang_circle(cm, cn, j);
+            check = overlap_check(cm, cn, j);
+        }
+        
+        insert_circle(cm, cn, j);
+        j++;
+        
+        if (verbose && (j <= num_nodes)) {
+            progress_bar(j, num_nodes);
+        }
+        return j;
     }
-    */
+    
+    
 };
 
 /* // [[Rcpp::export]]

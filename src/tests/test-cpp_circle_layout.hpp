@@ -5,7 +5,11 @@ bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
         approx_equal(c1.rad, c2.rad, thr);
 }
 
-context("C++ cpp_circle_layout") {
+bool nodes_are_equal(Node& c1, Node& c2, double thr = 5e-5) {
+    return xyr_are_equal(c1, c2, thr) && (c1.nxt == c2.nxt) && (c1.prv == c2.prv); 
+}
+
+context("C++ | cpp_circle_layout") {
     test_that("init_boundary works") {
         std::vector<double> v = {1,2,3,4};
         NodeVector nodes = NodeVector(v);
@@ -290,7 +294,7 @@ context("C++ cpp_circle_layout") {
     test_that("process_into_clusterlist works") {
         // create trial data, 5 circles, centroid (1,1), rad_scale_factor 0.8
         NodeVector nodes = NodeVector({
-            Node(1,2,3), Node(6,7,8), Node(50,90,1), Node(-1,-3,3), Node(-10,-69,4)
+            Node(1,2,3),Node(6,7,8),Node(50,90,1),Node(-1,-3,3),Node(-10,-69,4)
         });
         Rcpp::NumericVector centroid = {1, 1};
         Rcpp::List trial = nodes.process_into_clusterlist(
@@ -311,5 +315,42 @@ context("C++ cpp_circle_layout") {
         expect_true(elements_are_equal(trial_centroid, centroid));
         expect_true(approx_equal(trial_clRad, 51));
     }
-
+    
+    test_that("fit_circle works") {
+        std::vector<double> v = {3,3,2,1,1};
+        NodeVector nodes = NodeVector(v);
+        nodes.init_boundary();
+        nodes.place_starting_three();
+        int j = 3;
+        int curr_circ = nodes.closest(2);
+        int nxt_circ = nodes.data[curr_circ].nxt;
+        nodes.fit_tang_circle(curr_circ, nxt_circ, j);
+        
+        j = nodes.fit_circle(curr_circ, nxt_circ, j, false);
+        expect_true(j == 4);
+        
+        NodeVector expected_nodes = NodeVector({
+            Node(-3, 1.3333333333, 3),
+            Node(3, 1.3333333333, 3),
+            Node(0, -2.66666666667, 2),
+            Node(-3, -2.66666666667, 1),
+            Node(0,0,1)
+        });
+        expected_nodes.init_boundary(0,3); // important that its 0,3 !
+        
+        for (int i = 0; i < 5; i++) {
+            expect_true(nodes_are_equal(
+                expected_nodes.data[i], nodes.data[i]
+            ));
+        }
+    }
 }
+
+
+
+
+
+
+
+
+

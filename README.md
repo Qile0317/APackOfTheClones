@@ -29,6 +29,8 @@ if (require(devtools), quietly = TRUE) {
 }
 devtools::install_github("Qile0317/APackOfTheClones@dev")
 ```
+(Note: the package is about to undergo massive breaking changes in a subsequent CRAN release v1.0.0)
+
 ## Usage
 The main ball packing function `clonal_expansion_plot` in the package takes two main arguments: 
 - a Seurat object with a UMAP reduction
@@ -82,7 +84,7 @@ However, github pull requests from forked branches are more than welcome as it i
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
 
 ## Contact
-Qile Yang - qile0317@gmail.com
+Qile Yang - qile.yang@berkeley.edu
 
 ## References
 <a id="1">[1]</a> 
@@ -92,4 +94,4 @@ Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. 
 atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
-Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea and giving suggestions.
+Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, implementing julia code, debug support, and giving suggestions. Thanks to Nick Borcherding (@ncborcherding) for providing more insights,  suggestions, and promoting the package.

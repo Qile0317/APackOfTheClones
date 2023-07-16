@@ -1,4 +1,4 @@
-context("C++ utils") {
+context("C++ | utils") {
   test_that("sqr works") {
     expect_true(sqr(-5) == 25);
     expect_true(sqr(12) == 144);
