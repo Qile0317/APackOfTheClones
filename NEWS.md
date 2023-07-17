@@ -1,4 +1,9 @@
 # APackOfTheClones (development version)
+## Additions
+* There is now a new argument in `clonal_expansion_plot` called `scramble` which allows the user to optionally make the clones within each clsuter randomly distributed.
+
+## Changes
+* When working with size legend positions within the plot with the `legend_position` argument in `clonal_expansion_plot`, it can now simply just be a numeric vector of length 2 indicating the x and y coordinate of the "top center" of the legend.
 
 # APackOfTheClones 0.1.4
 ## Additions
