@@ -1,3 +1,11 @@
+# APackOfTheClones 0.1.4
+## Additions
+* The clonal expansion plotting function now has a new optional argument `reduction` which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to `'umap'` but can now be changed to `'tsne'` or `'pca'` given that they have been ran already on the seurat object
+* New CRAN badge showing date of latest release on `README.md`
+
+## Changes
+* Some testcases have been altered/fixed to pass CRAN's R-CMD check
+
 # APackOfTheClones 0.1.3
 ## Additions
 * `clonal_expansion_plot` now displays time elapsed if `verbose = TRUE`

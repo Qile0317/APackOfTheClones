@@ -20,6 +20,25 @@ test_that("API can take an integrated object, retain_axis_scales = F", {
   )
 })
 
+test_that("API can use tsne and pca reductions, retain_axis_scales = F", {
+  expect_doppelganger(
+    "main_pca_plot",
+    clonal_expansion_plot(
+      test_integrated_pbmc, reduction = 'pca', verbose = FALSE,
+      clone_scale_factor = 0.5, retain_axis_scales = FALSE,
+      add_size_legend = FALSE
+    )
+  )
+  expect_doppelganger(
+    "main_tsne_plot",
+    clonal_expansion_plot(
+      test_integrated_pbmc, reduction = 'tsne', verbose = FALSE,
+      clone_scale_factor = 0.5, retain_axis_scales = FALSE,
+      add_size_legend = FALSE
+    )
+  )
+})
+
 test_that("retain_scale() works", {
   expect_doppelganger(
     "scale_retained_main_plot",
