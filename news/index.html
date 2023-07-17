@@ -54,13 +54,14 @@
 <h2 class="pkg-version" data-toc-text="0.1.4" id="apackoftheclones-014">APackOfTheClones 0.1.4<a class="anchor" aria-label="anchor" href="#apackoftheclones-014"></a></h2>
 <div class="section level3">
 <h3 id="additions-0-1-4">Additions<a class="anchor" aria-label="anchor" href="#additions-0-1-4"></a></h3>
-<ul><li>The clonal expansion plotting function now has a new optional argument <code>reduction</code> which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to <code>'umap'</code> but can now be changed to <code>'tsne'</code> or <code>'pca'</code> given that they have been ran already on the seurat object</li>
+<ul><li>The clonal expansion plotting function now has a new optional argument <code>reduction</code> which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to <code>'umap'</code> but can now be changed to <code>'tsne'</code> or <code>'pca'</code> given that they have been ran already on the seurat object. The vignette has been updated accordingly as well</li>
 <li>New CRAN badge showing date of latest release on <code>README.md</code>
 </li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-0-1-4">Changes<a class="anchor" aria-label="anchor" href="#changes-0-1-4"></a></h3>
 <ul><li>Some testcases have been altered/fixed to pass CRAN’s R-CMD check</li>
+<li>Package startup message has been improved</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -111,8 +112,14 @@
 </ul><p>All of which have documentation, including on the documentation site.</p>
 <p>Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily</p>
 <div class="section level3">
-<h3 id="future-featuresplans-0-1-0">Future features/plans:<a class="anchor" aria-label="anchor" href="#future-featuresplans-0-1-0"></a></h3>
-<p>[~] Customizable cluster coloration, not just based on the original Seurat/ggplot palette [~] User-controlled cluster shifting [x] Comprehensive cluster repulsion [x] better legends and optional legend border [ ] automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code> [ ] BCR library integration [x] User vignette [ ] Developer vignette [x] Submission to CRAN or Bioconductor [~] Rewrite of certain circle packing functions in <code>rust</code> or <code>c++</code> to improve performance [ ] Increase interoperability with <code>Seurat</code> and <code>scRepertoire</code></p>
+<h3 id="future-featuresplans--means-in-progress-0-1-0">Future features/plans: (~ means in progress)<a class="anchor" aria-label="anchor" href="#future-featuresplans--means-in-progress-0-1-0"></a></h3>
+<p>[~] Customizable cluster coloration, not just based on the original Seurat/ggplot palette</p>
+<p>[~] User-controlled cluster shifting</p>
+<p>[ ] automated optimization of the initial parameters of <code>clonal_expansion_plot</code>, especially the <code>clone_scale_factor</code></p>
+<p>[ ] BCR library integration</p>
+<p>[ ] Developer vignette / manuscript</p>
+<p>[~] Rewrite of certain circle packing functions in <code>rust</code> or <code>c++</code> to improve performance</p>
+<p>[ ] Increase interoperability with <code>Seurat</code> and <code>scRepertoire</code></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

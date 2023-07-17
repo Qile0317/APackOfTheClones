@@ -90,7 +90,7 @@
     
     
 <div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h2 id="an-introductory-walkthrough-of-apackoftheclones-v0-1-x">An introductory walkthrough of APackOfTheClones v0.1.x<a class="anchor" aria-label="anchor" href="#an-introductory-walkthrough-of-apackoftheclones-v0-1-x"></a>
 </h2>
 <p>Single-cell RNA sequencing (scRNA-seq) and T cell receptor (TCR)
 sequencing are popular techniques for studying immune cell function and
@@ -117,15 +117,21 @@ the usage of a fully customizable clonal expansion plotting method.</p>
 <h2 id="setup-the-seurat-object-and-t-cell-receptor-library">Setup the Seurat object and T cell receptor library<a class="anchor" aria-label="anchor" href="#setup-the-seurat-object-and-t-cell-receptor-library"></a>
 </h2>
 <p>Before anything else can be done, we need a <code>Seurat</code>
-object with a UMAP reduction.</p>
+object of the single cell experiment with a dimensional reduction. The
+most modern and common reduction used in publications is UMAP (Uniform
+Manifold Approximation and Projection) which is what this package
+defaults to, and what this vignette will use. There is also a way to
+base it off of the t-SNE (t-distributed stochastic neighbor embedding)
+or PCA (Principle Component Analysis) reduction though choosing the
+latter is probably not the best idea.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/APackOfTheClones/">APackOfTheClones</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Thank you for using APackOfTheClones!</span></span></code></pre>
+<span><span class="co">#&gt; Thank you for using APackOfTheClones version 0.1.4</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; Please read the vignette found at https://qile0317.github.io/APackOfTheClones/articles/web_only/Clonal_expansion_plotting.html</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; if you use this package in your paper, please cite this package with the citation() function</span></span></code></pre>
+<span><span class="co">#&gt; if you use this package in your paper/study, please cite this package. Run `citation("APackOfTheClones")` for citation information</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, a Seurat object has already been loaded named `pbmc`</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
@@ -597,10 +603,20 @@ doing so. Check the documentation by running
 the following code:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co"># once again, `verbose` is set to false due to numerous progress bars but it defaults to TRUE and that is very recommended</span></span>
+<span><span class="co"># once again, `verbose` is set to false but it defaults to TRUE</span></span>
 <span><span class="va">pbmc_expansion_plot</span></span></code></pre></div>
 <p><img src="Clonal_expansion_plotting_files/figure-html/main_plt-1.png" width="700"></p>
-<div class="section level3">
+<details><summary><strong>How do I base the clonal expansion plot off of the t-SNE or PCA
+reduction?</strong>
+</summary><p><code>clonal_expansion_plot</code> has an optional argument
+<code>reduction</code> which defaults to <code>'umap'</code> that
+handles which reduction the plot is based off of. The argument can be
+set to <code>'tsne'</code> or <code>'pca'</code> like so:</p>
+<pre><code><span><span class="co"># t-SNE based plot</span></span>
+<span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">'tsne'</span><span class="op">)</span></span>
+<span><span class="co"># PCA based plot</span></span>
+<span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">'pca'</span><span class="op">)</span></span></code></pre>
+</details><div class="section level3">
 <h3 id="a-few-things-to-note-about-the-plot">A few things to note about the plot<a class="anchor" aria-label="anchor" href="#a-few-things-to-note-about-the-plot"></a>
 </h3>
 <ul>
@@ -630,11 +646,6 @@ dataframe, like so:</p>
 <span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, <span class="va">tcr_dataframe</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </details>
 </div>
-</div>
-<div class="section level2">
-<h2 id="plot-refinement-and-customization">Plot refinement and customization<a class="anchor" aria-label="anchor" href="#plot-refinement-and-customization"></a>
-</h2>
-<p><em>Unfinished</em></p>
 <div class="section level3">
 <h3 id="adjusting-intra-cluster-spacing">Adjusting intra-cluster spacing<a class="anchor" aria-label="anchor" href="#adjusting-intra-cluster-spacing"></a>
 </h3>
@@ -643,10 +654,10 @@ attempt to fit clusters to the original UMAP coordinates) may sometimes
 obstruct eachother excessively.</p>
 <p>To account for this, there are four optional arguments in
 <code>clonal_expansion plot</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 <p>For more details on them, read the “Arguments” section in the
 function documentation (<code><a href="../../reference/clonal_expansion_plot.html">?clonal_expansion_plot</a></code>). But to
 summarize, first, to make the circle clusters move away from eachother,
@@ -656,7 +667,7 @@ takes too long or is inefficient for your workflow in its current form,
 please make an issue on the github page.)</p>
 <p>Setting repulse to TRUE with those default parameters should probably
 yield something like the following:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">pbmc</span>, repulse <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">pbmc_expansion_plot</span></span></code></pre></div>
 <p><img src="Clonal_expansion_plotting_files/figure-html/repulse-1.png" width="700"></p>
@@ -713,18 +724,18 @@ we see that it is partially outside of the plot. Unfortunately the
 algorithm for placing the legend is far from perfect in the current
 release (v0.1.3) so the user will have to do a little extra work.</p>
 <p>There are the following six parameters to adjust the legend:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">50</span>),</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"top_left"</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">1.5</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="fl">0.4</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">50</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"top_left"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">1.5</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="fl">0.4</span></span></code></pre></div>
 <p>Here, we can adjust the argument <code>legend_buffer</code>, which
 indicates the amount of <code>ggplot2</code> units to move the legend
 “inwards” by. We can also slightly increase <code>legend_spacing</code>,
 an argument specifying the vertical distance between circles in the
 legend.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the previous arguments have to be maintained!</span></span>
 <span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>
@@ -737,7 +748,7 @@ legend.</p>
 <p><img src="Clonal_expansion_plotting_files/figure-html/adj_legend-1.png" width="700">
 We can even change the circle (clone) sizes displayed in the legend by
 changing the vector <code>legend_sizes</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>
 <span>  legend_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,</span>
@@ -773,7 +784,7 @@ between then,</p>
 <p>For demonstration sake, we’ll change the
 <code>clone_scale_factor</code> to 0.07 and
 <code>rad_scale_factor</code> to 0.9:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_expansion_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>
 <span>  clone_scale_factor <span class="op">=</span> <span class="fl">0.07</span>,</span>
@@ -799,7 +810,7 @@ customize the plot your own way (since
 <code>clonal_expansion_plot</code> generates a <code>ggplot</code>
 object!), simply set it to <code>FALSE</code> and you’ll have a very
 minimally themed plot:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../../reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -826,7 +837,7 @@ expansion visualization function. Remember to save the plot first as an
 publication ready.</p>
 <p>For fun, here’s a side-by-side comparison of the UMAP plot and the
 clonal expansion plot:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
 <span></span>
@@ -839,9 +850,9 @@ clonal expansion plot:</p>
 <details><summary><strong>How do I reproduce the plots in this vignette?</strong>
 </summary><p>If you really want to reproduce the plots and code in this vignette,
 you will need to install the data used in this vignette which has been
-compiled in an R package <code>SCIPData</code>. You can do so with the
-following code</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+compiled in an R package <code>SCIPData</code> (Single Cell Immune
+Profiling Data). You can do so with the following code</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install the data package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/SCIPData"</span><span class="op">)</span></span>
