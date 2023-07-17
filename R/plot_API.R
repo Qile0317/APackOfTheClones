@@ -77,6 +77,7 @@ plot_API <- function(
   num_clusters,
   rad_decrease = 1,
   ORDER = TRUE,
+  scramble = FALSE,
   try_place = FALSE,
   progbar = TRUE, 
   repulse = FALSE,
@@ -91,7 +92,8 @@ plot_API <- function(
 ) {
   
   ans <- pack_into_clusterlists(
-    sizes, centroids, num_clusters, rad_decrease, ORDER, try_place, progbar
+    sizes, centroids, num_clusters, rad_decrease, ORDER, scramble, try_place,
+    progbar
   )
   
   if (repulse) {

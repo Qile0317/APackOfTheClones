@@ -1,3 +1,5 @@
+# APackOfTheClones (development version)
+
 # APackOfTheClones 0.1.4
 ## Additions
 * The clonal expansion plotting function now has a new optional argument `reduction` which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to `'umap'` but can now be changed to `'tsne'` or `'pca'` given that they have been ran already on the seurat object. The vignette has been updated accordingly as well

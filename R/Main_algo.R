@@ -14,7 +14,7 @@
 # vectorized circle_layout - outputs list of clusterlists
 pack_into_clusterlists <- function(
   sizes, centroids, num_clusters, rad_scale = 1,
-  ORDER = TRUE, try_place = FALSE, verbose = TRUE
+  ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE
 ){
   #if (verbose) {
   #  progress_bar_with_text(0,1, "Initializing...")
@@ -39,6 +39,10 @@ pack_into_clusterlists <- function(
         input_rad_vec <- sort(
           input_rad_vec, decreasing = TRUE, method = "radix"
         )
+      }
+      if (scramble) {
+        set.seed(42)
+        input_rad_vec <- sample(input_rad_vec)
       }
       
       output_list[[i]] <- cpp_circle_layout( 

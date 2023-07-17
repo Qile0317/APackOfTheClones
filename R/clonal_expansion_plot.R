@@ -18,7 +18,8 @@
 #' @param clone_scale_factor numeric. Decides how much to scale each circle. Usually should be kept at around 0.01 to somewhat maintain UMAP structure for large datasets. However, if the plot that is displayed is ever blank, first try increasing this value. 
 #' @param rad_scale_factor numeric. indicates how much the radii of the clones should decrease to add a slight gap between all of them. Defaults to 1 but 0.85-0.95 values are recommended. Both `rad_scale_factor` and `clone_scale_factor` may need to be repeatedly readjusted
 #' @param res The number of points on the generated path per full circle. From plot viewers, if circles seem slightly too pixelated, it is highly recommended to first try to export the plot as an `.svg` before increasing `res`
-#' @param ORDER logical. Decides if the largest clones should be at the cluster centroids
+#' @param ORDER logical. Decides if the largest clones should be at the cluster centroids.
+#' @param scramble logical. Decides if the clones within each cluster should be randomly scrambled when plotted
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed circle to the origin
 #' @param verbose logical. Decides if visual cues print to the R console of the packing progress
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from each other.
@@ -30,7 +31,11 @@
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP. However, it will only attempt to extend the axes and never shorten.
 #' @param add_size_legend If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones. 
 #' @param legend_sizes numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`. 
-#' @param legend_position character. Can be set to either `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the legend roughly in the corresponding position
+#' @param legend_position character or numeric. Can be set to either
+#' `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the
+#' legend roughly in the corresponding position. Otherwise, can be a numeric
+#' vector of length 2 indicating the x and y position of the "top-center" of the
+#' legend
 #' @param legend_buffer numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away
 #' @param legend_color character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray
 #' @param legend_spacing numeric. Indicates the horizontal distance between each stacked circle on the size legend. Usually should be kept below 0.75 -ish depending on plot size.
@@ -84,21 +89,22 @@ clonal_expansion_plot <- function(
   rad_scale_factor = 0.95,
   res = 360,
   ORDER = TRUE,
+  scramble = FALSE,
   try_place = FALSE,
   verbose = TRUE,
   repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 10,
-  use_default_theme = TRUE,
-  show_origin = FALSE,
-  retain_axis_scales = FALSE,
-  add_size_legend = TRUE,
-  legend_sizes = c(1, 5, 50),
-  legend_position = "top_left",
-  legend_buffer = 1.5,
-  legend_color = "#808080",
-  legend_spacing = 0.4
+  use_default_theme = TRUE, #
+  show_origin = FALSE, #
+  retain_axis_scales = FALSE, #
+  add_size_legend = TRUE, #
+  legend_sizes = c(1, 5, 50), #
+  legend_position = "top_left", #
+  legend_buffer = 1.5, #
+  legend_color = "#808080", #
+  legend_spacing = 0.4 #
 ) {
   # time called
   time_called <- Sys.time()
@@ -115,6 +121,9 @@ clonal_expansion_plot <- function(
   }
   if (max_repulsion_iter > 1000) {
     warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
+  }
+  if (scramble && ORDER) {
+    warning("scramble and ORDER are both set to TRUE, prioritizing scramble")
   }
 
   # integrate TCR and count clonotypes
@@ -133,6 +142,7 @@ clonal_expansion_plot <- function(
     num_clusters = count_umap_clusters(seurat_obj),
     rad_decrease = rad_scale_factor,
     ORDER = ORDER,
+    scramble = scramble,
     try_place = try_place,
     progbar = verbose,
     repulse = repulse,

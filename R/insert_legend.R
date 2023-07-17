@@ -15,14 +15,18 @@ insert_legend <- function(
   xr <- ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
   yr <- ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
   
-  # this is the most rudimentary legend placement; purely on the corner.
-  pos_list <- list(
-    "top_left" = c(xr[1] + buffer, yr[2]),
-    "top_right" = c(xr[2] - buffer, yr[2]),
-    "bottom_left" = c(xr[1] + buffer, yr[1] + buffer),
-    "bottom_right" = c(xr[2] - buffer, yr[1] + buffer)
-  )
-  coord <- pos_list[[pos]]
+  if (is.character(pos)) {
+    pos_list <- list(
+      "top_left" = c(xr[1] + buffer, yr[2]),
+      "top_right" = c(xr[2] - buffer, yr[2]),
+      "bottom_left" = c(xr[1] + buffer, yr[1] + buffer),
+      "bottom_right" = c(xr[2] - buffer, yr[1] + buffer)
+    )
+    coord <- pos_list[[tolower(pos)]]
+  }else if(is.numeric(pos)) {
+    coord <- pos
+  }
+  
   plt <- plt + ggplot2::annotate(
     "text", x = coord[1], y = coord[2], label = "Clone sizes"
   )
