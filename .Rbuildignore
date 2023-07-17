@@ -22,3 +22,4 @@
 ^CRAN-SUBMISSION$
 ^R/upcoming_v1_scripts$
 [.]gitignore$
+^R/upcoming$

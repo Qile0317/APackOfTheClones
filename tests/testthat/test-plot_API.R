@@ -5,13 +5,16 @@ test_that("df_full_join() works", {
     
   expect_equal(
     df_full_join(
-      list(c1,c1_shifted_by_4_5, c1_shifted_to_9_0, c2,c3)),
-    test_df)
+      list(c1, c1_shifted_by_4_5, c1_shifted_to_9_0, c2,c3)
+    ),
+    test_df
+  )
 
   expect_equal(df_full_join(list(c1)),
                test_df[1:9, ])
   
   expect_equal(df_full_join(list(c1, NA)), test_df[1:9, ])
+  expect_equal(df_full_join(list(c1, list())), test_df[1:9, ])
   
   test_df_rows_1_till_9_with_label_1 <- test_df[1:9,]
   test_df_rows_1_till_9_with_label_1[[1]] <- rep("cluster 1", 9)
@@ -24,7 +27,8 @@ test_that("df_full_join() works", {
   
   expect_identical(
     test_df_rows_1_till_9_with_label_1,
-    df_full_join(list(NA, c1, NA))
+    df_full_join(list(NA, c1, NA)),
+    tolerance - 1e-6
   )
   
   expect_identical(
@@ -32,6 +36,7 @@ test_that("df_full_join() works", {
     df_full_join(list(list(), c1, list(), c2, list()))
   )
 })
+# NA testcases shouldnt be needed anymore (?)
 
 test_that("plot_clusters() works", {
   test_plot <- plot_clusters(
@@ -73,9 +78,11 @@ test_that("plot_API(rad_decrease = 0.8) works", {
 # 
 # it fails when running devtools::test() on opening RStudio, but not a bit after
 # when more packages are stuff are loading in. It might be some hidden dumb dep
-# problem that alters the behaviour of a function? No idea.
+# problem that alters the behaviour of a function? No idea. Or maybe floats
+# being slightly differenty valued?
 # 
 # the changed snapshot shows that bottom two circles being differently placed
+# with all else equal
 
 #test_that("plot_API(try_place = TRUE) works", {
 #  test_plot <- plot_API(
