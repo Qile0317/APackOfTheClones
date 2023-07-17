@@ -1,10 +1,11 @@
 # APackOfTheClones 0.1.4
 ## Additions
-* The clonal expansion plotting function now has a new optional argument `reduction` which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to `'umap'` but can now be changed to `'tsne'` or `'pca'` given that they have been ran already on the seurat object
+* The clonal expansion plotting function now has a new optional argument `reduction` which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to `'umap'` but can now be changed to `'tsne'` or `'pca'` given that they have been ran already on the seurat object. The vignette has been updated accordingly as well
 * New CRAN badge showing date of latest release on `README.md`
 
 ## Changes
 * Some testcases have been altered/fixed to pass CRAN's R-CMD check
+* Package startup message has been improved
 
 # APackOfTheClones 0.1.3
 ## Additions
@@ -42,15 +43,17 @@ All of which have documentation, including on the documentation site.
 
 Currently, Automated cluster repulsion uses a highly flawed mathematical formula loosely based on force directed graph drawing techniques, the resulting plots are not presentable and the function has been disabled temporarily
 
-##  Future features/plans:
+##  Future features/plans: (~ means in progress)
 [~] Customizable cluster coloration, not just based on the original Seurat/ggplot palette
+
 [~] User-controlled cluster shifting
-[x] Comprehensive cluster repulsion
-[x] better legends and optional legend border
+
 [ ] automated optimization of the initial parameters of `clonal_expansion_plot`, especially the `clone_scale_factor`
+
 [ ] BCR library integration
-[x] User vignette
-[ ] Developer vignette
-[x] Submission to CRAN or Bioconductor
+
+[ ] Developer vignette / manuscript
+
 [~] Rewrite of certain circle packing functions in `rust` or `c++` to improve performance
+
 [ ] Increase interoperability with `Seurat` and `scRepertoire`

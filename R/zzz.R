@@ -1,10 +1,12 @@
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage("\nThank you for using APackOfTheClones! \n")
-    packageStartupMessage("Please read the vignette found at https://qile0317.github.io/APackOfTheClones/articles/web_only/Clonal_expansion_plotting.html")
-    packageStartupMessage("\nif you use this package in your paper, please cite this package with the citation() function\n")
-    #packageStartupMessage(paste(
-    #  "R package Version", 
-    #  packageVersion("APackOfTheClones"),
-    #  "https://CRAN.R-project.org/package=APackOfTheClones\n"
-    #))
+    packageStartupMessage(paste(
+        "\nThank you for using APackOfTheClones version",
+        utils::packageVersion("APackOfTheClones"), "\n"
+    ))
+    packageStartupMessage(
+        "Please read the vignette found at https://qile0317.github.io/APackOfTheClones/articles/web_only/Clonal_expansion_plotting.html"
+    )
+    packageStartupMessage(
+        '\nif you use this package in your paper/study, please cite this package. Run `citation("APackOfTheClones")` for citation information\n'
+    )
 }

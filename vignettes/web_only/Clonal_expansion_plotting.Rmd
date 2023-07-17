@@ -50,7 +50,7 @@ if(!exists("pbmc")) {data("pbmc")}
 if(!exists("tcr_dataframe")) {data("tcr_dataframe")}
 ```
 
-# Introduction
+# An introductory walkthrough of APackOfTheClones v0.1.x
 
 Single-cell RNA sequencing (scRNA-seq) and T cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide insights into clonal expansion. `APackOfTheClones` provides a simple, publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot2`, and can be easily slotted into any analysis pipeline.
 
@@ -60,7 +60,7 @@ We will be showing basic usage of the main function of the package, Namely, in t
 
 # Setup the Seurat object and T cell receptor library
 
-Before anything else can be done, we need a `Seurat` object with a UMAP reduction. 
+Before anything else can be done, we need a `Seurat` object of the single cell experiment with a dimensional reduction. The most modern and common reduction used in publications is UMAP (Uniform Manifold Approximation and Projection) which is what this package defaults to, and what this vignette will use. There is also a way to base it off of the t-SNE (t-distributed stochastic neighbor embedding) or PCA (Principle Component Analysis) reduction though choosing the latter is probably not the best idea.
 
 ```{r, init_pbmc, echo = TRUE, collapse = FALSE}
 library(Seurat)
@@ -139,9 +139,21 @@ There is the `count_clone_sizes(seurat_obj)` function for doing so. Check the do
 All one has to do to produce the visualization is by simply running the following code:
 ```{r, main_plt, echo = TRUE}
 pbmc_expansion_plot <- clonal_expansion_plot(pbmc, verbose = FALSE)
-# once again, `verbose` is set to false due to numerous progress bars but it defaults to TRUE and that is very recommended
+# once again, `verbose` is set to false but it defaults to TRUE
 pbmc_expansion_plot
 ```
+
+<details>
+  <summary>**How do I base the clonal expansion plot off of the t-SNE or PCA reduction?**</summary>
+`clonal_expansion_plot` has an optional argument `reduction` which defaults to `'umap'` that handles which reduction the plot is based off of. The argument can be set to `'tsne'` or `'pca'` like so:
+
+```
+# t-SNE based plot
+pbmc_expansion_plot <- clonal_expansion_plot(pbmc, reduction = 'tsne')
+# PCA based plot
+pbmc_expansion_plot <- clonal_expansion_plot(pbmc, reduction = 'pca')
+```
+</details>
 
 ## A few things to note about the plot
 * The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
@@ -162,10 +174,6 @@ As `APackOfTheClones` is in a rapid-development phase, the resulting clonal expa
 pbmc_expansion_plot <- clonal_expansion_plot(pbmc, tcr_dataframe, verbose = FALSE)
 ```
 </details>
-
-# Plot refinement and customization
-
-*Unfinished*
 
 ## Adjusting intra-cluster spacing
 The considerable overlap between clusters (due to the algorithm's attempt to fit clusters to the original UMAP coordinates) may sometimes obstruct eachother excessively.
@@ -301,7 +309,7 @@ cowplot::plot_grid(
 <details>
   <summary>**How do I reproduce the plots in this vignette?**</summary>
 
-If you really want to reproduce the plots and code in this vignette, you will need to install the data used in this vignette which has been compiled in an R package `SCIPData`. You can do so with the following code
+If you really want to reproduce the plots and code in this vignette, you will need to install the data used in this vignette which has been compiled in an R package `SCIPData` (Single Cell Immune Profiling Data). You can do so with the following code
 ```{r, echo = TRUE, eval = FALSE}
 # install the data package
 library(devtools)

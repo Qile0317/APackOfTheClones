@@ -30,3 +30,9 @@ test_that("isnt_empty_nor_na works", {
   expect_false(isnt_empty_nor_na(list(NA, NA)))
   expect_false(isnt_empty_nor_na(list()))
 })
+
+test_that("attempt_correction works", {
+  expect_identical("umap", attempt_correction("Umap"))
+  expect_identical("tsne", attempt_correction("t-SNE"))
+  expect_identical("pca", attempt_correction("PCA"))
+})

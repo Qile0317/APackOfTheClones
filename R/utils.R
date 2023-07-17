@@ -50,3 +50,12 @@ print_completion_time <- function(start_time) {
     "seconds\n"
   ))
 }
+
+# helper function to correct reduction string
+attempt_correction <- function(s) {
+  s <- tolower(s)
+  if (identical(s, "t-sne")) {
+    s <- "tsne"
+  }
+  s
+}

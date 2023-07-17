@@ -102,7 +102,10 @@ clonal_expansion_plot <- function(
 ) {
   # time called
   time_called <- Sys.time()
-
+  
+  # attempt to correct the reduction string
+  reduction <- attempt_correction(reduction)
+  
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction]])) {
     stop(paste("No", reduction, "reduction found on the seurat object"))
