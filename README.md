@@ -1,10 +1,10 @@
 # APackOfTheClones <img src="man/figures/logo.png" width="20%" align="right" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
-[![CRAN status](https://www.r-pkg.org/badges/last-release/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
+[![CRAN status](https://www.r-pkg.org/badges/last-release/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
+[![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -24,10 +24,7 @@ install.packages("APackOfTheClones")
 ```
 Alternatively, to download the latest development edition on the development (`dev`) branch, run
 ```R
-if (require(devtools), quietly = TRUE) {
-  install.packages('devtools')
-  library(devtools)
-}
+library(devtools)
 devtools::install_github("Qile0317/APackOfTheClones@dev")
 ```
 (Note: the package is about to undergo massive breaking changes in a subsequent CRAN release v1.0.0)
