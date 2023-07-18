@@ -33,18 +33,18 @@ quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
   suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
 }
 
+quiet_load_all_CRAN <- function(...) {
+  pkgs <- list(...)
+  for (pkg in pkgs) {quiet_load(pkg)}
+}
+
 # redefine "head" to output a nicer dataframe
 view_head <- function(df) {
   knitr::kable(head(df))
 }
 
-# load misc packages
-quiet_load("ggplot2")
-quiet_load("cowplot")
-quiet_load("Seurat")
-
-# load packages and data
-quiet_load("devtools") # ugh, had to add devtools to import
+# load pkgs & data
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools", "APackOfTheClones")
 quiet_load("SCIPData", CRAN = FALSE)
 if(!exists("pbmc")) {data("pbmc")}
 if(!exists("tcr_dataframe")) {data("tcr_dataframe")}
@@ -64,7 +64,7 @@ Before anything else can be done, we need a `Seurat` object of the single cell e
 
 ```{r, init_pbmc, echo = TRUE, collapse = FALSE}
 library(Seurat)
-library(APackOfTheClones)
+suppressPackageStartupMessages(library(APackOfTheClones))
 
 # Here, a Seurat object has already been loaded named `pbmc`
 print(pbmc)
