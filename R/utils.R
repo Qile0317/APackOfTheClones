@@ -42,11 +42,15 @@ isnt_empty_nor_na <- function(inp) {
   isnt_empty(inp) && isnt_na(inp)
 }
 
-print_completion_time <- function(start_time) {
+is_int <- function(num) {
+  return(num == as.integer(num))
+}
+
+print_completion_time <- function(start_time, digits = 2) {
   end_time <- Sys.time()
   message(paste(
     "\nCompleted successfully, time elapsed:",
-    round(as.numeric(end_time - start_time), 2),
+    round(as.numeric(end_time - start_time), digits),
     "seconds\n"
   ))
 }

@@ -23,13 +23,6 @@ public:
     }
 };
 
-// macros for slightly better syntax for accessing Node attributes
-#define _x(a) (data[a].x)
-#define _y(a) (data[a].y)
-#define _rad(a) (data[a].rad)
-#define nxt(a) (data[a].nxt)
-#define prv(a) (data[a].prv)
-
 // functions for readability
 inline double centre_dist(Node& c) {
     return sqrt(sqr(c.x) + sqr(c.y));
@@ -38,6 +31,13 @@ inline double centre_dist(Node& c) {
 inline bool is_clear(std::pair<int, int>& p) {
     return (p.first == -1) && (p.second == -1);
 }
+
+// macros for slightly better syntax for accessing Node attributes in member functions
+#define _x(a) (data[a].x)
+#define _y(a) (data[a].y)
+#define _rad(a) (data[a].rad)
+#define nxt(a) (data[a].nxt)
+#define prv(a) (data[a].prv)
 
 class NodeVector {
 public:
@@ -335,6 +335,7 @@ public:
         }
         return j;
     }
+
 };
 
 // [[Rcpp::export]]
@@ -348,6 +349,7 @@ Rcpp::List cpp_circle_layout(
     if(verbose) {progress_bar(0, 1);}
 
     NodeVector nodes = NodeVector(input_rad_vec);
+    
     if (nodes.is_degenerate_case()) {
         if(verbose) {progress_bar(1, 1);}
         return nodes.handle_degenerate_cases(centroid, rad_scale_factor);
@@ -368,7 +370,7 @@ Rcpp::List cpp_circle_layout(
     while (j < nodes.num_nodes) {
         int curr_circ = (try_place) ? nodes.closest_place(j-1, j) : nodes.closest(j-1);
         int nxt_circ = nodes.data[curr_circ].nxt;
-        nodes.fit_tang_circle(curr_circ,nxt_circ , j);
+        nodes.fit_tang_circle(curr_circ, nxt_circ, j);
         j = nodes.fit_circle(curr_circ, nxt_circ, j, verbose);
     }
     return nodes.process_into_clusterlist(centroid, rad_scale_factor, verbose);

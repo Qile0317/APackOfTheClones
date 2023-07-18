@@ -119,18 +119,12 @@ RunAPOTC <- function(
   )
   
   if (repulse) {
-    if(verbose){
-      message(paste(
-        "\nrepulsing all clusters | max iterations =", max_repulsion_iter
-      ))
-    }
-    packed_clusters <- repulse_cluster(
-      packed_clusters, repulsion_threshold, repulsion_strength,
-      max_repulsion_iter, verbose
+    results <- get_repulsed_clusterlists_and_centroids(
+      packed_clusters, initial_centroids, apotc_obj@num_clusters,
+      repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
     )
-    initial_centroids <- read_centroids(
-      packed_clusters, initial_centroids, apotc_obj@num_clusters
-    )
+    packed_clusters <- results[[1]]
+    initial_centroids <- results[[2]]
   }
   
   # add the clusterlists and centroids to the obj
@@ -143,42 +137,20 @@ RunAPOTC <- function(
   seurat_obj
 }
 
-# need functions for readjusting the apotc reduction for better visuals
-# also possible to boot up a shiny window
-adjustAPOTC <- function(
-  seurat_obj,
-  verbose = TRUE,
-  
-  new_rad_scale_factor = -1,
-  
-  adjust_repulsion = FALSE,
-  repulsion_threshold = 1,
-  repulsion_strength = 1,
-  max_repulsion_iter = 10,
-  
-  relocate_cluster = -1,
-  relocation_coord = NULL,
-  
-  nudge_cluster = -1,
-  nudge_vector = NULL
-) {
-  seurat_obj
-}
-
 # plotting
 APOTCPlot <- function(
-    seurat_obj,
-    res = 360,
-    linetype = "blank",
-    use_default_theme = TRUE,
-    show_origin = FALSE,
-    retain_axis_scales = FALSE,
-    add_size_legend = TRUE,
-    legend_sizes = c(1, 5, 50),
-    legend_position = "top_left", # can now also be simply a coord
-    legend_buffer = 1.5,
-    legend_color = "#808080",
-    legend_spacing = 0.4
+  seurat_obj,
+  res = 360,
+  linetype = "blank",
+  use_default_theme = TRUE,
+  show_origin = FALSE,
+  retain_axis_scales = FALSE,
+  add_size_legend = TRUE,
+  legend_sizes = c(1, 5, 50),
+  legend_position = "top_left", # can now also be simply a coord
+  legend_buffer = 1.5,
+  legend_color = "#808080",
+  legend_spacing = 0.4
 ) {
   # convert clusterlists to dataframe and add colors
   clusterlists <- seurat_obj@reductions[["apotc"]]@clusters

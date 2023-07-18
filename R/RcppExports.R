@@ -21,3 +21,7 @@ calculate_transformation_vectors <- function(transformation_vectors, overall_rep
     .Call(`_APackOfTheClones_calculate_transformation_vectors`, transformation_vectors, overall_repulsion_vec, num_clusters)
 }
 
+has_repeats <- function(vec1, vec2) {
+    .Call(`_APackOfTheClones_has_repeats`, vec1, vec2)
+}
+

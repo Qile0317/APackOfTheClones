@@ -54,8 +54,6 @@ std::vector<double> get_component_repulsion_vector(
   return component_form(polar_repulsion_vec);
 } 
 
-// TODO: initialize_direction_vectors, initialize_list_of_transformation_vectors
-
 // Check if 2 cluster lists overlap, with a threshold, give their centroids and
 // radii. thr should be the amount of acceptable overlap
 // [[Rcpp::export]]

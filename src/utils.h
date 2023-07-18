@@ -46,3 +46,25 @@ bool elements_are_equal(
     }
     return true;
 }
+
+// could easily make it give more informative but... probably not needed
+// [[Rcpp::export]]
+bool has_repeats(const Rcpp::NumericVector vec1, const Rcpp::NumericVector vec2) {
+    std::unordered_set<double> s;
+  
+    for (int i = 0; i < vec1.size(); i++) {
+        if (s.count(vec1[i]) > 0) {
+            return true;
+        }
+        s.insert(vec1[i]);
+    }
+  
+    for (int i = 0; i < vec2.size(); i++) {
+        if (s.count(vec2[i]) > 0) {
+            return true;
+        }
+        s.insert(vec2[i]);
+    }
+  
+    return false;
+}
