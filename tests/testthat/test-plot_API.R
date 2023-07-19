@@ -21,17 +21,15 @@ test_that("df_full_join() works", {
   
   expect_equal(
     df_full_join(list(NA, c1)),
-    test_df_rows_1_till_9_with_label_1,
-    tolerance = 1e-6
+    test_df_rows_1_till_9_with_label_1
   )
   
-  expect_identical(
+  expect_equal(
     test_df_rows_1_till_9_with_label_1,
-    df_full_join(list(NA, c1, NA)),
-    tolerance - 1e-6
+    df_full_join(list(NA, c1, NA))
   )
   
-  expect_identical(
+  expect_equal(
     df_full_join(list(NA, c1, NA, c2, NA)),
     df_full_join(list(list(), c1, list(), c2, list()))
   )

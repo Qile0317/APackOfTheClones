@@ -122,8 +122,8 @@ clonal_expansion_plot <- function(
   if (max_repulsion_iter > 1000) {
     warning("Repulsion iteration count is high, consider reducing max_repulsion_iter if runtime is too long")
   }
-  if (scramble && ORDER) {
-    warning("scramble and ORDER are both set to TRUE, prioritizing scramble")
+  if (ORDER && scramble) {
+    stop("ORDER and scramble are both set to TRUE, only one should be TRUE")
   }
 
   # integrate TCR and count clonotypes

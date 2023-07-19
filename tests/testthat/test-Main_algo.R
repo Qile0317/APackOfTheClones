@@ -98,6 +98,11 @@ test_that("cpp_circle_layout(rad_scale_factor = 0.9) works", {
                tolerance = 1)
 })
 
+test_that("process_rad_vec works", {
+  expect_equal(process_rad_vec(c(4,2,5,1,3), TRUE, FALSE), c(5,4,3,2,1))
+  expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, TRUE), c(4,3,1,5,2))
+})
+
 test_that("pack_into_clusterlists works", {
   expect_equal(
     pack_into_clusterlists(

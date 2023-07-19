@@ -69,6 +69,17 @@ test_that("repulsion and try_place works", {
         add_size_legend = TRUE, legend_buffer = 1.5, legend_spacing = 0.25
       )
   )
-}) 
+})
+
+test_that("scrambling works", {
+  expect_doppelganger(
+    "scramble_plot",
+    clonal_expansion_plot(
+      test_integrated_pbmc, verbose = FALSE, repulse = FALSE,
+      clone_scale_factor = 0.5, retain_axis_scales = FALSE,
+      add_size_legend = FALSE, scramble = TRUE, ORDER = FALSE
+    )
+  )
+})
 
 # incredibly weird, try_place = TRUE works here but not on plot_API... WHAT?!?!

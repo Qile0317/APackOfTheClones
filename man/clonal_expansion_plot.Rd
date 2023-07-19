@@ -12,6 +12,7 @@ clonal_expansion_plot(
   rad_scale_factor = 0.95,
   res = 360,
   ORDER = TRUE,
+  scramble = FALSE,
   try_place = FALSE,
   verbose = TRUE,
   repulse = FALSE,
@@ -49,7 +50,9 @@ genomics' Cell Ranger. The dataframe has to at least have the `barcode` and
 
 \item{res}{The number of points on the generated path per full circle. From plot viewers, if circles seem slightly too pixelated, it is highly recommended to first try to export the plot as an `.svg` before increasing `res`}
 
-\item{ORDER}{logical. Decides if the largest clones should be at the cluster centroids}
+\item{ORDER}{logical. Decides if the largest clones should be at the cluster centroids.}
+
+\item{scramble}{logical. Decides if the clones within each cluster should be randomly scrambled when plotted}
 
 \item{try_place}{If `TRUE`, always minimizes distance from a newly placed circle to the origin}
 
@@ -73,7 +76,11 @@ genomics' Cell Ranger. The dataframe has to at least have the `barcode` and
 
 \item{legend_sizes}{numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`.}
 
-\item{legend_position}{character. Can be set to either `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the legend roughly in the corresponding position}
+\item{legend_position}{character or numeric. Can be set to either
+`"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the
+legend roughly in the corresponding position. Otherwise, can be a numeric
+vector of length 2 indicating the x and y position of the "top-center" of the
+legend}
 
 \item{legend_buffer}{numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away}
 

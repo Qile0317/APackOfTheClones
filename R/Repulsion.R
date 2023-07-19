@@ -36,7 +36,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 
 # check in current iteration if two clusters are worth repulsing
 do_proceed <- function(inp, i, j, thr) {
-  if (i != j) {
+  if (i == j) {
     return(FALSE)
   }
   if (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]]))) {

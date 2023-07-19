@@ -30,10 +30,25 @@ repulse_again <- function(
   seurat_obj
 }
 
-relocate_cluster <- function(seurat_obj, relocate_cluster, relocation_coord) {
-  if (length(relocate_cluster) == length(relocation_coord)) {
-    
+# should probably fool proof this and the next function more
+relocate_clusters <- function(seurat_obj, relocate_cluster, relocation_coord) {
+  for(i in 1:length(relocate_cluster)) {
+    cl_ind <- relocate_cluster[i]
+    seurat_obj@reductions[['apotc']]@clusters[[cl_ind]] <- move_cluster(
+      seurat_obj@reductions[['apotc']]@clusters[[cl_ind]], relocation_coord[[i]]
+    )
   }
+  seurat_obj
+}
+
+nudge_clusters <- function(seurat_obj, nudge_cluster, nudge_vector) {
+  for(i in 1:length(nudge_cluster)) {
+    cl_ind <- nudge_cluster[i]
+    seurat_obj@reductions[['apotc']]@clusters[[cl_ind]] <- trans_coord(
+      seurat_obj@reductions[['apotc']]@clusters[[cl_ind]], nudge_vector[[i]]
+    )
+  }
+  seurat_obj
 }
 
 adjustAPOTC_stop_str <- function(
@@ -83,21 +98,29 @@ adjustAPOTC <- function(
   nudge_cluster = -1L, # same as above
   nudge_vector = NULL
 ) {
+  
+  # check for argument issues
   stop_str <- adjustAPOTC_stop_str(
     seurat_obj, new_rad_scale_factor, adjust_repulsion, max_repulsion_iter,
-    relocation_cluster, relocation_coord, relocate_cluster, nudge_cluster,
+    relocate_cluster, relocation_coord, relocate_cluster, nudge_cluster,
     nudge_vector
   )
   if (!is.null(stop_str)) {
     stop(stop_str)
   }
-  
-  # need warnings first
-  # # check if the seurat command is there
-  # check if it was run correctly
-  
+
   if (new_rad_scale_factor > 0) {
     seurat_obj <- change_rad_scale(seurat_obj, new_rad_scale_factor)
+  }
+  
+  if (!identical(relocate_cluster, -1L)) {
+    seurat_obj <- relocate_clusters(
+      seurat_obj, relocate_cluster, relocation_coord
+    )
+  }
+  
+  if (!identical(nudge_cluster, -1L)) {
+    seurat_obj <- nudge_clusters(seurat_obj, nudge_cluster, nudge_vector)
   }
   
   if (adjust_repulsion) {

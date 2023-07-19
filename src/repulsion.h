@@ -77,6 +77,7 @@ Rcpp::List calculate_transformation_vectors(
 ) {
   bool contains_nonzero_vector = false;
   std::vector<double> blank = {0, 0};
+  
   for (int i = 0; i < num_clusters; i++) {
     Rcpp::List curr_rep_vecs = overall_repulsion_vec[i];
     transformation_vectors[i] = get_average_vector(curr_rep_vecs);
@@ -85,6 +86,7 @@ Rcpp::List calculate_transformation_vectors(
       contains_nonzero_vector = true;
     }
   }
+  
   if (contains_nonzero_vector) {
     return transformation_vectors;
   }
