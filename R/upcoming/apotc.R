@@ -49,7 +49,8 @@ initialize_apotc <- function(
   )
 }
 
-# function to imitate RunUMAP
+# function to imitate RunUMAP - something is wrong w the C++ packing in this function
+# session aborts on cluster 2 during testing
 RunAPOTC <- function(
   seurat_obj,
   tcr_df = "seurat_obj_already_integrated",
@@ -76,9 +77,6 @@ RunAPOTC <- function(
   }
   if (max_repulsion_iter > 1000) {
     warning("Repulsion iteration count > 1000, consider reducing max_repulsion_iter if runtime is too long")
-  }
-  if (clone_scale_factor <= 0) {
-    stop("clone_scale_factor has to be a positive number")
   }
   if (clone_scale_factor <= 0) {
     stop("clone_scale_factor has to be a positive number")

@@ -26,10 +26,6 @@ end_progress_bar <- function(verbose = TRUE) {
   }
 }
 
-get_num_clusters <- function(seurat_obj) {
-  length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
-}
-
 isnt_empty <- function(inp) {
   !identical(inp, list())
 }
