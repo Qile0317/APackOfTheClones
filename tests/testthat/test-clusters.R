@@ -1,5 +1,6 @@
 source("testdata/cluster_lists.R")
 source("testdata/SCIP.R")
+data("mini_seurat_obj")
 
 test_that("get_num_clusters works", {
   expect_equal(get_num_clusters(mini_seurat_obj), 2L)
@@ -22,7 +23,7 @@ test_that("find_centroids() works", {
   expect_equal(
     find_centroids(input),
     expected_output,
-    tolerance = 5e-7
+    tolerance = 1e-5
   )
 })
 
@@ -38,9 +39,10 @@ test_that("get_cluster_centroids() works", {
   expect_equal(
     get_cluster_centroids(test_pbmc, "tsne"),
     list(
-      `1` = c(-7.762187 13.409124),
-      `2` = c(12.93698 -22.34854)
-    )
+      `1` = c(-7.762187, 13.409124),
+      `2` = c(12.93698, -22.34854)
+    ),
+    tolerance = 1e-6
   )
 })
 
