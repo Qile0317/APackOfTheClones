@@ -323,10 +323,8 @@ context("C++ | cpp_circle_layout") {
         nodes.place_starting_three();
         int j = 3;
         int curr_circ = nodes.closest(2);
-        int nxt_circ = nodes.data[curr_circ].nxt;
-        nodes.fit_tang_circle(curr_circ, nxt_circ, j);
-        
-        j = nodes.fit_circle(curr_circ, nxt_circ, j, false);
+
+        j = nodes.fit_circle(curr_circ, j, false);
         expect_true(j == 4);
         
         NodeVector expected_nodes = NodeVector({

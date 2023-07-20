@@ -19,7 +19,6 @@
 #' @param rad_scale_factor numeric. indicates how much the radii of the clones should decrease to add a slight gap between all of them. Defaults to 1 but 0.85-0.95 values are recommended. Both `rad_scale_factor` and `clone_scale_factor` may need to be repeatedly readjusted
 #' @param res The number of points on the generated path per full circle. From plot viewers, if circles seem slightly too pixelated, it is highly recommended to first try to export the plot as an `.svg` before increasing `res`
 #' @param ORDER logical. Decides if the largest clones should be at the cluster centroids.
-#' @param scramble logical. Decides if the clones within each cluster should be randomly scrambled when plotted
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed circle to the origin
 #' @param verbose logical. Decides if visual cues print to the R console of the packing progress
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from each other.
@@ -39,7 +38,8 @@
 #' @param legend_buffer numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away
 #' @param legend_color character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray
 #' @param legend_spacing numeric. Indicates the horizontal distance between each stacked circle on the size legend. Usually should be kept below 0.75 -ish depending on plot size.
-#'
+#' @param scramble logical. Decides if the clones within each cluster should be randomly scrambled when plotted
+#' 
 #' @return Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects
 #'
 #' @details Check out the web-only user vignette at
@@ -89,22 +89,22 @@ clonal_expansion_plot <- function(
   rad_scale_factor = 0.95,
   res = 360,
   ORDER = TRUE,
-  scramble = FALSE,
   try_place = FALSE,
   verbose = TRUE,
   repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 10,
-  use_default_theme = TRUE, #
-  show_origin = FALSE, #
-  retain_axis_scales = FALSE, #
-  add_size_legend = TRUE, #
-  legend_sizes = c(1, 5, 50), #
-  legend_position = "top_left", #
-  legend_buffer = 1.5, #
-  legend_color = "#808080", #
-  legend_spacing = 0.4 #
+  use_default_theme = TRUE, 
+  show_origin = FALSE, 
+  retain_axis_scales = FALSE, 
+  add_size_legend = TRUE, 
+  legend_sizes = c(1, 5, 50), 
+  legend_position = "top_left", 
+  legend_buffer = 1.5, 
+  legend_color = "#808080", 
+  legend_spacing = 0.4,
+  scramble = FALSE,
 ) {
   # time called
   time_called <- Sys.time()

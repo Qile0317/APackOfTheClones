@@ -1,3 +1,5 @@
+// script to pack a vector of radii into a circular cluster of circles
+
 class Node {
 public:
     double x;      
@@ -61,7 +63,7 @@ public:
         }
     }
     
-    // functions for cpp_circle_layout
+    // functions for cpp_circle_layout (exported function at end of script)
     
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {
@@ -187,6 +189,11 @@ public:
         }
         return closest;
     }
+    
+    // convinience function
+    int place_circle(int j, bool try_place) {
+        return (try_place) ? closest_place(j-1, j) : closest(j-1);
+    }
 
     // check if two circle nodes overlap geometrically
     bool do_intersect(int c1, int c2) {
@@ -253,7 +260,8 @@ public:
 
     Rcpp::List handle_degenerate_cases(
         Rcpp::NumericVector& centroid,
-        double rad_scale_factor
+        double rad_scale_factor,
+        bool verbose = false
     ) {
         Rcpp::NumericVector x, y, r;
         double clrad;
@@ -275,6 +283,7 @@ public:
             clrad = 0.5 * (_rad(0) + _rad(1));
         }
         
+        if (verbose) {progress_bar(1, 1);}
         return Rcpp::List::create(
             _["x"] = x, _["y"] = y, _["rad"] = r,
             _["centroid"] = centroid, _["clRad"] = clrad
@@ -285,7 +294,7 @@ public:
     Rcpp::List process_into_clusterlist(
         Rcpp::NumericVector& centroid,
         double rad_scale_factor,
-        bool verbose
+        bool verbose = false
     ) {
         Rcpp::NumericVector x (num_nodes), y (num_nodes), rad (num_nodes);
         bool do_shift_x = (centroid[0] != 0), do_shift_y = (centroid[1] != 0);
@@ -313,9 +322,13 @@ public:
         );
     }
     
-    // fit a new circle (node at index j) adjacent to curr_circ, nxt_circ
-    int fit_circle(int curr_circ, int nxt_circ, int& j, bool verbose) {
+    // fit a new circle (index j) adjacent to curr_circ and its neighbour
+    int fit_circle(int curr_circ, int& j, bool verbose) {
+        int nxt_circ = nxt(curr_circ);
+            
+        fit_tang_circle(curr_circ, nxt_circ, j);
         std::pair<int, int> check = overlap_check(curr_circ, nxt_circ, j);
+        
         int cm = curr_circ, cn = nxt_circ;
         
         while (!is_clear(check)) {
@@ -351,27 +364,18 @@ Rcpp::List cpp_circle_layout(
     NodeVector nodes = NodeVector(input_rad_vec);
     
     if (nodes.is_degenerate_case()) {
-        if(verbose) {progress_bar(1, 1);}
-        return nodes.handle_degenerate_cases(centroid, rad_scale_factor);
+        return nodes.handle_degenerate_cases(centroid, rad_scale_factor, verbose);
     }
     
+    // for all nodes, fit each node into cluster, check for overlap, and refit
     nodes.place_starting_three();
- 
-    if (nodes.num_nodes == 3) {
-        return nodes.process_into_clusterlist(centroid, rad_scale_factor, verbose);
-    }
-    
-    // for all nodes, fit circle, check for overlap, and refit till condition
-    // satisfied
-    
     nodes.init_boundary();
     
     int j = 3;
     while (j < nodes.num_nodes) {
-        int curr_circ = (try_place) ? nodes.closest_place(j-1, j) : nodes.closest(j-1);
-        int nxt_circ = nodes.data[curr_circ].nxt;
-        nodes.fit_tang_circle(curr_circ, nxt_circ, j);
-        j = nodes.fit_circle(curr_circ, nxt_circ, j, verbose);
+        int curr_circ = nodes.place_circle(j, try_place);
+        j = nodes.fit_circle(curr_circ, j, verbose);
     }
+    
     return nodes.process_into_clusterlist(centroid, rad_scale_factor, verbose);
 }
