@@ -2,12 +2,12 @@ citHeader("To cite APackOfTheClones in publications, please use:")
 
 bibentry(
   bibtype  = "manual",
-  title    = "APackOfTheClones: Visualize T cell clonal expansion via circle packing",
+  title    = "APackOfTheClones: Visualization of clonal expansion with circle packing",
   author   = "Qile Yang",
   year     = 2023,
   url      = "https://github.com/Qile0317/APackOfTheClones",
   textVersion = paste(
-    "Yang, Qile. 2023. APackOfTheClones: Visualize T cell clonal expansion via circle packing. ",
+    "Yang, Qile. 2023. APackOfTheClones: Visualization of clonal expansion with circle packing. ",
     "URL https://github.com/Qile0317/APackOfTheClones"
   )
 )

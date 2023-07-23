@@ -27,7 +27,7 @@ initialize_list_of_transformation_vectors <- function(blank_vectors, num_cluster
   output
 }
 
-# do_cl_intersect has been replaced by do_cluster_intersect, this is a wrapper 
+# do_cl_intersect has been replaced by do_cluster_intersect, this is a wrapper
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
   do_cluster_intersect(
     Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
@@ -36,21 +36,20 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 
 # check in current iteration if two clusters are worth repulsing
 do_proceed <- function(inp, i, j, thr) {
-  if (i == j) {
-    return(FALSE)
-  }
-  if (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]]))) {
+  if ((i==j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
     return(FALSE)
   }
   do_cl_intersect(inp[[i]], inp[[j]], thr)
 }
+
+# cluster attraction is possible too
 
 # O(N^2) operation to calculate all repulsion vectors for each cluster
 calculate_repulsion_vectors <- function(
   overall_repulsion_vec, inp,
   num_clusters, G = 1, thr = 0
 ) {
-  for (i in 1:num_clusters) { 
+  for (i in 1:num_clusters) {
     for (j in 1:num_clusters) {
       if (!do_proceed(inp,i,j,thr)) {
         overall_repulsion_vec[[i]][[j]] <- c(0, 0)
@@ -72,28 +71,28 @@ repulse_cluster <- function(
 ) {
   #if (G <= 0) {stop("repulsion strength must be a positive real number")} # whynot let attraction be a thing too :/
   start_progress_bar(verbose)
-  
+
   #init variables - could use a class
   num_clusters <- length(inp)
-  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration. 
+  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration.
   overall_repulsion_vec <- initialize_list_of_transformation_vectors(
     transformation_vectors, num_clusters
   ) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
 
-  for(curr_iteration in 1:max_iter){ 
+  for(curr_iteration in 1:max_iter){
     overall_repulsion_vec <- calculate_repulsion_vectors(
       overall_repulsion_vec, inp, num_clusters, G, thr
     )
     transformation_vectors <- calculate_transformation_vectors(
       transformation_vectors, overall_repulsion_vec, num_clusters
     )
-    
+
     #transformation vectors is an empty list() if everything was c(0,0)
     if (!isnt_empty(transformation_vectors)) {
       end_progress_bar(verbose)
       return(inp)
     }
-    
+
     # with the transformation vectors established, each cluster is moved
     for (i in 1:num_clusters) {
       if (isnt_empty(inp[[i]])) {
@@ -129,6 +128,6 @@ get_repulsed_clusterlists_and_centroids <- function(
   initial_centroids <- read_centroids(
     packed_clusters, initial_centroids, num_clusters
   )
-  
+
   list(packed_clusters, initial_centroids)
 }
