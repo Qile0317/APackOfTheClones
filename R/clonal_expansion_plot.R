@@ -3,7 +3,7 @@
 #' Integrates a cell ranger T cell library into a Seurat object with a UMAP
 #' reduction. Then gets sizes of unique clones and utilizes a circle-packing
 #' algorithm to pack circles representing individual clones in approximately
-#' the same UMAP coordinates and clusters into a ggplot object. 
+#' the same UMAP coordinates and clusters into a ggplot object.
 #'
 #' @param seurat_obj Seurat object with at least a UMAP reduction. Can either
 #' already have been integrated with a T cell library via
@@ -15,7 +15,7 @@
 #' genomics' Cell Ranger. The dataframe has to at least have the `barcode` and
 #' `raw_clonotype_id` columns
 #' @param reduction character. The seurat reduction to base the clonal expansion plotting on. Defaults to 'umap' but can also be 'tsne' or 'pca'. If 'pca', the cluster coordinates will be based on PC1 and PC2 although generally APackOfTheClones is used for displaying UMAP and occasionally t-SNE versions
-#' @param clone_scale_factor numeric. Decides how much to scale each circle. Usually should be kept at around 0.01 to somewhat maintain UMAP structure for large datasets. However, if the plot that is displayed is ever blank, first try increasing this value. 
+#' @param clone_scale_factor numeric. Decides how much to scale each circle. Usually should be kept at around 0.01 to somewhat maintain UMAP structure for large datasets. However, if the plot that is displayed is ever blank, first try increasing this value.
 #' @param rad_scale_factor numeric. indicates how much the radii of the clones should decrease to add a slight gap between all of them. Defaults to 1 but 0.85-0.95 values are recommended. Both `rad_scale_factor` and `clone_scale_factor` may need to be repeatedly readjusted
 #' @param res The number of points on the generated path per full circle. From plot viewers, if circles seem slightly too pixelated, it is highly recommended to first try to export the plot as an `.svg` before increasing `res`
 #' @param ORDER logical. Decides if the largest clones should be at the cluster centroids.
@@ -28,8 +28,8 @@
 #' @param use_default_theme If `TRUE`, the resulting plot will have the same theme as the seurat UMAP. Else, the plot will simply have a blank background
 #' @param show_origin logical. If `TRUE`, only the centers of each circle will be plotted
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales of the original UMAP. However, it will only attempt to extend the axes and never shorten.
-#' @param add_size_legend If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones. 
-#' @param legend_sizes numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`. 
+#' @param add_size_legend If `TRUE`, adds a legend to the plot titled `"Clone sizes"` indicating the relative sizes of clones.
+#' @param legend_sizes numeric vector. Indicates the circle sizes to be displayed on the legend and defaults to `c(1, 5, 10)`.
 #' @param legend_position character or numeric. Can be set to either
 #' `"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the
 #' legend roughly in the corresponding position. Otherwise, can be a numeric
@@ -39,12 +39,12 @@
 #' @param legend_color character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray
 #' @param legend_spacing numeric. Indicates the horizontal distance between each stacked circle on the size legend. Usually should be kept below 0.75 -ish depending on plot size.
 #' @param scramble logical. Decides if the clones within each cluster should be randomly scrambled when plotted
-#' 
+#'
 #' @return Returns a ggplot2 object of the ball packing plot. Can be operated on like normal ggplot objects
 #'
 #' @details Check out the web-only user vignette at
 #' `https://qile0317.github.io/APackOfTheClones/articles/web_only/Clonal_expansion_plotting.html`
-#' for a walkthrough on using this function, and additional details. 
+#' for a walkthrough on using this function, and additional details.
 #'
 #' @seealso \code{\link{integrate_tcr}}
 #'
@@ -59,7 +59,7 @@
 #' ball_pack_plot <- clonal_expansion_plot(
 #'   mini_seurat_obj, mini_clonotype_data, verbose = FALSE
 #' )
-#' 
+#'
 #' #> integrating TCR library into seurat object
 #' #>   |===============================================| 100%
 #' #> Percent of unique barcodes: 100 %
@@ -69,9 +69,9 @@
 #' #> packing cluster 1
 #' #> [==================================================] 100%
 #' #> Plotting completed successfully
-#' 
+#'
 #' ball_pack_plot
-#' 
+#'
 #' # it's also possible (and preferable) to input an integrated Seurat object
 #' integrated_seurat_object <- integrate_tcr(
 #'   mini_seurat_obj, mini_clonotype_data, verbose = FALSE
@@ -95,23 +95,23 @@ clonal_expansion_plot <- function(
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 10,
-  use_default_theme = TRUE, 
-  show_origin = FALSE, 
-  retain_axis_scales = FALSE, 
-  add_size_legend = TRUE, 
-  legend_sizes = c(1, 5, 50), 
-  legend_position = "top_left", 
-  legend_buffer = 1.5, 
-  legend_color = "#808080", 
+  use_default_theme = TRUE,
+  show_origin = FALSE,
+  retain_axis_scales = FALSE,
+  add_size_legend = TRUE,
+  legend_sizes = c(1, 5, 50),
+  legend_position = "top_left",
+  legend_buffer = 1.5,
+  legend_color = "#808080",
   legend_spacing = 0.4,
-  scramble = FALSE,
+  scramble = FALSE
 ) {
   # time called
   time_called <- Sys.time()
-  
+
   # attempt to correct the reduction string
   reduction <- attempt_correction(reduction)
-  
+
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction]])) {
     stop(paste("No", reduction, "reduction found on the seurat object"))
@@ -130,7 +130,7 @@ clonal_expansion_plot <- function(
   if (is.data.frame(tcr_df)) {
     seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, time_called)
   }
-  
+
   # get clone sizes and cluster centroids
   clone_size_list <- get_clone_sizes(seurat_obj, scale_factor = clone_scale_factor)
   centroid_list <- get_cluster_centroids(seurat_obj, reduction = reduction)
@@ -152,7 +152,7 @@ clonal_expansion_plot <- function(
     n = res,
     origin = show_origin
   )
-  
+
   #set theme
   if (use_default_theme) {
     result_plot <- result_plot +
@@ -163,12 +163,12 @@ clonal_expansion_plot <- function(
   } else {
     result_plot <- result_plot + ggplot2::theme_void()
   }
-  
+
   # retain axis scales on the resulting plot. The function sucks tho
   if (retain_axis_scales) {
     result_plot <- suppressMessages(invisible(retain_scale(seurat_obj, result_plot)))
   }
-  
+
   if (verbose) {
     message(paste(
       "\nPlotting completed successfully, time elapsed:",
@@ -176,7 +176,7 @@ clonal_expansion_plot <- function(
       "seconds\n"
     ))
   }
-  
+
   if (add_size_legend) {
     return(insert_legend(
       plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
@@ -193,25 +193,25 @@ clonal_expansion_plot <- function(
 #' @importFrom ggplot2 coord_cartesian
 #' @noRd
 retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
-  
+
   test_umap_plt <- Seurat::DimPlot(object = seurat_obj, reduction = "umap")
-  
+
   # get current ranges
   umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
   umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
-  
+
   rm("test_umap_plt")
-  
+
   ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
   ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
-  
+
   # set new ranges
   min_xr <- min(ball_pack_xr[1], umap_xr[1]) - buffer
   max_xr <- max(ball_pack_xr[2], umap_xr[2]) + buffer
-  
+
   min_yr <- min(ball_pack_yr[1], umap_yr[1]) - buffer
   max_yr <- max(ball_pack_yr[2], umap_yr[2]) + buffer
-  
+
   return(ball_pack_plt + coord_cartesian(
     xlim = c(min_xr, max_xr),
     ylim = c(min_yr, max_yr)

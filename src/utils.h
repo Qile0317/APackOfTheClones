@@ -11,23 +11,23 @@ inline double sqr(double n) {
 
 // copy of the R progress_bar. not unit tested but works perfectly
 void progress_bar(int x, int max) {
-  double percent = 100.0 * (double(x) / double(max));
-  int filledWidth = static_cast<int>(percent * 0.5);
-  int remainingWidth = 50 - filledWidth;
-  
-  std::string progressBar = "\r[";
-  progressBar += std::string(filledWidth, '=');
-  progressBar += std::string(remainingWidth, ' ') + "] ";
-  progressBar += std::to_string(int(floor(percent))) + "%";
-  
-  Rcpp::Rcout << progressBar;
+    double percent = 100.0 * (double(x) / double(max));
+    int filledWidth = static_cast<int>(percent * 0.5);
+    int remainingWidth = 50 - filledWidth;
+    
+    std::string progressBar = "\r[";
+    progressBar += std::string(filledWidth, '=');
+    progressBar += std::string(remainingWidth, ' ') + "] ";
+    progressBar += std::to_string(int(floor(percent))) + "%";
+    
+    Rcpp::Rcout << progressBar;
 }
 
 // simple alias for an user interupt checker
 inline void periodic_interupt_check(int num, int factor) {
-  if ((num % factor) == 0) {
-    Rcpp::checkUserInterrupt();
-  }
+    if ((num % factor) == 0) {
+        Rcpp::checkUserInterrupt();
+    }
 }
 
 // functions for testing
@@ -65,6 +65,5 @@ bool has_repeats(const Rcpp::NumericVector vec1, const Rcpp::NumericVector vec2)
         }
         s.insert(vec2[i]);
     }
-  
     return false;
 }
