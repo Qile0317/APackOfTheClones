@@ -103,6 +103,7 @@ dev_integrate_tcr <- function(
 #' @param seurat_obj A seurat object integrated with a t cell receptor library via \code{\link{integrate_tcr}}
 #'
 #' @return Returns an integer indicating the number of valid barcodes that are not NA's
+#' @export
 count_valid_barcodes <- function(seurat_obj) sum(!is.na(seurat_obj@meta.data[["barcode"]]))
 
 # get the percent of NA's in the metadata barcode column for the message

@@ -86,16 +86,16 @@ RunAPOTC <- function(
     seurat_obj,
     tcr_df = "seurat_obj_already_integrated",
     reduction_base = "umap",
-    clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
+    clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     ORDER = TRUE,
     scramble = FALSE,
     try_place = FALSE,
-    verbose = TRUE,
     repulse = FALSE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
-    max_repulsion_iter = 10L
+    max_repulsion_iter = 10L,
+    verbose = TRUE
 ) {
     # call time for seurat commands
     call_time = Sys.time()
@@ -115,16 +115,23 @@ RunAPOTC <- function(
     # integrate TCR - in future remake to be compatible with scRepertoire
     if (is.data.frame(tcr_df)) {
         seurat_obj <- dev_integrate_tcr(
-            seurat_obj, tcr_df, "__", verbose, call_time
+            seurat_obj, tcr_df, "__", verbose, FALSE, call_time
         )
     }
 
+    if (should_estimate(clone_scale_factor)) {
+        clone_scale_factor <- estimate_clone_scale_factor(seurat_obj)
+    }
+
     # add seurat command
+    if (verbose && (!is.null(seurat_obj@commands[["RunAPOTC"]]))) {
+        message("overriding pervious APOTC run results")
+    }
     seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)
 
     # initialize apotc S4 class
     apotc_obj <- initialize_apotc(
-        num_clusters = get_num_clusters(seurat_obj),
+        get_num_clusters(seurat_obj),
         clone_scale_factor,
         rad_scale_factor,
         reduction_base

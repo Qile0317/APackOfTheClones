@@ -77,3 +77,16 @@ metadata_name_warnstring <- function(seurat_obj, tcr_dataframe) {
 
     return(NULL)
 }
+
+# functions to get the x and y ranges of a ggplot
+get_xr <- function(plt) {
+    ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
+}
+
+get_yr <- function(plt) {
+    ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
+}
+
+should_estimate <- function(obj, auto_str = "auto") {
+    identical(obj, auto_str)
+}

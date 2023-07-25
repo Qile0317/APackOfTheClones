@@ -85,7 +85,7 @@ clonal_expansion_plot <- function(
   seurat_obj,
   tcr_df = "seurat_obj_already_integrated",
   reduction = "umap",
-  clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
+  clone_scale_factor = 0.1,
   rad_scale_factor = 0.95,
   res = 360,
   ORDER = TRUE,
@@ -128,7 +128,9 @@ clonal_expansion_plot <- function(
 
   # integrate TCR and count clonotypes
   if (is.data.frame(tcr_df)) {
-    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, "__", verbose, time_called)
+    seurat_obj <- dev_integrate_tcr(
+      seurat_obj, tcr_df, "__", verbose, FALSE, time_called
+    )
   }
 
   # get clone sizes and cluster centroids
