@@ -83,10 +83,10 @@ bool has_common_strs(
 
     // Check if any string from vec2 is present in the hash set
     for (const std::string& str : vec2) {
-        hashSet.insert(str);
         if (hashSet.count(str) > 0) {
             return true;
         }
+        hashSet.insert(str);
     }
     return false;
 }

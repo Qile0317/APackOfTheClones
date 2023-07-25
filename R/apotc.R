@@ -120,7 +120,7 @@ RunAPOTC <- function(
     }
 
     if (should_estimate(clone_scale_factor)) {
-        clone_scale_factor <- estimate_clone_scale_factor(seurat_obj)
+        clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
     }
 
     # add seurat command

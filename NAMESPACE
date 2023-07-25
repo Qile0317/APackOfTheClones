@@ -2,6 +2,7 @@
 
 export(clonal_expansion_plot)
 export(count_clone_sizes)
+export(count_valid_barcodes)
 export(integrate_tcr)
 importFrom(Rcpp,sourceCpp)
 importFrom(data.table,.GRP)

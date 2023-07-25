@@ -13,6 +13,7 @@ seurat_extractfield <- function(string, field = 1, delim = "_") {
   ))
 }
 
+# almost identical to seurat command except the tcr_df is removed to save memory
 make_apotc_command <- function(call_time = "auto") {
   if (identical(call_time, "auto")) {
     call_time <- Sys.time()
@@ -68,6 +69,9 @@ make_apotc_command <- function(call_time = "auto") {
     }
     params[[arg]] <- param_value
   }
+
+  # addition: remove the dataframe in tcr_df to save memory
+  params[["tcr_df"]] <- "removed from command call to save memory"
 
   command_name <- sub(
     pattern = "[\\.]+$",

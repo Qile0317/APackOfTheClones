@@ -29,6 +29,7 @@ Imports:
     ggplot2,
     grDevices,
     hash,
+    methods,
     Rcpp,
     rlang,
     Seurat,
