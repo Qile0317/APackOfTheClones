@@ -11,7 +11,6 @@ tags:
 authors:
   - name: Qile Yang
     orcid: 0009-0005-0148-2499
-    equal-contrib: true
     affiliation: 1 # (Multiple affiliations must be quoted)
 affiliations:
  - name: University of California, Berkeley, Berkeley, CA 94720, USA
@@ -23,11 +22,14 @@ bibliography: paper.bib
 # Summary
 APackOfTheClones is an R implementation of a novel method (and utilities) for visualizing clonal expansion of single cell RNA and clonotype data from 10X genomics' Single Cell Immune Profiling, in R. The package can enumerate clone sizes for each cell cluster, and visualize heterogenity by representing each clone as a circle with an area representing relative clone size, and packing all clones into circular clusters with similar coordinates and color to the corresponding cluster in the dimension reduction plot.
 
-APackOfTheClones' approach was originally implemented in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and utillized in two papers. [@ma2021single; stark2022recombinant]
+APackOfTheClones' approach was originally implemented in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and utilized in two papers. [@ma2021single; @stark2022recombinant]
 
 # Statement of need
 - state issue to be solved
-- show improvement & ease of use over julia implementation
+- show improvement & ease of use over alternatives
+  - scRepertoire::clonal_overlay()
+  - julia implementation
+  - [@wang2021single] fig 2c
 
 # Method and features
 - summary of the method

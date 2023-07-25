@@ -25,3 +25,7 @@ has_repeats <- function(vec1, vec2) {
     .Call(`_APackOfTheClones_has_repeats`, vec1, vec2)
 }
 
+has_common_strs <- function(vec1, vec2) {
+    .Call(`_APackOfTheClones_has_common_strs`, vec1, vec2)
+}
+

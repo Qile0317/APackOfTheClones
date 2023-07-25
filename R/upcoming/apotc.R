@@ -22,124 +22,148 @@
 #' @keywords internal
 #'
 setClass(
-  Class = "apotc",
-  slots = c(
-    clusters = 'list',
-    num_clusters = 'numeric',
-    centroids = 'list',
-    clone_sizes = 'list',
-    clone_scale_factor = 'numeric',
-    rad_scale_factor = 'numeric',
-    cluster_colors = 'character',
-    reduction_base = 'character'
-  )
+    Class = "apotc",
+    slots = c(
+        clusters = 'list',
+        num_clusters = 'numeric',
+        centroids = 'list',
+        clone_sizes = 'list',
+        clone_scale_factor = 'numeric',
+        rad_scale_factor = 'numeric',
+        cluster_colors = 'character',
+        reduction_base = 'character'
+    )
 )
 
 # initialize the reduction object from precomputed clusterlists
 initialize_apotc <- function(
-  num_clusters, clone_scale_factor, rad_scale_factor, reduction_base
+    num_clusters, clone_scale_factor, rad_scale_factor, reduction_base
 ) {
-  empty_list <- vector("list", num_clusters)
-  methods::new(
-    Class = 'apotc',
-    clusters = empty_list,
-    num_clusters = num_clusters,
-    centroids = empty_list,
-    clone_sizes = empty_list,
-    clone_scale_factor = clone_scale_factor,
-    rad_scale_factor = rad_scale_factor,
-    cluster_colors = gg_color_hue(num_clusters),
-    reduction_base = reduction_base
-  )
+    empty_list <- vector("list", num_clusters)
+    methods::new(
+        Class = 'apotc',
+        clusters = empty_list,
+        num_clusters = num_clusters,
+        centroids = empty_list,
+        clone_sizes = empty_list,
+        clone_scale_factor = clone_scale_factor,
+        rad_scale_factor = rad_scale_factor,
+        cluster_colors = gg_color_hue(num_clusters),
+        reduction_base = reduction_base
+    )
+}
+
+# warn helpers
+run_apotc_warn_str <- function(
+    seurat_obj, reduction_base, tcr_df, clone_scale_factor
+) {
+    if (is.null(seurat_obj@reductions[[reduction_base]])) {
+        return(paste(
+            "No", reduction_base, "reduction found on the seurat object,",
+            "please ensure spelling is correct"
+        ))
+    }
+    if (!is.data.frame(tcr_df)) {
+        if (is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
+            return("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
+        }
+        warn_str <- metadata_name_warnstring(seurat_obj, tcr_df)
+        if (!is.null(warn_str)) {
+            return(warn_str)
+        }
+    }
+
+    if (clone_scale_factor <= 0) {
+        return("clone_scale_factor has to be a positive number")
+    }
+
+    return(NULL)
 }
 
 # function to imitate RunUMAP - something is wrong w the C++ packing in this function
 # session aborts on cluster 2 during testing
 RunAPOTC <- function(
-  seurat_obj,
-  tcr_df = "seurat_obj_already_integrated",
-  reduction_base = "umap",
-  clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
-  rad_scale_factor = 0.95,
-  ORDER = TRUE,
-  scramble = FALSE,
-  try_place = FALSE,
-  verbose = TRUE,
-  repulse = FALSE,
-  repulsion_threshold = 1,
-  repulsion_strength = 1,
-  max_repulsion_iter = 10L
+    seurat_obj,
+    tcr_df = "seurat_obj_already_integrated",
+    reduction_base = "umap",
+    clone_scale_factor = 0.1, # do 0.5 for test ds - need to make an estimator based on testing
+    rad_scale_factor = 0.95,
+    ORDER = TRUE,
+    scramble = FALSE,
+    try_place = FALSE,
+    verbose = TRUE,
+    repulse = FALSE,
+    repulsion_threshold = 1,
+    repulsion_strength = 1,
+    max_repulsion_iter = 10L
 ) {
-  # call time for seurat commands
-  call_time = Sys.time()
+    # call time for seurat commands
+    call_time = Sys.time()
 
-  reduction_base <- attempt_correction(reduction_base)
+    reduction_base <- attempt_correction(reduction_base)
 
-  # errors/warnings:
-  if (is.null(seurat_obj@reductions[[reduction_base]])) {
-    stop(paste(
-        "No", reduction_base, "reduction found on the seurat object,",
-        "please ensure spelling is correct"
-    ))
-  }
-  if ((!is.data.frame(tcr_df)) && is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
-    stop("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
-  }
-  if (clone_scale_factor <= 0) {
-    stop("clone_scale_factor has to be a positive number")
-  }
-
-  if (verbose) {message("Initializing APOTC run")}
-
-  # integrate TCR - in future remake to be compatible with scRepertoire
-  if (is.data.frame(tcr_df)) {
-      seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
-  }
-
-  # add seurat command
-  seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)
-
-  # initialize apotc S4 class
-  apotc_obj <- initialize_apotc(
-    num_clusters = get_num_clusters(seurat_obj),
-    clone_scale_factor,
-    rad_scale_factor,
-    reduction_base
-  )
-
-  # infer clone sizes and centroids
-  apotc_obj <- add_raw_clone_sizes(apotc_obj, seurat_obj)
-  initial_centroids <- get_cluster_centroids(
-    seurat_obj, reduction = reduction_base
-  )
-
-  # pack the clusterlists
-  packed_clusters <- pack_into_clusterlists(
-    sizes = get_processed_clone_sizes(apotc_obj),
-    centroids = initial_centroids,
-    num_clusters = apotc_obj@num_clusters,
-    rad_scale = rad_scale_factor,
-    ORDER = ORDER,
-    scramble = scramble,
-    try_place = try_place,
-    verbose = verbose
-  )
-
-  if (repulse) {
-    results <- get_repulsed_clusterlists_and_centroids(
-      packed_clusters, initial_centroids, apotc_obj@num_clusters,
-      repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
+    # errors/warnings:
+    warn_str <- run_apotc_warn_str(
+        seurat_obj, reduction_base, tcr_df, clone_scale_factor
     )
-    packed_clusters <- results[[1]]
-    initial_centroids <- results[[2]]
-  }
+    if (!is.null(warn_str)) {
+        stop(warn_str)
+    }
 
-  # add the clusterlists and centroids to the obj
-  apotc_obj@clusters <- packed_clusters
-  apotc_obj@centroids <- initial_centroids
+    if (verbose) {message("Initializing APOTC run")}
 
-  # add the finished apotc object to reductions, print message, and return
-  seurat_obj@reductions[['apotc']] <- apotc_obj
-  if (verbose) {print_completion_time(call_time)}
-  seurat_obj
+    # integrate TCR - in future remake to be compatible with scRepertoire
+    if (is.data.frame(tcr_df)) {
+        seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
+    }
+
+    # add seurat command
+    seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)
+
+    # initialize apotc S4 class
+    apotc_obj <- initialize_apotc(
+        num_clusters = get_num_clusters(seurat_obj),
+        clone_scale_factor,
+        rad_scale_factor,
+        reduction_base
+    )
+
+    # infer clone sizes and centroids
+    apotc_obj <- add_raw_clone_sizes(apotc_obj, seurat_obj)
+    initial_centroids <- get_cluster_centroids(
+        seurat_obj, reduction = reduction_base
+    )
+
+    # pack the clusterlists
+    packed_clusters <- pack_into_clusterlists(
+        sizes = get_processed_clone_sizes(apotc_obj),
+        centroids = initial_centroids,
+        num_clusters = apotc_obj@num_clusters,
+        rad_scale = rad_scale_factor,
+        ORDER = ORDER,
+        scramble = scramble,
+        try_place = try_place,
+        verbose = verbose
+    )
+
+    if (repulse) {
+        results <- get_repulsed_clusterlists_and_centroids(
+            packed_clusters, initial_centroids, apotc_obj@num_clusters,
+            repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
+        )
+        packed_clusters <- results[[1]]
+        initial_centroids <- results[[2]]
+    }
+
+    # add the clusterlists and centroids to the obj
+    apotc_obj@clusters <- packed_clusters
+    apotc_obj@centroids <- initial_centroids
+
+    # add the finished apotc object to reductions, print message, and return
+    seurat_obj@reductions[['apotc']] <- apotc_obj
+
+    if (verbose) {
+        print_completion_time(call_time)
+    }
+    seurat_obj
 }

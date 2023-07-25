@@ -128,7 +128,7 @@ clonal_expansion_plot <- function(
 
   # integrate TCR and count clonotypes
   if (is.data.frame(tcr_df)) {
-    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, time_called)
+    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, "__", verbose, time_called)
   }
 
   # get clone sizes and cluster centroids
@@ -155,11 +155,7 @@ clonal_expansion_plot <- function(
 
   #set theme
   if (use_default_theme) {
-    result_plot <- result_plot +
-      ggplot2::theme_classic() +
-      ggplot2::xlab("UMAP_1") +
-      ggplot2::ylab("UMAP_2") +
-      ggplot2::ggtitle("Sizes of clones within each cluster")
+    result_plot <- add_default_theme(result_plot, reduction)
   } else {
     result_plot <- result_plot + ggplot2::theme_void()
   }

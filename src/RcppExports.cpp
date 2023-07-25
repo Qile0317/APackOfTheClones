@@ -90,6 +90,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// has_common_strs
+bool has_common_strs(const std::vector<std::string>& vec1, const std::vector<std::string>& vec2);
+RcppExport SEXP _APackOfTheClones_has_common_strs(SEXP vec1SEXP, SEXP vec2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type vec1(vec1SEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type vec2(vec2SEXP);
+    rcpp_result_gen = Rcpp::wrap(has_common_strs(vec1, vec2));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -100,6 +112,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},
     {"_APackOfTheClones_calculate_transformation_vectors", (DL_FUNC) &_APackOfTheClones_calculate_transformation_vectors, 3},
     {"_APackOfTheClones_has_repeats", (DL_FUNC) &_APackOfTheClones_has_repeats, 2},
+    {"_APackOfTheClones_has_common_strs", (DL_FUNC) &_APackOfTheClones_has_common_strs, 2},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
