@@ -114,7 +114,9 @@ RunAPOTC <- function(
 
     # integrate TCR - in future remake to be compatible with scRepertoire
     if (is.data.frame(tcr_df)) {
-        seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
+        seurat_obj <- dev_integrate_tcr(
+            seurat_obj, tcr_df, "__", verbose, call_time
+        )
     }
 
     # add seurat command

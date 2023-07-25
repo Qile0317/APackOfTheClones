@@ -87,7 +87,7 @@ adjustAPOTC_stop_str <- function(
 }
 
 # need functions for readjusting the apotc reduction for better visuals
-# also possible to boot up a shiny window
+# also possible to boot up a shiny window in the future?
 adjustAPOTC <- function(
   seurat_obj,
   verbose = TRUE,
@@ -149,9 +149,14 @@ adjustAPOTC <- function(
 
 # it is probably super common to need to readjust the clone_scale_factor
 change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
+
+	if (is.null(seurat_obj@reductions[['apotc']])) {
+		stop("please run RunAPOTC first")
+	}
 	if (new_clone_scale == seurat_obj@reductions[['apotc']]@clone_scale_factor) {
 		stop("new clone scale factor identical to current clone scale factor")
 	}
+
 	if (verbose) {message("Repacking all clusters with new clone scale factor")}
 
 	seurat_obj@reductions[['apotc']]@clone_scale_factor <- new_clone_scale
