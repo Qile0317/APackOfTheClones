@@ -15,3 +15,5 @@ docs
 a.exe
 /doc/
 /Meta/
+.RDataTmp
+.RDataTmp1

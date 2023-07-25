@@ -179,7 +179,8 @@ clonal_expansion_plot <- function(
 
   if (add_size_legend) {
     return(insert_legend(
-      plt = result_plot, circ_scale_factor = clone_scale_factor, sizes = legend_sizes,
+      plt = result_plot, circ_scale_factor = clone_scale_factor,
+      rad_scale_factor = rad_scale_factor, sizes = legend_sizes,
       pos = legend_position, buffer = legend_buffer, color = legend_color, n = res,
       spacing = legend_spacing
       )

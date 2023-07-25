@@ -48,7 +48,7 @@ initialize_apotc <- function(
     clone_sizes = empty_list,
     clone_scale_factor = clone_scale_factor,
     rad_scale_factor = rad_scale_factor,
-    cluster_colors = gg_color_hue(num_clusters)
+    cluster_colors = gg_color_hue(num_clusters),
     reduction_base = reduction_base
   )
 }
@@ -77,13 +77,13 @@ RunAPOTC <- function(
 
   # errors/warnings:
   if (is.null(seurat_obj@reductions[[reduction_base]])) {
-    stop(paste("No", reduction_base, "reduction found on the seurat object"))
+    stop(paste(
+        "No", reduction_base, "reduction found on the seurat object,",
+        "please ensure spelling is correct"
+    ))
   }
   if ((!is.data.frame(tcr_df)) && is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) {
     stop("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
-  }
-  if (max_repulsion_iter > 1000) {
-    warning("Repulsion iteration count > 1000, consider reducing max_repulsion_iter if runtime is too long")
   }
   if (clone_scale_factor <= 0) {
     stop("clone_scale_factor has to be a positive number")
@@ -93,7 +93,7 @@ RunAPOTC <- function(
 
   # integrate TCR - in future remake to be compatible with scRepertoire
   if (is.data.frame(tcr_df)) {
-    seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
+      seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_df, verbose, call_time)
   }
 
   # add seurat command
@@ -142,60 +142,4 @@ RunAPOTC <- function(
   seurat_obj@reductions[['apotc']] <- apotc_obj
   if (verbose) {print_completion_time(call_time)}
   seurat_obj
-}
-
-new_clonal_expansion_plot <- function(
-  seurat_obj,
-  res = 360,
-  linetype = "blank",
-  use_default_theme = TRUE,
-  show_origin = FALSE,
-  retain_axis_scales = FALSE,
-  add_size_legend = TRUE,
-  legend_sizes = c(1, 5, 50),
-  legend_position = "top_left", # can now also be simply a coord
-  legend_buffer = 1.5,
-  legend_color = "#808080",
-  legend_spacing = 0.4
-) {
-  if (is.null)
-
-  # convert clusterlists to dataframe and add colors
-  clusterlists <- seurat_obj@reductions[["apotc"]]@clusters
-  clusterlists <- df_full_join(clusterlists)
-  clusterlists <- extract_and_add_colors(seurat_obj, clusterlists) # will change
-
-  result_plot <- plot_clusters(
-    clusterlists, n = res, linetype = linetype,
-    title = "Sizes of Clones Within Each Cluster", haslegend = FALSE,
-    void = FALSE, origin = show_origin
-  )
-
-  #set theme
-  if (use_default_theme) {
-    result_plot <- result_plot +
-      ggplot2::theme_classic() +
-      ggplot2::xlab("UMAP_1") +
-      ggplot2::ylab("UMAP_2") +
-      ggplot2::ggtitle("Sizes of clones within each cluster")
-  } else {
-    result_plot <- result_plot + ggplot2::theme_void()
-  }
-
-  # retain axis scales on the resulting plot. The function sucks tho
-  if (retain_axis_scales) {
-    result_plot <- suppressMessages(invisible(
-      retain_scale(seurat_obj, result_plot)
-    ))
-  }
-
-  if (add_size_legend) {
-    return(insert_legend(
-      plt = result_plot,
-      circ_scale_factor = seurat_obj@reductions[["apotc"]]@clone_scale_factor,
-      sizes = legend_sizes, pos = legend_position, buffer = legend_buffer,
-      color = legend_color, n = res, spacing = legend_spacing
-    ))
-  }
-  result_plot
 }

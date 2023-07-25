@@ -149,6 +149,10 @@ adjustAPOTC <- function(
 
 # it is probably super common to need to readjust the clone_scale_factor
 change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
+	if (new_clone_scale == seurat_obj@reductions[['apotc']]@clone_scale_factor) {
+		stop("new clone scale factor identical to current clone scale factor")
+	}
+	if (verbose) {message("Repacking all clusters with new clone scale factor")}
 
 	seurat_obj@reductions[['apotc']]@clone_scale_factor <- new_clone_scale
 
