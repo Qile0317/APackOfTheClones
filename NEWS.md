@@ -4,6 +4,7 @@
 * When working with size legend positions within the plot with the `legend_position` argument in `clonal_expansion_plot`, it can now simply just be a numeric vector of length 2 indicating the x and y coordinate of the "top center" of the legend. However the old functionality with strings are still present.
 
 ## Changes
+* Completely revamping the entire package to v1.x.y with seurat-like syntax
 * fixed the `reduction` argument in the clonal expansion plotting function so that, when choosing `'pca'`, the resulting plot will use coordinates of only PC1 and PC2
 
 # APackOfTheClones 0.1.4
