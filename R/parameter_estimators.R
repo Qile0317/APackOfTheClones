@@ -5,13 +5,14 @@
 #a more complicated model can use clonotype distribution as third param
 
 estimate_clone_scale_factor <- function(seurat_obj, verbose = FALSE) {
-	num <- (-0.003305785 * count_valid_barcodes(seurat_obj)) + 1
+	num <- (-0.0003305785 * count_valid_barcodes(seurat_obj)) + 1
 	if (verbose) {
-		message(paste("setting clone_scale_factor to", num))
+		message(paste("\nsetting clone_scale_factor to", num))
 	}
 	num
 }
 
-convert_rad_decrease <- function(seurat_obj) {
-
+# for readability
+convert_to_rad_decrease <- function(rad_scale_factor, clone_scale_factor) {
+	clone_scale_factor * rad_scale_factor
 }

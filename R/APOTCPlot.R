@@ -11,6 +11,13 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
 
+#' Create clonal expansion plot after RunAPOTC()
+#'
+#' Given a seurat object with an 'apotc' (APackOfTheClones) object from running
+#' RunAPOTC(), this function will read the information and return a customizable
+#' ggplot of the clonal expansion with a circle size legend.
+#'
+#'
 APOTCPlot <- function(
 	seurat_obj,
 	res = 360,
@@ -18,15 +25,21 @@ APOTCPlot <- function(
 	use_default_theme = TRUE,
 	show_origin = FALSE,
 	retain_axis_scales = FALSE,
+
+	show_labels = FALSE,
+	label_size = 5,
+
 	add_size_legend = TRUE,
 	legend_sizes = c(1, 5, 50),
 	legend_position = "top_left", # can now also be simply a coord
 	legend_buffer = 1.5,
 	legend_color = "#808080",
-	legend_spacing = 0.4
+	legend_spacing = "auto",
+	legend_label = "Clone sizes",
+	legend_text_size = 5
 ) {
 	if (is.null(seurat_obj@reductions[["apotc"]])) {
-		stop("Please do an APackOfTheClones run on the seurat object first")
+		stop("Please do an APackOfTheClones run on the seurat object first with RunAPOTC")
 	}
 
 	# convert clusterlists to dataframe and add colors
@@ -57,13 +70,21 @@ APOTCPlot <- function(
 	}
 
 	if (add_size_legend) {
-		return(insert_legend(
-			plt = result_plot,
-			circ_scale_factor = seurat_obj@reductions[["apotc"]]@clone_scale_factor,
-			rad_scale_factor = seurat_obj@reductions[["apotc"]]@rad_scale_factor,
+		rad_scale <- seurat_obj@reductions[["apotc"]]@rad_scale_factor
+		clone_scale <- seurat_obj@reductions[["apotc"]]@clone_scale_factor
+
+		result_plot <- insert_legend(
+			plt = result_plot, circ_scale_factor = clone_scale,
+			rad_decrease = convert_to_rad_decrease(rad_scale, clone_scale),
 			sizes = legend_sizes, pos = legend_position, buffer = legend_buffer,
-			color = legend_color, n = res, spacing = legend_spacing
-		))
+			color = legend_color, n = res, spacing = legend_spacing,
+			legend_label = legend_label, legend_textsize = legend_text_size
+		)
 	}
+
+	if (show_labels) {
+		result_plot <- insert_labels(result_plot, seurat_obj, label_size)
+	}
+
 	result_plot
 }

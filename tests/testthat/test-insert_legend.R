@@ -1,21 +1,24 @@
 source("testdata/SCIP.R")
 
-test_that("insert_legend() works, assuming clonal_expansion_plot() works", {
-  expect_doppelganger(
-    "main_plot_with_legend",
-    clonal_expansion_plot(
-      test_pbmc, test_tcr, verbose = FALSE, clone_scale_factor = 0.5,
-      retain_axis_scales = FALSE, add_size_legend = TRUE,
-      legend_sizes = c(1, 5, 10), legend_buffer = 0, legend_spacing = 0.25
-    )
-  )
-  
-  expect_doppelganger(
-    "main_plot_with_smaller_custom_legend",
-    clonal_expansion_plot(
-      test_pbmc, test_tcr, verbose = FALSE, clone_scale_factor = 0.5,
-      retain_axis_scales = FALSE, add_size_legend = TRUE,
-      legend_sizes = c(1, 3), legend_buffer = 0.5, legend_spacing = 0.25
-    )
-  )
+test_that("get_legend_coordinate works", {
+	plt <- plot_clusters(df_full_join(list(c1,c2,c3)))
+
+	expect_equal(get_legend_coordinate(plt, c(1,2), 1.5), c(1, 2))
+	expect_equal(get_legend_coordinate(plt, "top_left", 1.5),
+})
+
+test_that("insert_legend() works", {
+	plt <- plot_clusters(df_full_join(list(c1,c2,c3)))
+	expect_doppelganger(
+		"plt_default_legend",
+		insert_legend(plt, 1, 0)
+	)
+
+	expect_doppelganger(
+		"plt_custom_legend",
+		insert_legend(
+			plt, 1, 0, c(0.5,2,17), "bottom_right", buffer = 2, #color = "black",
+			legend_label = "custom label", legend_textsize = 4
+		)
+	)
 })

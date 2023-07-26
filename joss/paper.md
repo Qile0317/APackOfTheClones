@@ -34,7 +34,7 @@ APackOfTheClones' approach was originally implemented in the julia language [@Ju
 # Method and features
 - summary of the method
 - integrate_tcr
-- getting clonotype frequency
+- getting clonotype frequency (theres more analysis utilities too, perhaps should change title/summary?)
 - scRepertoire and Seurat inter operability
 
 # Usage example

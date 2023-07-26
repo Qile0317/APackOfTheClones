@@ -141,7 +141,7 @@ clonal_expansion_plot <- function(
   result_plot <- plot_API(
     sizes = clone_size_list,
     centroids = centroid_list,
-    num_clusters = count_umap_clusters(seurat_obj),
+    num_clusters = count_umap_clusters(seurat_obj), # should be renamed
     rad_decrease = rad_scale_factor,
     ORDER = ORDER,
     scramble = scramble,
@@ -187,33 +187,40 @@ clonal_expansion_plot <- function(
   result_plot
 }
 
-#' change the axis scales to fit the original plot approximately. Looks pretty bad atm.
-#' A more advanced version could multiply axses by a small amount to retain ratios exactly
-#' @importFrom ggplot2 coord_cartesian
-#' @noRd
+# change the axis scales to fit the original plot approximately. Looks pretty bad atm.
+# A more advanced version could multiply axses by a small amount to retain ratios exactly
 retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
 
-  test_umap_plt <- Seurat::DimPlot(object = seurat_obj, reduction = "umap")
-
-  # get current ranges
-  umap_xr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_x[[1]]$range$range
-  umap_yr <- ggplot2::ggplot_build(test_umap_plt)$layout$panel_scales_y[[1]]$range$range
-
-  rm("test_umap_plt")
-
-  ball_pack_xr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_x[[1]]$range$range
-  ball_pack_yr <- ggplot2::ggplot_build(ball_pack_plt)$layout$panel_scales_y[[1]]$range$range
-
-  # set new ranges
-  min_xr <- min(ball_pack_xr[1], umap_xr[1]) - buffer
-  max_xr <- max(ball_pack_xr[2], umap_xr[2]) + buffer
-
-  min_yr <- min(ball_pack_yr[1], umap_yr[1]) - buffer
-  max_yr <- max(ball_pack_yr[2], umap_yr[2]) + buffer
-
-  return(ball_pack_plt + coord_cartesian(
-    xlim = c(min_xr, max_xr),
-    ylim = c(min_yr, max_yr)
+    test_reduction_plot <- Seurat::DimPlot(
+        object = seurat_obj,
+        reduction = seurat_obj@reductions[["apotc"]]@reduction_base
     )
-  )
+
+    # get current ranges
+    reduction_xr <- get_xr(test_reduction_plot)
+    reduction_yr <- get_yr(test_reduction_plot)
+
+    rm("test_reduction_plot")
+
+    ball_pack_xr <- get_xr(ball_pack_plt)
+    ball_pack_yr <- get_yr(ball_pack_plt)
+
+    # set new ranges
+    min_xr <- min(ball_pack_xr[1], reduction_xr[1]) - buffer
+    max_xr <- max(ball_pack_xr[2], reduction_xr[2]) + buffer
+
+    min_yr <- min(ball_pack_yr[1], reduction_yr[1]) - buffer
+    max_yr <- max(ball_pack_yr[2], reduction_yr[2]) + buffer
+
+    return(
+        ball_pack_plt + ggplot2::coord_cartesian(
+            xlim = c(min_xr, max_xr),
+            ylim = c(min_yr, max_yr)
+        )
+    )
 }
+
+# future ver:
+# clonal_expansion_plot <- function(...) {
+#     stop("this function is deprecated. Please see the vignette and the functions RunAPOTC and APOTCPlot to perform the same function")
+# }

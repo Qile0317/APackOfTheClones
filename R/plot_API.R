@@ -8,9 +8,9 @@ df_full_join <- function(clstr_list) {
     'y' = numeric(0),
     'r' = numeric(0)
   )
-  
+
   seurat_cluster_index <- 0
-  for(i in 1:length(clstr_list)){
+  for(i in seq_along(clstr_list)){
     if (isnt_empty_nor_na(clstr_list[[i]])) {
       df <- dplyr::full_join(
         df,
@@ -37,11 +37,11 @@ df_full_join <- function(clstr_list) {
 #the clusters imput is a dataframe. #move into seperate script
 
 plot_clusters <- function(
-  clusters, n = 360, linetype ="blank", 
+  clusters, n = 360, linetype ="blank",
   title = "Sizes of clones within each cluster",
   haslegend = FALSE, void = TRUE,
   origin = FALSE){
-  
+
   if (!origin) {
     p1 <- ggplot2::ggplot(data = clusters) +
       ggforce::geom_circle(
@@ -56,32 +56,33 @@ plot_clusters <- function(
       ggplot2::coord_fixed()
   }else {
     p1 <- ggplot2::ggplot(
-      clusters, 
+      clusters,
       mapping = apotc_aes_string(x = "x", y = "y")
-      ) + 
+      ) +
       ggplot2::geom_point() +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
   }
-  
+
   if (void) {
     p1 <- p1 + ggplot2::theme_void()
   }
-  
+
   return(p1 + ggplot2::theme(legend.position = "none"))
 }
 
+# not rlly needed anymore
 plot_API <- function(
   sizes, # list of size vectors,[[1]] c(a,b,..)
   centroids, # centroids of size vectors [[1]] c(x,y)
   num_clusters,
-  rad_decrease = 1,
+  rad_decrease = 0,
   ORDER = TRUE,
   scramble = FALSE,
   try_place = FALSE,
-  progbar = TRUE, 
+  progbar = TRUE,
   repulse = FALSE,
-  thr = 1, G = 1, 
+  thr = 1, G = 1,
   max_repulsion_iter = 10,
   n = 360, linetype = "blank",
   plot_title = "Sizes of clones within each cluster",
@@ -90,12 +91,12 @@ plot_API <- function(
   origin = FALSE,
   debug_mode = FALSE
 ) {
-  
+
   ans <- pack_into_clusterlists(
     sizes, centroids, num_clusters, rad_decrease, ORDER, scramble, try_place,
     progbar
   )
-  
+
   if (repulse) {
     if(progbar){
       message(
@@ -110,7 +111,7 @@ plot_API <- function(
   #joining list into df, add color, then plot.
   ans <- df_full_join(ans)
   ans <- insert_colors(ans, num_clusters)
-  
+
   plt <- plot_clusters(
     ans, n = n, linetype = linetype, title = plot_title, haslegend = haslegend,
     void = void, origin = origin

@@ -16,16 +16,16 @@ test_that("cpp_circle_layout() works", {
       c(0.8,0.6,0.6,0.5,0.5), centroid = c(0,0), verbose = FALSE
     )
   ))
-  
+
   expect_equal(
     cpp_circle_layout(
       c(6,9,4,2,7), centroid = c(0,0),
       verbose = FALSE, try_place = FALSE
     ),
-    
+
     list(
       x = c(
-        -6.73333333333333, 8.26666666666667, -1.53333333333333, 
+        -6.73333333333333, 8.26666666666667, -1.53333333333333,
         -7.50533138211336, -8.70501097444157
       ),
       y = c(
@@ -36,7 +36,7 @@ test_that("cpp_circle_layout() works", {
       centroid = c(0, 0),
       clRad = 17.2666666666667
     ),
-    
+
     tolerance = 3e-6
   )
 })
@@ -78,7 +78,7 @@ test_that("cpp_circle_layout() handles edge cases", {
                     )
                )
 
-  # input length = 3 
+  # input length = 3
   expect_equal(cpp_circle_layout(c(3, 2, 1), centroid = c(0,0), verbose = FALSE),
                list(x = c(-2.73333333333333, 2.26666666666667, 0.466666666666667
                ), y = c(0.8, 0.8, -1.6), rad = c(3, 2, 1), centroid = c(0, 0
@@ -87,71 +87,76 @@ test_that("cpp_circle_layout() handles edge cases", {
 })
 
 # Testing optional args (needs more)
-test_that("cpp_circle_layout(rad_scale_factor = 0.9) works", {
-  new_c1 <- c1
-  new_c1[[3]] <- c1[[3]] * 0.9
-  expect_equal(cpp_circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
-                             centroid = new_c1$centroid,
-                             rad_scale_factor = 0.9,
-                             verbose = FALSE),
-               new_c1,
-               tolerance = 1)
+test_that("cpp_circle_layout(rad_decrease = 0.1) works", {
+    new_c1 <- c1
+    new_c1[[3]] <- c1[[3]] - 0.1
+    expect_equal(
+        cpp_circle_layout(
+            c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
+            centroid = new_c1$centroid,
+            rad_decrease = 0.1,
+            verbose = FALSE
+        ),
+       new_c1,
+       tolerance = 1
+    )
 })
 
 test_that("process_rad_vec works", {
-  expect_equal(process_rad_vec(c(4,2,5,1,3), TRUE, FALSE), c(5,4,3,2,1))
-  expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, TRUE), c(4,3,1,5,2))
+    expect_equal(process_rad_vec(c(4,2,5,1,3), TRUE, FALSE), c(5,4,3,2,1))
+    expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, TRUE), c(4,3,1,5,2))
+    expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, FALSE), c(4,2,5,1,3))
 })
 
 test_that("pack_into_clusterlists works", {
-  expect_equal(
-    pack_into_clusterlists(
-      test_radii,
-      test_centroids,
-      5,
-      verbose = FALSE
-    ),
-    test_cluster_lists,
-    tolerance = 1e-8
-  )
-  
-  expect_equal(
-    pack_into_clusterlists(
-      test_radii[1:4],
-      test_centroids[1:4],
-      4,
-      verbose = FALSE
-    ),
-    test_cluster_lists[1:4],
-    tolerance = 1e-8
-  )
-  
-  expect_equal(
-    pack_into_clusterlists(
-      test_radii[1:4],
-      test_centroids[1:4],
-      4,
-      verbose = FALSE
-    ),
-    pack_into_clusterlists(
-      test_radii,
-      test_centroids,
-      5,
-      verbose = FALSE
-    )[1:4],
-    tolerance = 1e-8
-  )
+    expect_equal(
+        pack_into_clusterlists(
+            sizes = test_radii,
+            centroids = test_centroids,
+            num_clusters = 5,
+            verbose = FALSE
+        ),
+        test_cluster_lists,
+        tolerance = 1e-8
+    )
+
+    expect_equal(
+        pack_into_clusterlists(
+            test_radii[1:4],
+            test_centroids[1:4],
+            4,
+            verbose = FALSE
+        ),
+        test_cluster_lists[1:4],
+        tolerance = 1e-8
+    )
+
+    expect_equal(
+        pack_into_clusterlists(
+            test_radii[1:4],
+            test_centroids[1:4],
+            4,
+            verbose = FALSE
+        ),
+        pack_into_clusterlists(
+            test_radii,
+            test_centroids,
+            5,
+            verbose = FALSE
+        )[1:4],
+        tolerance = 1e-8
+    )
 })
 
 test_that("pack_into_clusterlists handles NULLS", {
-  expect_equal(
-    pack_into_clusterlists(
-      list(NULL, c1[[3]]),
-      list(c(0, 0), c(0, 0)),
-      2,
-      verbose = FALSE
-    ),
-    list(list(), c1),
-    tolerance = 1e-8
-  )
+    expect_equal(
+        pack_into_clusterlists(
+            list(NULL, c1[[3]]),
+            list(c(0, 0), c(0, 0)),
+            2,
+            verbose = FALSE
+        ),
+        list(list(), c1),
+        tolerance = 1e-8
+    )
 })

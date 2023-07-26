@@ -19,14 +19,15 @@ process_rad_vec <- function(input_rad_vec, ORDER, scramble) {
         set.seed(42)
         return(sample(input_rad_vec))
     }
+    input_rad_vec
 }
 
 # vectorized circle_layout - outputs list of clusterlists
 pack_into_clusterlists <- function(
-    sizes, centroids, num_clusters, rad_scale = 1,
+    sizes, centroids, num_clusters, rad_decrease = 0,
     ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE
 ){
-  output_list <- list()
+  output_list <- vector("list", num_clusters)
 
   for(i in 1:num_clusters){
       input_rad_vec <- sizes[[i]]
@@ -40,14 +41,12 @@ pack_into_clusterlists <- function(
           message(paste("\npacking cluster", as.character(i-1)))
       }
 
-      if (ORDER || scramble) { # assume only 1 is true
-          input_rad_vec <- process_rad_vec(input_rad_vec, ORDER, scramble)
-      }
+      input_rad_vec <- process_rad_vec(input_rad_vec, ORDER, scramble)
 
       output_list[[i]] <- cpp_circle_layout(
           input_rad_vec,
           centroid = centroids[[i]],
-          rad_scale_factor = rad_scale,
+          rad_decrease = rad_decrease,
           try_place = try_place,
           verbose = verbose
       )

@@ -88,7 +88,7 @@ adjustAPOTC_stop_str <- function(
 
 # need functions for readjusting the apotc reduction for better visuals
 # also possible to boot up a shiny window in the future?
-adjustAPOTC <- function(
+AdjustAPOTC <- function(
   seurat_obj,
   verbose = TRUE,
 

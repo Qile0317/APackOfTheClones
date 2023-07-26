@@ -6,7 +6,7 @@
 \title{The apotc (APackOfTheClones) reduction class}
 \description{
 A class for storing information about T cell clonal expansion in the seurat
-`reductions` attribute
+`reductions` attribute under [["apotc"]]
 }
 \section{Slots}{
 
@@ -32,6 +32,11 @@ also be better in the future to instead just have a number to subtract :/}
 
 \item{\code{reduction_base}}{character indicating the reduction the plotting was
 based off of}
+
+\item{\code{labels}}{character vector indicating the names of each cluster. Defaults
+to sequencial integers with a 'C' in front}
+
+\item{\code{label_coords}}{list of numeric vectors of length two indicating the (x,y)
+coordinates of each label if plotted}
 }}
 
-\keyword{internal}

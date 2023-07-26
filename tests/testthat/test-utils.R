@@ -25,6 +25,8 @@ test_that("start_progress_bar works", {
     )
 })
 
+# print_completion_time cant really be tested but is extremely simple
+
 test_that("isnt_empty works", {
     expect_true(isnt_empty(list(c(1,2,3))))
     expect_false(isnt_empty(list()))
@@ -46,12 +48,29 @@ test_that("is_int works", {
     expect_false(is_int(1.001))
 })
 
-# print_completion_time cant really be tested but is extremely simple
+test_that("should_estimate works", {
+    expect_true(should_estimate("auto"))
+    expect_false(should_estimate(10290987))
+})
+
+test_that("get_xr and get_yr works", {
+    plt <- ggplot2::ggplot(data.frame(x = c(1, 2), y = c(3, 4))) +
+        ggplot2::geom_point(ggplot2::aes(x, y))
+
+    expect_equal(get_xr(plt), c(1, 2))
+    expect_equal(get_yr(plt), c(3, 4))
+})
 
 test_that("attempt_correction works", {
     expect_identical("umap", attempt_correction("Umap"))
     expect_identical("tsne", attempt_correction("t-SNE"))
     expect_identical("pca", attempt_correction("PCA"))
+})
+
+test_that("closest_word works", {
+    expect_identical(closest_word(" umsp"), "umap")
+    expect_identical(closest_word("t snq"), "tsne")
+    expect_identical(closest_word("aca "), "pca")
 })
 
 test_that("metadata_name_warnstring works", {
@@ -71,17 +90,4 @@ test_that("metadata_name_warnstring works", {
         metadata_name_warnstring(mini_seurat_obj, fake_tcr_df),
         "tcr_dataframe has repeated names with the seurat_object metadata"
     )
-})
-
-test_that("get_xr and get_yr works", {
-    plt <- ggplot2::ggplot(data.frame(x = c(1, 2), y = c(3, 4))) +
-        ggplot2::geom_point(ggplot2::aes(x, y))
-
-    expect_equal(get_xr(plt), c(1, 2))
-    expect_equal(get_yr(plt), c(3, 4))
-})
-
-test_that("should_estimate works", {
-    expect_true(should_estimate("auto"))
-    expect_false(should_estimate(10290987))
 })

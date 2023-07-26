@@ -5,6 +5,8 @@
     .Call("run_testthat_tests", FALSE, PACKAGE = "APackOfTheClones")
 })
 
+# progress bar functions
+
 progress_bar <- function (x = 0, max = 100) {
     percent <- 100 * (x / max)
     cat(sprintf(
@@ -26,6 +28,17 @@ end_progress_bar <- function(verbose = TRUE) {
     }
 }
 
+print_completion_time <- function(start_time, digits = 2) {
+    end_time <- Sys.time()
+    message(paste(
+        "\nCompleted successfully, time elapsed:",
+        round(as.numeric(end_time - start_time), digits),
+        "seconds\n"
+    ))
+}
+
+# readability functions
+
 isnt_empty <- function(inp) {
     !identical(inp, list())
 }
@@ -42,22 +55,39 @@ is_int <- function(num) {
     return(num == as.integer(num))
 }
 
-print_completion_time <- function(start_time, digits = 2) {
-    end_time <- Sys.time()
-    message(paste(
-        "\nCompleted successfully, time elapsed:",
-        round(as.numeric(end_time - start_time), digits),
-        "seconds\n"
-    ))
+should_estimate <- function(obj, auto_str = "auto") {
+    identical(obj, auto_str)
 }
 
-# helper function to correct reduction string
+get_xr <- function(plt) {
+    ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
+}
+
+get_yr <- function(plt) {
+    ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
+}
+
+# string related functions
+
 attempt_correction <- function(s) {
     s <- tolower(s)
     if (identical(s, "t-sne")) {
         s <- "tsne"
     }
     s
+}
+
+closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
+    closest_w <- strset[1]
+    closest_dist <- utils::adist(s, closest_w)
+    for(i in 2:length(strset)) {
+        curr_dist <- utils::adist(s, strset[i])
+        if (curr_dist < closest_dist) {
+            closest_w <- strset[i]
+            closest_dist <- curr_dist
+        }
+    }
+    closest_w
 }
 
 # R interface function for checking if metadata names to be added overlaps with
@@ -76,17 +106,4 @@ metadata_name_warnstring <- function(seurat_obj, tcr_dataframe) {
     }
 
     return(NULL)
-}
-
-# functions to get the x and y ranges of a ggplot
-get_xr <- function(plt) {
-    ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
-}
-
-get_yr <- function(plt) {
-    ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
-}
-
-should_estimate <- function(obj, auto_str = "auto") {
-    identical(obj, auto_str)
 }

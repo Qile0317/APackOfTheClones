@@ -2,13 +2,12 @@
 # Should take up a percentage of corner not a constant amount
 
 get_legend_coordinate <- function(plt, pos, buffer) {
-
-    xr <- get_xr(plt)
-    yr <- get_yr(plt)
-
     coord <- numeric(2)
 
     if (is.character(pos)) {
+      xr <- get_xr(plt)
+      yr <- get_yr(plt)
+
       pos_list <- list(
           "top_left" = c(xr[1] + buffer, yr[2]),
           "top_right" = c(xr[2] - buffer, yr[2]),
@@ -23,22 +22,22 @@ get_legend_coordinate <- function(plt, pos, buffer) {
 }
 
 calculate_legend_spacing <- function(spacing, plt, portion = 0.05) {
-    if (!identical(spacing, -1L)) {
-        return(spacing)
+    if (should_estimate(spacing)) {
+        return(get_xr(plt) * portion)
     }
-    get_xr(plt) * portion
+    spacing
 }
 
 insert_legend <- function(
     plt,
     circ_scale_factor,
-    rad_scale_factor,
+    rad_decrease,
     sizes = c(1,5,50),
     pos = "top_left",
     buffer = 1.5,
     color = "#808080",
     n = 360,
-    spacing = -1L, # spacing should be a percentage of plot height
+    spacing = "auto", # spacing should be a percentage of plot height
     legend_label = "Clone sizes",
     legend_textsize = 5
 ) {
@@ -56,12 +55,12 @@ insert_legend <- function(
     legend_list <- list(
         "x" = rep(coord[1], m),
         "y" = c(coord[2] - 0.5, numeric(m-1)),
-        "r" = sqrt(sizes) * circ_scale_factor * rad_scale_factor,
+        "r" = (sqrt(sizes) * circ_scale_factor) - rad_decrease,
         "color" = rep(color, m)
     )
 
-    number_label_x_coord <- coord[1] + spacing + 1 +
-        sqrt(sizes[m]) * circ_scale_factor * rad_scale_factor
+    number_label_x_coord <- coord[1] + spacing + 1 - rad_decrease +
+        (sqrt(sizes[m]) * circ_scale_factor)
 
     coord[2] <- coord[2] - spacing
     r <- 0
@@ -92,3 +91,9 @@ insert_legend <- function(
         n = n
     )
 }
+
+# could put the ggplot color legend by sticking some points under something
+#insert_color_legend <- function(plt, seurat_obj) {
+    #yr <- get_yr(plt)
+    #seurat_obj@reductions[["apotc"]]
+#}
