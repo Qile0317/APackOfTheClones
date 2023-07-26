@@ -1,20 +1,12 @@
 # APackOfTheClones (development version)
 ## Additions
-* There is now a new boolean argument in `clonal_expansion_plot` called `scramble` which allows the user to optionally make the clones within each cluster randomly distributed though it should usually make more intuitive sense to have `ORDER = TRUE` and `scramble = FALSE` to signify clonal expansion
 * When working with size legend positions within the plot with the `legend_position` argument in `clonal_expansion_plot`, it can now simply just be a numeric vector of length 2 indicating the x and y coordinate of the "top center" of the legend. However the old functionality with strings are still present.
 
 ## Changes
 * Completely revamping the entire package to v1.x.y with seurat-like syntax
-* fixed the `reduction` argument in the clonal expansion plotting function so that, when choosing `'pca'`, the resulting plot will use coordinates of only PC1 and PC2
-
-# APackOfTheClones 0.1.4 (github-only release)
-## Additions
+* `clonal_expansion_plot` has been soft-deprecated in favour of the new pipeline in v1
+* There is now a new boolean argument in `clonal_expansion_plot` called `scramble` which allows the user to optionally make the clones within each cluster randomly distributed though it should usually make more intuitive sense to have `ORDER = TRUE` and `scramble = FALSE` to signify clonal expansion
 * The clonal expansion plotting function now has a new optional argument `reduction` which now allows the user to choose which reduction the circle clonal clusters should be based on. Defaults to `'umap'` but can now be changed to `'tsne'` or `'pca'` given that they have been ran already on the seurat object. The vignette has been updated accordingly as well
-* New CRAN badge showing date of latest release on `README.md`
-
-## Changes
-* Some testcases have been altered/fixed to pass CRAN's R-CMD check
-* Package startup message has been improved
 
 # APackOfTheClones 0.1.3
 ## Additions

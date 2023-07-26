@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev, unstable]
   pull_request:
     branches: [main, dev]
 
