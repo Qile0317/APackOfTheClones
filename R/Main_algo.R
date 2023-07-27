@@ -37,14 +37,10 @@ pack_into_clusterlists <- function(
           next
       }
 
-      if(verbose){
-          message(paste("\npacking cluster", as.character(i-1)))
-      }
-
-      input_rad_vec <- process_rad_vec(input_rad_vec, ORDER, scramble)
+      if(verbose){message(paste("\npacking cluster", as.character(i-1)))}
 
       output_list[[i]] <- cpp_circle_layout(
-          input_rad_vec,
+          input_rad_vec = process_rad_vec(input_rad_vec, ORDER, scramble),
           centroid = centroids[[i]],
           rad_decrease = rad_decrease,
           try_place = try_place,

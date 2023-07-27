@@ -41,73 +41,83 @@
 #'
 #' @references atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. `https://www.biostars.org/p/384640/`
 #'
-integrate_tcr <- function(seurat_obj, tcr_file, join_by = "__", verbose = TRUE) {
-  time_called <- Sys.time()
-  dev_integrate_tcr(seurat_obj, tcr_file, join_by, verbose, TRUE, time_called)
-}
+integrate_tcr <- function(seurat_obj, tcr_file, join_by = "__", verbose = TRUE) { # probably should use underscores in exported function names anymore
+    time_called <- Sys.time()
 
-dev_integrate_tcr <- function(
-  seurat_obj, tcr_file, join_by, verbose, do_add_command, time_called
-) {
+    if (!is.null(seurat_obj@commands[["integrate_tcr"]])) {
+        warning("overiding pervious integration results")
+        prev_slots <- seurat_obj@commands[["integrate_tcr"]]@params
+        seurat_obj@meta.data[[prev_slots]] <- NULL # assume names were saved
+    } else {
+        warn_str <- metadata_name_warnstring(seurat_obj, tcr_file)
+        if (!is.null(warn_str)) {stop(warn_str)}
+    }
 
-  tcr <- data.table::as.data.table(tcr_file)
+    tcr <- data.table::as.data.table(tcr_file)
 
-  # Prepare a progress bar to monitor progress (helpful for large aggregations)
-  if (verbose) {
-    message("integrating TCR library into seurat object")
-    grpn <- data.table::uniqueN(tcr$barcode)
-    pb <- utils::txtProgressBar(min = 0, max = grpn, style = 3)
-  }
+    # Prepare a progress bar to monitor progress (helpful for large aggregations)
+    if (verbose) {
+        message("integrating TCR library into seurat object")
+        grpn <- data.table::uniqueN(tcr$barcode)
+        pb <- utils::txtProgressBar(min = 0, max = grpn, style = 3)
+    }
 
-  # Generate a function that will concatenate unique data entries and collapse duplicate rows
-  # To do this, I first factorize the data and then get factor levels as unique data points
-  # Then data points are pasted together separated with "__" to access later on if needed
+    # Generate a function that will concatenate unique data entries and collapse duplicate rows
+    # To do this, I first factorize the data and then get factor levels as unique data points
+    # Then data points are pasted together separated with "__" to access later on if needed
 
-  data_concater <- function(x){
-    x <- levels(factor(x)) # not sure if na.omit is needed on x
-    paste(x, collapse = join_by)
-  }
+    data_concater <- function(x){
+        x <- levels(factor(x)) # not sure if na.omit is needed on x
+        paste(x, collapse = join_by)
+    }
 
-  # This code applies data_concater function per  barcodes to create a
-  # concatenated string with  the information we want to keep
+    # This code applies data_concater function per  barcodes to create a
+    # concatenated string with  the information we want to keep
 
-  if (verbose) {
-    tcr_collapsed <- tcr[, {setTxtProgressBar(pb, .GRP);
-      lapply(.SD, data_concater)},
-      by = "barcode"]
-  } else {
-    tcr_collapsed <- tcr[, lapply(.SD, data_concater), by = "barcode"]
-  }
+    if (verbose) {
+        tcr_collapsed <- tcr[, {setTxtProgressBar(pb, .GRP);
+            lapply(.SD, data_concater)},
+            by = "barcode"
+        ]
+    } else {
+        tcr_collapsed <- tcr[, lapply(.SD, data_concater), by = "barcode"]
+    }
 
-  # assign rownames for integration and add metadata
-  rownames(tcr_collapsed) <- tcr_collapsed$barcode
+    # assign rownames for integration and add metadata
+    rownames(tcr_collapsed) <- tcr_collapsed$barcode
 
-  # remove NA? - doesnt do anything
-  tcr_collapsed <- na.omit(tcr_collapsed)
+    # remove NA? - doesnt do anything? Or did I mess up?
+    tcr_collapsed <- na.omit(tcr_collapsed)
 
-  seurat_obj <- Seurat::AddMetaData(
-    seurat_obj,
-    metadata = tcr_collapsed
-  )
+    seurat_obj <- Seurat::AddMetaData(
+        seurat_obj,
+        metadata = tcr_collapsed
+    )
 
-  if (verbose) {
-    percent_integrated <- 100 - percent_na(seurat_obj)
-    message(paste("\nPercent of unique barcodes:", as.character(round(percent_integrated)), "%"))
-  }
+    # add command
+    seurat_obj@commands[["integrate_tcr"]] <- make_apotc_command(time_called)
 
-  return(seurat_obj)
+    if (verbose) {
+        percent_integrated <- 100 - percent_na(seurat_obj)
+        message(paste("\nPercent of unique barcodes:", as.character(round(percent_integrated)), "%"))
+    }
+
+    seurat_obj
 }
 
 #' Count the number of valid integrated TCR barcodes
 #'
 #' @param seurat_obj A seurat object integrated with a t cell receptor library via \code{\link{integrate_tcr}}
 #'
+#' @usage count_valid_barcodes(seurat_obj)
+#'
 #' @return Returns an integer indicating the number of valid barcodes that are not NA's
 #' @export
+#'
 count_valid_barcodes <- function(seurat_obj) sum(!is.na(seurat_obj@meta.data[["barcode"]]))
 
 # get the percent of NA's in the metadata barcode column for the message
 percent_na <- function(seurat_obj) {
-  num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
-  100 * (num_barcodes - count_valid_barcodes(seurat_obj)) / num_barcodes
+    num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
+    100 * (num_barcodes - count_valid_barcodes(seurat_obj)) / num_barcodes
 }

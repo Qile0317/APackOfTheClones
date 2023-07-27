@@ -58,7 +58,6 @@ initialize_apotc <- function(
         reduction_base = reduction_base,
         labels = gen_labels(num_clusters),
         label_coords = empty_list
-        # probably should add the column the clones were counted from?
     )
 }
 
@@ -69,7 +68,7 @@ get_apotc <- function(seurat_obj) {
 
 # warn helper
 run_apotc_warn_str <- function(
-    seurat_obj, reduction_base, tcr_df, clone_scale_factor
+    seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
 ) {
     if (tolower(reduction_base) == 'apotc') {
         return("please only use the umap, tsne, or pca reduction")
@@ -81,20 +80,12 @@ run_apotc_warn_str <- function(
             "mean", closest_word(reduction_base), "?"
         ))
     }
-    if (!is.data.frame(tcr_df)) {
-        if (is.null(seurat_obj@meta.data[["raw_clonotype_id"]])) { # should have this info in function head
-            return("Seurat object is missing the raw_clonotype_id data or isn't integrated with the TCR library. Consider integrating the T-cell library into the seurat object again.")
-        }
-        warn_str <- metadata_name_warnstring(seurat_obj, tcr_df)
-        if (!is.null(warn_str)) {
-            return(warn_str)
-        }
-    }
-
     if (should_estimate(clone_scale_factor) && (clone_scale_factor <= 0)) {
         return("clone_scale_factor has to be a positive number")
     }
-
+    if (ORDER && scramble) {
+        return("ORDER and scramble are both TRUE, please set only one to TRUE")
+    }
     return(NULL)
 }
 
@@ -173,7 +164,7 @@ RunAPOTC <- function(
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     ORDER = TRUE,
-    scramble = FALSE,
+    scramble = FALSE, # not rlly needed
     try_place = FALSE,
 
     repulse = FALSE,
@@ -188,18 +179,11 @@ RunAPOTC <- function(
 
     # errors/warnings:
     warn_str <- run_apotc_warn_str(
-        seurat_obj, reduction_base, tcr_df, clone_scale_factor
+        seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
     )
     if (!is.null(warn_str)) { stop(warn_str) }
 
     if (verbose) {message("Initializing APOTC run")}
-
-    # integrate TCR - in future remake to be compatible with scRepertoire
-    if (is.data.frame(tcr_df)) {
-        seurat_obj <- dev_integrate_tcr(
-            seurat_obj, tcr_df, "__", verbose, FALSE, call_time
-        )
-    }
 
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
@@ -208,7 +192,7 @@ RunAPOTC <- function(
     rad_decrease <- convert_to_rad_decrease(rad_scale_factor,clone_scale_factor)
 
     # add seurat command
-    if (!is.null(seurat_obj@commands[["RunAPOTC"]])) {
+    if (!(is.null(seurat_obj@commands[["RunAPOTC"]]) && is.null(seurat_obj@commands[["RunAPOTC"]]))) {
         message("overriding pervious APOTC run results")
     }
     seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)

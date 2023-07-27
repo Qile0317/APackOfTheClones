@@ -323,7 +323,7 @@ public:
 
         fit_tang_circle(curr_circ, nxt(curr_circ), j);
         std::pair<int, int> check = overlap_check(curr_circ, nxt(curr_circ), j);
-        int cm, cn;
+        int cm = curr_circ, cn = nxt(curr_circ);
 
         while (!is_clear(check)) {
             cm = check.first;
