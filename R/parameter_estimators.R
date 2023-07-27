@@ -5,7 +5,7 @@
 #a more complicated model can use clonotype distribution as third param
 
 estimate_clone_scale_factor <- function(seurat_obj, verbose = FALSE) {
-	num <- (-0.0003305785 * count_valid_barcodes(seurat_obj)) + 1
+	num <- max((-0.0003305785 * count_valid_barcodes(seurat_obj)) + 1, 0.1)
 	if (verbose) {
 		message(paste("\nsetting clone_scale_factor to", num))
 	}

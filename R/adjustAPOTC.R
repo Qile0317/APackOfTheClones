@@ -88,6 +88,20 @@ adjustAPOTC_stop_str <- function(
 
 # need functions for readjusting the apotc reduction for better visuals
 # also possible to boot up a shiny window in the future?
+
+#' @title Adjust the paramaters of the APackOfTheClones reduction in a seurat
+#' object
+#'
+#' @description unfinished
+#'
+#' @param
+#'
+#' @return The adjusted (modified) `seurat_obj`
+#'
+#' @export
+#'
+#' @example
+#'
 AdjustAPOTC <- function(
   seurat_obj,
   verbose = TRUE,
@@ -99,13 +113,13 @@ AdjustAPOTC <- function(
   repulsion_strength = 1,
   max_repulsion_iter = 10L,
 
-  relocate_cluster = -1L, # can also be a vector
+  relocate_cluster = NULL, # can also be a vector
   relocation_coord = NULL, # vector or list of vectors
 
-  nudge_cluster = -1L, # same as above
+  nudge_cluster = NULL, # same as above
   nudge_vector = NULL,
 
-  recolor_cluster = -1L, #same as above
+  recolor_cluster = NULL, #same as above
   new_color = NULL
 ) {
 
@@ -123,17 +137,17 @@ AdjustAPOTC <- function(
     seurat_obj <- change_rad_scale(seurat_obj, new_rad_scale_factor)
   }
 
-  if (!identical(recolor_cluster, -1L)) {
+  if (!is.null(recolor_cluster)) {
     seurat_obj <- recolor_clusters(seurat_obj, recolor_cluster, new_color)
   }
 
-  if (!identical(relocate_cluster, -1L)) {
+  if (!is.null(relocate_cluster)) {
     seurat_obj <- relocate_clusters(
       seurat_obj, relocate_cluster, relocation_coord
     )
   }
 
-  if (!identical(nudge_cluster, -1L)) {
+  if (!is.null(nudge_cluster)) {
     seurat_obj <- nudge_clusters(seurat_obj, nudge_cluster, nudge_vector)
   }
 
@@ -148,6 +162,35 @@ AdjustAPOTC <- function(
 }
 
 # it is probably super common to need to readjust the clone_scale_factor
+# question is if it should affect rad_scale_factor as well
+
+#' @title Modify the clone scale factor of a seurat object APackOfTheClones
+#' reduction
+#'
+#' @description If the clone scale factor is unsatisfactory (i.e. circles are
+#' too big/small) after creating a clonal expansion plot with `APOTCPlot`, the
+#' factor can be changed with this function. This function simply repacks all
+#' clusters with smaller circle sizes while maintaining all other factors the
+#' same as before.
+#'
+#' @param seurat_obj the seurat object to be modified
+#' @param new_clone_scale the new `clone_scale_factor` to change to
+#' @param verbose boolean indicating whether to display progress information
+#'
+#' @export
+#'
+#' @example
+#' library(Seurat)
+#' suppressPackageStartupMessages(library(APackOfTheClones))
+#' data("mini_clonotype_data","mini_seurat_obj")
+#'
+#' # first the APOTC pipeline has to be run
+#' pbmc <- integrate_tcr(mini_seurat_obj, mini_clonotype_data, verbose = FALSE)
+#' pbmc <- RunAPOTC(pbmc, clone_scale_factor = 1, verbose = FALSE)
+#'
+#' # change clone_scale_factor to 0.5
+#' pbmc <- change_clone_scale(pbmc, 0.5, verbose = FALSE)
+#'
 change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
 
 	if (is.null(seurat_obj@reductions[['apotc']])) {
@@ -162,7 +205,10 @@ change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
 		sizes = get_processed_clone_sizes(seurat_obj@reductions[['apotc']]),
 		centroids = seurat_obj@reductions[['apotc']]@centroids,
 		num_clusters = seurat_obj@reductions[['apotc']]@num_clusters,
-		rad_scale = seurat_obj@reductions[['apotc']]@rad_scale_factor,
+		rad_decrease = convert_to_rad_decrease(
+			seurat_obj@reductions[['apotc']]@rad_scale_factor,
+			new_clone_scale
+		),
 		ORDER = get_cmd(seurat_obj, "ORDER"),
 		scramble = get_cmd(seurat_obj, "scramble"),
 		try_place = get_cmd(seurat_obj, "try_place"),
