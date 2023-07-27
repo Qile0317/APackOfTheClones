@@ -90,8 +90,18 @@ closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
     closest_w
 }
 
+# utility
+find_first_non_empty <- function(l) {
+    for (item in l) {
+        if (isnt_empty(item)) {
+            return(item)
+        }
+    }
+    return(NULL)
+}
+
 # R interface function for checking if metadata names to be added overlaps with
-# existing
+# existing (probably placed in wrong file :/)
 metadata_name_warnstring <- function(seurat_obj, tcr_dataframe) {
 
     seurat_names <- names(seurat_obj@meta.data)

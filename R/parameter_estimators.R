@@ -12,7 +12,7 @@ estimate_clone_scale_factor <- function(seurat_obj, verbose = FALSE) {
 	num
 }
 
-# for readability
+# for readability - assumes rad_scale_factor between 0 & 1
 convert_to_rad_decrease <- function(rad_scale_factor, clone_scale_factor) {
-	clone_scale_factor * rad_scale_factor
+	clone_scale_factor * (1 - rad_scale_factor)
 }

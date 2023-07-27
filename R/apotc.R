@@ -182,6 +182,9 @@ RunAPOTC <- function(
         seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
     )
     if (!is.null(warn_str)) { stop(warn_str) }
+    if (rad_scale_factor < 0 || rad_scale_factor > 1) {
+        stop("rad_scale_factor has to be between 0 and 1")
+    }
 
     if (verbose) {message("Initializing APOTC run")}
 
