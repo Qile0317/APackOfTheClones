@@ -9,7 +9,6 @@ APOTCPlot(
   res = 360,
   linetype = "blank",
   use_default_theme = TRUE,
-  show_origin = FALSE,
   retain_axis_scales = FALSE,
   show_labels = FALSE,
   label_size = 5,
@@ -23,8 +22,87 @@ APOTCPlot(
   legend_text_size = 5
 )
 }
+\arguments{
+\item{seurat_obj}{A seurat object that has been integrated with clonotype
+data and has had `RunAPOTC` ran on it.}
+
+\item{res}{The number of points on the generated path per full circle. From
+plot viewers, if circles seem slightly too pixelated, it is recommended to
+first try to export the plot as an `.svg` before increasing `res` due to
+increased plotting times from `ggforce::geom_circle`.}
+
+\item{linetype}{The type of outline each circle should have. defaults to
+`"blank` meaning no outline. More information is in the function
+documentation of `ggforce::geom_circle`.}
+
+\item{use_default_theme}{logical that defaults to `TRUE`. If `TRUE`,
+the resulting plot will have the same theme as the seurat reference reduction
+plot. Else, the plot will simply have a blank background.}
+
+\item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales
+of the original UMAP. However, it will only attempt to extend the axes and
+never shorten.}
+
+\item{show_labels}{If `TRUE`, will label each circle cluster at the centroid,
+defaulting to "C0, C1, ...". labels and their coordinates can also be
+manually edited with the `ModifyLabels` function.}
+
+\item{label_size}{The text size of labels if shown. Defaults to 5.}
+
+\item{add_size_legend}{If `TRUE`, adds a legend to the plot visualizing the
+relative sizes of clones. Note that it is simply an overlay and not a real
+ggplot2 legend.}
+
+\item{legend_sizes}{numeric vector. Indicates the circle sizes to be
+displayed on the legend and defaults to `c(1, 5, 10)`.}
+
+\item{legend_position}{character or numeric. Can be set to either
+`"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the
+legend roughly in the corresponding position. Otherwise, can be a numeric
+vector of length 2 indicating the x and y position of the "top-center" of the
+legend}
+
+\item{legend_buffer}{numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away}
+
+\item{legend_color}{character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray}
+
+\item{legend_spacing}{numeric. Indicates the horizontal distance between each
+stacked circle on the size legend. Defaults to `"auto"` which will use an
+estimated value depending on plot size}
+
+\item{legend_label}{character. The title of the legend, which defaults to
+`"clone sizes`.}
+
+\item{legend_text_size}{numeric. The text size of the letters and numbers on
+the legend}
+}
+\value{
+A ggplot object of the APackOfTheClones clonal expansion plot of the
+seurat object
+}
 \description{
-Given a seurat object with an 'apotc' (APackOfTheClones) object from running
-RunAPOTC(), this function will read the information and return a customizable
-ggplot of the clonal expansion with a circle size legend.
+Given a seurat object with an 'apotc' (APackOfTheClones) object
+from running `RunAPOTC()`, this function will read the information and return
+a customizable ggplot object of the clonal expansion with a circle size legend.
+If the user is unhappy about certain aspects of the plot, some parameters can
+be adjusted with the `AdjustAPOTC` function.
+}
+\examples{
+library(Seurat)
+suppressPackageStartupMessages(library(APackOfTheClones))
+data("mini_clonotype_data","mini_seurat_obj")
+
+# first the APOTC pipeline has to be run
+pbmc <- integrate_tcr(mini_seurat_obj, mini_clonotype_data, verbose = FALSE)
+pbmc <- RunAPOTC(pbmc, verbose = FALSE)
+
+# generate the default plot with APOTCPlot
+APOTCPlot(pbmc)
+
+# if plotting of the same object with different customizations
+APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
+
+}
+\seealso{
+\code{\link{AdjustAPOTC}}
 }
