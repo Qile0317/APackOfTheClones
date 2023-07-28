@@ -62,113 +62,6 @@ recolor_clusters <- function(seurat_obj, recolor_cluster, new_color) {
 	seurat_obj
 }
 
-adjustAPOTC_stop_str <- function(
-	seurat_obj, new_rad_scale_factor, adjust_repulsion, max_repulsion_iter,
-	relocation_cluster, relocation_coord, relocate_cluster, nudge_cluster,
-	nudge_vector
-) {
-	if (is.null(seurat_obj@reductions[['apotc']])) {
-	return("RunAPOTC has not been ran on the input seurat object. Please follow the APackOfTheClones documentation and try again")
-	}
-	if (new_rad_scale_factor < 0) {
-	return("new_rad_scale_factor must be a positive number")
-	}
-	if ((max_repulsion_iter < 1 || !is_int(max_repulsion_iter)) && adjust_repulsion) {
-	return("max_repulsion_iter must be a positive integer")
-	}
-	if (!is.null(relocation_coord) && (length(relocate_cluster) != length(relocation_coord))) {
-	return("length of relocate_cluster must be the same as the length of relocation_coord")
-	}
-	if (!is.null(nudge_vector) && (length(nudge_cluster) != length(nudge_vector))) {
-	return("length of nudge_cluster must be the same as the length of nudge_vector")
-	}
-	if ((relocate_cluster != -1) && (nudge_cluster != -1)) {
-		if (has_repeats(relocation_cluster, nudge_cluster)) {
-			return("There are repeated elements in relocate_cluster and/or nudge_cluster")
-		}
-	}
-	return(NULL)
-}
-
-# need functions for readjusting the apotc reduction for better visuals
-# also possible to boot up a shiny window in the future?
-
-#' @title Adjust the paramaters of the APackOfTheClones reduction in a seurat
-#' object
-#'
-#' @description unfinished
-#'
-#' @param seurat_obj The seurat object to be adjusted
-#' @param new_rad_scale_factor
-#'
-#' @return The adjusted (modified) `seurat_obj`
-#'
-#' @export
-#'
-#'
-#'
-AdjustAPOTC <- function(
-	seurat_obj,
-
-	new_rad_scale_factor = 0L, # assumes you dont want to change
-
-	adjust_repulsion = FALSE,
-	repulsion_threshold = 1,
-	repulsion_strength = 1,
-	max_repulsion_iter = 10L,
-
-	relocate_cluster = NULL, # can also be a vector
-	relocation_coord = NULL, # vector or list of vectors
-
-	nudge_cluster = NULL, # same as above
-	nudge_vector = NULL,
-
-	recolor_cluster = NULL, #same as above
-	new_color = NULL,
-
-	verbose = TRUE
-) {
-
-	# check for argument issues
-	stop_str <- adjustAPOTC_stop_str(
-		seurat_obj, new_rad_scale_factor, adjust_repulsion, max_repulsion_iter,
-		relocate_cluster, relocation_coord, relocate_cluster, nudge_cluster,
-		nudge_vector
-	)
-	if (!is.null(stop_str)) {
-		stop(stop_str)
-	}
-
-	if (new_rad_scale_factor > 0) {
-		seurat_obj <- change_rad_scale(seurat_obj, new_rad_scale_factor)
-	}
-
-	if (!is.null(recolor_cluster)) {
-		seurat_obj <- recolor_clusters(seurat_obj, recolor_cluster, new_color)
-	}
-
-	if (!is.null(relocate_cluster)) {
-		seurat_obj <- relocate_clusters(
-			seurat_obj, relocate_cluster, relocation_coord
-		)
-	}
-
-	if (!is.null(nudge_cluster)) {
-		seurat_obj <- nudge_clusters(seurat_obj, nudge_cluster, nudge_vector)
-	}
-
-	if (adjust_repulsion) {
-		seurat_obj <- repulse_again(
-			seurat_obj, repulsion_threshold, repulsion_strength,
-			max_repulsion_iter, verbose
-		)
-	}
-	seurat_obj
-}
-
-# it is probably super common to need to readjust the clone_scale_factor
-# question is if it should affect rad_scale_factor as well
-
 #' @title Modify the clone scale factor of a seurat object APackOfTheClones
 #' reduction
 #'
@@ -220,5 +113,121 @@ change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
 		verbose = verbose
 	)
 
+	seurat_obj
+}
+
+adjustAPOTC_stop_str <- function(
+	seurat_obj, new_rad_scale_factor, adjust_repulsion, max_repulsion_iter,
+	relocation_cluster, relocation_coord, relocate_cluster, nudge_cluster,
+	nudge_vector
+) {
+	if (is.null(seurat_obj@reductions[['apotc']])) {
+	return("RunAPOTC has not been ran on the input seurat object. Please follow the APackOfTheClones documentation and try again")
+	}
+	if (new_rad_scale_factor < 0) {
+	return("new_rad_scale_factor must be a positive number")
+	}
+	if ((max_repulsion_iter < 1 || !is_int(max_repulsion_iter)) && adjust_repulsion) {
+	return("max_repulsion_iter must be a positive integer")
+	}
+	if (!is.null(relocation_coord) && (length(relocate_cluster) != length(relocation_coord))) {
+	return("length of relocate_cluster must be the same as the length of relocation_coord")
+	}
+	if (!is.null(nudge_vector) && (length(nudge_cluster) != length(nudge_vector))) {
+	return("length of nudge_cluster must be the same as the length of nudge_vector")
+	}
+	if ((relocate_cluster != -1) && (nudge_cluster != -1)) {
+		if (has_repeats(relocation_cluster, nudge_cluster)) {
+			return("There are repeated elements in relocate_cluster and/or nudge_cluster")
+		}
+	}
+	return(NULL)
+}
+
+# need functions for readjusting the apotc reduction for better visuals
+# also possible to boot up a shiny window in the future?
+
+#' @title Adjust the paramaters of the APackOfTheClones reduction in a seurat
+#' object
+#'
+#' @description If the user is unsatisfied with the clonal expansion plot that
+#' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
+#' arguments to modify the data and/or parameters of the visualization. Note
+#' that some of the arguments may conflict with eachother.
+#'
+#' @param seurat_obj The seurat object to be adjusted. Must have an `apotc`
+#' reduction
+#' @param new_rad_scale_factor responsible for changing the rad_scale_factor of
+#' all circles. Can be a numerical value between 0 and 1.
+#' unfinished
+#'
+#' @return The adjusted (modified) `seurat_obj`
+#'
+#' @export
+#'
+#'
+#'
+AdjustAPOTC <- function(
+	seurat_obj,
+
+	new_rad_scale_factor = NULL,
+	new_clone_scale_factor = NULL,
+
+	repulse = FALSE,
+	repulsion_threshold = 1,
+	repulsion_strength = 1,
+	max_repulsion_iter = 10L,
+
+	relocate_cluster = NULL, # can also be a vector
+	relocation_coord = NULL, # vector or list of vectors
+
+	nudge_cluster = NULL, # same as above
+	nudge_vector = NULL,
+
+	recolor_cluster = NULL, #same as above
+	new_color = NULL,
+
+	verbose = TRUE
+) {
+
+	stop_str <- adjustAPOTC_stop_str(
+		seurat_obj, new_rad_scale_factor, repulse, max_repulsion_iter,
+		relocate_cluster, relocation_coord, relocate_cluster, nudge_cluster,
+		nudge_vector
+	)
+	if (!is.null(stop_str)) {
+		stop(stop_str)
+	}
+
+	if (should_change(new_clone_scale_factor)) {
+		seurat_obj <- change_clone_scale(
+			seurat_obj, new_clone_scale_factor, verbose
+		)
+	}
+
+	if (should_change(new_rad_scale_factor)) {
+		seurat_obj <- change_rad_scale(seurat_obj, new_rad_scale_factor)
+	}
+
+	if (should_change(recolor_cluster)) {
+		seurat_obj <- recolor_clusters(seurat_obj, recolor_cluster, new_color)
+	}
+
+	if (should_change(relocate_cluster)) {
+		seurat_obj <- relocate_clusters(
+			seurat_obj, relocate_cluster, relocation_coord
+		)
+	}
+
+	if (should_change(nudge_cluster)) {
+		seurat_obj <- nudge_clusters(seurat_obj, nudge_cluster, nudge_vector)
+	}
+
+	if (repulse) {
+		seurat_obj <- repulse_again(
+			seurat_obj, repulsion_threshold, repulsion_strength,
+			max_repulsion_iter, verbose
+		)
+	}
 	seurat_obj
 }

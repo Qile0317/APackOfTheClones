@@ -59,6 +59,10 @@ should_estimate <- function(obj, auto_str = "auto") {
     identical(obj, auto_str)
 }
 
+should_change <- function(obj) {
+    !is.null(obj)
+}
+
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
 }
