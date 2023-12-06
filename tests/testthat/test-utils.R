@@ -73,6 +73,17 @@ test_that("closest_word works", {
     expect_identical(closest_word("aca "), "pca")
 })
 
+test_that("construct_prefix_vector works", {
+    test_samples <- c("NP1", "NP2", "NP3", "NP4")
+    test_ids <- c("CTRL", "CTRL", "STIM", "STIM")
+
+    test_results <- construct_prefix_vector(list(test_samples, test_ids))
+    expect_identical(test_samples, c("NP1", "NP2", "NP3", "NP4"))
+    expect_identical(
+        test_results, c("NP1_CTRL", "NP2_CTRL", "NP3_CTRL", "NP4_CTRL")
+    )
+})
+
 test_that("metadata_name_warnstring works", {
     expect_null(metadata_name_warnstring(mini_seurat_obj, mini_clonotype_data))
 

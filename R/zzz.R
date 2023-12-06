@@ -12,6 +12,6 @@
 
     # new deprecation note for the release
     packageStartupMessage(
-    'NOTE FOR RETURNING USERS OF VERSION 0.1.x: the `clonal_expansion_plot()` function is being deprecated. Please read the new vignette which will demonstrate a better way to achieve the same visualization. Namely, the workflow now involves using the functions `RunAPOTC` and `APOTCPlot`. Please read their function level documentation as well.'
+        'NOTE FOR RETURNING USERS OF VERSION 0.1.x: the `clonal_expansion_plot()` function is being deprecated. Please read the new vignette which will demonstrate a better way to achieve the same visualization. Namely, the workflow now involves using the functions `RunAPOTC` and `APOTCPlot`. Please read their function level documentation as well.'
     )
 }

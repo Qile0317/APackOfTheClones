@@ -1,40 +1,39 @@
-#The API functions for generating the ggplot
-
-#full join a list of lists of (x,y,r) vectors into a dataframe with generated labels.
+# full join a list of lists of (x,y,r) vectors into a dataframe with
+# generated labels.
 df_full_join <- function(clstr_list) {
-  df <- data.frame(
-    'label' = character(0),
-    'x' = numeric(0),
-    'y' = numeric(0),
-    'r' = numeric(0)
-  )
+    df <- data.frame(
+        'label' = character(0),
+        'x' = numeric(0),
+        'y' = numeric(0),
+        'r' = numeric(0)
+    )
 
-  seurat_cluster_index <- 0
-  for(i in seq_along(clstr_list)){
-    if (isnt_empty_nor_na(clstr_list[[i]])) {
-      df <- dplyr::full_join(
-        df,
-        data.frame(
-          "label" = rep(
-            paste("cluster", seurat_cluster_index),
-            length(clstr_list[[i]][["x"]])
-          ),
-          "x" = clstr_list[[i]][["x"]],
-          "y" = clstr_list[[i]][["y"]],
-          "r" = clstr_list[[i]][["rad"]]
-        ),
-        by = dplyr::join_by("label", "x", "y", "r"))
+    seurat_cluster_index <- 0
+    for(i in seq_along(clstr_list)){
+        if (isnt_empty_nor_na(clstr_list[[i]])) {
+            df <- dplyr::full_join(
+                df,
+                data.frame(
+                  "label" = rep(
+                    paste("cluster", seurat_cluster_index),
+                    length(clstr_list[[i]][["x"]])
+                  ),
+                  "x" = clstr_list[[i]][["x"]],
+                  "y" = clstr_list[[i]][["y"]],
+                  "r" = clstr_list[[i]][["rad"]]
+                ),
+                by = dplyr::join_by("label", "x", "y", "r")
+            )
+        }
+        seurat_cluster_index <- seurat_cluster_index + 1
     }
-    seurat_cluster_index <- seurat_cluster_index + 1
-  }
-  df
+    df
 }
 
-#main plotting function
 
-# result plotting function. clusters is a list of clusterlists TRANSFORM into a dataframe, which are clusters.
-# A cluster list includes x, y, rad, centroid, clRad.
-#the clusters imput is a dataframe. #move into seperate script
+# result plotting function. clusters is a list of clusterlists TRANSFORM into a
+# dataframe, which are clusters. A cluster list includes x, y, rad, centroid,
+# clRad. the clusters imput is a dataframe.
 
 plot_clusters <- function(
   clusters, n = 360, linetype ="blank",
@@ -118,3 +117,38 @@ plot_API <- function(
   )
   plt
 }
+
+
+# change the axis scales to fit the original plot approximately. Looks pretty bad atm.
+# A more advanced version could multiply axses by a small amount to retain ratios exactly
+retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
+
+  test_reduction_plot <- Seurat::DimPlot(
+    object = seurat_obj,
+    reduction = seurat_obj@reductions[["apotc"]]@reduction_base
+  )
+
+  # get current ranges
+  reduction_xr <- get_xr(test_reduction_plot)
+  reduction_yr <- get_yr(test_reduction_plot)
+
+  rm("test_reduction_plot")
+
+  ball_pack_xr <- get_xr(ball_pack_plt)
+  ball_pack_yr <- get_yr(ball_pack_plt)
+
+  # set new ranges
+  min_xr <- min(ball_pack_xr[1], reduction_xr[1]) - buffer
+  max_xr <- max(ball_pack_xr[2], reduction_xr[2]) + buffer
+
+  min_yr <- min(ball_pack_yr[1], reduction_yr[1]) - buffer
+  max_yr <- max(ball_pack_yr[2], reduction_yr[2]) + buffer
+
+  return(
+    ball_pack_plt + ggplot2::coord_cartesian(
+      xlim = c(min_xr, max_xr),
+      ylim = c(min_yr, max_yr)
+    )
+  )
+}
+

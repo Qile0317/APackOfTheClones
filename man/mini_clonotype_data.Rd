@@ -28,6 +28,6 @@ Note that the clonotypes in the `raw_clonotype_id` column
 actually do not contain all of clonotype`1`...clonotype`n`
 }
 \seealso{
-\code{\link{mini_seurat_obj}}
+[mini_seurat_obj()]
 }
 \keyword{datasets}

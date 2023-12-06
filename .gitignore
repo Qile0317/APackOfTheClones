@@ -5,6 +5,7 @@
 inst/doc
 /loc_tesdat
 devnotes.txt
+devnotes.md
 packages.R
 test.svg
 .Rdata

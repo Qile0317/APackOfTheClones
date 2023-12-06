@@ -7,8 +7,9 @@ object}
 \usage{
 AdjustAPOTC(
   seurat_obj,
-  new_rad_scale_factor = 0L,
-  adjust_repulsion = FALSE,
+  new_rad_scale_factor = NULL,
+  new_clone_scale_factor = NULL,
+  repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 10L,
@@ -22,13 +23,19 @@ AdjustAPOTC(
 )
 }
 \arguments{
-\item{seurat_obj}{The seurat object to be adjusted}
+\item{seurat_obj}{The seurat object to be adjusted. Must have an `apotc`
+reduction}
 
-\item{new_rad_scale_factor}{}
+\item{new_rad_scale_factor}{responsible for changing the rad_scale_factor of
+all circles. Can be a numerical value between 0 and 1.
+unfinished}
 }
 \value{
 The adjusted (modified) `seurat_obj`
 }
 \description{
-unfinished
+If the user is unsatisfied with the clonal expansion plot that
+was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
+arguments to modify the data and/or parameters of the visualization. Note
+that some of the arguments may conflict with eachother.
 }

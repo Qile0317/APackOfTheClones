@@ -30,7 +30,7 @@ expansion plotting on. Defaults to `'umap'` but can also be `'tsne'` or
 However, generally APackOfTheClones is used for displaying UMAP and
 occasionally t-SNE versions to intuitively highlight clonal expansion}
 
-\item{clone_scale_factor}{Dictates how much to scale each circle (between 0,1)
+\item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
 individual clonotypes. The argument defaults to the character `"auto"`, and
 if so, the most visually pleasing factor will be estimated}
@@ -98,6 +98,5 @@ mini_seurat_obj <- RunAPOTC(mini_seurat_obj, repulse = TRUE)
 
 }
 \seealso{
-\code{\link{integrate_tcr}}, \code{\link{APOTCPlot}},
-\code{\link{AdjustAPOTC}}
+[APOTCPlot()], [AdjustAPOTC()]
 }

@@ -25,7 +25,7 @@ insert_labels <- function(plt, seurat_obj, size) {
 }
 
 modify_names <- function(seurat_obj, modify_label, to_new_label) {
-	label_map = hash::hash(modify_label, to_new_label)
+	label_map <- hash::hash(modify_label, to_new_label)
 	for (i in 1:seurat_obj@reduction[['apotc']]@num_clusters) {
 		val <- label_map[[seurat_obj@reduction[['apotc']]@labels[i]]]
 		if (!is.null(val)) {
@@ -36,7 +36,7 @@ modify_names <- function(seurat_obj, modify_label, to_new_label) {
 }
 
 nudge_label_coords <- function(seurat_obj, modify_label, to_nudge_by) {
-	label_map = hash::hash(modify_label, to_nudge_by)
+	label_map <- hash::hash(modify_label, to_nudge_by)
 	for (i in 1:seurat_obj@reduction[['apotc']]@num_clusters) {
 		val <- label_map[[seurat_obj@reduction[['apotc']]@labels[i]]]
 		if (!is.null(val)) {
@@ -48,7 +48,7 @@ nudge_label_coords <- function(seurat_obj, modify_label, to_nudge_by) {
 }
 
 move_label_coords <- function(seurat_obj, modify_label, to_new_coord) {
-	label_map = hash::hash(modify_label, to_new_coord)
+	label_map <- hash::hash(modify_label, to_new_coord)
 	for (i in 1:seurat_obj@reduction[['apotc']]@num_clusters) {
 		val <- label_map[[seurat_obj@reduction[['apotc']]@labels[i]]]
 		if (!is.null(val)) {

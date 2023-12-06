@@ -25,10 +25,12 @@ APackOfTheClones is an R implementation of a novel method (and utilities) for vi
 APackOfTheClones' approach was originally implemented in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and utilized in two papers. [@ma2021single; @stark2022recombinant]
 
 # Statement of need
+scRNA-seq and scTCR-seq methods are popular methods ...
+
 - state issue to be solved
 - show improvement & ease of use over alternatives
-  - scRepertoire::clonal_overlay()
-  - julia implementation
+  - scRepertoire::clonaloverlay() [@andreatta2023tcell]
+  - julia implementation (ask ben to upload)
   - [@wang2021single] fig 2c
 
 # Method and features
@@ -59,10 +61,14 @@ Figure sizes can be customized by adding an optional second parameter:
 - seamless integration into any analysis pipeline
 - simple, no domain knowledge required
 - publication ready visualizations
-- however, requires just a little extra user work 
+- however, requires just a little extra user work
+
+# Intended future features
+- compatibility with singlecellexperiment objects
+- ability to integrate with clonotype data of other formats
 
 # Acknowledgements
-Thanks to Ben Murrell at the Karolinska Institute for introducing the idea, implementing julia code along with Christian Murray, debug support, and giving suggestions. Thanks to Nick Borcherding at Washington University in St. Louis for providing more insights, suggestions, and promoting the package.
+Thanks to Ben Murrell at the Karolinska Institute for introducing the idea, implementing the original julia code along with Christian Murray, debug support, and giving suggestions. Thanks to Nick Borcherding at Washington University in St. Louis for providing more insights, suggestions, and promoting the package.
 
 # References
 <!---

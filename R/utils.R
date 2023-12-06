@@ -38,30 +38,23 @@ print_completion_time <- function(start_time, digits = 2) {
 }
 
 # readability functions
-
-isnt_empty <- function(inp) {
-    !identical(inp, list())
+get_rna_assay_barcodes <- function(seurat_obj) {
+    seurat_obj@assays[["RNA"]]@data@Dimnames[[2]]
 }
 
-isnt_na <- function(inp) {
-    !any(is.na(inp))
-}
+isnt_empty <- function(inp) !identical(inp, list())
 
-isnt_empty_nor_na <- function(inp) {
-    isnt_empty(inp) && isnt_na(inp)
-}
+isnt_na <- function(inp) !any(is.na(inp))
 
-is_int <- function(num) {
-    return(num == as.integer(num))
-}
+isnt_empty_nor_na <- function(inp) isnt_empty(inp) && isnt_na(inp)
 
-should_estimate <- function(obj, auto_str = "auto") {
-    identical(obj, auto_str)
-}
+is_int <- function(num) all(num == as.integer(num))
 
-should_change <- function(obj) {
-    !is.null(obj)
-}
+should_estimate <- function(obj, auto_str = "auto") identical(obj, auto_str)
+
+should_assume <- should_estimate
+
+should_change <- function(obj) !is.null(obj)
 
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
@@ -71,7 +64,17 @@ get_yr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
 }
 
-# string related functions
+is_seurat_object <- function(obj) inherits(obj, "Seurat")
+
+is_sce_object <- function(obj) inherits(obj, "SingleCellExperiment")
+
+is_se_object <- function(obj) inherits(obj, "SummarizedExperiment")
+
+is_seurat_or_sce_object <- function(obj) {
+    is_seurat_object(obj) || is_sce_object(obj)
+}
+
+# spelling related functions
 
 attempt_correction <- function(s) {
     s <- tolower(s)
@@ -82,10 +85,13 @@ attempt_correction <- function(s) {
 }
 
 closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
-    closest_w <- strset[1]
+    strset_lowercase <- tolower(strset)
+    s <- tolower(s)
+
+    closest_w <- strset_lowercase[1]
     closest_dist <- utils::adist(s, closest_w)
-    for(i in 2:length(strset)) {
-        curr_dist <- utils::adist(s, strset[i])
+    for(i in 2:length(strset_lowercase)) {
+        curr_dist <- utils::adist(s, strset_lowercase[i])
         if (curr_dist < closest_dist) {
             closest_w <- strset[i]
             closest_dist <- curr_dist
@@ -94,7 +100,18 @@ closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
     closest_w
 }
 
-# utility
+# data extraction / analysis utilities
+
+last_occurence_index <- function(str, char) {
+    ind <- 0
+    for (i in seq_along(str)) {
+        if (identical(str[i], char)) {
+            ind <- i
+        }
+    }
+    ind
+}
+
 find_first_non_empty <- function(l) {
     for (item in l) {
         if (isnt_empty(item)) {
@@ -102,6 +119,93 @@ find_first_non_empty <- function(l) {
         }
     }
     return(NULL)
+}
+
+extract_2d_list_row <- function(l, row_index) {
+    row_vector <- c()
+    for (i in seq_along(l)) {
+        row_vector[i] <- l[[i]][row_index]
+    }
+    row_vector
+}
+
+#' Take a list of character vectors and join each element of the vectors
+#' together, separating each character by sep
+#' @return a character vector
+#' @noRd
+construct_prefix_vector <- function(params, sep = "_") {
+    num_params <- length(params)
+    num_samples <- length(params[[1]])
+    prefix_vector <- vector("character", num_samples)
+
+    for (i in 1:num_samples) {
+        for (j in 1:num_params) {
+            prefix_vector[i] <- paste(
+                prefix_vector[i], params[[j]][i], sep = sep
+            )
+        }
+    }
+    prefix_vector
+}
+
+# function to be used within another parent function, extracting the arguments
+# to the parent function and returning it as a named list, while also allowing
+# filtering out of certain object types to save memory
+
+process_argnames <- function(argnames) {
+    argnames <- BiocGenerics::grep(
+        pattern = "object",
+        x = argnames,
+        invert = TRUE,
+        value = TRUE
+    )
+    argnames <- BiocGenerics::grep(
+        pattern = "anchorset",
+        x = argnames,
+        invert = TRUE,
+        value = TRUE
+    )
+    argnames <- BiocGenerics::grep(
+        pattern = "\\.\\.\\.",
+        x = argnames,
+        invert = TRUE,
+        value = TRUE
+    )
+    argnames
+}
+
+get_parent_params <- function(
+    n = 1,
+    excluded_types = "Seurat",
+    only_named_types = c("data.frame", "data.table")
+) {
+    argnames <- names(formals(fun = sys.function(which = sys.parent(n = n))))
+    argnames <- process_argnames(argnames)
+
+    params <- list()
+    p.env <- parent.frame(n = n)
+    argnames <- intersect(x = argnames, y = ls(name = p.env))
+    for (arg in argnames) {
+        param_value <- get(x = arg, envir = p.env)
+
+        is_excluded_type <- FALSE
+        for (obj_type in excluded_types) {
+            if (inherits(param_value, obj_type)) {
+                is_excluded_type <- TRUE
+                break
+            }
+        }
+        if (is_excluded_type) {next}
+
+        for (obj_type in only_named_types) {
+            if (inherits(param_value, obj_type)) {
+                param_value <- names(param_value)
+                break
+            }
+        }
+        params[[arg]] <- param_value
+    }
+    params
 }
 
 # R interface function for checking if metadata names to be added overlaps with

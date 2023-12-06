@@ -1,18 +1,22 @@
+#include <Rcpp.h>
+#include "CircleNode.h"
+#include "CirclePacker.h"
+
 // function for testing of two nodes' numeric parameters x, y, rad.
-bool xyr_are_equal(Node& c1, Node c2, double thr = 5e-5) {
+bool xyr_are_equal(CircleNode& c1, CircleNode c2, double thr = 5e-5) {
     return approx_equal(c1.x, c2.x, thr) &&
         approx_equal(c1.y, c2.y, thr) &&
         approx_equal(c1.rad, c2.rad, thr);
 }
 
-bool nodes_are_equal(Node& c1, Node& c2, double thr = 5e-5) {
+bool nodes_are_equal(CircleNode& c1, CircleNode& c2, double thr = 5e-5) {
     return xyr_are_equal(c1, c2, thr) && (c1.nxt == c2.nxt) && (c1.prv == c2.prv);
 }
 
 context("C++ | cpp_circle_layout") {
     test_that("init_boundary works") {
         std::vector<double> v = {1,2,3,4};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
 
         nodes.init_boundary();
         expect_true(nodes.data[0].nxt == 1);
@@ -29,7 +33,7 @@ context("C++ | cpp_circle_layout") {
 
     test_that("insert_circle works") {
         std::vector<double> v = {1,2,3,4};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         nodes.init_boundary();
 
         int c1 = 1, c2 = 2, cn = 3;
@@ -44,7 +48,7 @@ context("C++ | cpp_circle_layout") {
     test_that("fwd_dist works") {
         int c1 = 0, c2 = 1, c3 = 2;
         std::vector<double> v = {1,2,3};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         nodes.init_boundary();
 
         expect_true(nodes.fwd_dist(c3, c1) == 1);
@@ -55,7 +59,7 @@ context("C++ | cpp_circle_layout") {
     test_that("fwd_remove works") {
         int c1 = 0, c2 = 1, c5 = 4;
         std::vector<double> v = {1,2,3,4,5};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         nodes.init_boundary(c1, c5);
 
         nodes.fwd_remove(c2, c5);
@@ -66,16 +70,16 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("centre_dist works") {
-        Node c1 = Node(3, 4, 1);
+        CircleNode c1 = CircleNode(3, 4, 1);
         expect_true(centre_dist(c1) == 5);
 
-        Node c2 = Node(-12, -35, 1);
+        CircleNode c2 = CircleNode(-12, -35, 1);
         expect_true(centre_dist(c2) == 37);
     }
 
     test_that("fit_tang_circle works") { // probably could benefit from more testcases
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1)
         });
         nodes.init_boundary();
 
@@ -85,8 +89,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("tang_circle_dist works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1)
         });
         nodes.init_boundary();
 
@@ -94,20 +98,20 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("place_starting_three works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1)
         });
         nodes.init_boundary();
 
         nodes.place_starting_three();
-        expect_true(xyr_are_equal(nodes.data[0], Node(-4.984898, -1.466558, 3)));
-        expect_true(xyr_are_equal(nodes.data[1], Node(6.015102, 3.533442, 8)));
-        expect_true(xyr_are_equal(nodes.data[2], Node(-1.030204, -2.066885, 1)));
+        expect_true(xyr_are_equal(nodes.data[0], CircleNode(-4.984898, -1.466558, 3)));
+        expect_true(xyr_are_equal(nodes.data[1], CircleNode(6.015102, 3.533442, 8)));
+        expect_true(xyr_are_equal(nodes.data[2], CircleNode(-1.030204, -2.066885, 1)));
     }
 
     test_that("closest works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1), Node(-1, -3, 3), Node(-10, -69, 4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1), CircleNode(-1, -3, 3), CircleNode(-10, -69, 4)
         });
         nodes.init_boundary(0, 4);
 
@@ -117,8 +121,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("closest_place works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1)
         });
         nodes.init_boundary();
 
@@ -127,8 +131,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("do_intersect works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1), Node(-1, -3, 3), Node(-10, -69, 4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1), CircleNode(-1, -3, 3), CircleNode(-10, -69, 4)
         });
         nodes.init_boundary(0, 4);
 
@@ -139,8 +143,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("geod_dist works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1), Node(-1, -3, 3), Node(-10, -69, 4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1), CircleNode(-1, -3, 3), CircleNode(-10, -69, 4)
         });
         nodes.init_boundary(0, 4);
 
@@ -156,8 +160,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("construct_obstruct_list works") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1), Node(-1, -3, 3), Node(-10, -69, 4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1), CircleNode(-1, -3, 3), CircleNode(-10, -69, 4)
         });
         nodes.init_boundary(0, 4);
 
@@ -170,8 +174,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("overlap_check works for 5 connected nodes") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1), Node(-1, -3, 3), Node(-10, -69, 4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1), CircleNode(-1, -3, 3), CircleNode(-10, -69, 4)
         });
         nodes.init_boundary(0, 4);
         std::pair<int ,int> trial, expected;
@@ -190,8 +194,8 @@ context("C++ | cpp_circle_layout") {
     }
 
     test_that("overlap_check works for 3 connected nodes") {
-        NodeVector nodes = NodeVector({
-            Node(1, 2, 3), Node(6, 7, 8), Node(50, 90, 1)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1, 2, 3), CircleNode(6, 7, 8), CircleNode(50, 90, 1)
         });
         nodes.init_boundary();
         std::pair<int ,int> trial, expected;
@@ -203,22 +207,22 @@ context("C++ | cpp_circle_layout") {
 
     test_that("is_degenerate_case works") {
         std::vector<double> v = {1};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         expect_true(nodes.is_degenerate_case());
 
         v = {1,2};
-        nodes = NodeVector(v);
+        nodes = CirclePacker(v);
         expect_true(nodes.is_degenerate_case());
 
         v = {1,2,3};
-        nodes = NodeVector(v);
+        nodes = CirclePacker(v);
         expect_false(nodes.is_degenerate_case());
     }
 
     test_that("handle_degenerate_cases for n = 1 works") {
         Rcpp::NumericVector centroid = {0, 0};
         std::vector<double> v = {69.0};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         Rcpp::List trial = nodes.handle_degenerate_cases(centroid, 0);
 
         Rcpp::NumericVector trial_x = trial[0], trial_y = trial[1];
@@ -235,7 +239,7 @@ context("C++ | cpp_circle_layout") {
         expect_true(approx_equal(trial_clRad, 69));
 
         // generating test trial 2 values with new centroid and rad_scale_factor
-        nodes = NodeVector(v);
+        nodes = CirclePacker(v);
         centroid = {4, 5};
         trial = nodes.handle_degenerate_cases(centroid, 1.5);
 
@@ -255,7 +259,7 @@ context("C++ | cpp_circle_layout") {
     test_that("handle_degenerate_cases for n = 2 works") {
         // generating test trial 1 values
         std::vector<double> v = {69.0, 420.0};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         Rcpp::NumericVector centroid = {0, 0};
         Rcpp::List trial = nodes.handle_degenerate_cases(centroid, 0);
 
@@ -274,7 +278,7 @@ context("C++ | cpp_circle_layout") {
 
         // generating test trial 2 values with new centroid and rad_scale_factor
         v = {4, 3};
-        nodes = NodeVector(v);
+        nodes = CirclePacker(v);
         centroid = {1, 2};
         trial = nodes.handle_degenerate_cases(centroid, 0.8);
 
@@ -293,8 +297,8 @@ context("C++ | cpp_circle_layout") {
 
     test_that("process_into_clusterlist works") {
         // create trial data, 5 circles, centroid (1,1), rad_scale_factor 0.8
-        NodeVector nodes = NodeVector({
-            Node(1,2,3),Node(6,7,8),Node(50,90,1),Node(-1,-3,3),Node(-10,-69,4)
+        CirclePacker nodes = CirclePacker({
+            CircleNode(1,2,3),CircleNode(6,7,8),CircleNode(50,90,1),CircleNode(-1,-3,3),CircleNode(-10,-69,4)
         });
         Rcpp::NumericVector centroid = {1, 1};
         Rcpp::List trial = nodes.process_into_clusterlist(
@@ -318,7 +322,7 @@ context("C++ | cpp_circle_layout") {
 
     test_that("fit_circle works") {
         std::vector<double> v = {3,3,2,1,1};
-        NodeVector nodes = NodeVector(v);
+        CirclePacker nodes = CirclePacker(v);
         nodes.init_boundary();
         nodes.place_starting_three();
         int j = 3;
@@ -327,12 +331,12 @@ context("C++ | cpp_circle_layout") {
         j = nodes.fit_circle(curr_circ, j, false);
         expect_true(j == 4);
 
-        NodeVector expected_nodes = NodeVector({
-            Node(-3, 1.3333333333, 3),
-            Node(3, 1.3333333333, 3),
-            Node(0, -2.66666666667, 2),
-            Node(-3, -2.66666666667, 1),
-            Node(0,0,1)
+        CirclePacker expected_nodes = CirclePacker({
+            CircleNode(-3, 1.3333333333, 3),
+            CircleNode(3, 1.3333333333, 3),
+            CircleNode(0, -2.66666666667, 2),
+            CircleNode(-3, -2.66666666667, 1),
+            CircleNode(0,0,1)
         });
         expected_nodes.init_boundary(0,3); // important that its 0,3 !
 

@@ -104,5 +104,5 @@ APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
 
 }
 \seealso{
-\code{\link{AdjustAPOTC}}
+[AdjustAPOTC()]
 }

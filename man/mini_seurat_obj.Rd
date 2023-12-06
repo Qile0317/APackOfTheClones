@@ -28,11 +28,11 @@ A Seurat object with the following slots filled
 data("mini_seurat_obj")
 }
 \description{
-A generated 'SeuratObject' of a small sc-RNAseq experiment. 
+A generated 'SeuratObject' of a small sc-RNAseq experiment.
 Has a corresponding T-cell receptor library generated from
 single cell immune profiling, named `"mini_clonotype_data"`
 }
 \seealso{
-\code{\link{mini_clonotype_data}}
+[mini_clonotype_data()]
 }
 \keyword{datasets}

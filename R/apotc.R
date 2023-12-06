@@ -1,5 +1,5 @@
 #' The apotc (APackOfTheClones) reduction class
-#'
+#'s
 #' A class for storing information about T cell clonal expansion in the seurat
 #' `reductions` attribute under [["apotc"]]
 #'
@@ -18,8 +18,6 @@
 #' @slot cluster_colors character vector indicating coloration of each cluster
 #' @slot reduction_base character indicating the reduction the plotting was
 #' based off of
-#' @slot labels character vector indicating the names of each cluster. Defaults
-#' to sequencial integers with a 'C' in front
 #' @slot label_coords list of numeric vectors of length two indicating the (x,y)
 #' coordinates of each label if plotted
 #'
@@ -40,6 +38,8 @@ setClass(
         label_coords = 'list'
     )
 )
+
+# it might be better to store it in @misc? but shouldnt matter too much
 
 # initialize the reduction object from precomputed clusterlists
 initialize_apotc <- function(
@@ -89,7 +89,8 @@ run_apotc_warn_str <- function(
     return(NULL)
 }
 
-#' @title Run the APackOfTheClones algorithm for visualizing clonal expansion
+#' @title Run the APackOfTheClones method on a combined Seurat object for
+#' downstream visualization of clonal expansion
 #'
 #' @description Computes all necessary information for an APackOfTheClones
 #' clonal expansion plot and stores it in the seurat object at
@@ -114,7 +115,7 @@ run_apotc_warn_str <- function(
 #' `'pca'`. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
 #' However, generally APackOfTheClones is used for displaying UMAP and
 #' occasionally t-SNE versions to intuitively highlight clonal expansion
-#' @param clone_scale_factor Dictates how much to scale each circle (between 0,1)
+#' @param clone_scale_factor Dictates how much to scale each circle(between 0,1)
 #' radius when converting from clonotype counts into circles that represent
 #' individual clonotypes. The argument defaults to the character `"auto"`, and
 #' if so, the most visually pleasing factor will be estimated
@@ -142,21 +143,12 @@ run_apotc_warn_str <- function(
 #' the `@reduction` attribute named `apotc`, which harbors data necessary for
 #' visualizing the clonal expansion of the cells with the `APOTCPlot()` function
 #'
-#' @seealso \code{\link{integrate_tcr}}, \code{\link{APOTCPlot}},
-#' \code{\link{AdjustAPOTC}}
+#' @seealso [APOTCPlot()], [AdjustAPOTC()]
 #'
 #' @export
 #'
 #' @examples
-#' library(Seurat)
-#' library(APackOfTheClones)
-#' data("mini_clonotype_data","mini_seurat_obj")
-#'
-#' mini_seurat_obj <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
-#' mini_seurat_obj <- RunAPOTC(mini_seurat_obj)
-#'
-#' # for cluster repulsion on the first run, set repulse to TRUE manually
-#' mini_seurat_obj <- RunAPOTC(mini_seurat_obj, repulse = TRUE)
+#' # unfinished
 #'
 RunAPOTC <- function(
     seurat_obj,
@@ -164,7 +156,7 @@ RunAPOTC <- function(
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     ORDER = TRUE,
-    scramble = FALSE, # not rlly needed
+    scramble = FALSE,
     try_place = FALSE,
 
     repulse = FALSE,
@@ -173,7 +165,7 @@ RunAPOTC <- function(
     max_repulsion_iter = 20L,
     verbose = TRUE
 ) {
-    call_time = Sys.time()
+    call_time <- Sys.time()
 
     reduction_base <- attempt_correction(reduction_base)
 
@@ -186,6 +178,7 @@ RunAPOTC <- function(
         stop("rad_scale_factor has to be between 0 and 1")
     }
 
+    # actual run
     if (verbose) {message("Initializing APOTC run")}
 
     if (should_estimate(clone_scale_factor)) {
@@ -244,5 +237,6 @@ RunAPOTC <- function(
     if (verbose) {
         print_completion_time(call_time)
     }
+
     seurat_obj
 }

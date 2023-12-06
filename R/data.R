@@ -1,6 +1,6 @@
 #' Artificially generated Seurat object
 #'
-#' A generated 'SeuratObject' of a small sc-RNAseq experiment. 
+#' A generated 'SeuratObject' of a small sc-RNAseq experiment.
 #' Has a corresponding T-cell receptor library generated from
 #' single cell immune profiling, named `"mini_clonotype_data"`
 #'
@@ -24,8 +24,8 @@
 #'   \item{version}{Seurat version used to create the object}
 #'   \item{commands}{Command history}
 #' }
-#' 
-#' @seealso \code{\link{mini_clonotype_data}}
+#'
+#' @seealso [mini_clonotype_data()]
 "mini_seurat_obj"
 
 #' Artificially generated T cell receptor library
@@ -45,9 +45,26 @@
 #'   \item{barcode}{barcodes corresponding to each sequenced cell}
 #'   \item{raw_clonotype_id}{clonotype information for each cell}
 #' }
-#' 
+#'
 #' @details Note that the clonotypes in the `raw_clonotype_id` column
 #' actually do not contain all of clonotype`1`...clonotype`n`
-#' 
-#' @seealso \code{\link{mini_seurat_obj}}
+#'
+#' @seealso [mini_seurat_obj()]
 "mini_clonotype_data"
+
+#' Processed subset of `contig_list` from `scRepertoire`
+#'
+#' @description A list of 6 dataframes of T cell contigs outputted from the
+#' `filtered_contig_annotation` files, but subsetted to about 92 valid T cells
+#' which correspond to the same barcodes found in `screp_example` (Also from
+#' `scRepertoire`)
+#'
+#' @usage data("combined_contigs")
+#'
+#' @format An R `list` of `data.frame` objects
+#'
+#' @docType data
+#'
+#' @seealso \code{\link{contig_list}}
+#'
+"combined_contigs"

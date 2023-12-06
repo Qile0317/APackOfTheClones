@@ -61,7 +61,7 @@ add_default_theme <- function(plt, reduction) {
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object
 #'
-#' @seealso \code{\link{AdjustAPOTC}}
+#' @seealso [AdjustAPOTC()]
 #'
 #' @export
 #'

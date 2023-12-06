@@ -1,12 +1,12 @@
 # wrapper to get the number of identified clusters:
 count_umap_clusters <- function(seurat_obj) {
-  return(length(levels(seurat_obj@meta.data[["seurat_clusters"]])))
+    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 # get the ggplot colors - important function for 'apotc'
 gg_color_hue <- function(n) {
-  hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
+    hues <- seq(15, 375, length = n + 1)
+    hcl(h = hues, l = 65, c = 100)[1:n]
 }
 
 # generate a hashmap of cluster to color
@@ -23,7 +23,7 @@ gen_cluster_color_hashmap <- function(num_clusters) {
 #' inserts a list of colors into a column in the cluster df by label with the
 #' v0.1.2 version of the packing algos
 #' @noRd
-#' @importFrom dplyr %>% 
+#' @importFrom dplyr %>%
 insert_colors <- function(cluster_dataframe, num_clusters) {
   color_hashmap <- gen_cluster_color_hashmap(num_clusters)
   color_vec <- cluster_dataframe[[1]] # 1 is label
@@ -57,5 +57,5 @@ extract_and_add_colors <- function(seurat_obj, plot_df) {
 }
 
 # in the future should probably make a fake ggplot cluster legend on the right
-# side by inserting scatterplt points? (like in the seurat UMPA plot) But also, 
+# side by inserting scatterplt points? (like in the seurat UMPA plot) But also,
 # the problem is that it becomes inconsistent with the clone size legend :/

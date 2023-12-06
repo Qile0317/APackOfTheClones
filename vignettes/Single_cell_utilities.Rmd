@@ -1,0 +1,19 @@
+---
+title: "Single_cell_utilities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Single_cell_utilities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(APackOfTheClones)
+```
