@@ -10,6 +10,20 @@ public:
     bool try_place;
     bool verbose;
 
+    CirclePacker(const std::vector<double>& input_rad_vec) {
+        verbose = false;
+        start_progress_bar();
+
+        try_place = true;
+
+        num_nodes = (int)input_rad_vec.size();
+        data.resize(num_nodes);
+
+        for (int i = 0; i < num_nodes; i++) {
+            data[i] = CircleNode(input_rad_vec[i]);
+        }
+    }
+
     CirclePacker(const std::vector<double>& input_rad_vec, bool _try_place, bool _verbose) {
         verbose = _verbose;
         start_progress_bar();
