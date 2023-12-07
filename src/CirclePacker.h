@@ -17,7 +17,7 @@ inline std::pair<int, int> sentinel_pair() {
     return std::make_pair(-1, -1);
 }
 
-inline bool is_clear(std::pair<int, int>& p) {
+bool is_clear(std::pair<int, int>& p) {
     return (p.first == -1) && (p.second == -1);
 }
 
@@ -28,7 +28,11 @@ public:
     bool try_place;
     bool verbose;
 
-    CirclePacker(const std::vector<double>& input_rad_vec, bool _try_place = true, bool _verbose = false) {
+    CirclePacker(
+        const std::vector<double>& input_rad_vec,
+        bool _try_place = true,
+        bool _verbose = false
+    ) {
         verbose = _verbose;
         start_progress_bar();
 
@@ -42,7 +46,11 @@ public:
         }
     }
 
-    CirclePacker(const std::vector<CircleNode> final_circle_nodes, bool _try_place = true, bool _verbose = false) {
+    CirclePacker(
+        const std::vector<CircleNode> final_circle_nodes,
+        bool _try_place = true,
+        bool _verbose = false
+    ) {
         verbose = _verbose;
         start_progress_bar();
 
@@ -66,7 +74,7 @@ public:
             return packer.handle_degenerate_cases(centroid, rad_decrease);
         }
 
-        // for all nodes, fit each node into cluster, check for overlap, and refit
+        // for all nodes, fit node into cluster, check for overlap, and refit
         packer.place_starting_three();
         packer.init_boundary();
 
@@ -129,8 +137,8 @@ public:
 
     // removes segment between c1 and c2
     void fwd_remove(int c1, int c2) {
-        if (c1 == c2) { Rcpp::stop("Circles are the same."); return; }
-        if (data[c1].nxt == c2) { Rcpp::stop("Circles are consecutive."); return; }
+        if (c1 == c2) { Rcpp::stop("Circles are the same."); }
+        if (data[c1].nxt == c2) { Rcpp::stop("Circles are consecutive."); }
 
         data[c1].nxt = c2;
         data[c2].prv = c1;
@@ -195,20 +203,22 @@ public:
     }
 
     /*
-    Locating the pair of successive circles, c, c.nxt, with the following property:
+    Locating the pair of successive circles, c, c.nxt, w/the following property:
     amongst all pairs of successive circles on the boundary, this pair minimizes
-    distance from the center of d to the origin, when d is fitted tangent to this
-    pair. Returns the index of the closest node
+    distance from the center of d to the origin, when d is fitted tangent to
+    this pair. Returns the index of the closest node.
 
-    The function will modify some nodes in tang_circle_dist but when used later in
-    circle_layout, the changes will be overwritten immediately after
+    The function will modify some nodes in tang_circle_dist but when used later
+    in circle_layout, the changes will be overwritten immediately after.
     */
-    int closest_place(int c1, int c2) {
-        int closest = c1;
-        int circ = data[c1].nxt;
-        while (circ != c1) {
-            double dist_closest = tang_circle_dist(closest, data[closest].nxt, c2);
-            double dist_circ = tang_circle_dist(circ, data[circ].nxt, c2);
+    int closest_place(int c, int d) {
+        int closest = c;
+        int circ = data[c].nxt;
+        while (circ != c) {
+            double dist_closest = tang_circle_dist(
+                closest, data[closest].nxt, d
+            );
+            double dist_circ = tang_circle_dist(circ, data[circ].nxt, d);
 
             if (dist_closest > dist_circ) {
                 closest = circ;
@@ -218,14 +228,16 @@ public:
         return closest;
     }
 
-    // convinience function
+    // convenience function
     int place_circle(int j) {
         return (try_place) ? closest_place(j-1, j) : closest(j-1);
     }
 
     // check if two circle nodes overlap geometrically
     bool do_intersect(int c1, int c2) {
-        double centre_distance = sqrt(sqr(data[c1].x - data[c2].x) + sqr(data[c1].y - data[c2].y));
+        double centre_distance = sqrt(
+            sqr(data[c1].x - data[c2].x) + sqr(data[c1].y - data[c2].y)
+        );
         double rad_sum = data[c1].rad + data[c2].rad;
         return centre_distance < rad_sum;
     }
@@ -248,12 +260,12 @@ public:
         return obstruct;
     }
 
-    // overlap check of three circles - seems to be O(length(nodes)^2)
+    // overlap check of three circles
     std::pair<int, int> overlap_check(int Cm, int Cn, int C) {
         int C_em = Cm;
         int C_en = Cn;
 
-        // collect circles that C intersects, if any, and store indicies in obstruct
+        // collect circles that C intersects, and store indices in obstruct
         std::vector<int> obstruct = construct_obstruct_list(C_en, C_em, C);
         int n = obstruct.size();
 
@@ -269,17 +281,18 @@ public:
         }
 
         // if the distance is realized fwd, change C_en
-        if (fwd_dist(Cn, nearest) <= fwd_dist(nearest, Cm)) { 
+        if (fwd_dist(Cn, nearest) <= fwd_dist(nearest, Cm)) {
             C_en = nearest;
-        
+
         } else { // if distance is realized bkwd and not fwd, change C_em
             C_em = nearest;
         }
 
-        return (C_em == Cm) && (C_en == Cn) ? sentinel_pair() : std::make_pair(C_em, C_en);
+        return (C_em == Cm) && (C_en == Cn) ?
+            sentinel_pair() : std::make_pair(C_em, C_en);
     }
 
-    // helper for degenerate cases where there is only 1 or 2 input radii
+    // helper for cases where there is only 1 or 2 input radii
 
     bool is_degenerate_case() {
         return ((num_nodes == 1) || (num_nodes == 2));
@@ -327,15 +340,15 @@ public:
         double rad_decrease
     ) {
         Rcpp::NumericVector x (num_nodes), y (num_nodes), rad (num_nodes);
-        int max_x_index = 0;
+        int max_x_ind = 0;
 
         for (int i = 0; i < num_nodes; i++) {
             x[i] = data[i].x + centroid[0];
             y[i] = data[i].y + centroid[1];
             rad[i] = data[i].rad - rad_decrease;
 
-            if (x[i] > x[max_x_index]) {
-                max_x_index = i;
+            if (x[i] > x[max_x_ind]) {
+                max_x_ind = i;
             }
         }
 
@@ -344,18 +357,20 @@ public:
             Rcpp::Named("y") = y,
             Rcpp::Named("rad") = rad,
             Rcpp::Named("centroid") = centroid,
-            Rcpp::Named("clRad") = x[max_x_index] + rad[max_x_index] - centroid[0]
+            Rcpp::Named("clRad") = x[max_x_ind] + rad[max_x_ind] - centroid[0]
         );
 
         finish_progress_bar();
         return out;
     }
 
-    // fit a new circle (index j) adjacent to curr_circ and its neighbour
+    // fit a new circle (index j) adjacent to curr_circ and its neighbor
     void fit_circle(int curr_circ, int& j) {
 
         fit_tang_circle(curr_circ, data[curr_circ].nxt, j);
-        std::pair<int, int> check = overlap_check(curr_circ, data[curr_circ].nxt, j);
+        std::pair<int, int> check = overlap_check(
+            curr_circ, data[curr_circ].nxt, j
+        );
         int cm = curr_circ, cn = data[curr_circ].nxt;
 
         while (!is_clear(check)) {
@@ -375,4 +390,5 @@ public:
         }
 
     }
+
 };

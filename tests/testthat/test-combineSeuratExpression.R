@@ -3,7 +3,7 @@ test_that("combineSeuratExpression output is compatible with scRepertoire", {
 	data("combined_contigs")
 
 	apotc_pbmc <- combineSeuratExpression(combined_contigs, screp_example)
-	screp_pbmc <- combineExpression(combined_contigs, screp_example)
+	screp_pbmc <- scRepertoire::combineExpression(combined_contigs, screp_example)
 
 	screp_pbmc_meta_modified <- screp_pbmc@meta.data
 	screp_pbmc_meta_modified[["barcode"]] <- NULL
