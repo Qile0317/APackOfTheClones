@@ -2,7 +2,8 @@
 % Please edit documentation in R/apotc.R
 \name{RunAPOTC}
 \alias{RunAPOTC}
-\title{Run the APackOfTheClones algorithm for visualizing clonal expansion}
+\title{Run the APackOfTheClones method on a combined Seurat object for
+downstream visualization of clonal expansion}
 \usage{
 RunAPOTC(
   seurat_obj,
@@ -86,15 +87,7 @@ functions and class, and also the web-only user vignette for a walkthrough of
 the inner workings of the package.
 }
 \examples{
-library(Seurat)
-library(APackOfTheClones)
-data("mini_clonotype_data","mini_seurat_obj")
-
-mini_seurat_obj <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
-mini_seurat_obj <- RunAPOTC(mini_seurat_obj)
-
-# for cluster repulsion on the first run, set repulse to TRUE manually
-mini_seurat_obj <- RunAPOTC(mini_seurat_obj, repulse = TRUE)
+# unfinished
 
 }
 \seealso{

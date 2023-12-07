@@ -1,7 +1,25 @@
 #include <Rcpp.h>
 #include <vector>
-#include "CircleNode.h"
+#include "../src/CircleNode.h"
 #include "ProgressBar.h"
+
+// general readability helpers
+
+inline double sqr(double a) {
+    return a * a;
+}
+
+inline double centre_dist(CircleNode& c) {
+    return sqrt(sqr(c.x) + sqr(c.y));
+}
+
+inline std::pair<int, int> sentinel_pair() {
+    return std::make_pair(-1, -1);
+}
+
+inline bool is_clear(std::pair<int, int>& p) {
+    return (p.first == -1) && (p.second == -1);
+}
 
 class CirclePacker {
 public:
@@ -10,13 +28,13 @@ public:
     bool try_place;
     bool verbose;
 
-    CirclePacker(const std::vector<double>& input_rad_vec) {
-        verbose = false;
+    CirclePacker(const std::vector<double>& input_rad_vec, bool _try_place = true, bool _verbose = false) {
+        verbose = _verbose;
         start_progress_bar();
 
-        try_place = true;
+        try_place = _try_place;
 
-        num_nodes = (int)input_rad_vec.size();
+        num_nodes = (int) input_rad_vec.size();
         data.resize(num_nodes);
 
         for (int i = 0; i < num_nodes; i++) {
@@ -24,18 +42,14 @@ public:
         }
     }
 
-    CirclePacker(const std::vector<double>& input_rad_vec, bool _try_place, bool _verbose) {
+    CirclePacker(const std::vector<CircleNode> final_circle_nodes, bool _try_place = true, bool _verbose = false) {
         verbose = _verbose;
         start_progress_bar();
 
         try_place = _try_place;
 
-        num_nodes = (int)input_rad_vec.size();
-        data.resize(num_nodes);
-
-        for (int i = 0; i < num_nodes; i++) {
-            data[i] = CircleNode(input_rad_vec[i]);
-        }
+        num_nodes = (int) final_circle_nodes.size();
+        data = final_circle_nodes;
     }
 
     // main circle packing method, all helpers below.
@@ -65,7 +79,6 @@ public:
         return packer.process_into_clusterlist(centroid, rad_decrease);
     }
 
-private:
     void progress_bar(int x, int max) {
         if (verbose) {
             ProgressBar::show(x, max);
@@ -79,26 +92,6 @@ private:
     void finish_progress_bar() {
         progress_bar(1, 1);
     }
-
-    // general readability helpers
-
-    inline double sqr(double a) {
-        return a * a;
-    }
-
-    inline double centre_dist(CircleNode& c) {
-        return sqrt(sqr(c.x) + sqr(c.y));
-    }
-
-    inline std::pair<int, int> sentinel_pair() {
-        return std::make_pair(-1, -1);
-    }
-
-    inline bool is_clear(std::pair<int, int>& p) {
-        return (p.first == -1) && (p.second == -1);
-    }
-
-    // circle layout helpers
 
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {

@@ -5,6 +5,14 @@ cpp_circle_layout <- function(input_rad_vec, centroid, rad_decrease = 0, try_pla
     .Call(`_APackOfTheClones_cpp_circle_layout`, input_rad_vec, centroid, rad_decrease, try_place, verbose)
 }
 
+has_repeats <- function(vec1, vec2) {
+    .Call(`_APackOfTheClones_has_repeats`, vec1, vec2)
+}
+
+has_common_strs <- function(vec1, vec2) {
+    .Call(`_APackOfTheClones_has_common_strs`, vec1, vec2)
+}
+
 get_average_vector <- function(vec_list) {
     .Call(`_APackOfTheClones_get_average_vector`, vec_list)
 }
@@ -19,13 +27,5 @@ do_cluster_intersect <- function(Cn_centroid, Cn_clRad, Cm_centroid, Cm_clRad, t
 
 calculate_transformation_vectors <- function(transformation_vectors, overall_repulsion_vec, num_clusters) {
     .Call(`_APackOfTheClones_calculate_transformation_vectors`, transformation_vectors, overall_repulsion_vec, num_clusters)
-}
-
-has_repeats <- function(vec1, vec2) {
-    .Call(`_APackOfTheClones_has_repeats`, vec1, vec2)
-}
-
-has_common_strs <- function(vec1, vec2) {
-    .Call(`_APackOfTheClones_has_common_strs`, vec1, vec2)
 }
 

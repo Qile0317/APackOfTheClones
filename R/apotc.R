@@ -1,7 +1,6 @@
 #' The apotc (APackOfTheClones) reduction class
-#'s
-#' A class for storing information about T cell clonal expansion in the seurat
-#' `reductions` attribute under [["apotc"]]
+#'
+#' A class for storing information about T cell clonal expansion
 #'
 #' @slot clusters The original circle packing "reduction" with no modifications,
 #' a list of clusterlists that may include NAs.
