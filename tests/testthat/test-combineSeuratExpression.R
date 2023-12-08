@@ -1,28 +1,31 @@
 test_that("combineSeuratExpression output is compatible with scRepertoire", {
-	data("screp_example") # from scRepertoire
-	data("combined_contigs")
 
-	apotc_pbmc <- combineSeuratExpression(combined_contigs, screp_example)
-	screp_pbmc <- scRepertoire::combineExpression(combined_contigs, screp_example)
+	# scRepertoire data
+	data("scRep_example")
+	data("mini_contig_list")
 
-	screp_pbmc_meta_modified <- screp_pbmc@meta.data
-	screp_pbmc_meta_modified[["barcode"]] <- NULL
+	# named test
+	mini_combined <- scRepertoire::combineTCR(
+		input.data = scRepertoire::mini_contig_list,
+		samples = c("P17B", "P17L", "P18B", "P18L",
+					"P19B","P19L", "P20B", "P20L")
+	)
+	apotc_pbmc <- combineSeuratExpression(
+		mini_combined, scRepertoire::scRep_example
+	)
+	screp_pbmc <- scRepertoire::combineExpression(
+		mini_combined, scRepertoire::scRep_example, cloneCall = "strict",
+		chain = "both", group.by = NULL, proportion = FALSE, filterNA = FALSE,
+		cloneSize = c(
+			Rare = 1, Small = 5, Medium = 50, Large = 100, Hyperexpanded = 1000
+		),
+		addLabel = FALSE
+	)
 
-	# compatible doesnt mean identical. In apotc:
-	# - extra barcodes are removed from metadata
-	# - there is a seurat command slot
+	apotc_pbmc@commands[[length(apotc_pbmc@commands)]] <- NULL
+	screp_pbmc@commands[[length(screp_pbmc@commands)]] <- NULL
 
-	expect_equal(apotc_pbmc@assays, screp_pbmc@assays)
-	expect_equal(apotc_pbmc@meta.data, screp_pbmc_meta_modified)
-	expect_identical(apotc_pbmc@active.assay, screp_pbmc@active.assay)
-	expect_identical(apotc_pbmc@active.ident, screp_pbmc@active.ident)
-	expect_identical(apotc_pbmc@graphs, screp_pbmc@graphs)
-	expect_identical(apotc_pbmc@neighbors, screp_pbmc@neighbors)
-	expect_equal(apotc_pbmc@reductios, screp_pbmc@reductions)
-	expect_identical(apotc_pbmc@images, screp_pbmc@images)
-	expect_identical(apotc_pbmc@project.name, screp_pbmc@project.name)
-	expect_identical(apotc_pbmc@misc, screp_pbmc@misc)
-	expect_identical(apotc_pbmc@version, screp_pbmc@version)
-	# commands should be seperately tested
-	# tools is probably not too relevant
+	expect_equal(apotc_pbmc, screp_pbmc)
+
+	# TODO unnamed test! (was a problem in scRepertoire)
 })

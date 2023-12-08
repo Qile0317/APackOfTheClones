@@ -24,3 +24,4 @@
 [.]gitignore$
 ^R/upcoming$
 ^joss$
+^\.Rprofile$

@@ -1,31 +1,30 @@
-# all functions in this script are copied/modified from scRepertoire - with
-# permission from the author
-
 #' @title
 #' Wrapper to add scRepertoire-compatible clonotype information to a seurat
 #' object
 #'
 #' @description
-#' This is a modified version of `scRepertoire::combineExpression`, which adds
+#' `r lifecycle::badge("experimental")`
+#'
+#' This is a modified version of [scRepertoire::combineExpression], which adds
 #' the immune receptor information to a Seurat object's meta data. This function
 #' also calculates the combined clonotype frequencies.
 #'
 #' Importantly, before using this function, ensure the barcodes of the seurat
-#' object match the barcodes in the output of the
-#' `scRepertoire::combinedContig()` call. Check `AddSampleBarcode()`
+#' object match the barcodes in the output of the [scRepertoire::combineTCR]
+#' or [scRepertoire::combineBCR] call. Check [AddSampleBarcode]
 #' to change the prefixes of the Seurat object. If combining more than one
 #' immune receptor type, barcodes with both receptors will be removed during the
 #' combination process.
 #'
 #' @details
-#' This function is a sort of "subset" of the original `scRepertoire` function
+#' This function is a sort of "special case" of the original function
 #' that combines and processes the clonotype data so that it can be used by
 #' `APackOfTheClones` further downstream. The modified output seurat object
 #' should be completely compatible to be used with other `scRepertoire`
 #' functions.
 #'
-#' @param input.data The product of `scRepertoire::CombineTCR()`,
-#' `scRepertoire::CombineBCR()` or a list of both. (see scRepertoire's vignette)
+#' @param input.data The product of [scRepertoire::combineTCR],
+#' [scRepertoire::combineBCR] or a list of both. (see scRepertoire's vignette)
 #' @param sc.data The Seurat object to attach. Note that this will not work with
 #' SingleCellExperiment (SCE) objects!
 #' @param cloneCall How to call the clonotype - VDJC gene (gene),
@@ -38,7 +37,7 @@
 #' while NULL will merge all the clones into a single data frame.
 #' @param proportion Whether to proportion (**TRUE**) or total frequency
 #' (**FALSE**) of the clonotype based on the group.by variable. For
-#' `APackOfTheClines`, this value is recommended (and defaults) to be set
+#' `APackOfTheClones`, this value is recommended (and defaults) to be set
 #' *FALSE* for cleaner cluster visualization.
 #' @param cloneSize The bins for the grouping based on proportion or frequency.
 #' If proportion is **FALSE** and the *cloneSizes* are not set high enough based
@@ -48,9 +47,6 @@
 #' @param addLabel This will add a label to the frequency header, allowing
 #' the user to try multiple group.by variables or recalculate frequencies after
 #' subsetting the data.
-#'
-#' @importFrom dplyr %>%
-#' @importFrom  rlang %||%
 #'
 #' @return
 #' The modified seurat object with the contig information attached, and a seurat
@@ -70,18 +66,16 @@ combineSeuratExpression <- function(
 	proportion = FALSE,
 	filterNA = FALSE,
 	cloneSize = c(
-		Rare = 1e-4, Small = 0.001, Medium = 0.01, Large = 0.1,Hyperexpanded = 1
+		Rare = 1, Small = 5, Medium = 50, Large = 100, Hyperexpanded = 1000
 	),
 	addLabel = FALSE
 ) {
 	call_time <- Sys.time()
 
 	# handle inputs
-	if (!is_seurat_object(input.data)) {
+	if (!is_seurat_object(sc.data)) {
 		stop("`sc.data` must be a Seurat object")
 	}
-
-	cloneCall <- clonecall_to_colname(cloneCall)
 
 	# run combineExpression
 	combined_seurat <- scRepertoire::combineExpression(
@@ -97,49 +91,12 @@ combineSeuratExpression <- function(
 	)
 
 	# overwrite the seurat command slot
-	combined_seurat@command[["combineExpression"]] <- NULL
-	combined_seurat@command[["combineSeuratExpression"]] <- make_apotc_command(
+	combined_seurat@commands[["combineExpression"]] <- NULL
+	combined_seurat@commands[["combineSeuratExpression"]] <- make_apotc_command(
 		call_time = call_time
 	)
 
 	combined_seurat
-}
-
-clonecall_to_colname <- function(x) {
-
-	clonecall_dictionary <- hash::hash(
-		"gene" = "CTgene",
-		"genes" = "CTgene",
-		"ctgene" = "CTgene",
-		"ctstrict" = "CTstrict",
-		"nt" = "CTnt",
-		"nucleotide" = "CTnt",
-		"nucleotides" = "CTnt",
-		"ctnt" = "CTnt",
-		"aa" = "CTaa",
-		"amino" = "CTaa",
-		"ctaa" = "CTaa",
-		"gene+nt" = "CTstrict",
-		"strict" = "CTstrict",
-		"ctstrict" = "CTstrict"
-	)
-
-	x <- tolower(x)
-
-	if (!is.null(clonecall_dictionary[[x]])) {
-		return(clonecall_dictionary[[x]])
-	}
-
-	stop(paste(
-		"invalid input cloneCall, did you mean: '",
-		closest_word(
-			x,
-			c(names(clonecall_dictionary),
-			  unname(hash::values(clonecall_dictionary)))
-		),
-		"'?",
-		sep = ""
-	))
 }
 
 # probably should also have a function in APOTC to add a metadata slot for pure

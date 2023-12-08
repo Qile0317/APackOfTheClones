@@ -1,4 +1,4 @@
-#' The apotc (APackOfTheClones) reduction class
+#' The apotc (APackOfTheClones) class
 #'
 #' A class for storing information about T cell clonal expansion
 #'

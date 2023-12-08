@@ -28,7 +28,7 @@ test_that("start_progress_bar works", {
 # print_completion_time cant really be tested but is extremely simple
 
 test_that("isnt_empty works", {
-    expect_true(isnt_empty(list(c(1,2,3))))
+    expect_true(isnt_empty(list(c(1, 2, 3))))
     expect_false(isnt_empty(list()))
 })
 
