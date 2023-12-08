@@ -24,40 +24,40 @@ APOTCPlot(
 }
 \arguments{
 \item{seurat_obj}{A seurat object that has been integrated with clonotype
-data and has had `RunAPOTC` ran on it.}
+data and has had \code{RunAPOTC} ran on it.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to
-first try to export the plot as an `.svg` before increasing `res` due to
-increased plotting times from `ggforce::geom_circle`.}
+first try to export the plot as an \code{.svg} before increasing \code{res} due to
+increased plotting times from \code{ggforce::geom_circle}.}
 
 \item{linetype}{The type of outline each circle should have. defaults to
-`"blank` meaning no outline. More information is in the function
-documentation of `ggforce::geom_circle`.}
+\verb{"blank} meaning no outline. More information is in the function
+documentation of \code{ggforce::geom_circle}.}
 
-\item{use_default_theme}{logical that defaults to `TRUE`. If `TRUE`,
+\item{use_default_theme}{logical that defaults to \code{TRUE}. If \code{TRUE},
 the resulting plot will have the same theme as the seurat reference reduction
 plot. Else, the plot will simply have a blank background.}
 
-\item{retain_axis_scales}{If `TRUE`, approximately maintains the axis scales
+\item{retain_axis_scales}{If \code{TRUE}, approximately maintains the axis scales
 of the original UMAP. However, it will only attempt to extend the axes and
 never shorten.}
 
-\item{show_labels}{If `TRUE`, will label each circle cluster at the centroid,
+\item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
 defaulting to "C0, C1, ...". labels and their coordinates can also be
-manually edited with the `ModifyLabels` function.}
+manually edited with the \code{ModifyLabels} function.}
 
 \item{label_size}{The text size of labels if shown. Defaults to 5.}
 
-\item{add_size_legend}{If `TRUE`, adds a legend to the plot visualizing the
+\item{add_size_legend}{If \code{TRUE}, adds a legend to the plot visualizing the
 relative sizes of clones. Note that it is simply an overlay and not a real
 ggplot2 legend.}
 
 \item{legend_sizes}{numeric vector. Indicates the circle sizes to be
-displayed on the legend and defaults to `c(1, 5, 10)`.}
+displayed on the legend and defaults to \code{c(1, 5, 10)}.}
 
 \item{legend_position}{character or numeric. Can be set to either
-`"top_left"`, `"top_right"`, `"bottom_left"`, `"bottom_right"` and places the
+\code{"top_left"}, \code{"top_right"}, \code{"bottom_left"}, \code{"bottom_right"} and places the
 legend roughly in the corresponding position. Otherwise, can be a numeric
 vector of length 2 indicating the x and y position of the "top-center" of the
 legend}
@@ -67,11 +67,11 @@ legend}
 \item{legend_color}{character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray}
 
 \item{legend_spacing}{numeric. Indicates the horizontal distance between each
-stacked circle on the size legend. Defaults to `"auto"` which will use an
+stacked circle on the size legend. Defaults to \code{"auto"} which will use an
 estimated value depending on plot size}
 
 \item{legend_label}{character. The title of the legend, which defaults to
-`"clone sizes`.}
+\verb{"clone sizes}.}
 
 \item{legend_text_size}{numeric. The text size of the letters and numbers on
 the legend}
@@ -82,10 +82,10 @@ seurat object
 }
 \description{
 Given a seurat object with an 'apotc' (APackOfTheClones) object
-from running `RunAPOTC()`, this function will read the information and return
+from running \code{RunAPOTC()}, this function will read the information and return
 a customizable ggplot object of the clonal expansion with a circle size legend.
 If the user is unhappy about certain aspects of the plot, some parameters can
-be adjusted with the `AdjustAPOTC` function.
+be adjusted with the \code{AdjustAPOTC} function.
 }
 \examples{
 library(Seurat)
@@ -104,5 +104,5 @@ APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
 
 }
 \seealso{
-[AdjustAPOTC()]
+\code{\link[=AdjustAPOTC]{AdjustAPOTC()}}
 }

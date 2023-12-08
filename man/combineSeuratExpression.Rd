@@ -2,7 +2,8 @@
 % Please edit documentation in R/combineSeuratExpression.R, R/integration.R
 \name{combineSeuratExpression}
 \alias{combineSeuratExpression}
-\title{Add scRepertoire-compatible clonotype information to a seurat object}
+\title{Wrapper to add scRepertoire-compatible clonotype information to a seurat
+object}
 \usage{
 combineSeuratExpression(
   contigs,
@@ -21,8 +22,8 @@ combineSeuratExpression(
 )
 }
 \arguments{
-\item{contigs}{The product of `scRepertoire::CombineTCR()`,
-`scRepertoire::CombineBCR()` or a list of both. (see scRepertoire's vignette)}
+\item{contigs}{The product of \code{scRepertoire::CombineTCR()},
+\code{scRepertoire::CombineBCR()} or a list of both. (see scRepertoire's vignette)}
 
 \item{seurat_obj}{The seurat object to attach the contigs to}
 
@@ -36,7 +37,28 @@ e.g. "both", "TRA", "TRG", "IGH", "IGL"}
 \item{filterNA}{logical. Method to subset seurat object of barcodes without
 clonotype information}
 
-\item{cloneTypes}{named numeric. The bins for the grouping based on frequency}
+\item{input.data}{The product of \code{scRepertoire::CombineTCR()},
+\code{scRepertoire::CombineBCR()} or a list of both. (see scRepertoire's vignette)}
+
+\item{sc.data}{The Seurat object to attach. Note that this will not work with
+SingleCellExperiment (SCE) objects!}
+
+\item{group.by}{The column label in the combined clones in which
+clonotype frequency will be calculated. "none" will keep the list as is,
+while NULL will merge all the clones into a single data frame.}
+
+\item{proportion}{Whether to proportion (\strong{TRUE}) or total frequency
+(\strong{FALSE}) of the clonotype based on the group.by variable. For
+\code{APackOfTheClines}, this value is recommended (and defaults) to be set
+\emph{FALSE} for cleaner cluster visualization.}
+
+\item{cloneSize}{The bins for the grouping based on proportion or frequency.
+If proportion is \strong{FALSE} and the \emph{cloneSizes} are not set high enough based
+on frequency, the upper limit of \emph{cloneSizes} will be automatically amended.}
+
+\item{addLabel}{This will add a label to the frequency header, allowing
+the user to try multiple group.by variables or recalculate frequencies after
+subsetting the data.}
 }
 \value{
 The modified seurat object with the contig information attached, and a seurat
@@ -46,41 +68,40 @@ The modified seurat object with the contig information attached, and a seurat
 command slot with the command call information
 }
 \description{
-This is a modified version of `scRepertoire::combineExpression`, which adds
+This is a modified version of \code{scRepertoire::combineExpression}, which adds
 the immune receptor information to a Seurat object's meta data. This function
 also calculates the combined clonotype frequencies.
 
 Importantly, before using this function, ensure the barcodes of the seurat
 object match the barcodes in the output of the
-`scRepertoire::combinedContig()` call. Check `AddSampleBarcode()`
+\code{scRepertoire::combinedContig()} call. Check \code{AddSampleBarcode()}
 to change the prefixes of the Seurat object. If combining more than one
 immune receptor type, barcodes with both receptors will be removed during the
 combination process.
 
-This is a modified version of `scRepertoire::combineExpression`, which adds
+This is a modified version of \code{scRepertoire::combineExpression}, which adds
 the immune receptor information to a Seurat object's meta data. This function
 also calculates the combined clonotype frequencies.
 
 Importantly, before using this function, ensure the barcodes of the seurat
 object match the barcodes in the output of the
-`scRepertoire::combinedContig()` call. Check `AddSampleBarcode()`
+\code{scRepertoire::combinedContig()} call. Check \code{AddSampleBarcode()}
 to change the prefixes of the Seurat object. If combining more than one
 immune receptor type, barcodes with both receptors will be removed during the
 combination process.
 }
 \details{
-This function is a sort of "subset" of the original `scRepertoire` function
+This function is a sort of "subset" of the original \code{scRepertoire} function
 that combines and processes the clonotype data so that it can be used by
-`APackOfTheClones` further downstream. The modified output seurat object
-should be completely compatible to be used with other `scRepertoire`
-functions. `scRepertoire::combineExpression` can also be ran again on the
-modified seurat object and it shouldn't overwrite any of the existing data.
+\code{APackOfTheClones} further downstream. The modified output seurat object
+should be completely compatible to be used with other \code{scRepertoire}
+functions.
 
-This function is a sort of "subset" of the original `scRepertoire` function
+This function is a sort of "subset" of the original \code{scRepertoire} function
 that combines and processes the clonotype data so that it can be used by
-`APackOfTheClones` further downstream. The modified output seurat object
-should be completely compatible to be used with other `scRepertoire`
-functions. `scRepertoire::combineExpression` can also be ran again on the
+\code{APackOfTheClones} further downstream. The modified output seurat object
+should be completely compatible to be used with other \code{scRepertoire}
+functions. \code{scRepertoire::combineExpression} can also be ran again on the
 modified seurat object and it shouldn't overwrite any of the existing data.
 }
 \examples{

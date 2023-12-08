@@ -10,13 +10,13 @@ change_clone_scale(seurat_obj, new_clone_scale, verbose = TRUE)
 \arguments{
 \item{seurat_obj}{the seurat object to be modified}
 
-\item{new_clone_scale}{the new `clone_scale_factor` to change to}
+\item{new_clone_scale}{the new \code{clone_scale_factor} to change to}
 
 \item{verbose}{boolean indicating whether to display progress information}
 }
 \description{
 If the clone scale factor is unsatisfactory (i.e. circles are
-too big/small) after creating a clonal expansion plot with `APOTCPlot`, the
+too big/small) after creating a clonal expansion plot with \code{APOTCPlot}, the
 factor can be changed with this function. This function simply repacks all
 clusters with smaller circle sizes while maintaining all other factors the
 same as before.

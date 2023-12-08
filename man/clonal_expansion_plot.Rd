@@ -6,12 +6,15 @@
 \usage{
 clonal_expansion_plot(...)
 }
+\arguments{
+\item{...}{deprecated}
+}
 \value{
 error message
 }
 \description{
-As of CRAN version 1.0.0, `clonal_expansion_plot` has been deprecated.
-APackOfTheClones has been revamped and improved to allow for multiple
-samples. Please read the new vignette with `vignette('APOTC_workflow')` and
-refer to the `RunAPOTC` and `APOTCPlot` functions.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped, now depending on the \code{scRepertoire} v2 package. Please see the new vignette, showing a superior way to achieve the same visualizations with more features.
 }
+\keyword{internal}

@@ -23,7 +23,7 @@ AdjustAPOTC(
 )
 }
 \arguments{
-\item{seurat_obj}{The seurat object to be adjusted. Must have an `apotc`
+\item{seurat_obj}{The seurat object to be adjusted. Must have an \code{apotc}
 reduction}
 
 \item{new_rad_scale_factor}{responsible for changing the rad_scale_factor of
@@ -31,11 +31,11 @@ all circles. Can be a numerical value between 0 and 1.
 unfinished}
 }
 \value{
-The adjusted (modified) `seurat_obj`
+The adjusted (modified) \code{seurat_obj}
 }
 \description{
 If the user is unsatisfied with the clonal expansion plot that
-was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
+was generated from \code{RunAPOTC} and \code{APOTCPlot}, this function has a range of
 arguments to modify the data and/or parameters of the visualization. Note
 that some of the arguments may conflict with eachother.
 }

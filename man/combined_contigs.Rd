@@ -3,20 +3,20 @@
 \docType{data}
 \name{combined_contigs}
 \alias{combined_contigs}
-\title{Processed subset of `contig_list` from `scRepertoire`}
+\title{Processed subset of \code{contig_list} from \code{scRepertoire}}
 \format{
-An R `list` of `data.frame` objects
+An R \code{list} of \code{data.frame} objects
 }
 \usage{
 data("combined_contigs")
 }
 \description{
 A list of 6 dataframes of T cell contigs outputted from the
-`filtered_contig_annotation` files, but subsetted to about 92 valid T cells
-which correspond to the same barcodes found in `screp_example` (Also from
-`scRepertoire`)
+\code{filtered_contig_annotation} files, but subsetted to about 92 valid T cells
+which correspond to the same barcodes found in \code{screp_example} (Also from
+\code{scRepertoire})
 }
 \seealso{
-\code{\link{contig_list}}
+\code{\link[=contig_list]{contig_list()}}
 }
 \keyword{datasets}

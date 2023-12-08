@@ -1,11 +1,23 @@
-#' SOFT DEPRECATED: Integrate a single TCR library into Seurat object metadata
+md_deprecation_docstring <- function() {
+	paste(
+		'***ALL v0.1.x functions are deprecated***, and the workflow has been ',
+		'completely revamped, now depending on the `scRepertoire` v2 package. ',
+		'Please see the new vignette, showing a superior way to achieve the ',
+		'same visualizations with more features. ',
+		sep = ""
+	)
+}
+
+deprecation_docstring <- function() {
+	gsub("*", "", md_deprecation_docstring(), fixed = TRUE)
+}
+
+#' DEPRECATED: Integrate a single TCR library into Seurat object metadata
 #'
 #' @description
-#' As of CRAN version 1.0.0,`integrate_tcr` has been deprecated.
-#' APackOfTheClones has been revamped and improved to allow for multiple
-#' samples. `clonal_expansion_plot` has also been deprecated. Please
-#' read the new vignette with `vignette('APOTC_workflow')`, and refer
-#' to the `scRepertoire` bioconductor package for similar function.
+#' `r lifecycle::badge('deprecated')`
+#'
+#' `r md_deprecation_docstring()`
 #'
 #' Modifies a `Seurat` object's metadata by taking all the columns
 #' of the `all_contig_annotations.csv`, and adding new elements to
@@ -36,6 +48,8 @@
 #' @importFrom data.table .GRP
 #' @importFrom data.table .SD
 #'
+#' @keywords internal
+#'
 #' @examples
 #' library(Seurat)
 #' library(APackOfTheClones)
@@ -51,15 +65,14 @@
 #'
 integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
 	time_called <- Sys.time()
-	dev_integrate_tcr(seurat_obj, tcr_file, verbose, FALSE, time_called)
 
-	warning(paste(
-		"As of CRAN version 1.0.0,`integrate_tcr` has been deprecated.",
-		"APackOfTheClones has been revamped and improved to allow for multiple",
-		"samples. `clonal_expansion_plot` has also been deprecated. Please",
-		" read the new vignette with `vignette('APOTC_workflow')`, and refer",
-		"to the `scRepertoire` bioconductor package."
-	))
+	lifecycle::deprecate_warn(
+		when = "1.0.0",
+		what = I("integrate_tcr")
+	)
+
+	dev_integrate_tcr(seurat_obj, tcr_file, verbose, FALSE, time_called)
+	seurat_obj[["integrate_tcr"]] <- make_apotc_command(time_called)
 }
 
 dev_integrate_tcr <- function(
@@ -121,7 +134,7 @@ dev_integrate_tcr <- function(
 
 # Returns the number of valid barcodes that are not NA's
 count_tcr_barcodes <- function(seurat_obj) {
-	sum(!is.na(seurat_obj@meta.data[["barcode"]])) # faster than looping
+	sum(!is.na(seurat_obj@meta.data[["barcode"]]))
 }
 
 # get the percent of NA's in the metadata barcode column for the message
@@ -131,44 +144,91 @@ percent_na <- function(seurat_obj) {
 }
 
 #' @title
+#' DEPRECATED: count the number of clonotype sizes per cell cluster in a seurat
+#' object integrated with a TCR library
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' `r md_deprecation_docstring()`
+#'
+#' @details
+#' The function is no longer needed as the `scRepertoire` workflow takes care
+#' of this step.
+#'
+#' @param integrated_seurat_obj Seurat object that has been integrated with a
+#' T-cell receptor library with the deprecated function
+#' \code{\link{integrate_tcr}}. More specifically, in the metadata, there must
+#' at least be the elements `seurat_clusters` and `raw_clonotype_id`
+#'
+#' @examples
+#' library(Seurat)
+#' library(APackOfTheClones)
+#' data("mini_clonotype_data","mini_seurat_obj")
+#'
+#' # produce an integrated seurat_object
+#' integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
+#' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
+#' clonotype_counts
+#'
+#' @return A list of `table` objects, where each element is tabled
+#' clonotype frequencies for the seurat cluster corresponding to the same index
+#' - 1. For example, the 5th element is a tabled frequency of counts that
+#' corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed).
+#' If an element is `NULL`, it indicates that there were no corresponding T-cell
+#' receptor barcode for the cells in the cluster.
+#'
+#' @export
+#'
+count_clone_sizes <- function(integrated_seurat_obj) {
+
+	lifecycle::deprecate_warn(when = "1.0.0", what = I("`count_clone_sizes`"))
+
+	if (is.null(integrated_seurat_obj@meta.data[["seurat_clusters"]])) {
+		stop("No seurat clusters detected on the seurat object")
+	}
+	if (is.null(integrated_seurat_obj@meta.data[["raw_clonotype_id"]])) {
+		stop(paste(
+			"Seurat object is not integrated with a T-cell receptor,",
+			"library or has no metadata `raw_clonotype_id`"
+		))
+	}
+
+	df <- data.frame(
+		"clusters" = integrated_seurat_obj@meta.data[["seurat_clusters"]],
+		"clonotype_ids" = integrated_seurat_obj@meta.data[["raw_clonotype_id"]]
+	)
+
+	freq_df <- aggregate(clonotype_ids ~ clusters, data = df, function(x) table(x))
+
+	num_clusters <- length(levels(integrated_seurat_obj@meta.data[["seurat_clusters"]]))
+	freq <- vector("list", num_clusters) # each element initialzes to NULL
+	for (i in 1:nrow(freq_df)) {
+		freq[[freq_df[[1]][i]]] <- table(as.numeric(freq_df[[2]][[i]]))
+	}
+	freq
+}
+
+#' @title
 #' DEPRECATED: Visualize T cell clonal expansion with a ball-packing plot.
 #'
 #' @description
-#' As of CRAN version 1.0.0, `clonal_expansion_plot` has been deprecated.
-#' APackOfTheClones has been revamped and improved to allow for multiple
-#' samples. Please read the new vignette with `vignette('APOTC_workflow')` and
-#' refer to the `RunAPOTC` and `APOTCPlot` functions.
+#' `r lifecycle::badge("deprecated")`
+#'
+#' `r md_deprecation_docstring()`
+#'
+#' @param ... deprecated
+#'
+#' @keywords internal
 #'
 #' @return error message
 #' @export
 #'
 clonal_expansion_plot <- function(...) {
-	stop(paste(
-		"As of CRAN version 1.0.0,`clonal_expansion_plot` has been deprecated.",
-		"APackOfTheClones has been revamped and improved to allow for multiple",
-		"samples. Please read the new vignette with",
-		"`vignette('APOTC_workflow')`and refer to the `RunAPOTC` and",
-		"`APOTCPlot` functions."
-	))
-}
-
-#' @title
-#' DEPRECATED: count the number of clonotype sizes per cell cluster in a seurat
-#' object integrated with a TCR library
-#'
-#' @description
-#' As of CRAN version 1.0.0, `count_clone_sizes` has been deprecated.
-#' APackOfTheClones has been revamped and improved to allow for multiple
-#' samples. Please read the new vignette with `vignette('APOTC_workflow')`.
-#'
-#' @return error message
-#' @export
-#'
-count_clone_sizes <- function(...) {
-	stop(paste(
-		"As of CRAN version 1.0.0, `count_clone_sizes` has been deprecated.",
-		"APackOfTheClones has been revamped and improved to allow for multiple",
-		"samples. Please read the new vignette with",
-		"`vignette('APOTC_workflow')`."
-	))
+	lifecycle::deprecate_stop(
+		when = "1.0.0",
+		what = I(
+			"visualizing clonal expansion with `clonal_expansion_plot`"
+		)
+	)
 }

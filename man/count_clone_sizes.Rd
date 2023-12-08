@@ -5,13 +5,44 @@
 \title{DEPRECATED: count the number of clonotype sizes per cell cluster in a seurat
 object integrated with a TCR library}
 \usage{
-count_clone_sizes(...)
+count_clone_sizes(integrated_seurat_obj)
+}
+\arguments{
+\item{integrated_seurat_obj}{Seurat object that has been integrated with a
+T-cell receptor library with the deprecated function
+\code{\link{integrate_tcr}}. More specifically, in the metadata, there must
+at least be the elements \code{seurat_clusters} and \code{raw_clonotype_id}}
 }
 \value{
-error message
+A list of \code{table} objects, where each element is tabled
+clonotype frequencies for the seurat cluster corresponding to the same index
+\itemize{
+\item 
+\enumerate{
+\item For example, the 5th element is a tabled frequency of counts that
+corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed).
+If an element is \code{NULL}, it indicates that there were no corresponding T-cell
+receptor barcode for the cells in the cluster.
+}
+}
 }
 \description{
-As of CRAN version 1.0.0, `count_clone_sizes` has been deprecated.
-APackOfTheClones has been revamped and improved to allow for multiple
-samples. Please read the new vignette with `vignette('APOTC_workflow')`.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped, now depending on the \code{scRepertoire} v2 package. Please see the new vignette, showing a superior way to achieve the same visualizations with more features.
+}
+\details{
+The function is no longer needed as the \code{scRepertoire} workflow takes care
+of this step.
+}
+\examples{
+library(Seurat)
+library(APackOfTheClones)
+data("mini_clonotype_data","mini_seurat_obj")
+
+# produce an integrated seurat_object
+integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
+clonotype_counts <- count_clone_sizes(integrated_seurat_object)
+clonotype_counts
+
 }

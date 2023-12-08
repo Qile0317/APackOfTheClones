@@ -65,6 +65,6 @@
 #'
 #' @docType data
 #'
-#' @seealso \code{\link{contig_list}}
+#' @seealso [contig_list()]
 #'
 "combined_contigs"

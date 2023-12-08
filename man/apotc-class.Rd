@@ -20,7 +20,7 @@ everytime the plotting function is called. but it wont be slow probably}
 \item{\code{clone_sizes}}{the original unscaled clone sizes. Not sure if I should
 leave it named}
 
-\item{\code{clone_scale_factor}}{scale factor to multiply `clone_sizes` by when
+\item{\code{clone_scale_factor}}{scale factor to multiply \code{clone_sizes} by when
 running the clonal expansion plotting algorithms}
 
 \item{\code{rad_scale_factor}}{scale factor to multiply the radii in clusterlists by

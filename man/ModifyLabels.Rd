@@ -13,30 +13,30 @@ ModifyLabels(
 )
 }
 \arguments{
-\item{seurat_obj}{Object of class `Seurat` which has had `integrate_tcr` and
-`RunAPOTC` functions ran on.}
+\item{seurat_obj}{Object of class \code{Seurat} which has had \code{integrate_tcr} and
+\code{RunAPOTC} functions ran on.}
 
 \item{modify_label}{character (vector) of labels to modify (to rename
 and/or move)}
 
 \item{to_new_label}{character (vector) of new labels to convert the labels in
-`modify_label` to. The order MUST be the exact same as in modify_label}
+\code{modify_label} to. The order MUST be the exact same as in modify_label}
 
 \item{`to_nudge_by`}{list of (or one single) numeric vector of length two
-indicating the (x,y) amounts to *shift* the corresponding label by in the plot}
+indicating the (x,y) amounts to \emph{shift} the corresponding label by in the plot}
 
 \item{`to_new_coord`}{list of (or one single) numeric vector of length two
-indicating the (x,y) amounts to *move* the corresponding label to in the plot}
+indicating the (x,y) amounts to \emph{move} the corresponding label to in the plot}
 }
 \value{
-A modified version of the input `seurat_obj` where
-`@reduction[['apotc']]@labels` and `@reduction[['apotc']]@label_coords` were
+A modified version of the input \code{seurat_obj} where
+\verb{@reduction[['apotc']]@labels} and \verb{@reduction[['apotc']]@label_coords} were
 accordingly modified
 }
 \description{
 Allows simpler user customization of APackOfTheClones cluster
 label names and coordinates, and modifies the changes into the input seurat
-object. Changes will be visible after running `APOTCPlot` on the input
+object. Changes will be visible after running \code{APOTCPlot} on the input
 seurat object. The length of the lists/vectors must all be the same, as the
 indicies dictate which labels are changed.
 }

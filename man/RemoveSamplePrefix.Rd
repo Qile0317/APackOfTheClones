@@ -7,12 +7,12 @@
 RemoveSamplePrefix(sc_list, prefix_end = "auto", sep = "_")
 }
 \arguments{
-\item{sc_list}{A `list` of seurat objects}
+\item{sc_list}{A \code{list} of seurat objects}
 
 \item{sep}{placeholder}
 }
 \value{
-The modified version of the input list of seurat objects `sc_list`
+The modified version of the input list of seurat objects \code{sc_list}
 }
 \description{
 placeholder

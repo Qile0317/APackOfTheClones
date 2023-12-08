@@ -14,7 +14,7 @@ AddSamplePrefix(
 )
 }
 \arguments{
-\item{sc_list}{A `list` of seurat objects to be modified}
+\item{sc_list}{A \code{list} of seurat objects to be modified}
 
 \item{samples}{unfinished}
 
@@ -22,14 +22,14 @@ AddSamplePrefix(
 
 \item{...}{unfinished}
 
-\item{add_to_metadata}{logical. If `TRUE`, adds the entire processed clonotype data
+\item{add_to_metadata}{logical. If \code{TRUE}, adds the entire processed clonotype data
 by barcode into the seurat object meta.data dataframe.}
 
 \item{sep}{character. Decides the string to join new sample level informations.
-Defaults to `"_"`.}
+Defaults to \code{"_"}.}
 }
 \value{
-The modified version of the input list of seurat objects `sc_list`
+The modified version of the input list of seurat objects \code{sc_list}
 }
 \description{
 placeholder.
