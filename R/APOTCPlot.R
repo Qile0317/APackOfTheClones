@@ -11,13 +11,13 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
 
-#' @title Create clonal expansion plot after RunAPOTC()
+#' @title Create clonal expansion plot after RunAPOTC
 #'
 #' @description Given a seurat object with an 'apotc' (APackOfTheClones) object
-#' from running `RunAPOTC()`, this function will read the information and return
-#' a customizable ggplot object of the clonal expansion with a circle size legend.
-#' If the user is unhappy about certain aspects of the plot, some parameters can
-#' be adjusted with the `AdjustAPOTC` function.
+#' from running [RunAPOTC], this function will read the information and return
+#' a customizable ggplot object of the clonal expansion with a circle size
+#' legend. If the user is unhappy about certain aspects of the plot, many
+#' parameters can be adjusted with the [AdjustAPOTC] function.
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had `RunAPOTC` ran on it.
@@ -48,8 +48,10 @@ add_default_theme <- function(plt, reduction) {
 #' legend roughly in the corresponding position. Otherwise, can be a numeric
 #' vector of length 2 indicating the x and y position of the "top-center" of the
 #' legend
-#' @param legend_buffer numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away
-#' @param legend_color character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray
+#' @param legend_buffer numeric. Indicates how much to "push" the legend towards
+#' the center of the plot from the selected corner. If negative, will push away
+#' @param legend_color character. Indicates the hex color of the circles
+#' displayed on the legend. Defaults to the hex code for a gray tone
 #' @param legend_spacing numeric. Indicates the horizontal distance between each
 #' stacked circle on the size legend. Defaults to `"auto"` which will use an
 #' estimated value depending on plot size
@@ -61,7 +63,7 @@ add_default_theme <- function(plt, reduction) {
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object
 #'
-#' @seealso [AdjustAPOTC()]
+#' @seealso [AdjustAPOTC]
 #'
 #' @export
 #'

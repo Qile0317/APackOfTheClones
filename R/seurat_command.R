@@ -81,7 +81,7 @@ process_argnames <- function(argnames) {
 
 get_parent_params <- function(
     n = 1,
-    excluded_types = "Seurat",
+    excluded_types = c("Seurat", "list"),
     only_named_types = c("data.frame", "data.table")
 ) {
     argnames <- names(formals(fun = sys.function(which = sys.parent(n = n))))

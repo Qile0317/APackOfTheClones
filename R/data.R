@@ -1,6 +1,8 @@
+#' @title
 #' Artificially generated Seurat object
 #'
-#' A generated 'SeuratObject' of a small sc-RNAseq experiment.
+#' @description
+#' A generated 'SeuratObject' of a small single-sample sc-RNAseq experiment.
 #' Has a corresponding T-cell receptor library generated from
 #' single cell immune profiling, named `"mini_clonotype_data"`
 #'
@@ -28,7 +30,11 @@
 #' @seealso [mini_clonotype_data()]
 "mini_seurat_obj"
 
+#' @title
 #' Artificially generated T cell receptor library
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #'
 #' A generated dataframe of a T-cell receptor (TCR) library generated from
 #' single cell immune profiling. It is a subset the full dataframe
@@ -52,19 +58,15 @@
 #' @seealso [mini_seurat_obj()]
 "mini_clonotype_data"
 
-#' Processed subset of `contig_list` from `scRepertoire`
+#' @title
+#' Multi-sampled T-cell seurat object with integrated TCR library
 #'
-#' @description A list of 6 dataframes of T cell contigs outputted from the
-#' `filtered_contig_annotation` files, but subsetted to about 92 valid T cells
-#' which correspond to the same barcodes found in `screp_example` (Also from
-#' `scRepertoire`)
+#' @description
+#' Generated with [combineSeuratExpression], more specifically, with:
+#' `r combined_pbmc@commands[["combineSeuratExpression"]]@call_string`
 #'
-#' @usage data("combined_contigs")
+#' @usage data("combined_pbmc")
 #'
-#' @format An R `list` of `data.frame` objects
+#' @format A seurat object
 #'
-#' @docType data
-#'
-#' @seealso [contig_list()]
-#'
-"combined_contigs"
+"combined_pbmc"

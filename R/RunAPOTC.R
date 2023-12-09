@@ -1,97 +1,9 @@
-#' The apotc (APackOfTheClones) class
-#'
-#' A class for storing information about T cell clonal expansion
-#'
-#' @slot clusters The original circle packing "reduction" with no modifications,
-#' a list of clusterlists that may include NAs.
-#' @slot centroids Centroids of the clusters which default to the same centroids
-#' of the clusterlists, tho this also means clusters has to be iterated over
-#' everytime the plotting function is called. but it wont be slow probably
-#' @slot clone_sizes the original unscaled clone sizes. Not sure if I should
-#' leave it named
-#' @slot clone_scale_factor scale factor to multiply `clone_sizes` by when
-#' running the clonal expansion plotting algorithms
-#' @slot rad_scale_factor scale factor to multiply the radii in clusterlists by
-#' after they have all been computed to increase spacing between circles. Might
-#' also be better in the future to instead just have a number to subtract :/
-#' @slot cluster_colors character vector indicating coloration of each cluster
-#' @slot reduction_base character indicating the reduction the plotting was
-#' based off of
-#' @slot label_coords list of numeric vectors of length two indicating the (x,y)
-#' coordinates of each label if plotted
-#'
-#' @export
-#'
-setClass(
-    Class = "apotc",
-    slots = c(
-        clusters = 'list',
-        num_clusters = 'numeric',
-        centroids = 'list',
-        clone_sizes = 'list',
-        clone_scale_factor = 'numeric',
-        rad_scale_factor = 'numeric',
-        cluster_colors = 'character',
-        reduction_base = 'character',
-        labels = 'character',
-        label_coords = 'list'
-    )
-)
-
-# it might be better to store it in @misc? but shouldnt matter too much
-
-# initialize the reduction object from precomputed clusterlists
-initialize_apotc <- function(
-    num_clusters, clone_scale_factor, rad_scale_factor, reduction_base
-) {
-    empty_list <- vector("list", num_clusters)
-    methods::new(
-        Class = 'apotc',
-        clusters = empty_list,
-        num_clusters = num_clusters,
-        centroids = empty_list,
-        clone_sizes = empty_list,
-        clone_scale_factor = clone_scale_factor,
-        rad_scale_factor = rad_scale_factor,
-        cluster_colors = gg_color_hue(num_clusters),
-        reduction_base = reduction_base,
-        labels = gen_labels(num_clusters),
-        label_coords = empty_list
-    )
-}
-
-# readability function
-get_apotc <- function(seurat_obj) {
-    seurat_obj@reductions[['apotc']]
-}
-
-# warn helper
-run_apotc_warn_str <- function(
-    seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
-) {
-    if (tolower(reduction_base) == 'apotc') {
-        return("please only use the umap, tsne, or pca reduction")
-    }
-    if (is.null(seurat_obj@reductions[[attempt_correction(reduction_base)]])) {
-        return(paste(
-            "No", reduction_base, "reduction found on the seurat object,",
-            "ensure the the reduction has been computed. Otherwise, did you",
-            "mean", closest_word(reduction_base), "?"
-        ))
-    }
-    if (should_estimate(clone_scale_factor) && (clone_scale_factor <= 0)) {
-        return("clone_scale_factor has to be a positive number")
-    }
-    if (ORDER && scramble) {
-        return("ORDER and scramble are both TRUE, please set only one to TRUE")
-    }
-    return(NULL)
-}
-
-#' @title Run the APackOfTheClones method on a combined Seurat object for
+#' @title
+#' Run the APackOfTheClones method on a combined Seurat object for
 #' downstream visualization of clonal expansion
 #'
-#' @description Computes all necessary information for an APackOfTheClones
+#' @description
+#' Computes all necessary information for an APackOfTheClones
 #' clonal expansion plot and stores it in the seurat object at
 #' `seurat_obj@reduction[['apotc']]` for use later with `APOTCPlot`. Gets sizes
 #' of unique clones and utilizes a circle-packing algorithm to pack circles
@@ -121,7 +33,7 @@ run_apotc_warn_str <- function(
 #' @param rad_scale_factor numeric between 0 and 1. This value decreases the
 #' radius of the smallest clones by this scale factor. And the absolute value
 #' of this decrease will be applied to all packed circles, effectively shrinking
-#' all circles on the spot, and introduce more spacing in between
+#' all circles on the spot, and introduce more constant spacing in between
 #' @param ORDER logical. Decides if the largest clone circles should be at
 #' cluster centroids
 #' @param scramble logical. Decides if the clone circles within each cluster
@@ -140,9 +52,9 @@ run_apotc_warn_str <- function(
 #'
 #' @return A modified version of the input seurat object with a new object in
 #' the `@reduction` attribute named `apotc`, which harbors data necessary for
-#' visualizing the clonal expansion of the cells with the `APOTCPlot()` function
+#' visualizing the clonal expansion of the cells with the [APOTCPlot] function
 #'
-#' @seealso [APOTCPlot()], [AdjustAPOTC()]
+#' @seealso [APOTCPlot], [AdjustAPOTC]
 #'
 #' @export
 #'
@@ -152,6 +64,9 @@ run_apotc_warn_str <- function(
 RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
+    # samples?
+    # cloneCall?
+
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     ORDER = TRUE,
@@ -166,7 +81,7 @@ RunAPOTC <- function(
 ) {
     call_time <- Sys.time()
 
-    reduction_base <- attempt_correction(reduction_base)
+    reduction_base <- attempt_correction(reduction_base) # there can be a nice err msg scannign thru avaliable reductions
 
     # errors/warnings:
     warn_str <- run_apotc_warn_str(
@@ -180,17 +95,14 @@ RunAPOTC <- function(
     # actual run
     if (verbose) {message("Initializing APOTC run")}
 
+
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
     }
 
     rad_decrease <- convert_to_rad_decrease(rad_scale_factor,clone_scale_factor)
 
-    # add seurat command
-    if (!(is.null(seurat_obj@commands[["RunAPOTC"]]) && is.null(seurat_obj@commands[["RunAPOTC"]]))) {
-        message("overriding pervious APOTC run results")
-    }
-    seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time)
+    #seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time) # unsure how to handle the series of commands tbh since this should be ran multiple times.
 
     # initialize apotc S4 class
     apotc_obj <- initialize_apotc(
@@ -204,7 +116,6 @@ RunAPOTC <- function(
     apotc_obj <- add_raw_clone_sizes(apotc_obj, seurat_obj)
     initial_centroids <- get_cluster_centroids(seurat_obj, reduction_base)
 
-    # pack the clusterlists
     packed_clusters <- pack_into_clusterlists(
         sizes = get_processed_clone_sizes(apotc_obj),
         centroids = initial_centroids,
@@ -238,4 +149,9 @@ RunAPOTC <- function(
     }
 
     seurat_obj
+}
+
+# for the ApotcData to get the right subset for clonotype data
+convert_to_filter_condition <- function() {
+  # TODO
 }

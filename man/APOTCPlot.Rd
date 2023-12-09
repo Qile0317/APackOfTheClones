@@ -2,7 +2,7 @@
 % Please edit documentation in R/APOTCPlot.R
 \name{APOTCPlot}
 \alias{APOTCPlot}
-\title{Create clonal expansion plot after RunAPOTC()}
+\title{Create clonal expansion plot after RunAPOTC}
 \usage{
 APOTCPlot(
   seurat_obj,
@@ -62,9 +62,11 @@ legend roughly in the corresponding position. Otherwise, can be a numeric
 vector of length 2 indicating the x and y position of the "top-center" of the
 legend}
 
-\item{legend_buffer}{numeric. Indicates how much to "push" the legend towards the center of the plot from the selected corner. If negative, will push away}
+\item{legend_buffer}{numeric. Indicates how much to "push" the legend towards
+the center of the plot from the selected corner. If negative, will push away}
 
-\item{legend_color}{character. Indicates the hex color of the circles displayed on the legend. Defaults to the hex code for gray}
+\item{legend_color}{character. Indicates the hex color of the circles
+displayed on the legend. Defaults to the hex code for a gray tone}
 
 \item{legend_spacing}{numeric. Indicates the horizontal distance between each
 stacked circle on the size legend. Defaults to \code{"auto"} which will use an
@@ -82,10 +84,10 @@ seurat object
 }
 \description{
 Given a seurat object with an 'apotc' (APackOfTheClones) object
-from running \code{RunAPOTC()}, this function will read the information and return
-a customizable ggplot object of the clonal expansion with a circle size legend.
-If the user is unhappy about certain aspects of the plot, some parameters can
-be adjusted with the \code{AdjustAPOTC} function.
+from running \link{RunAPOTC}, this function will read the information and return
+a customizable ggplot object of the clonal expansion with a circle size
+legend. If the user is unhappy about certain aspects of the plot, many
+parameters can be adjusted with the \link{AdjustAPOTC} function.
 }
 \examples{
 library(Seurat)
@@ -104,5 +106,5 @@ APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
 
 }
 \seealso{
-\code{\link[=AdjustAPOTC]{AdjustAPOTC()}}
+\link{AdjustAPOTC}
 }

@@ -8,12 +8,8 @@
 # [["centroid"]] numeric vector of the cluster centroid x and y coordinate
 # [["clRad"]] approximate radius of the cluster
 
-# get the number of seurat clusters
-get_num_clusters <- function(seurat_obj) {
-  length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
-}
-
-#centroid finder for a whole dataframe. # indexing is a bit off but no big deal for the function
+#centroid finder for a whole dataframe.
+# indexing is a bit off but no big deal for the function
 find_centroids <- function(df, return_mode = "list") { # or "df"
   cll <- split(df, factor(df[, 3])) #the last cluster column becomes redundant
   l <- length(cll)
@@ -24,8 +20,8 @@ find_centroids <- function(df, return_mode = "list") { # or "df"
 
   for (i in 1:l){
     nameset[i] <- cll[[i]][,3][1]
-    xset[i] <- sum(cll[[i]][, 1])/length(cll[[i]][, 1])
-    yset[i] <- sum(cll[[i]][, 2])/length(cll[[i]][, 2])
+    xset[i] <- sum(cll[[i]][, 1]) / length(cll[[i]][, 1])
+    yset[i] <- sum(cll[[i]][, 2]) / length(cll[[i]][, 2])
   }
   if (return_mode != "list") { # return df, although its not rlly needed...
     return(data.frame(cluster = nameset, x = xset, y = yset))
@@ -33,28 +29,29 @@ find_centroids <- function(df, return_mode = "list") { # or "df"
   #return list (theres definetely a smarter way to do this)
   list_output <- list()
   for (i in 1:l) {
-    list_output[[nameset[i]]] <- c(xset[i],yset[i])
+    list_output[[nameset[i]]] <- c(xset[i], yset[i])
   }
   return(list_output)
 }
 
 # get reduction centroids from seurat obj, could be tsne and pca too
 get_cluster_centroids <- function(seurat_obj, reduction = "umap") {
-  find_centroids(
+  unname(find_centroids(
     data.frame(
-      seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2], # to account for pca
+      seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2],
       clusters = seurat_obj$seurat_clusters
     )
-  )
+  ))
 }
 
-# TRANSFORM coordinates of a clusterlist from c(0, 0) to its own new centroid, or MOVE to new coord from current
+# TRANSFORM coordinates of a clusterlist from c(0, 0) to its own new centroid,
+# or MOVE to new coord from current
 trans_coord <- function(cluster, new_coord = NULL) {
   if (!is.null(new_coord)) {
     dx <- new_coord[1]
     dy <- new_coord[2]
     cluster[[4]] <- cluster[[4]] + c(dx, dy)
-  }else {
+  } else {
     dx <- cluster[[4]][1]
     dy <- cluster[[4]][2]
   }
@@ -67,7 +64,7 @@ trans_coord <- function(cluster, new_coord = NULL) {
 move_cluster <- function(cluster, new_coord) {
   dx <- cluster[[4]][1] - new_coord[1]
   dy <- cluster[[4]][2] - new_coord[2]
-  
+
   cluster[[1]] <- cluster[[1]] - dx
   cluster[[2]] <- cluster[[2]] - dy
   cluster[[4]] <- new_coord

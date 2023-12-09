@@ -165,8 +165,6 @@ adjustAPOTC_stop_str <- function(
 #'
 #' @export
 #'
-#'
-#'
 AdjustAPOTC <- function(
 	seurat_obj,
 

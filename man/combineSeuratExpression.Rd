@@ -13,8 +13,7 @@ combineSeuratExpression(
   group.by = NULL,
   proportion = FALSE,
   filterNA = FALSE,
-  cloneSize = c(Rare = 1e-04, Small = 0.001, Medium = 0.01, Large = 0.1, Hyperexpanded =
-    1),
+  cloneSize = c(Rare = 1, Small = 5, Medium = 50, Large = 100, Hyperexpanded = 1000),
   addLabel = FALSE
 )
 }

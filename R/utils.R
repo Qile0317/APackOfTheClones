@@ -38,6 +38,7 @@ print_completion_time <- function(start_time, digits = 2) {
 }
 
 # readability functions
+
 get_rna_assay_barcodes <- function(seurat_obj) {
     seurat_obj@assays[["RNA"]]@data@Dimnames[[2]]
 }
@@ -47,6 +48,8 @@ isnt_empty <- function(inp) !identical(inp, list())
 isnt_na <- function(inp) !any(is.na(inp))
 
 isnt_empty_nor_na <- function(inp) isnt_empty(inp) && isnt_na(inp)
+
+is_empty_table <- function(inp) identical(inp, table(NULL))
 
 is_int <- function(num) all(num == as.integer(num))
 
@@ -146,6 +149,14 @@ construct_prefix_vector <- function(params, sep = "_") {
         }
     }
     prefix_vector
+}
+
+init_list <- function(num_elements, init_val = NULL) {
+    l <- vector("list", num_elements)
+    for (i in 1:num_elements) {
+        l[[i]] <- init_val
+    }
+    l
 }
 
 # R interface function for checking if metadata names to be added overlaps with
