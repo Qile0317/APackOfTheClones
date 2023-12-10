@@ -35,7 +35,7 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
         )
     }
 
-    filter_string
+    gsub(" ", "", filter_string)
 }
 
 col_cond_vec_to_filter_str <- function(condition_vector, colname) {
@@ -77,12 +77,9 @@ col_condition_vec_to_filter_string_with_insert <- function(
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stoed under under @misc[["APackOfTheClones"]][[id]]
 
-.idSepStr <- ";"
-.idNullStr <- "_"
-utils::globalVariables(c(".idSepStr", ".idNullStr"))
-
 parse_to_object_id <- function(
-    reduction_base, clonecall, varargs_list, metadata_filter
+    reduction_base, clonecall, varargs_list, metadata_filter,
+    .idSepStr = ";", .idNullStr = "_"
 ) {
 	object_id <- paste(reduction_base, .idSepStr, clonecall, .idSepStr, sep = "")
 
@@ -98,7 +95,7 @@ parse_to_object_id <- function(
     if (is.null(metadata_filter) || identical(metadata_filter, "")) {
         return(paste(object_id, .idNullStr, sep = ""))
     }
-    paste(object_id, metadata_filter, sep = "")
+    paste(object_id, gsub(" ", "", metadata_filter), sep = "")
 }
 
 varargs_list_to_id_segment <- function(varargs_list) {
@@ -106,7 +103,9 @@ varargs_list_to_id_segment <- function(varargs_list) {
     colnames <- names(varargs_list)
     for (i in seq_along(varargs_list)) {
         segments[i] <- paste(
-            colnames[i], "=", repr_as_string(sort(varargs_list[[i]])), sep = ""
+            colnames[i], "=",
+            repr_as_string(sort(unique(varargs_list[[i]]))),
+            sep = ""
         )
     }
 
