@@ -75,31 +75,43 @@ col_condition_vec_to_filter_string_with_insert <- function(
 }
 
 .defaultApotcDataObjId <- "__all__"
-utils::globalVariables(c(".defaultApotcDataSample"))
+.idSepStr <- ";"
+.idNullStr <- "_"
+utils::globalVariables(c(".defaultApotcDataSample", ".idSepStr", ".idNullStr"))
 
 # from the input of RunAPOTC, convert the condition to the apotc data sample id where
 # its stored under @misc[["APackOfTheClones"]][[id]]
 parse_to_object_id <- function(
     reduction_base, clonecall, varargs_list, metadata_filter
 ) {
-	object_id <- paste("|", reduction_base, "|", clonecall, "|", sep = "")
+	object_id <- paste(reduction_base, .idSepStr, clonecall, .idSepStr, sep = "")
 
     if (identical(varargs_list, list(NULL))) {
-        object_id <- paste(object_id, "-|", sep = "")
+        object_id <- paste(object_id, .idNullStr, .idSepStr, sep = "")
     } else {
         object_id <- paste(
-            object_id, varargs_list_to_id_segment(varargs_list), "|", sep = ""
+            object_id, varargs_list_to_id_segment(varargs_list),
+            .idSepStr, sep = ""
         )
     }
 
     if (is.null(metadata_filter)) {
-        return(paste(object_id, "-|", sep = ""))
+        return(paste(object_id, .idNullStr, sep = ""))
     }
-    paste(object_id, metadata_filter)
+    paste(object_id, metadata_filter, sep = "")
 }
 
 varargs_list_to_id_segment <- function(varargs_list) {
-    # TODO
+    segment <- ""
+    colnames <- names(varargs_list)
+    for (i in seq_along(varargs_list)) {
+        segment <- paste(
+            segment, colnames[i], "=c(",
+            to_char_separated_string(varargs_list[[i]], ","),
+            ")", .idSepStr, sep = ""
+        )
+    }
+    segment
 }
 
 # make user getters for apotcData

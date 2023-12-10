@@ -159,6 +159,14 @@ init_list <- function(num_elements, init_val = NULL) {
     l
 }
 
+to_char_separated_string <- function(character_vector, separator) {
+    output <- ""
+    for (x in character_vector) {
+        output <- paste(x, separator, sep = "")
+    }
+    substr(output, length(output) - 1)
+}
+
 # R interface function for checking if metadata names to be added overlaps with
 # existing (probably shouldnt be placed here :/)
 metadata_name_warnstring <- function(seurat_obj, tcr_dataframe) {

@@ -107,8 +107,9 @@ RunAPOTC <- function(
 
     clonecall <- scRepertoire:::.theCall(clonecall)
 
+    filtering_varargs <- list(...)
     metadata_filter_string <- parse_to_metadata_filter_str(
-        metadata_filter = metadata_filter, varargs_list = list(...)
+        metadata_filter = metadata_filter, varargs_list = filtering_varargs
     )
 
     # run the packing algos
@@ -133,8 +134,11 @@ RunAPOTC <- function(
     }
 
     # store the apotc object in the correct slot
-    obj_id <- parse_to_object_id(reduction_base, clonecall, filter_samples, filter_ID, metadata_filter) # unfinished, 
-    seurat_obj@misc[['APackOfTheClones']][[s]] <- apotc_obj
+    obj_id <- parse_to_object_id(
+        reduction_base = reduction_base, clonecall =  clonecall,
+        varargs_list = filtering_varargs, metadata_filter = metadata_filter
+    )
+    seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
 
     seurat_obj <- log_and_index_command(
         seurat_obj, "RunAPOTC", command_obj = make_apotc_command(call_time)
