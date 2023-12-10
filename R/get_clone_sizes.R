@@ -52,7 +52,7 @@ get_processed_clone_sizes <- function(apotc_obj) {
   raw_tabled_clone_sizes <- apotc_obj@clone_sizes
   processed_sizes <- init_list(apotc_obj@num_clusters, list())
   for (i in 1:apotc_obj@num_clusters) {
-    if (!is_empty_table(raw_tabled_clone_sizes[[i]][[1]])) {
+    if (!is_empty_table(raw_tabled_clone_sizes[[i]])) {
       processed_sizes[[i]] <- apotc_obj@clone_scale_factor *
         sqrt(as.numeric(raw_tabled_clone_sizes[[i]][[1]]))
     }

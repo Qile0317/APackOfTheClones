@@ -53,5 +53,3 @@ test_radii <- list(
   "c2" = c2[[3]],
   "c3" = c3[[3]]
 )
-
-#plot_clusters(test_cluster_lists)

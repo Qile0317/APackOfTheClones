@@ -88,7 +88,7 @@ initializeApotcData <- function(
 	)
 
 	methods::new(
-		Class = 'ApotcData',
+		Class = "ApotcData",
 
 		reduction_base = reduction_base,
 		clonecall = clonecall,
@@ -117,24 +117,28 @@ initializeSubsetApotcData <- function(
 	clone_scale_factor, rad_scale_factor
 ) {
 	default_obj_id <- "TODO" # TODO design decisions!!
-	default_obj_wasnt_computed <- !is.null(get_apotc_obj(seurat_obj, default_obj_id))
 	
-	if (default_obj_wasnt_computed) {
+	if (!is.null(get_apotc_obj(seurat_obj, default_obj_id))) {
 		default_apotc_obj <- ApotcData(
 			seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
 		)
 		seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]] <- default_apotc_obj
 	}
 
+	# get the subsetted metadata
+	seurat_obj@meta.data %>% dplyr::filter(eval(parse(
+		text = metadata_filter_condition
+	)))
+
 	# create the apotc data for the subset
 	subset_apotc_obj <- seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]]
 	subset_apotc_obj@metadata_filter_string <- metadata_filter_condition
 
+	
+
 	# TODO handle which clusters are kept / recomputed, which also will recompute centroids!
 
-	if (default_obj_wasnt_computed) { # this shouldnt be needed
-		seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]] <- NULL
-	}
+
 
 	subset_apotc_obj
 }

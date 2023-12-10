@@ -42,7 +42,11 @@ test_that("The default case ApotcData constructor works", {
 
 # TODO teset the constructor for a subset, assuming different reduction base.
 
+
+
 # TODO test the circle packing with diff args, the @clusters slot shgould be identical to other tests
+
+
 
 # TODO test the repulsion API
 

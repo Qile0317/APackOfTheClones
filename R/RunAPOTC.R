@@ -66,10 +66,6 @@ RunAPOTC <- function(
     reduction_base = "umap",
     clonecall = "strict",
 
-    filter_samples = NULL,
-    filter_ID = NULL,
-    metadata_filter = NULL,
-
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     ORDER = TRUE,
@@ -80,7 +76,10 @@ RunAPOTC <- function(
     repulsion_threshold = 1,
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
-    verbose = TRUE
+    verbose = TRUE,
+
+    metadata_filter = NULL,
+    ... = NULL
 ) {
     call_time <- Sys.time()
 
@@ -99,7 +98,7 @@ RunAPOTC <- function(
     # then, check if this exact run has been performed already
     # and check the command slot arguments to see if its been computed
 
-    if (verbose) message("Initializing APOTC run")
+    if (verbose) message("Initializing APOTC run...\n")
 
     # compute inputs
     if (should_estimate(clone_scale_factor)) {
@@ -108,8 +107,8 @@ RunAPOTC <- function(
 
     clonecall <- scRepertoire:::.theCall(clonecall)
 
-    metadata_filter_string <- parse_to_metadata_filter(
-        filter_samples, filter_ID, metadata_filter
+    metadata_filter_string <- parse_to_metadata_filter_str(
+        metadata_filter = metadata_filter, varargs_list = list(...)
     )
 
     # run the packing algos
@@ -118,9 +117,13 @@ RunAPOTC <- function(
         clone_scale_factor, rad_scale_factor
     )
 
+    if (verbose) message("Packing clones into clusters\n")
+
     apotc_obj <- circlepackClones(
         apotc_obj, ORDER, scramble, try_place, verbose
     )
+
+    if (verbose) message("Repulsing clusters\n")
 
     if (repulse) {
         apotc_obj <- repulseClusters(
