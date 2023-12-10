@@ -1,5 +1,97 @@
-test_that("parse_to_metadata_filter_str works", {
-    # TODO
+test_that("parse_to_metadata_filter_str works for no varargs", {
+
+    expect_identical(parse_to_metadata_filter_str(NULL, list(NULL)), "")
+    expect_identical(parse_to_metadata_filter_str("", list(NULL)), "")
+    expect_identical(parse_to_metadata_filter_str("   ", list(NULL)), "")
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            "mito.genes > 1.5 | length(CTaa) - 1 < 20", list(NULL)
+        ),
+        "mito.genes>1.5|length(CTaa)-1<20"
+    )
+})
+
+test_that("parse_to_metadata_filter_str works for base cases", {
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("seurat_clusters" = 1)
+        ),
+        "seurat_clusters==1"
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("seurat_clusters" = c(2, 5, 8))
+        ),
+        "seurat_clusters==2|seurat_clusters==5|seurat_clusters==8"
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("seurat_clusters" = c(8, 2, 2, 5, 2))
+        ),
+        "seurat_clusters==2|seurat_clusters==5|seurat_clusters==8"
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("orig.id" = "P19B")
+        ),
+        "orig.id=='P19B'"
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("orig.id" = c("P19B", "P19L"))
+        ),
+        "orig.id=='P19B'|orig.id=='P19L'"
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            NULL, list("orig.id" = c("P19L", "P19B", "P19B"))
+        ),
+        "orig.id=='P19B'|orig.id=='P19L'"
+    )
+
+})
+
+test_that("parse_to_metadata_filter_str works with all args", {
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            metadata_filter = "mito.genes > 1.5 | length(CTaa) - 1 < 20",
+            varargs_list = list(
+                "seurat_clusters" = c(2, 5, 8),
+                "orig.id" = c("P19B", "P19L")
+            )
+        ),
+        paste(
+            "((orig.id=='P19B'|orig.id=='P19L')",
+            "(seurat_clusters==2|seurat_clusters==5|seurat_clusters==8))",
+            "(mito.genes>1.5|length(CTaa)-1<20)",
+            sep = "&"
+        )
+    )
+
+    expect_identical(
+        parse_to_metadata_filter_str(
+            metadata_filter = "mito.genes > 1.5 | length(CTaa) - 1 < 20",
+            varargs_list = list(
+                "seurat_clusters" = c(8, 2, 2, 5, 2),
+                "orig.id" = c("P19L", "P19B", "P19B")
+            )
+        ),
+        paste(
+            "((orig.id=='P19B'|orig.id=='P19L')",
+            "(seurat_clusters==2|seurat_clusters==5|seurat_clusters==8))",
+            "(mito.genes>1.5|length(CTaa)-1<20)",
+            sep = "&"
+        )
+    )
+
 })
 
 test_that("parse_to_object_id works for single varargs", {

@@ -1,6 +1,16 @@
 # script to manage the interface for accessing the apotc data
 # all functions assume arguments are correct
 
+is_valid_filter_str <- function(metadata_string) {
+    if (is.null(metadata_string)) return(FALSE)
+    if (identical(gsub(" ", "", metadata_string), "")) return(FALSE)
+    return(TRUE)
+}
+
+is_valid_args  <- function(varargs_list) {
+    !is.null(varargs_list) && !identical(varargs_list, list(NULL))
+}
+
 # from the input of RunAPOTC, convert the condition to a call to be put in
 # @meta.data %>% dpylr::filter(eval(parse(text = "output of this func")))
 # assume that metadata_filter is a valid ADDITIONAL filter condition.
@@ -9,29 +19,27 @@
 # and element is a string vector of which factors to INCLUDE
 parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
-    if (is.null(metadata_filter) && identical(varargs_list, list(NULL))) {
+    if (!is_valid_args(varargs_list)) {
+        if (is_valid_filter_str(metadata_filter)) {
+            return(gsub(" ", "", metadata_filter))
+        }
         return("")
     }
 
-    filter_string <- ""
+    filter_strings <- vector("character", length(varargs_list))
     colnames <- names(varargs_list)
 
     for (i in seq_along(varargs_list)) {
-        
-        sub_filter_cond_string <- col_cond_vec_to_filter_str(
-            condition_vector = varargs_list[[i]], colname = colnames[i]
-        )
-
-        filter_string <- paste(
-            filter_string, "(", sub_filter_cond_string, ") & ", sep = ""
+        filter_strings[i] <- col_cond_vec_to_filter_str(
+            condition_vector = sort(unique(varargs_list[[i]])), colnames[i]
         )
     }
 
-    filter_string <- substr(filter_string, 1, length(filter_string) - 2)
+    filter_string <- sort_and_join_conds_by_and(filter_strings)
 
-    if (!is.null(metadata_filter)) {
+    if (is_valid_filter_str(metadata_filter)) {
         filter_string <- paste(
-            "((", filter_string, ") & (", metadata_filter, "))", sep = ""
+            "(", filter_string, ")&(", metadata_filter, ")", sep = ""
         )
     }
 
@@ -39,13 +47,13 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 }
 
 col_cond_vec_to_filter_str <- function(condition_vector, colname) {
-  UseMethod("col_condition_vec_to_filter_string")
+  UseMethod("col_cond_vec_to_filter_str")
 }
 
 col_cond_vec_to_filter_str.character <- function(
     condition_vector, colname
 ) {
-    col_condition_vec_to_filter_string_with_insert(
+    col_conds_to_str_w_insert(
         condition_vector = condition_vector, colname = colname,
         insert_char = "'"
     )
@@ -54,24 +62,31 @@ col_cond_vec_to_filter_str.character <- function(
 col_cond_vec_to_filter_str.default <- function(
     condition_vector, colname
 ) {
-    col_condition_vec_to_filter_string_with_insert(
+    col_conds_to_str_w_insert(
         condition_vector = condition_vector, colname = colname,
         insert_char = ""
     )
 }
 
-col_condition_vec_to_filter_string_with_insert <- function(
+col_conds_to_str_w_insert <- function(
     condition_vector, colname, insert_char
 ) {
     filter_str <- ""
     for (i in seq_along(condition_vector)) {
         filter_str <- paste(
-            filter_str, "(",
-            colname, " == ", insert_char, condition_vector[i], insert_char,
-            ") | ", sep = ""
+            filter_str,
+            colname, "==", insert_char, condition_vector[i], insert_char,
+            "|", sep = ""
         )
     }
-    substr(filter_str, 1, length(filter_str) - 2)
+    substr(filter_str, 1, nchar(filter_str) - 1)
+}
+
+sort_and_join_conds_by_and <- function(filter_strings) {
+    if (length(filter_strings) == 1) return(filter_strings[1])
+    paste(
+        "(", paste(sort(filter_strings), collapse = ")&("), ")", sep = ""
+    )
 }
 
 # functions for converting args of RunAPOTC to the apotc data sample id
