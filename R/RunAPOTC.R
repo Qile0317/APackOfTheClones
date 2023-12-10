@@ -65,8 +65,10 @@ RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
+
     filter_samples = NULL,
-    filter_ID = NULL, # or custom filter metadata condition
+    filter_ID = NULL,
+    metadata_filter = NULL,
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -104,8 +106,10 @@ RunAPOTC <- function(
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
     }
 
-    metadata_filter_string <- convert_to_filter_condition(
-        filter_samples, filter_ID #TODO
+    clonecall <- scRepertoire:::.theCall(clonecall)
+
+    metadata_filter_string <- parse_to_metadata_filter(
+        filter_samples, filter_ID, metadata_filter
     )
 
     # run the packing algos
@@ -126,7 +130,7 @@ RunAPOTC <- function(
     }
 
     # store the apotc object in the correct slot
-    s <- "TODO function for id string" # TODO
+    obj_id <- parse_to_object_id(reduction_base, clonecall, filter_samples, filter_ID, metadata_filter) # unfinished, 
     seurat_obj@misc[['APackOfTheClones']][[s]] <- apotc_obj
 
     seurat_obj <- log_and_index_command(

@@ -59,9 +59,6 @@ get_apotc_obj <- function(seurat_obj, obj_id) {
 }
 # user getter will make use of this with some error handling
 
-.defaultApotcDataSample <- "__all__"
-utils::globalVariables(c(".defaultApotcDataSample"))
-
 ApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
@@ -182,32 +179,7 @@ repulseClusters <- function(
 	apotc_obj
 }
 
-
-
-
-# super important, parser for the metadatafilter condition - probably should be in another script
-parse_to_metadata_filter <- function(...) {
-
-}
-
-metadata_filter_to_object_id <- function(filter_string) {
-	if (is.null(filter_string)) {
-		return(.defaultApotcDataSample)
-	}
-	# TODO
-}
-
-# new format, there will be a list of apotc objects in the seurat@misc slot. the list will be named apotc.
-# each is dependent on reduction/samples and within the list there will be named elements for each reduction/sample combo
-# and make it optional in RunAPOTC if this should be stored. APOTCPlot will then be able to have the apotc obj slot input
-# alternatively the sample/id configuration.
-
 # should have getters and setters
 #
 # # should have a matchcolors func that takes into accoutn cluster names
 # should by default force the "all" run for the first time even if it isnt selected
-
-
-
-# all subsequent apotc data that isnt "all" should be derived from
-# the "all" sample case with the corresponding reduction.
