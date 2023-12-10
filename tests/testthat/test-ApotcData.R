@@ -1,8 +1,10 @@
-test_that("The default ApotcData constructor works", {
+test_that("The default case ApotcData constructor works", {
 	data("combined_pbmc")
 
 	test_apotc_data <- ApotcData(
 		seurat_obj = combined_pbmc,
+		NULL,
+		clonecall = "CTstrict",
 		reduction_base = "umap",
 		clone_scale_factor = 0.95,
 		rad_scale_factor = 0.95
@@ -10,13 +12,13 @@ test_that("The default ApotcData constructor works", {
 
 	expected_centroids <- getdata("combined_pbmc", "all_cluster_centroids")
 
-	expect_is(test_apotc_data, "ApotcData")
+	expect_s4_class(test_apotc_data, "ApotcData")
 
 	expect_equal(test_apotc_data@reduction_base, "umap")
-	expect_equal(test_apotc_data@clonecall, "strict")
-	expect_equal(test_apotc_data@sample_prefixes, .defaultApotcDataSample)
+	expect_equal(test_apotc_data@clonecall, "CTstrict")
+	expect_equal(test_apotc_data@metadata_filter_string, "")
 
-	# TODO clusters
+	expect_false(isnt_empty(test_apotc_data@clusters))
 	expect_equal(test_apotc_data@centroids, expected_centroids)
 	expect_equal(
 		test_apotc_data@clone_sizes,
@@ -32,10 +34,16 @@ test_that("The default ApotcData constructor works", {
 		"#9C8DFF", "#D277FF", "#F166E8", "#FF61C7", "#FF689E"
 	))
 	expect_equal(test_apotc_data@labels, c(
-		"C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11",
-		"C12", "C13", "C14", "C15", "C16", "C17"
+		"C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11",
+		"C12", "C13", "C14", "C15", "C16"
 	))
 	expect_equal(test_apotc_data@label_coords, expected_centroids)
 })
 
 # TODO teset the constructor for a subset, assuming different reduction base.
+
+# TODO test the circle packing with diff args, the @clusters slot shgould be identical to other tests
+
+# TODO test the repulsion API
+
+# TODO test getters and setters

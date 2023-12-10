@@ -141,11 +141,6 @@ RunAPOTC <- function(
     seurat_obj
 }
 
-# for the ApotcData to get the right subset for clonotype data
-convert_to_filter_condition <- function(...) {
-  # TODO
-}
-
 # warn helper
 run_apotc_warn_str <- function(
 		seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble

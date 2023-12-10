@@ -92,9 +92,9 @@ initializeApotcData <- function(
 
 		reduction_base = reduction_base,
 		clonecall = clonecall,
-		metadata_filter_string = NULL,
+		metadata_filter_string = "",
 
-		clusters = NA,
+		clusters = list(),
 		centroids = initial_centroids,
 		clone_sizes = raw_all_clone_sizes,
 		num_clusters = num_clusters,
