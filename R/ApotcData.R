@@ -178,12 +178,13 @@ repulseClusters <- function(
 
 	apotc_obj@clusters <- repulsion_results[[1]]
 	apotc_obj@centroids <- repulsion_results[[2]]
-	apotc_obj@label_coords <- repulsion_results[[2]] # TODO if label coords were modded perhaps they should only move by a factor instead
+	apotc_obj@label_coords <- repulsion_results[[2]] # TODO if label coords were modded perhaps they should only move by a factor instead?
 
 	apotc_obj
 }
 
+
+
 # should have getters and setters
 #
 # # should have a matchcolors func that takes into accoutn cluster names
-# should by default force the "all" run for the first time even if it isnt selected

@@ -97,6 +97,7 @@ RunAPOTC <- function(
     # TODO, form the id string for the apotc obj storage location,
     # then, check if this exact run has been performed already
     # and check the command slot arguments to see if its been computed
+    # with intersect
 
     if (verbose) message("Initializing APOTC run...\n")
 
@@ -133,7 +134,7 @@ RunAPOTC <- function(
         )
     }
 
-    # store the apotc object in the correct slot
+    # store the apotc object in the correct slot with the correct id
     obj_id <- parse_to_object_id(
         reduction_base = reduction_base, clonecall =  clonecall,
         varargs_list = filtering_varargs, metadata_filter = metadata_filter

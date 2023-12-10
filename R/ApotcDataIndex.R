@@ -1,5 +1,5 @@
 # script to manage the interface for accessing the apotc data
-# could also put it in ApotcData.R
+# all functions assume arguments are correct
 
 # from the input of RunAPOTC, convert the condition to a call to be put in
 # @meta.data %>% dpylr::filter(eval(parse(text = "output of this func")))
@@ -74,13 +74,13 @@ col_condition_vec_to_filter_string_with_insert <- function(
     substr(filter_str, 1, length(filter_str) - 2)
 }
 
-.defaultApotcDataObjId <- "__all__"
+# functions for converting args of RunAPOTC to the apotc data sample id
+# stoed under under @misc[["APackOfTheClones"]][[id]]
+
 .idSepStr <- ";"
 .idNullStr <- "_"
-utils::globalVariables(c(".defaultApotcDataSample", ".idSepStr", ".idNullStr"))
+utils::globalVariables(c(".idSepStr", ".idNullStr"))
 
-# from the input of RunAPOTC, convert the condition to the apotc data sample id where
-# its stored under @misc[["APackOfTheClones"]][[id]]
 parse_to_object_id <- function(
     reduction_base, clonecall, varargs_list, metadata_filter
 ) {
@@ -95,23 +95,25 @@ parse_to_object_id <- function(
         )
     }
 
-    if (is.null(metadata_filter)) {
+    if (is.null(metadata_filter) || identical(metadata_filter, "")) {
         return(paste(object_id, .idNullStr, sep = ""))
     }
     paste(object_id, metadata_filter, sep = "")
 }
 
 varargs_list_to_id_segment <- function(varargs_list) {
-    segment <- ""
+    segments <- vector("character", length(varargs_list))
     colnames <- names(varargs_list)
     for (i in seq_along(varargs_list)) {
-        segment <- paste(
-            segment, colnames[i], "=c(",
-            to_char_separated_string(varargs_list[[i]], ","),
-            ")", .idSepStr, sep = ""
+        segments[i] <- paste(
+            colnames[i], "=", repr_as_string(sort(varargs_list[[i]])), sep = ""
         )
     }
-    segment
+
+    if (length(segments) == 1) {
+        return(segments)
+    }
+    paste(sort(segments), collapse = ",")
 }
 
 # make user getters for apotcData

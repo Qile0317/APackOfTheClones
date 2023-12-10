@@ -159,12 +159,26 @@ init_list <- function(num_elements, init_val = NULL) {
     l
 }
 
-to_char_separated_string <- function(character_vector, separator) {
+# S3 method to represent vectors as strings
+
+repr_as_string <- function(input_vector, ...) {
+    UseMethod("repr_as_string")
+}
+
+repr_as_string.character <- function(input_vector, ...) {
+    to_string_rep_with_insert(v = input_vector, insert = "'")
+}
+
+repr_as_string.default <- function(input_vector, ...) {
+    to_string_rep_with_insert(v = input_vector, insert = "")
+}
+
+to_string_rep_with_insert <- function(v, insert) {
     output <- ""
-    for (x in character_vector) {
-        output <- paste(x, separator, sep = "")
+    for (x in v) {
+        output <- paste(output, insert, x, insert, ",", sep = "")
     }
-    substr(output, length(output) - 1)
+    paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
 }
 
 # R interface function for checking if metadata names to be added overlaps with
