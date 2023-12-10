@@ -38,7 +38,7 @@ methods::setClass(
 	slots = c(
 		reduction_base = 'character',
 		clonecall = 'character',
-		sample_prefixes = 'character',
+		metadata_filter_string = 'character',
 
 		clusters = 'list',
 		centroids = 'list',
@@ -53,31 +53,149 @@ methods::setClass(
 	)
 )
 
-# internal constructor for the .defaultApotcDataSample sample case
+# internal getter
+get_apotc_obj <- function(seurat_obj, obj_id) {
+	seurat_obj@misc[["APackOfTheClones"]][[obj_id]]
+}
+# user getter will make use of this with some error handling
+
+.defaultApotcDataSample <- "__all__"
+utils::globalVariables(c(".defaultApotcDataSample"))
 
 ApotcData <- function(
-	seurat_obj, clone_scale_factor, rad_scale_factor, reduction_base
+	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
+	clone_scale_factor, rad_scale_factor
 ) {
-	empty_list <- vector("list", num_clusters)
+	if (is.null(metadata_filter_condition)) {
+		return(initializeApotcData(
+			seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+		))
+	}
+	initializeSubsetApotcData(
+		seurat_obj, metadata_filter_condition, clonecall, reduction_base,
+		clone_scale_factor, rad_scale_factor
+	)
+}
+
+# internal constructor for the .defaultApotcDataSample sample case
+# processes all input data, assuming they are correct!
+# for now lets say let the only do samples / id
+initializeApotcData <- function(
+	seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+) {
+	num_clusters <- get_num_clusters(seurat_obj)
+	initial_centroids <- get_cluster_centroids(seurat_obj, reduction_base)
+	raw_all_clone_sizes <- count_raw_clone_sizes(
+		seurat_obj = seurat_obj, num_clusters = num_clusters,
+		clonecall = clonecall, metadata_filter_condition = NULL
+	)
+
 	methods::new(
 		Class = 'ApotcData',
 
 		reduction_base = reduction_base,
-		clusters = empty_list,
-		centroids = empty_list,
-		clone_sizes = empty_list,
+		clonecall = clonecall,
+		metadata_filter_string = NULL,
+
+		clusters = NA,
+		centroids = initial_centroids,
+		clone_sizes = raw_all_clone_sizes,
 		num_clusters = num_clusters,
 
 		clone_scale_factor = clone_scale_factor,
 		rad_scale_factor = rad_scale_factor,
 		cluster_colors = gg_color_hue(num_clusters),
 		labels = gen_labels(num_clusters),
-		label_coords = empty_list
+		label_coords = initial_centroids
 	)
 }
 
-.defaultApotcDataSample <- "__all__"
-utils::globalVariables(c(".defaultApotcDataSample"))
+# create subset / new obj based on new conditions, assuming valid!
+# based on an initialized (not nessecarily packed) apotc obj
+# creates a temporary apotc obj if it doesn exist already
+# assumes metadata_filter_condition cannot be null
+
+initializeSubsetApotcData <- function(
+	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
+	clone_scale_factor, rad_scale_factor
+) {
+	default_obj_id <- "TODO" # TODO design decisions!!
+	default_obj_wasnt_computed <- !is.null(get_apotc_obj(seurat_obj, default_obj_id))
+	
+	if (default_obj_wasnt_computed) {
+		default_apotc_obj <- ApotcData(
+			seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+		)
+		seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]] <- default_apotc_obj
+	}
+
+	# create the apotc data for the subset
+	subset_apotc_obj <- seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]]
+	subset_apotc_obj@metadata_filter_string <- metadata_filter_condition
+
+	# TODO handle which clusters are kept / recomputed, which also will recompute centroids!
+
+	if (default_obj_wasnt_computed) { # this shouldnt be needed
+		seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]] <- NULL
+	}
+
+	subset_apotc_obj
+}
+
+# function circlepack for both cases
+
+circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
+
+	rad_decrease <- convert_to_rad_decrease(
+		apotc_obj@rad_scale_factor, apotc_obj@clone_scale_factor
+	)
+
+	apotc_obj@clusters <- pack_into_clusterlists(
+		sizes = get_processed_clone_sizes(apotc_obj),
+		centroids = apotc_obj@centroids,
+		num_clusters = apotc_obj@num_clusters,
+		rad_decrease = rad_decrease,
+		ORDER = ORDER,
+		scramble = scramble,
+		try_place = try_place,
+		verbose = verbose
+	)
+
+	apotc_obj
+}
+
+# function to do repulsion for both cases
+
+repulseClusters <- function(
+	apotc_obj, repulsion_threshold, repulsion_strength, max_repulsion_iter,
+	verbose
+) {
+	repulsion_results <- get_repulsed_clusterlists_and_centroids(
+		apotc_obj@clusters, apotc_obj@centroids,
+		repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
+	)
+
+	apotc_obj@clusters <- repulsion_results[[1]]
+	apotc_obj@centroids <- repulsion_results[[2]]
+	apotc_obj@label_coords <- repulsion_results[[2]] # TODO if label coords were modded perhaps they should only move by a factor instead
+
+	apotc_obj
+}
+
+
+
+
+# super important, parser for the metadatafilter condition - probably should be in another script
+parse_to_metadata_filter <- function(...) {
+
+}
+
+metadata_filter_to_object_id <- function(filter_string) {
+	if (is.null(filter_string)) {
+		return(.defaultApotcDataSample)
+	}
+	# TODO
+}
 
 # new format, there will be a list of apotc objects in the seurat@misc slot. the list will be named apotc.
 # each is dependent on reduction/samples and within the list there will be named elements for each reduction/sample combo
@@ -93,26 +211,3 @@ utils::globalVariables(c(".defaultApotcDataSample"))
 
 # all subsequent apotc data that isnt "all" should be derived from
 # the "all" sample case with the corresponding reduction.
-
-# warn helper
-run_apotc_warn_str <- function(
-		seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
-) {
-	if (tolower(reduction_base) == 'apotc') {
-		return("please only use the umap, tsne, or pca reduction")
-	}
-	if (is.null(seurat_obj@reductions[[attempt_correction(reduction_base)]])) {
-		return(paste(
-			"No", reduction_base, "reduction found on the seurat object,",
-			"ensure the the reduction has been computed. Otherwise, did you",
-			"mean", closest_word(reduction_base), "?"
-		))
-	}
-	if (should_estimate(clone_scale_factor) && (clone_scale_factor <= 0)) {
-		return("clone_scale_factor has to be a positive number")
-	}
-	if (ORDER && scramble) {
-		return("ORDER and scramble are both TRUE, please set only one to TRUE")
-	}
-	return(NULL)
-}

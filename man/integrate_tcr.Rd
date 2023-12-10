@@ -32,9 +32,9 @@ points for the same cell).
 }
 \details{
 Columns from cells (barcodes) that had duplicates in another row are
-concatenated into strings, separated by \verb{__} in the metadata element. Barcodes
-from the TCR library that had no matches to barcodes in the \code{seurat_obj} will
-add \code{NA}s for all elements of the same index.
+concatenated into strings, separated by \verb{__} in the metadata element.
+Barcodes from the TCR library that had no matches to barcodes in the
+\code{seurat_obj} will add \code{NA}s for all elements of the same index.
 }
 \examples{
 library(Seurat)

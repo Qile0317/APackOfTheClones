@@ -39,7 +39,7 @@ if so, the most visually pleasing factor will be estimated}
 \item{rad_scale_factor}{numeric between 0 and 1. This value decreases the
 radius of the smallest clones by this scale factor. And the absolute value
 of this decrease will be applied to all packed circles, effectively shrinking
-all circles on the spot, and introduce more spacing in between}
+all circles on the spot, and introduce more constant spacing in between}
 
 \item{ORDER}{logical. Decides if the largest clone circles should be at
 cluster centroids}

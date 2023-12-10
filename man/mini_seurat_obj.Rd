@@ -28,7 +28,7 @@ A Seurat object with the following slots filled
 data("mini_seurat_obj")
 }
 \description{
-A generated 'SeuratObject' of a small sc-RNAseq experiment.
+A generated 'SeuratObject' of a small single-sample sc-RNAseq experiment.
 Has a corresponding T-cell receptor library generated from
 single cell immune profiling, named \code{"mini_clonotype_data"}
 }

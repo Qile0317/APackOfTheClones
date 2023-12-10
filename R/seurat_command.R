@@ -117,3 +117,18 @@ get_parent_params <- function(
 get_cmd <- function(seurat_obj, cmd) {
     seurat_obj@commands[["RunAPOTC"]]@params[[cmd]]
 }
+
+log_and_index_command <- function(seurat_obj, func_name, command_obj) {
+    func_name_len <- nchar(func_name)
+    last_index <- -1L
+    for (past_command_name in names(seurat_obj@commands)) {
+        if (substr(past_command_name, 1, func_name_len) == func_name) {
+            last_index <- as.integer(substr(
+                past_command_name, func_name_len + 1, nchar(past_command_name)
+            ))
+        }
+    }
+    actual_func_name <- paste(func_name, last_index + 1L, sep = "")
+    seurat_obj@commands[[actual_func_name]] <- command_obj
+    seurat_obj
+}

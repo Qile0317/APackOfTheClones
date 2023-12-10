@@ -3,14 +3,16 @@
 \docType{class}
 \name{ApotcData-class}
 \alias{ApotcData-class}
-\title{The ApotcData (APackOfTheClonesData) class}
+\title{The ApotcData class (TO CHANGE)}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 An S4 class for storing information about T/B cell clonal expansion to be
-used by various \link{APackOfTheClones} functions. This class is not meant to be
-directly instantiated nor modified by the user. Read the vignette about
-the various getters for this class.
+used by various \link{APackOfTheClones} functions. Instances of this object type
+are stored by \link{RunAPOTC} in a seurat object's \verb{@misc} slot under a list named
+\code{"APackOfTheClones"}. This class is not meant to be directly instantiated nor
+modified by the user. Read the vignette about the various getters for this
+class.
 }
 \section{Slots}{
 
@@ -19,14 +21,13 @@ the various getters for this class.
 with each list of length 5, with the first 3 elements being numeric vectors
 containing the x and y coordinates and radii of each clone in the cluster.
 The fourth element is a numeric vector of length 2 indicating the centroid of
-the cluster, and the fifth is the estimated cluster radious.}
+the cluster, and the fifth is the estimated cluster radius.}
 
 \item{\code{centroids}}{Centroids of the clusters which default to the same centroids
 of the clusterlists, tho this also means clusters has to be iterated over
 everytime the plotting function is called. but it wont be slow probably}
 
-\item{\code{clone_sizes}}{the original unscaled clone sizes. Not sure if I should
-leave it named}
+\item{\code{clone_sizes}}{the original unscaled clone sizes for the samples.}
 
 \item{\code{clone_scale_factor}}{scale factor to multiply \code{clone_sizes} by when
 running the clonal expansion plotting algorithms}

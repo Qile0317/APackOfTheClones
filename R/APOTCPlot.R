@@ -82,7 +82,7 @@ add_default_theme <- function(plt, reduction) {
 #' # if plotting of the same object with different customizations
 #' APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
 #'
-APOTCPlot <- function(
+APOTCPlot <- function( # TODO also add a bool for whether one should get linked clones. also should have a export Getter. hope its fast in C++ :P
 	seurat_obj,
 	res = 360,
 	linetype = "blank",

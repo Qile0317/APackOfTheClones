@@ -64,8 +64,9 @@
 RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
-    # samples?
-    # cloneCall?
+    clonecall = "strict",
+    filter_samples = NULL,
+    filter_ID = NULL, # or custom filter metadata condition
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -83,7 +84,7 @@ RunAPOTC <- function(
 
     reduction_base <- attempt_correction(reduction_base) # there can be a nice err msg scannign thru avaliable reductions
 
-    # errors/warnings:
+    # errors/warnings for inputs:
     warn_str <- run_apotc_warn_str(
         seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
     )
@@ -92,66 +93,74 @@ RunAPOTC <- function(
         stop("rad_scale_factor has to be between 0 and 1")
     }
 
-    # actual run
-    if (verbose) {message("Initializing APOTC run")}
+    # TODO, form the id string for the apotc obj storage location,
+    # then, check if this exact run has been performed already
+    # and check the command slot arguments to see if its been computed
 
+    if (verbose) message("Initializing APOTC run")
 
+    # compute inputs
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
     }
 
-    rad_decrease <- convert_to_rad_decrease(rad_scale_factor,clone_scale_factor)
-
-    #seurat_obj@commands[["RunAPOTC"]] <- make_apotc_command(call_time) # unsure how to handle the series of commands tbh since this should be ran multiple times.
-
-    # initialize apotc S4 class
-    apotc_obj <- initialize_apotc(
-        get_num_clusters(seurat_obj),
-        clone_scale_factor,
-        rad_scale_factor, # maybe should be rad_decrease in the future?
-        reduction_base
+    metadata_filter_string <- convert_to_filter_condition(
+        filter_samples, filter_ID #TODO
     )
 
-    # infer clone sizes and centroids
-    apotc_obj <- add_raw_clone_sizes(apotc_obj, seurat_obj)
-    initial_centroids <- get_cluster_centroids(seurat_obj, reduction_base)
+    # run the packing algos
+    apotc_obj <- ApotcData(
+        seurat_obj, metadata_filter_string, clonecall, reduction_base,
+        clone_scale_factor, rad_scale_factor
+    )
 
-    packed_clusters <- pack_into_clusterlists(
-        sizes = get_processed_clone_sizes(apotc_obj),
-        centroids = initial_centroids,
-        num_clusters = apotc_obj@num_clusters,
-        rad_decrease = rad_decrease,
-        ORDER = ORDER,
-        scramble = scramble,
-        try_place = try_place,
-        verbose = verbose
+    apotc_obj <- circlepackClones(
+        apotc_obj, ORDER, scramble, try_place, verbose
     )
 
     if (repulse) {
-        results <- get_repulsed_clusterlists_and_centroids(
-            packed_clusters, initial_centroids, apotc_obj@num_clusters,
-            repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
+        apotc_obj <- repulseClusters(
+            apotc_obj, repulsion_threshold, repulsion_strength,
+            max_repulsion_iter, verbose
         )
-        packed_clusters <- results[[1]]
-        initial_centroids <- results[[2]]
     }
 
-    # add the clusterlists and centroids to the obj
-    apotc_obj@clusters <- packed_clusters
-    apotc_obj@centroids <- initial_centroids
-    apotc_obj@label_coords <- initial_centroids
+    # store the apotc object in the correct slot
+    s <- "TODO function for id string" # TODO
+    seurat_obj@misc[['APackOfTheClones']][[s]] <- apotc_obj
 
-    # add the finished apotc object to reductions, print message, and return
-    seurat_obj@reductions[['apotc']] <- apotc_obj
+    seurat_obj <- log_and_index_command(
+        seurat_obj, "RunAPOTC", command_obj = make_apotc_command(call_time)
+    )
 
-    if (verbose) {
-        print_completion_time(call_time)
-    }
-
+    if (verbose) print_completion_time(call_time)
     seurat_obj
 }
 
 # for the ApotcData to get the right subset for clonotype data
-convert_to_filter_condition <- function() {
+convert_to_filter_condition <- function(...) {
   # TODO
+}
+
+# warn helper
+run_apotc_warn_str <- function(
+		seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
+) {
+	if (tolower(reduction_base) == 'apotc') {
+		return("please only use the umap, tsne, or pca reduction")
+	}
+	if (is.null(seurat_obj@reductions[[attempt_correction(reduction_base)]])) {
+		return(paste(
+			"No", reduction_base, "reduction found on the seurat object,",
+			"ensure the the reduction has been computed. Otherwise, did you",
+			"mean", closest_word(reduction_base), "?"
+		))
+	}
+	if (should_estimate(clone_scale_factor) && (clone_scale_factor <= 0)) {
+		return("clone_scale_factor has to be a positive number")
+	}
+	if (ORDER && scramble) {
+		return("ORDER and scramble are both TRUE, please set only one to TRUE")
+	}
+	return(NULL)
 }

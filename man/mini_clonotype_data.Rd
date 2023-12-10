@@ -16,6 +16,8 @@ A data frame with 80 rows and 2 columns:
 data("mini_clonotype_data")
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 A generated dataframe of a T-cell receptor (TCR) library generated from
 single cell immune profiling. It is a subset the full dataframe
 which would usually have up to 18 columns containing different data,
