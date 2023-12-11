@@ -34,10 +34,11 @@
 #' radius of the smallest clones by this scale factor. And the absolute value
 #' of this decrease will be applied to all packed circles, effectively shrinking
 #' all circles on the spot, and introduce more constant spacing in between
-#' @param ORDER logical. Decides if the largest clone circles should be at
-#' cluster centroids
-#' @param scramble logical. Decides if the clone circles within each cluster
-#' should be randomly scrambled when plotted
+#' @param order_clones logical. Decides if the largest clone circles should be
+#' near cluster centroids. This is highly recommended to be set to TRUE.
+#' @param scramble_clones logical. Decides if the clone circles within each
+#' cluster should be randomly scrambled when plotted. Note that solely this
+#' argument or order_clones may be `TRUE` at once.
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed
 #' circle to the origin in the circle packing algorithm
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from
@@ -65,53 +66,47 @@ RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
-
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
-    ORDER = TRUE,
-    scramble = FALSE,
+    order_clones = TRUE,
+    scramble_clones = FALSE,
     try_place = FALSE,
-
     repulse = FALSE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
+    override = FALSE,
     verbose = TRUE,
-
-    metadata_filter = NULL,
-    ... = NULL
+    extra_filter = NULL,
+    ...
 ) {
     call_time <- Sys.time()
-
-    reduction_base <- attempt_correction(reduction_base) # there can be a nice err msg scannign thru avaliable reductions
-
-    # errors/warnings for inputs:
-    warn_str <- run_apotc_warn_str(
-        seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
-    )
-    if (!is.null(warn_str)) { stop(warn_str) }
-    if (rad_scale_factor < 0 || rad_scale_factor > 1) {
-        stop("rad_scale_factor has to be between 0 and 1")
-    }
-
-    # TODO, form the id string for the apotc obj storage location,
-    # then, check if this exact run has been performed already
-    # and check the command slot arguments to see if its been computed
-    # with intersect
 
     if (verbose) message("Initializing APOTC run...\n")
 
     # compute inputs
+    reduction_base <- attempt_correction(reduction_base)
+
     if (should_estimate(clone_scale_factor)) {
-        clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, verbose)
+        clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
+        if (verbose) message(paste(
+            "Setting `clone_scale_factor` to", clone_scale_factor
+        ))
     }
 
-    clonecall <- scRepertoire:::.theCall(clonecall)
+    #clonecall <- scRepertoire:::.theCall(clonecall, seurat_obj@meta.data)
+    clonecall <- .convertClonecall(clonecall)
 
-    filtering_varargs <- list(...)
     metadata_filter_string <- parse_to_metadata_filter_str(
-        metadata_filter = metadata_filter, varargs_list = filtering_varargs
+        metadata_filter = extra_filter, varargs_list = list(...)
     )
+
+    obj_id <- parse_to_object_id(
+        reduction_base = reduction_base, clonecall =  clonecall,
+        varargs_list = list(...), metadata_filter = extra_filter
+    )
+
+    RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
     # run the packing algos
     apotc_obj <- ApotcData(
@@ -122,7 +117,7 @@ RunAPOTC <- function(
     if (verbose) message("Packing clones into clusters\n")
 
     apotc_obj <- circlepackClones(
-        apotc_obj, ORDER, scramble, try_place, verbose
+        apotc_obj, order_clones, scramble_clones, try_place, verbose
     )
 
     if (verbose) message("Repulsing clusters\n")
@@ -135,11 +130,7 @@ RunAPOTC <- function(
     }
 
     # store the apotc object in the correct slot with the correct id
-    obj_id <- parse_to_object_id(
-        reduction_base = reduction_base, clonecall =  clonecall,
-        varargs_list = filtering_varargs, metadata_filter = metadata_filter
-    )
-    seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
+    seurat_obj <- setApotcData(seurat_obj, obj_id, apotc_obj)
 
     seurat_obj <- log_and_index_command(
         seurat_obj, "RunAPOTC", command_obj = make_apotc_command(call_time)
@@ -149,25 +140,48 @@ RunAPOTC <- function(
     seurat_obj
 }
 
-# warn helper
-run_apotc_warn_str <- function(
-		seurat_obj, reduction_base, clone_scale_factor, ORDER, scramble
-) {
-	if (tolower(reduction_base) == 'apotc') {
-		return("please only use the umap, tsne, or pca reduction")
-	}
-	if (is.null(seurat_obj@reductions[[attempt_correction(reduction_base)]])) {
-		return(paste(
-			"No", reduction_base, "reduction found on the seurat object,",
+RunAPOTC_parameter_checker <- function(args) {
+
+	if (is.null(args[["seurat_obj"]]@reductions[[attempt_correction(args[["reduction_base"]])]])) {
+		stop(paste(
+			"No", args[["reduction_base"]], "reduction found on the seurat object,",
 			"ensure the the reduction has been computed. Otherwise, did you",
-			"mean", closest_word(reduction_base), "?"
+			"mean:", closest_word(args[["reduction_base"]], c("umap", "tsne", "pca"))
 		))
 	}
-	if (should_estimate(clone_scale_factor) && (clone_scale_factor <= 0)) {
-		return("clone_scale_factor has to be a positive number")
+
+	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
+		stop("`clone_scale_factor` has to be a positive number in (0, 1]")
 	}
-	if (ORDER && scramble) {
-		return("ORDER and scramble are both TRUE, please set only one to TRUE")
+
+    if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
+		stop("`rad_scale_factor` has to be a positive number in (0, 1]")
 	}
-	return(NULL)
+
+	if (args[["order_clones"]] == args[["scramble_clones"]]) {
+		stop(paste(
+            "`order_clones` and `scramble_clones` cannot both be",
+            args[["order_clones"]]
+        ))
+	}
+
+    if (args[["repulse"]]) {
+        if (args[["repulsion_threshold"]] <= 0) {
+            stop("`repulsion_threshold` has to be a positive number")
+        }
+        if (args[["repulsion_strength"]] <= 0) {
+            stop("`repulsion_strength` has to be a positive number")
+        }
+        if (args[["max_repulsion_iter"]] <= 0) {
+            stop("`max_repulsion_iter` has to be a positive number")
+        }
+    }
+
+    if (args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {
+        stop(paste(
+            "An APackOfTheClones run with the the parameters", args[["obj_id"]],
+            "appears to already have been ran. If this is a mistake,",
+            "set the `override` argument to `FALSE` and re-run."
+        ))
+    }
 }

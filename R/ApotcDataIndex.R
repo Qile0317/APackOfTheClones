@@ -8,7 +8,7 @@ is_valid_filter_str <- function(metadata_string) {
 }
 
 is_valid_args  <- function(varargs_list) {
-    !is.null(varargs_list) && !identical(varargs_list, list(NULL))
+    isnt_empty(varargs_list)
 }
 
 # from the input of RunAPOTC, convert the condition to a call to be put in
@@ -90,15 +90,14 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 }
 
 # functions for converting args of RunAPOTC to the apotc data sample id
-# stoed under under @misc[["APackOfTheClones"]][[id]]
-
+# stored under under @misc[["APackOfTheClones"]][[id]]
 parse_to_object_id <- function(
     reduction_base, clonecall, varargs_list, metadata_filter,
     .idSepStr = ";", .idNullStr = "_"
 ) {
 	object_id <- paste(reduction_base, .idSepStr, clonecall, .idSepStr, sep = "")
 
-    if (identical(varargs_list, list(NULL))) {
+    if (!is_valid_args(varargs_list)) {
         object_id <- paste(object_id, .idNullStr, .idSepStr, sep = "")
     } else {
         object_id <- paste(
@@ -130,9 +129,17 @@ varargs_list_to_id_segment <- function(varargs_list) {
     paste(sort(segments), collapse = ",")
 }
 
-# make user getters for apotcData
+# getting and setting
 
-# new format, there will be a list of apotc objects in the seurat@misc slot. the list will be named apotc.
-# each is dependent on reduction/samples and within the list there will be named elements for each reduction/sample combo
-# and make it optional in RunAPOTC if this should be stored. APOTCPlot will then be able to have the apotc obj slot input
-# alternatively the sample/id configuration.
+containsApotcRun <- function(seurat_obj, obj_id) {
+    return(!is.null(getApotcData(seurat_obj, obj_id)))
+}
+
+getApotcData <- function(seurat_obj, obj_id) {
+    seurat_obj@misc[["APackOfTheClones"]][[obj_id]]
+}
+
+setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
+    seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
+    seurat_obj
+}

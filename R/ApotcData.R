@@ -63,7 +63,7 @@ ApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
-	if (is.null(metadata_filter_condition)) {
+	if (identical(metadata_filter_condition, "")) {
 		return(initializeApotcData(
 			seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
 		))

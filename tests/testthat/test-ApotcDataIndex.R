@@ -1,12 +1,12 @@
 test_that("parse_to_metadata_filter_str works for no varargs", {
 
-    expect_identical(parse_to_metadata_filter_str(NULL, list(NULL)), "")
-    expect_identical(parse_to_metadata_filter_str("", list(NULL)), "")
-    expect_identical(parse_to_metadata_filter_str("   ", list(NULL)), "")
+    expect_identical(parse_to_metadata_filter_str(NULL, list()), "")
+    expect_identical(parse_to_metadata_filter_str("", list()), "")
+    expect_identical(parse_to_metadata_filter_str("   ", list()), "")
 
     expect_identical(
         parse_to_metadata_filter_str(
-            "mito.genes > 1.5 | length(CTaa) - 1 < 20", list(NULL)
+            "mito.genes > 1.5 | length(CTaa) - 1 < 20", list()
         ),
         "mito.genes>1.5|length(CTaa)-1<20"
     )

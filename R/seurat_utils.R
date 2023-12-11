@@ -3,6 +3,10 @@ count_tcr_barcodes <- function(seurat_obj) {
   sum(!is.na(seurat_obj@meta.data[["barcode"]]))
 }
 
+count_clones <- function(seurat_obj, clonecall) {
+  sum(!is.na(seurat_obj@meta.data[[clonecall]]))
+}
+
 # get the percent of NA's in the metadata barcode column for the message
 percent_na <- function(seurat_obj) {
   num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
