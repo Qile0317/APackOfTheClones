@@ -49,6 +49,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppFilterReductionCoords
+Rcpp::NumericMatrix rcppFilterReductionCoords(std::vector<std::string>& seuratBarcodes, Rcpp::NumericMatrix reductionCoords);
+RcppExport SEXP _APackOfTheClones_rcppFilterReductionCoords(SEXP seuratBarcodesSEXP, SEXP reductionCoordsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<std::string>& >::type seuratBarcodes(seuratBarcodesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type reductionCoords(reductionCoordsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppFilterReductionCoords(seuratBarcodes, reductionCoords));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_average_vector
 std::vector<double> get_average_vector(Rcpp::List vec_list);
 RcppExport SEXP _APackOfTheClones_get_average_vector(SEXP vec_listSEXP) {
@@ -109,6 +121,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_has_repeats", (DL_FUNC) &_APackOfTheClones_has_repeats, 2},
     {"_APackOfTheClones_has_common_strs", (DL_FUNC) &_APackOfTheClones_has_common_strs, 2},
+    {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},

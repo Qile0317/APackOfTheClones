@@ -13,7 +13,11 @@ percent_na <- function(seurat_obj) {
   100 * (num_barcodes - count_tcr_barcodes(seurat_obj)) / num_barcodes
 }
 
-# get the number of seurat clusters
-get_num_clusters <- function(seurat_obj) {
+# get the number of seurat clusters based on clusters remaining in metadata
+count_num_clusters <- function(seurat_obj) {
+  length(unique(seurat_obj@meta.data[["seurat_clusters"]]))
+}
+
+get_num_total_clusters <- function(seurat_obj) {
   length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }

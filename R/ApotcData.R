@@ -53,12 +53,6 @@ methods::setClass(
 	)
 )
 
-# internal getter
-get_apotc_obj <- function(seurat_obj, obj_id) {
-	seurat_obj@misc[["APackOfTheClones"]][[obj_id]]
-}
-# user getter will make use of this with some error handling
-
 ApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
@@ -74,17 +68,13 @@ ApotcData <- function(
 	)
 }
 
-# internal constructor for the .defaultApotcDataSample sample case
-# processes all input data, assuming they are correct!
-# for now lets say let the only do samples / id
 initializeApotcData <- function(
 	seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
 ) {
-	num_clusters <- get_num_clusters(seurat_obj)
+	num_clusters <- get_num_total_clusters(seurat_obj) # may need to redo, will leave empty elements for invalid clusters
 	initial_centroids <- get_cluster_centroids(seurat_obj, reduction_base)
 	raw_all_clone_sizes <- count_raw_clone_sizes(
-		seurat_obj = seurat_obj, num_clusters = num_clusters,
-		clonecall = clonecall, metadata_filter_condition = NULL
+		seurat_obj = seurat_obj, num_clusters = num_clusters, clonecall = clonecall
 	)
 
 	methods::new(
@@ -116,34 +106,18 @@ initializeSubsetApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
-	default_obj_id <- "TODO" # TODO design decisions!!
-	
-	if (!is.null(get_apotc_obj(seurat_obj, default_obj_id))) {
-		default_apotc_obj <- ApotcData(
-			seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
-		)
-		seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]] <- default_apotc_obj
-	}
-
-	# get the subsetted metadata
+	# subset the seurat metadata
 	seurat_obj@meta.data %>% dplyr::filter(eval(parse(
 		text = metadata_filter_condition
 	)))
 
-	# create the apotc data for the subset
-	subset_apotc_obj <- seurat_obj@misc[["APackOfTheClones"]][[default_obj_id]]
-	subset_apotc_obj@metadata_filter_string <- metadata_filter_condition
+	apotc_obj <- initializeApotcData(
+		seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+	)
 
-	
-
-	# TODO handle which clusters are kept / recomputed, which also will recompute centroids!
-
-
-
-	subset_apotc_obj
+	apotc_obj@metadata_filter_string <- metadata_filter_condition
+	apotc_obj
 }
-
-# function circlepack for both cases
 
 circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 

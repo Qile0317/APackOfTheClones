@@ -1,29 +1,17 @@
 # script probably will need to be revamped for multi-sample experiments. Might
 # even end up involving heavy TCR/BCR sequence comparisons
 
-# count the raw clone from the integrated seurat object, where col_condition is
-# a dplyr condition to be evaluated. In the main function a string version
-# can be mapped to conditions as shortcuts. assumes all inputs are valid
-# returns the clone sizes list to be put in the ApotcData object
+# count the raw clone from the integrated seurat object from the METADATA
 # TODO should make another function with a user wrapper AND as a getter
 count_raw_clone_sizes <- function(
-  seurat_obj, num_clusters, clonecall, metadata_filter_condition
+  seurat_obj, num_clusters, clonecall
 ) {
-  if (!is.null(metadata_filter_condition)) {
-    seurat_metadata <- seurat_obj@meta.data %>%
-      dplyr::filter(substitute(metadata_filter_condition))
-  } else {
-    seurat_metadata <- seurat_obj@meta.data
-  }
-
-  clonotype_df <- data.frame(
-    "clusters" = seurat_metadata[["seurat_clusters"]],
-    "clonotype_ids" = seurat_metadata[[clonecall]]
-  )
 
   # aggregate the raw counts
   freq_df <- stats::aggregate(
-    as.formula("clonotype_ids ~ clusters"), clonotype_df, function(x) table(x)
+    as.formula(paste(clonecall, "~ seurat_clusters")),
+    seurat_obj@meta.data,
+    function(x) table(x)
   )
 
   # compile the tabled counts, purposefully not modifying them
@@ -45,8 +33,6 @@ count_raw_clone_sizes <- function(
 
   clone_sizes
 }
-
-# TODO convert input to metadata filter condition from string
 
 get_processed_clone_sizes <- function(apotc_obj) {
   raw_tabled_clone_sizes <- apotc_obj@clone_sizes

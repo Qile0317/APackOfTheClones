@@ -1,10 +1,6 @@
-source("testdata/cluster_lists.R")
-source("testdata/SCIP.R")
+sourcedata("v0", "cluster_lists")
+sourcedata("v0", "SCIP")
 data("mini_seurat_obj")
-
-test_that("get_num_clusters works", {
-  expect_equal(get_num_clusters(mini_seurat_obj), 2L)
-})
 
 test_that("find_centroids() works", {
   input <- data.frame(

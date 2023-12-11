@@ -106,10 +106,16 @@ parse_to_object_id <- function(
         )
     }
 
-    if (is.null(metadata_filter) || identical(metadata_filter, "")) {
+    if (!is_valid_filter_str(metadata_filter)) {
         return(paste(object_id, .idNullStr, sep = ""))
     }
     paste(object_id, gsub(" ", "", metadata_filter), sep = "")
+}
+
+get_default_apotc_id <- function(reduction_base, clonecall) {
+    parse_to_object_id(
+        reduction_base = reduction_base, clonecall = clonecall,
+        varargs_list = list(), metadata_filter = NULL)
 }
 
 varargs_list_to_id_segment <- function(varargs_list) {

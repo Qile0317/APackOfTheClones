@@ -46,7 +46,7 @@ add_repped_2d_list_row_to_df <- function(
 	objs_to_be_added <- extract_2d_list_row(l, row_index)
 	df_height <- nrow(df)
 
-	if (has_common_strs(colnames(df), list_names)) {stop(err_msg)}
+	if (has_common_strs(colnames(df), list_names)) stop(err_msg)
 	for (i in seq_along(l)) {
 		df[[list_names[i]]] <- rep(objs_to_be_added[i], df_height)
 	}

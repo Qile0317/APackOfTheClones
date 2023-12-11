@@ -13,6 +13,10 @@ has_common_strs <- function(vec1, vec2) {
     .Call(`_APackOfTheClones_has_common_strs`, vec1, vec2)
 }
 
+rcppFilterReductionCoords <- function(seuratBarcodes, reductionCoords) {
+    .Call(`_APackOfTheClones_rcppFilterReductionCoords`, seuratBarcodes, reductionCoords)
+}
+
 get_average_vector <- function(vec_list) {
     .Call(`_APackOfTheClones_get_average_vector`, vec_list)
 }
