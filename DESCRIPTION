@@ -39,7 +39,7 @@ Imports:
     utils,
     withr
 Remotes:
-    nborcherding/scRepertoire
+    ncborcherding/scRepertoire
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/APackOfTheClones/
 LinkingTo: 
