@@ -23,11 +23,10 @@ gen_cluster_color_hashmap <- function(num_clusters) {
 #' inserts a list of colors into a column in the cluster df by label with the
 #' v0.1.2 version of the packing algos
 #' @noRd
-#' @importFrom dplyr %>%
 insert_colors <- function(cluster_dataframe, num_clusters) {
   color_hashmap <- gen_cluster_color_hashmap(num_clusters)
   color_vec <- cluster_dataframe[[1]] # 1 is label
-  for (i in 1:length(color_vec)) {
+  for (i in seq_along(color_vec)) {
     color_vec[i] <- color_hashmap[[color_vec[i]]]
   }
   return(cluster_dataframe %>% dplyr::mutate("color" = color_vec))
@@ -50,7 +49,7 @@ pair_colors_to_hash <- function(seurat_obj) {
 extract_and_add_colors <- function(seurat_obj, plot_df) {
   color_hashmap <- pair_colors_to_hash(seurat_obj)
   color_vec <- plot_df[[1]] # 1 is label
-  for (i in 1:length(color_vec)) {
+  for (i in seq_along(color_vec)) {
     color_vec[i] <- color_hashmap[[color_vec[i]]]
   }
   plot_df %>% dplyr::mutate("color" = color_vec)

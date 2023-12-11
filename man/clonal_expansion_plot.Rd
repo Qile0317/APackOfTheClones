@@ -7,13 +7,13 @@
 clonal_expansion_plot(...)
 }
 \arguments{
-\item{...}{deprecated}
+\item{...}{arbitrary arguments}
 }
 \value{
 error message
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 
 \emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped - now depending on the scRepertoire v2 package - which allows for the processing of multi-sampled single cell data. Please see the new vignette, showing a superior way to achieve the same visualizations with more features.
 }

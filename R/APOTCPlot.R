@@ -94,6 +94,8 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 ) {
 	APOTCPlot_error_handler(hash::hash(as.list(environment())))
 
+	obj_id <- "TODO"
+
 	# convert clusterlists to dataframe and add colors
 	clusterlists <- seurat_obj@reductions[["apotc"]]@clusters
 	clusterlists <- df_full_join(clusterlists)

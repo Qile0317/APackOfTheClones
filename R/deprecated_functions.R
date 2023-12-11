@@ -203,11 +203,11 @@ count_clone_sizes <- function(integrated_seurat_obj) {
 #' DEFUNCT: Visualize T cell clonal expansion with a ball-packing plot.
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' `r md_deprecation_docstring()`
 #'
-#' @param ... deprecated
+#' @param ... arbitrary arguments
 #'
 #' @keywords internal
 #'

@@ -9,7 +9,7 @@ count_raw_clone_sizes <- function(
 
   # aggregate the raw counts
   freq_df <- stats::aggregate(
-    as.formula(paste(clonecall, "~ seurat_clusters")),
+    stats::as.formula(paste(clonecall, "~ seurat_clusters")),
     seurat_obj@meta.data,
     function(x) table(x)
   )

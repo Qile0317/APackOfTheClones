@@ -2,7 +2,7 @@
 % Please edit documentation in R/APOTCPlot.R
 \name{APOTCPlot}
 \alias{APOTCPlot}
-\title{Create clonal expansion plot after RunAPOTC}
+\title{Various variations of visualizations of clonal expansion post-RunAPOTC}
 \usage{
 APOTCPlot(
   seurat_obj,
@@ -45,7 +45,7 @@ never shorten.}
 
 \item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
 defaulting to "C0, C1, ...". labels and their coordinates can also be
-manually edited with the \code{ModifyLabels} function.}
+manually edited with the \link{ModifyLabels} or \link{AdjustAPOTC} functions.}
 
 \item{label_size}{The text size of labels if shown. Defaults to 5.}
 
@@ -87,7 +87,7 @@ seurat object
 
 Given a seurat object with an 'apotc' (APackOfTheClones) object
 from running \link{RunAPOTC}, this function will read the information and return
-a customizable ggplot object of the clonal expansion with a circle size
+a customizable ggplot2 object of the clonal expansion with a circle size
 legend. If the user is unhappy about certain aspects of the plot, many
 parameters can be adjusted with the \link{AdjustAPOTC} function.
 }
