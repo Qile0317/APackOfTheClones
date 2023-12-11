@@ -1,11 +1,11 @@
-#' @title Create clonal expansion plot after RunAPOTC
+#' @title Various variations of visualizations of clonal expansion post-RunAPOTC
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
 #' Given a seurat object with an 'apotc' (APackOfTheClones) object
 #' from running [RunAPOTC], this function will read the information and return
-#' a customizable ggplot object of the clonal expansion with a circle size
+#' a customizable ggplot2 object of the clonal expansion with a circle size
 #' legend. If the user is unhappy about certain aspects of the plot, many
 #' parameters can be adjusted with the [AdjustAPOTC] function.
 #'
@@ -26,7 +26,7 @@
 #' never shorten.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
 #' defaulting to "C0, C1, ...". labels and their coordinates can also be
-#' manually edited with the `ModifyLabels` function.
+#' manually edited with the [ModifyLabels] or [AdjustAPOTC] functions.
 #' @param label_size The text size of labels if shown. Defaults to 5.
 #' @param add_size_legend If `TRUE`, adds a legend to the plot visualizing the
 #' relative sizes of clones. Note that it is simply an overlay and not a real
@@ -74,6 +74,7 @@
 #'
 APOTCPlot <- function( # TODO also add a bool for whether one should get linked clones. also should have a export Getter. hope its fast in C++ :P
 	seurat_obj,
+	# need to decide how to handle getting the right plot. probably shouldnt use object id but the same args as before?
 	res = 360,
 	linetype = "blank",
 	use_default_theme = TRUE,
@@ -91,9 +92,7 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	legend_label = "Clone sizes",
 	legend_text_size = 5
 ) {
-	if (is.null(seurat_obj@reductions[["apotc"]])) {
-		stop("Please do an APackOfTheClones run on the seurat object first with RunAPOTC")
-	}
+	APOTCPlot_error_handler(hash::hash(as.list(environment())))
 
 	# convert clusterlists to dataframe and add colors
 	clusterlists <- seurat_obj@reductions[["apotc"]]@clusters
@@ -142,6 +141,10 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	result_plot
 }
 
+APOTCPlot_error_handler <- function(args) {
+
+}
+
 add_default_theme <- function(plt, reduction) {
 	label_hashmap <- hash::hash(
 		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
@@ -154,3 +157,4 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ylab(paste(label, 2, sep = "_")) +
 		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
+

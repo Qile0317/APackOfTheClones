@@ -149,3 +149,29 @@ setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
     seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
     seurat_obj
 }
+
+#' @title
+#' Get all object ids of previous RunAPOTC runs on a seurat object
+#' 
+#' @description
+#' A convenience function to get all object ids of previous RunAPOTC run IDs
+#' 
+#' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
+#' order of the functions being called.
+#' 
+#' @return a character vector of all object ids of previous RunAPOTC runs
+#' @export
+#' 
+#' @example
+#' # TODO
+#' 
+getApotcDataIndex <- function(seurat_obj) {
+    if (!is_seurat_object(seurat_obj)) {
+        stop("input must be a seurat object")
+    }
+    obj_list <- seurat_obj@misc[["APackOfTheClones"]]
+    if (!isnt_empty(obj_list) && !is.null(obj_list)) {
+        stop("No APackOfTheClones data found in seurat object")
+    }
+    names(obj_list)
+}
