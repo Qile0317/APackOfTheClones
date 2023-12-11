@@ -132,6 +132,15 @@ extract_2d_list_row <- function(l, row_index) {
     row_vector
 }
 
+# add two lists of the same length elementwise where everything is the same length
+add_numeric_lists <- function(l1, l2) {
+    l <- vector("list", length(l1))
+    for (i in seq_along(l1)) {
+        l[[i]] <- l1[[i]] + l2[[i]]
+    }
+    l
+}
+
 #' Take a list of character vectors and join each element of the vectors
 #' together, separating each character by sep
 #' @return a character vector

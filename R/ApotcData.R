@@ -151,13 +151,24 @@ repulseClusters <- function(
 	)
 
 	apotc_obj@clusters <- repulsion_results[[1]]
-	apotc_obj@centroids <- repulsion_results[[2]]
-	apotc_obj@label_coords <- repulsion_results[[2]] # TODO if label coords were modded perhaps they should only move by a factor instead?
 
+	apotc_obj@label_coords <- add_numeric_lists(
+		apotc_obj@label_coords,
+		get_dx_dy_list(apotc_obj@centroids, repulsion_results[[2]])
+	)
+
+	apotc_obj@centroids <- repulsion_results[[2]]
+	
 	apotc_obj
 }
 
-
+get_dx_dy_list <- function(old_coord_list, new_coord_list) {
+	output <- vector("list", length(old_coord_list))
+	for (i in seq_along(old_coord_list)) {
+		output[[i]] <- new_coord_list[[i]] - old_coord_list[[i]]
+	}
+	output
+}
 
 # should have getters and setters
 #
