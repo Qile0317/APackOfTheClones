@@ -3,7 +3,7 @@
 \docType{class}
 \name{ApotcData-class}
 \alias{ApotcData-class}
-\title{The ApotcData class (TO CHANGE)}
+\title{The ApotcData class}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 

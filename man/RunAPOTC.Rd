@@ -8,16 +8,20 @@ downstream visualization of clonal expansion}
 RunAPOTC(
   seurat_obj,
   reduction_base = "umap",
+  clonecall = "strict",
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
-  ORDER = TRUE,
-  scramble = FALSE,
+  order_clones = TRUE,
+  scramble_clones = FALSE,
   try_place = FALSE,
   repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
-  verbose = TRUE
+  override = TRUE,
+  verbose = TRUE,
+  ...,
+  extra_filter = NULL
 )
 }
 \arguments{
@@ -29,7 +33,11 @@ already have been integrated with a T cell library via
 expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or
 \code{'pca'}. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
 However, generally APackOfTheClones is used for displaying UMAP and
-occasionally t-SNE versions to intuitively highlight clonal expansion}
+occasionally t-SNE versions to intuitively highlight clonal expansion.}
+
+\item{clonecall}{character. The column name in the seurat object metadata to
+use. See \code{scRepertoire} documentation for more information about this
+parameter that is central to both packages.}
 
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
@@ -41,11 +49,12 @@ radius of the smallest clones by this scale factor. And the absolute value
 of this decrease will be applied to all packed circles, effectively shrinking
 all circles on the spot, and introduce more constant spacing in between}
 
-\item{ORDER}{logical. Decides if the largest clone circles should be at
-cluster centroids}
+\item{order_clones}{logical. Decides if the largest clone circles should be
+near cluster centroids. This is highly recommended to be set to TRUE.}
 
-\item{scramble}{logical. Decides if the clone circles within each cluster
-should be randomly scrambled when plotted}
+\item{scramble_clones}{logical. Decides if the clone circles within each
+cluster should be randomly scrambled when plotted. Note that solely this
+argument or order_clones may be \code{TRUE} at once.}
 
 \item{try_place}{If \code{TRUE}, always minimizes distance from a newly placed
 circle to the origin in the circle packing algorithm}
@@ -61,8 +70,28 @@ clusters repulse each other per iteration, and vice versa}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations}
 
-\item{verbose}{logical. Decides if visual cues print to the R console of the
-progress}
+\item{override}{logical. If \code{TRUE}, will override any existing
+APackOfTheClones run data with the same parameters quietly}
+
+\item{verbose}{logical. Decides if visual cues are displayed to the R console
+of the progress}
+
+\item{...}{additional keyword arguments indicating the rows corresponding to
+elements in the seurat object metadata that should be filtered by.
+For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
+those in seurat clusters 1, 9, and 10. Or, if there is some column named
+"sample", then sample = c("A", "B") will conduct a run only on those
+corresponding cells. A useful application for this is to run the function
+many times, once for each sample, and plot them all together with \link{APOTCPlot}
+down the line.}
+
+\item{extra_filter}{character. An additional string that should be formatted
+\emph{exactly} like a statement one would pass into \link[dplyr:filter]{dplyr::filter} that does
+\emph{additional} filtering to cells in the seurat object - on top of the other
+keyword arguments - based on the metadata. This is a more flexible
+alternative / addition to the filtering keyword arguments. For example, if
+one wanted to filter by the length of the amino acid sequence of TCRs, one
+could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}}
 }
 \value{
 A modified version of the input seurat object with a new object in
@@ -70,21 +99,32 @@ the \verb{@reduction} attribute named \code{apotc}, which harbors data necessary
 visualizing the clonal expansion of the cells with the \link{APOTCPlot} function
 }
 \description{
-Computes all necessary information for an APackOfTheClones
-clonal expansion plot and stores it in the seurat object at
-\code{seurat_obj@reduction[['apotc']]} for use later with \code{APOTCPlot}. Gets sizes
-of unique clones and utilizes a circle-packing algorithm to pack circles
-representing individual clones in approximately the same dimensional
-reduction (\code{reduction_base}) coordinates.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Computes necessary information for an APackOfTheClones
+clonal expansion plot (\link{APOTCPlot}) and stores it in the seurat object.
+Gets sizes of unique clones and utilizes a circle-packing algorithm to
+pack circles representing individual clones in approximately the same
+dimensional  reduction (\code{reduction_base}) coordinates.
+
+The parameter \code{extra_filter} along with an unlimited number of additional
+keyword arguments can be used to filter the cells by certain conditions
+in the metadata, and new results will be stored in addition to other runs
+the users may have done.
+
+If the user wishes to manually customize/fix the expansion plot
+generated, the circular packing information can be modified
+with the \link{AdjustAPOTC} function.
 }
 \details{
-If the user wishes to manually customize/fix the expansion plot
-generated by \code{APOTCPlot}, the circular packing information can be modified
-with the \code{AdjustAPOTC} function, or alternatively accessed via the syntax
-\code{seurat_obj@reduction[['apotc']]} which harbours the custom S4 object of the
-class \code{apotc}. Please read the function level documentation for the mentioned
-functions and class, and also the web-only user vignette for a walkthrough of
-the inner workings of the package.
+Each APackOfTheClones run is uniquely identified by the parameters
+\code{reduction_base}, \code{clonecall}, \code{extra_filter}, and any additional keywords
+passed to filter the metadata. Each distinct run is stored in the seurat
+object under the \verb{@misc} slot in a list named \code{"APackOfTheClones"}, where
+each list element is an instance of the \link{ApotcData} class. Each element is
+named with an object id which is generated from the aforementioned parameters
+stored. The user can but is recommended heavily to not modify anything under
+the @misc$APackOfTheClones manually as it may cause unexpected behavior.
 }
 \examples{
 # unfinished

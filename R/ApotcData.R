@@ -1,5 +1,5 @@
 #' @title
-#' The ApotcData class (TO CHANGE)
+#' The ApotcData class
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
@@ -158,7 +158,7 @@ repulseClusters <- function(
 	)
 
 	apotc_obj@centroids <- repulsion_results[[2]]
-	
+
 	apotc_obj
 }
 

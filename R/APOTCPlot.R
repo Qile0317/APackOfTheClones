@@ -1,19 +1,9 @@
-add_default_theme <- function(plt, reduction) {
-	label_hashmap <- hash::hash(
-		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
-	)
-	label <- label_hashmap[[reduction]]
-
-	plt +
-		ggplot2::theme_classic() +
-		ggplot2::xlab(paste(label, 1, sep = "_")) +
-		ggplot2::ylab(paste(label, 2, sep = "_")) +
-		ggplot2::ggtitle("Sizes of clones within each cluster")
-}
-
 #' @title Create clonal expansion plot after RunAPOTC
 #'
-#' @description Given a seurat object with an 'apotc' (APackOfTheClones) object
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Given a seurat object with an 'apotc' (APackOfTheClones) object
 #' from running [RunAPOTC], this function will read the information and return
 #' a customizable ggplot object of the clonal expansion with a circle size
 #' legend. If the user is unhappy about certain aspects of the plot, many
@@ -150,4 +140,17 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	}
 
 	result_plot
+}
+
+add_default_theme <- function(plt, reduction) {
+	label_hashmap <- hash::hash(
+		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
+	)
+	label <- label_hashmap[[reduction]]
+
+	plt +
+		ggplot2::theme_classic() +
+		ggplot2::xlab(paste(label, 1, sep = "_")) +
+		ggplot2::ylab(paste(label, 2, sep = "_")) +
+		ggplot2::ggtitle("Sizes of clones within each cluster")
 }

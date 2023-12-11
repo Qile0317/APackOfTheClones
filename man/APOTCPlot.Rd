@@ -83,6 +83,8 @@ A ggplot object of the APackOfTheClones clonal expansion plot of the
 seurat object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Given a seurat object with an 'apotc' (APackOfTheClones) object
 from running \link{RunAPOTC}, this function will read the information and return
 a customizable ggplot object of the clonal expansion with a circle size

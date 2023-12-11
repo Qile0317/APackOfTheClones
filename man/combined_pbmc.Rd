@@ -12,6 +12,7 @@ data("combined_pbmc")
 }
 \description{
 Generated with \link{combineSeuratExpression}, more specifically, with:
-\verb{r combined_pbmc@commands[["combineSeuratExpression"]]@call_string}
+
+combineSeuratExpression(scRepertoire::combineTCR(scRepertoire::mini_contig_list, ,     samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", ,         "P20B", "P20L")), scRepertoire::scRep_example)
 }
 \keyword{datasets}

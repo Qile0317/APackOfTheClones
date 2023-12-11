@@ -63,7 +63,8 @@
 #'
 #' @description
 #' Generated with [combineSeuratExpression], more specifically, with:
-#' `r combined_pbmc@commands[["combineSeuratExpression"]]@call_string`
+#'
+#' `r get(data(combined_pbmc))@commands[["combineSeuratExpression"]]@call.string`
 #'
 #' @usage data("combined_pbmc")
 #'
