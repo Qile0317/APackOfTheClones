@@ -3,7 +3,7 @@
 
 is_valid_filter_str <- function(metadata_string) {
     if (is.null(metadata_string)) return(FALSE)
-    if (identical(gsub(" ", "", metadata_string), "")) return(FALSE)
+    if (identical(strip_spaces(metadata_string), "")) return(FALSE)
     return(TRUE)
 }
 
@@ -21,7 +21,7 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     if (!is_valid_args(varargs_list)) {
         if (is_valid_filter_str(metadata_filter)) {
-            return(gsub(" ", "", metadata_filter))
+            return(strip_spaces(metadata_filter))
         }
         return("")
     }
@@ -43,7 +43,7 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
         )
     }
 
-    gsub(" ", "", filter_string)
+    strip_spaces(filter_string)
 }
 
 col_cond_vec_to_filter_str <- function(condition_vector, colname) {
@@ -91,6 +91,7 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stored under under @misc[["APackOfTheClones"]][[id]]
+
 parse_to_object_id <- function(
     reduction_base, clonecall, varargs_list, metadata_filter,
     .idSepStr = ";", .idNullStr = "_"
@@ -115,7 +116,8 @@ parse_to_object_id <- function(
 get_default_apotc_id <- function(reduction_base, clonecall) {
     parse_to_object_id(
         reduction_base = reduction_base, clonecall = clonecall,
-        varargs_list = list(), metadata_filter = NULL)
+        varargs_list = list(), metadata_filter = NULL
+    )
 }
 
 varargs_list_to_id_segment <- function(varargs_list) {
@@ -165,7 +167,7 @@ setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
 #' @example
 #' # TODO
 #' 
-getApotcDataIndex <- function(seurat_obj) {
+getApotcDataId <- function(seurat_obj) {
     if (!is_seurat_object(seurat_obj)) {
         stop("input must be a seurat object")
     }
@@ -174,4 +176,24 @@ getApotcDataIndex <- function(seurat_obj) {
         stop("No APackOfTheClones data found in seurat object")
     }
     names(obj_list)
+}
+
+#' @title
+#' Get the object id of the last RunAPOTC run on a seurat object
+#' 
+#' @description
+#' A convenience function to get the last object ids of the previous RunAPOTC
+#' run, to be used by [APOTCPlot] and [AdjustAPOTC]
+#' 
+#' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
+#' order of the functions being called.
+#' 
+#' @return a character of the object id of the last RunAPOTC call
+#' @export
+#' 
+#' @example
+#' # TODO
+#' 
+getLastApotcDataId <- function(seurat_obj) {
+    getlast(getApotcDataId(seurat_obj))
 }

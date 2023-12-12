@@ -7,29 +7,31 @@ gen_labels <- function(num_clusters) {
 }
 
 # show the labels on the plot
-insert_labels <- function(plt, seurat_obj, size) {
-	for (i in 1:seurat_obj@reductions[['apotc']]@num_clusters) {
-		if (!isnt_empty(seurat_obj@reductions[['apotc']]@clusters[[i]])) {
+insert_labels <- function(plt, apotc_obj, size) {
+	for (i in 1:apotc_obj@num_clusters) {
+		if (!isnt_empty(apotc_obj@clusters[[i]])) {
 			next
 		}
 
 		plt <- plt + ggplot2::annotate(
 			"text",
-			x = seurat_obj@reductions[['apotc']]@label_coords[1],
-			y = seurat_obj@reductions[['apotc']]@label_coords[2],
-			label = seurat_obj@reductions[['apotc']]@labels[i],
+			x = apotc_obj@label_coords[1],
+			y = apotc_obj@label_coords[2],
+			label = apotc_obj@labels[i],
 			size = size
 		)
 	}
 	plt
 }
 
-modify_names <- function(seurat_obj, modify_label, to_new_label) {
+# TODO: all needs to be fixed with obj_id
+
+modify_names <- function(seurat_obj, apotc_obj, modify_label, to_new_label) {
 	label_map <- hash::hash(modify_label, to_new_label)
-	for (i in 1:seurat_obj@reduction[['apotc']]@num_clusters) {
-		val <- label_map[[seurat_obj@reduction[['apotc']]@labels[i]]]
+	for (i in 1:apotc_obj@num_clusters) {
+		val <- label_map[[apotc_obj@labels[i]]]
 		if (!is.null(val)) {
-			seurat_obj@reduction[['apotc']]@labels[i] <- val
+			apotc_obj@labels[i] <- val
 		}
 	}
 	seurat_obj

@@ -39,7 +39,7 @@ get_cluster_centroids <- function(seurat_obj, reduction = "umap") {
     data.frame(
       rcppFilterReductionCoords(
         seuratBarcodes = rownames(seurat_obj@meta.data),
-        reductionCoords = seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2]
+        reductionCoords = get_2d_embedding(seurat_obj, reduction)
       ),
       seurat_obj@meta.data[["seurat_clusters"]]
     )

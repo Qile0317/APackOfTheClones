@@ -21,3 +21,7 @@ count_num_clusters <- function(seurat_obj) {
 get_num_total_clusters <- function(seurat_obj) {
   length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
+
+get_2d_embedding <- function(seurat_obj, reduction) {
+  seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2]
+}

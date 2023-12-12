@@ -6,6 +6,11 @@
 \usage{
 APOTCPlot(
   seurat_obj,
+  reduction_base = "umap",
+  clonecall = "strict",
+  ...,
+  extra_filter = NULL,
+  object_id = NULL,
   res = 360,
   linetype = "blank",
   use_default_theme = TRUE,
@@ -13,7 +18,7 @@ APOTCPlot(
   show_labels = FALSE,
   label_size = 5,
   add_size_legend = TRUE,
-  legend_sizes = c(1, 5, 50),
+  legend_sizes = "auto",
   legend_position = "top_left",
   legend_buffer = 1.5,
   legend_color = "#808080",

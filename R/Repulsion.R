@@ -111,7 +111,6 @@ repulse_cluster <- function(
 # repulses clusters and returns a list of length 2.
 # first is the new modified list of clusterlists
 # second is the centroids
-# Could technically be a member function of apotc as well and probably more readable that way :P
 get_repulsed_clusterlists_and_centroids <- function(
   packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
   repulsion_strength, max_repulsion_iter, verbose

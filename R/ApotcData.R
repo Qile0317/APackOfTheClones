@@ -146,8 +146,13 @@ repulseClusters <- function(
 	verbose
 ) {
 	repulsion_results <- get_repulsed_clusterlists_and_centroids(
-		apotc_obj@clusters, apotc_obj@centroids,
-		repulsion_threshold, repulsion_strength, max_repulsion_iter, verbose
+		packed_clusters = apotc_obj@clusters,
+		initial_centroids = apotc_obj@centroids,
+		num_clusters = apotc_obj@num_clusters,
+		repulsion_threshold = repulsion_threshold,
+		repulsion_strength = repulsion_strength,
+		max_repulsion_iter = max_repulsion_iter,
+		verbose = verbose
 	)
 
 	apotc_obj@clusters <- repulsion_results[[1]]

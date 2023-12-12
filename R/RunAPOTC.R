@@ -31,6 +31,21 @@
 #' @param clonecall character. The column name in the seurat object metadata to
 #' use. See `scRepertoire` documentation for more information about this
 #' parameter that is central to both packages.
+#' @param ... additional keyword arguments indicating the rows corresponding to
+#' elements in the seurat object metadata that should be filtered by.
+#' For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
+#' those in seurat clusters 1, 9, and 10. Or, if there is some column named
+#' "sample", then sample = c("A", "B") will conduct a run only on those
+#' corresponding cells. A useful application for this is to run the function
+#' many times, once for each sample, and plot them all together with [APOTCPlot]
+#' down the line.
+#' @param extra_filter character. An additional string that should be formatted
+#' *exactly* like a statement one would pass into [dplyr::filter] that does
+#' *additional* filtering to cells in the seurat object - on top of the other
+#' keyword arguments - based on the metadata. This is a more flexible
+#' alternative / addition to the filtering keyword arguments. For example, if
+#' one wanted to filter by the length of the amino acid sequence of TCRs, one
+#' could pass in something like `extra_filter = "nchar(CTaa) - 1 > 10"`
 #' @param clone_scale_factor Dictates how much to scale each circle(between 0,1)
 #' radius when converting from clonotype counts into circles that represent
 #' individual clonotypes. The argument defaults to the character `"auto"`, and
@@ -57,21 +72,6 @@
 #' APackOfTheClones run data with the same parameters quietly
 #' @param verbose logical. Decides if visual cues are displayed to the R console
 #' of the progress
-#' @param ... additional keyword arguments indicating the rows corresponding to
-#' elements in the seurat object metadata that should be filtered by.
-#' For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
-#' those in seurat clusters 1, 9, and 10. Or, if there is some column named
-#' "sample", then sample = c("A", "B") will conduct a run only on those
-#' corresponding cells. A useful application for this is to run the function
-#' many times, once for each sample, and plot them all together with [APOTCPlot]
-#' down the line.
-#' @param extra_filter character. An additional string that should be formatted
-#' *exactly* like a statement one would pass into [dplyr::filter] that does
-#' *additional* filtering to cells in the seurat object - on top of the other
-#' keyword arguments - based on the metadata. This is a more flexible
-#' alternative / addition to the filtering keyword arguments. For example, if
-#' one wanted to filter by the length of the amino acid sequence of TCRs, one
-#' could pass in something like `extra_filter = "nchar(CTaa) - 1 > 10"`
 #'
 #' @details
 #' Each APackOfTheClones run is uniquely identified by the parameters
@@ -83,34 +83,38 @@
 #' stored. The user can but is recommended heavily to not modify anything under
 #' the @misc$APackOfTheClones manually as it may cause unexpected behavior.
 #'
-#' @return A modified version of the input seurat object with a new object in
-#' the `@reduction` attribute named `apotc`, which harbors data necessary for
-#' visualizing the clonal expansion of the cells with the [APOTCPlot] function
+#' @return A modified version of the input seurat object, which harbors data
+#' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
+#' and has a friendly user interface to modify certain attributes with
+#' [AdjustAPOTC].
 #'
 #' @seealso [APOTCPlot], [AdjustAPOTC]
 #'
 #' @export
 #'
 #' @examples
-#' # unfinished
+#' data("combined_pbmc")
+#' combined_pbmc <- RunAPOTC(combined_pbmc, verbose = FALSE)
 #'
 RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
+    ...,
+    extra_filter = NULL,
+
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     order_clones = TRUE,
     scramble_clones = FALSE,
     try_place = FALSE,
-    repulse = FALSE,
+    repulse = TRUE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
+
     override = TRUE,
-    verbose = TRUE,
-    ...,
-    extra_filter = NULL
+    verbose = TRUE
 ) {
     call_time <- Sys.time()
 
@@ -140,19 +144,19 @@ RunAPOTC <- function(
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
+    if (verbose) message(paste("id for this run:", obj_id, "\n"))
+
     # run the packing algos
     apotc_obj <- ApotcData(
         seurat_obj, metadata_filter_string, clonecall, reduction_base,
         clone_scale_factor, rad_scale_factor
     )
 
-    if (verbose) message("Packing clones into clusters\n")
+    if (verbose) message("Packing clones into clusters")
 
     apotc_obj <- circlepackClones(
         apotc_obj, order_clones, scramble_clones, try_place, verbose
     )
-
-    if (verbose) message("Repulsing clusters\n")
 
     if (repulse) {
         apotc_obj <- repulseClusters(

@@ -74,7 +74,12 @@
 #'
 APOTCPlot <- function( # TODO also add a bool for whether one should get linked clones. also should have a export Getter. hope its fast in C++ :P
 	seurat_obj,
-	# need to decide how to handle getting the right plot. probably shouldnt use object id but the same args as before?
+	reduction_base = "umap",
+	clonecall = "strict",
+	...,
+	extra_filter = NULL,
+	object_id = NULL,
+
 	res = 360,
 	linetype = "blank",
 	use_default_theme = TRUE,
@@ -84,7 +89,7 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	label_size = 5,
 
 	add_size_legend = TRUE,
-	legend_sizes = c(1, 5, 50),
+	legend_sizes = "auto",
 	legend_position = "top_left", # can now also be simply a coord
 	legend_buffer = 1.5,
 	legend_color = "#808080",
@@ -92,26 +97,33 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	legend_label = "Clone sizes",
 	legend_text_size = 5
 ) {
+	reduction_base <- attempt_correction(reduction_base)
+	clonecall <- .theCall(seurat_obj@meta.data, clonecall)
+
+	if (should_compute(object_id)) {
+		object_id <- parse_to_object_id(
+			reduction_base = reduction_base, clonecall = clonecall,
+			varargs_list = list(...), metadata_filter = extra_filter
+		)
+	}
+
 	APOTCPlot_error_handler(hash::hash(as.list(environment())))
 
-	obj_id <- "TODO"
+	apotc_obj <- getApotcData(seurat_obj, object_id)
 
 	# convert clusterlists to dataframe and add colors
-	clusterlists <- seurat_obj@reductions[["apotc"]]@clusters
-	clusterlists <- df_full_join(clusterlists)
-	clusterlists <- extract_and_add_colors(seurat_obj, clusterlists) # will change
+	clusterlists_as_df <- df_full_join(apotc_obj@clusters)
+	clusterlists_as_df <- extract_and_add_colors(apotc_obj, clusterlists_as_df)
 
 	result_plot <- plot_clusters(
-		clusterlists, n = res, linetype = linetype,
+		clusterlists_as_df, n = res, linetype = linetype,
 		title = "Sizes of Clones Within Each Cluster", haslegend = FALSE,
 		void = FALSE, origin = FALSE
 	)
 
 	#set theme
 	if (use_default_theme) {
-		result_plot <- add_default_theme(
-			result_plot, seurat_obj@reductions[["apotc"]]@reduction_base
-		)
+		result_plot <- add_default_theme(result_plot, apotc_obj@reduction_base)
 	} else {
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
@@ -119,20 +131,28 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	# retain axis scales on the resulting plot. The function sucks tho
 	if (retain_axis_scales) {
 		result_plot <- suppressMessages(invisible(
-			retain_scale(seurat_obj, result_plot)
+			retain_scale(seurat_obj, reduction_base, result_plot)
 		))
 	}
 
 	if (add_size_legend) {
-		rad_scale <- seurat_obj@reductions[["apotc"]]@rad_scale_factor
-		clone_scale <- seurat_obj@reductions[["apotc"]]@clone_scale_factor
+		if (should_estimate(legend_sizes))
+			legend_sizes <- estimate_legend_sizes(apotc_obj)
 
 		result_plot <- insert_legend(
-			plt = result_plot, circ_scale_factor = clone_scale,
-			rad_decrease = convert_to_rad_decrease(rad_scale, clone_scale),
-			sizes = legend_sizes, pos = legend_position, buffer = legend_buffer,
-			color = legend_color, n = res, spacing = legend_spacing,
-			legend_label = legend_label, legend_textsize = legend_text_size
+			plt = result_plot,
+			circ_scale_factor = apotc_obj@clone_scale_factor,
+			rad_decrease = convert_to_rad_decrease(
+				apotc_obj@rad_scale_factor, apotc_obj@clone_scale_factor
+			),
+			sizes = legend_sizes,
+			pos = legend_position,
+			buffer = legend_buffer,
+			color = legend_color,
+			n = res,
+			spacing = legend_spacing,
+			legend_label = legend_label,
+			legend_textsize = legend_text_size
 		)
 	}
 
@@ -159,4 +179,3 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ylab(paste(label, 2, sep = "_")) +
 		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
-

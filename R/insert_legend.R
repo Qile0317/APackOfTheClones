@@ -28,6 +28,11 @@ calculate_legend_spacing <- function(spacing, plt, portion = 0.05) {
     spacing
 }
 
+estimate_legend_sizes <- function(apotc_obj) {
+    sizes <- unlist(as.numeric(apotc_obj@clone_sizes))
+    sort(unique(round(c(1, median(sizes), mean(sizes), max(sizes)))))
+}
+
 insert_legend <- function(
     plt,
     circ_scale_factor,
@@ -87,13 +92,9 @@ insert_legend <- function(
             r = "r",
             fill = "color"
         ),
-        linetype ="blank",
+        linetype = "blank",
         n = n
     )
 }
 
 # could put the ggplot color legend by sticking some points under something
-#insert_color_legend <- function(plt, seurat_obj) {
-    #yr <- get_yr(plt)
-    #seurat_obj@reductions[["apotc"]]
-#}

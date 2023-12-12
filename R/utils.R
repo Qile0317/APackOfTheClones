@@ -59,6 +59,8 @@ should_assume <- should_estimate
 
 should_change <- function(obj) !is.null(obj)
 
+should_compute <- function(x) is.null(x)
+
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
 }
@@ -79,12 +81,22 @@ is_seurat_or_sce_object <- function(obj) {
 
 # spelling related functions
 
+strip_spaces <- function(s) {
+    gsub(" ", "", s)
+}
+
 attempt_correction <- function(s) {
-    s <- tolower(s)
+    s <- strip_spaces(tolower(s))
     if (identical(s, "t-sne")) {
         s <- "tsne"
     }
-    s
+    if (any(s == c("umap", "tsne", "pca"))) {
+        return(s)
+    }
+    stop(paste(
+        "invalid reduction:", s, "did you mean:",
+        closest_word(s, c("umap", "tsne", "pca"))
+    ))
 }
 
 closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
@@ -166,6 +178,18 @@ init_list <- function(num_elements, init_val = NULL) {
         l[[i]] <- init_val
     }
     l
+}
+
+getlast <- function(x) {
+    UseMethod("getlast")
+}
+
+getlast.default <- function(x) {
+    x[length(x)]
+}
+
+getlast.list <- function(x) {
+    x[[length(x)]]
 }
 
 # S3 method to represent vectors as strings

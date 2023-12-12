@@ -121,11 +121,11 @@ plot_API <- function(
 
 # change the axis scales to fit the original plot approximately. Looks pretty bad atm.
 # A more advanced version could multiply axses by a small amount to retain ratios exactly
-retain_scale <- function(seurat_obj, ball_pack_plt, buffer = 0) {
+retain_scale <- function(seurat_obj, reduction, ball_pack_plt, buffer = 0) {
 
   test_reduction_plot <- Seurat::DimPlot(
     object = seurat_obj,
-    reduction = seurat_obj@reductions[["apotc"]]@reduction_base
+    reduction = reduction
   )
 
   # get current ranges
