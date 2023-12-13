@@ -219,6 +219,7 @@ clonal_expansion_plot <- function(...) {
 		when = "1.0.0",
 		what = I(
 			"visualizing clonal expansion with `clonal_expansion_plot`"
-		)
+		),
+		with = I("vizAPOTC")
 	)
 }

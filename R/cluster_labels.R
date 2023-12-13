@@ -24,7 +24,7 @@ insert_labels <- function(plt, apotc_obj, size) {
 	plt
 }
 
-# TODO: all needs to be fixed with obj_id
+# TODO: everything below needs to be fixed with obj_id
 
 modify_names <- function(seurat_obj, apotc_obj, modify_label, to_new_label) {
 	label_map <- hash::hash(modify_label, to_new_label)
@@ -86,25 +86,26 @@ move_label_coords <- function(seurat_obj, modify_label, to_new_coord) {
 #' @export
 #'
 #' @examples
+#' # TODO all of these need to be redone
 #' # rename "C0" and move it to x = 1, y = 2
-#' seurat_obj <- ModifyLabels(
+#' seurat_obj <- modifyLabels(
 #'     seurat_obj, modify_label = "C0",
 #'     to_new_label = "CD4+ CTL", to_new_coord = c(1, 2)
 #' )
 #'
 #' # rename multiple labels
-#' seurat_obj <- ModifyLabels(
+#' seurat_obj <- modifyLabels(
 #'     seurat_obj, modify_label = c("C4", "C9", "C2"),
 #'     to_new_label = c("T cm", "T cm 2", "T fh")
 #' )
 #'
 #' # shift multiple labels
-#' seurat_obj <- ModifyLabels(
+#' seurat_obj <- modifyLabels(
 #'     seurat_obj, modify_label = c("T cm 2", "T fh", "C12"),
 #'     to_nudge_by = list(c(1,1), c(4,3), c(0.2,-2))
 #' )
 #'
-ModifyLabels <- function(
+modifyLabels <- function(
 	seurat_obj, modify_label,
 	to_new_label = NULL, to_nudge_by = NULL, to_new_coord = NULL
 ) {

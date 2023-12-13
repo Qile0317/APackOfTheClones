@@ -28,8 +28,9 @@ end_progress_bar <- function(verbose = TRUE) {
     }
 }
 
-print_completion_time <- function(start_time, digits = 2) {
+print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
     end_time <- Sys.time()
+    if (newline) cat("\n")
     message(paste(
         "\nCompleted successfully, time elapsed:",
         round(as.numeric(end_time - start_time), digits),
@@ -38,10 +39,6 @@ print_completion_time <- function(start_time, digits = 2) {
 }
 
 # readability functions
-
-get_rna_assay_barcodes <- function(seurat_obj) {
-    seurat_obj@assays[["RNA"]]@data@Dimnames[[2]]
-}
 
 isnt_empty <- function(inp) !identical(inp, list())
 
@@ -85,6 +82,7 @@ strip_spaces <- function(s) {
     gsub(" ", "", s)
 }
 
+# attempt to correct a reduction name
 attempt_correction <- function(s) {
     s <- strip_spaces(tolower(s))
     if (identical(s, "t-sne")) {
@@ -144,7 +142,7 @@ extract_2d_list_row <- function(l, row_index) {
     row_vector
 }
 
-# add two lists of the same length elementwise where everything is the same length
+# add two lists of the same length elementwise where everything has same length
 add_numeric_lists <- function(l1, l2) {
     l <- vector("list", length(l1))
     for (i in seq_along(l1)) {

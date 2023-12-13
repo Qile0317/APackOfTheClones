@@ -117,8 +117,7 @@ RunAPOTC <- function(
     verbose = TRUE
 ) {
     call_time <- Sys.time()
-
-    if (verbose) message("Initializing APOTC run...\n")
+    if (verbose) message("Initializing APOTC run...")
 
     # compute inputs
     reduction_base <- attempt_correction(reduction_base)
@@ -126,7 +125,8 @@ RunAPOTC <- function(
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
         if (verbose) message(paste(
-            "Setting `clone_scale_factor` to", clone_scale_factor
+            "* Setting `clone_scale_factor` to",
+            round(clone_scale_factor, digits = 3)
         ))
     }
 
@@ -144,7 +144,7 @@ RunAPOTC <- function(
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
-    if (verbose) message(paste("id for this run:", obj_id, "\n"))
+    if (verbose) message(paste("* id for this run:", obj_id, "\n"))
 
     # run the packing algos
     apotc_obj <- ApotcData(
@@ -172,7 +172,7 @@ RunAPOTC <- function(
         seurat_obj, "RunAPOTC", command_obj = make_apotc_command(call_time)
     )
 
-    if (verbose) print_completion_time(call_time)
+    if (verbose) print_completion_time(call_time, newline = TRUE)
     seurat_obj
 }
 

@@ -97,13 +97,12 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	legend_label = "Clone sizes",
 	legend_text_size = 5
 ) {
-	reduction_base <- attempt_correction(reduction_base)
-	clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-
 	if (should_compute(object_id)) {
 		object_id <- parse_to_object_id(
-			reduction_base = reduction_base, clonecall = clonecall,
-			varargs_list = list(...), metadata_filter = extra_filter
+			reduction_base = attempt_correction(reduction_base),
+			clonecall = .theCall(seurat_obj@meta.data, clonecall),
+			varargs_list = list(...),
+			metadata_filter = extra_filter
 		)
 	}
 
@@ -157,13 +156,21 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	}
 
 	if (show_labels) {
-		result_plot <- insert_labels(result_plot, seurat_obj, label_size)
+		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
 	}
 
 	result_plot
 }
 
 APOTCPlot_error_handler <- function(args) {
+	if (!containsApotcRun(args$seurat_obj, args$object_id)) {
+		stop(paste(
+			"APackOfTheClones object with id", args$object_id,
+			"does not exist in the seurat object"
+		))
+	}
+	# TODO
+
 
 }
 

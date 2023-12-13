@@ -2,7 +2,7 @@
 % Please edit documentation in R/vizAPOTC.R
 \name{vizAPOTC}
 \alias{vizAPOTC}
-\title{TODO}
+\title{Directly visualize clonal expansion of a contig combined seurat object}
 \usage{
 vizAPOTC(
   seurat_obj,
@@ -159,5 +159,11 @@ A ggplot object of the APackOfTheClones clonal expansion plot of the
 seurat object
 }
 \description{
-TODO
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function combines the functionality of both \code{RunAPOTC} and \code{APOTCPlot}.
+Given a Seurat object, it first runs the APackOfTheClones method (\link{RunAPOTC})
+to compute clonal expansion information, and then generates a customizable
+ggplot2 object of the clonal expansion plot with a circle size legend
+(\link{APOTCPlot}).
 }

@@ -43,7 +43,7 @@ vizAPOTC <- function(
 
     add_size_legend = TRUE,
     legend_sizes = "auto",
-    legend_position = "top_left", # can now also be simply a coord
+    legend_position = "top_left",
     legend_buffer = 1.5,
     legend_color = "#808080",
     legend_spacing = "auto",
@@ -52,5 +52,49 @@ vizAPOTC <- function(
 
     verbose = TRUE
 ) {
-    # TODO
+    seurat_obj <- RunAPOTC(
+        seurat_obj,
+        reduction_base = reduction_base,
+        clonecall = clonecall,
+        ...,
+        extra_filter = extra_filter,
+
+        clone_scale_factor = clone_scale_factor,
+        rad_scale_factor = rad_scale_factor,
+        order_clones = order_clones,
+        scramble_clones = scramble_clones,
+        try_place = try_place,
+        repulse = repulse,
+        repulsion_threshold = repulsion_threshold,
+        repulsion_strength = repulsion_strength,
+        max_repulsion_iter = max_repulsion_iter,
+        verbose = verbose
+    )
+
+    if (verbose) message("Plotting...\n")
+
+    APOTCPlot(
+        seurat_obj,
+        reduction_base = NULL,
+        clonecall = NULL,
+        extra_filter = NULL,
+        object_id = getLastApotcDataId(seurat_obj),
+
+        res = res,
+        linetype = linetype,
+        use_default_theme = use_default_theme,
+        retain_axis_scales = retain_axis_scales,
+
+        show_labels = show_labels,
+        label_size = label_size,
+
+        add_size_legend = add_size_legend,
+        legend_sizes = legend_sizes,
+        legend_position = legend_position,
+        legend_buffer = legend_buffer,
+        legend_color = legend_color,
+        legend_spacing = legend_spacing,
+        legend_label = legend_label,
+        legend_text_size = legend_text_size
+    )
 }
