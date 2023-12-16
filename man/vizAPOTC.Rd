@@ -28,11 +28,12 @@ vizAPOTC(
   add_size_legend = TRUE,
   legend_sizes = "auto",
   legend_position = "top_left",
-  legend_buffer = 1.5,
+  legend_buffer = 0.2,
   legend_color = "#808080",
   legend_spacing = "auto",
   legend_label = "Clone sizes",
   legend_text_size = 5,
+  add_legend_background = FALSE,
   verbose = TRUE
 )
 }
@@ -150,6 +151,9 @@ estimated value depending on plot size}
 
 \item{legend_text_size}{numeric. The text size of the letters and numbers on
 the legend}
+
+\item{add_legend_background}{logical. If \code{TRUE}, will add a border around the
+legend and fill the background to be white, overlaying anything else existing.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress}

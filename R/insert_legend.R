@@ -11,14 +11,14 @@ insert_legend <- function(
     plt,
     apotc_obj,
     sizes,
-    pos, # the user input for the top coord of the legend. defaults to auto
+    pos,
     buffer,
     color = "#808080",
     n = 360,
-    spacing = "auto", # spacing should be a percentage of plot height
+    spacing = "auto", 
     legend_label = "Clone sizes",
     legend_textsize = 5,
-    legend_border = FALSE # TODO
+    do_add_legend_border = FALSE # TODO
 ) {
 
     # setup relevant variables
@@ -68,9 +68,11 @@ insert_legend <- function(
         label = legend_label, size = legend_textsize
     )
 
-    # add the background
-    if (legend_border) plt <- add_legend_backing(plt, spacing)
-
+    # add the background   
+    if (do_add_legend_border) {
+        plt <- add_legend_backing(plt, legend_df)
+    }
+    
     # add the side number labels
     plt <- plt + ggplot2::annotate(
         "text", x = legend_df[, "label_x"], y = legend_df[, "y"],
@@ -224,7 +226,11 @@ get_legend_title_coord <- function(legend_df, spacing) {
     )
 }
 
-add_legend_backing <- function(plt, legend_df, spacing) {
+add_legend_backing <- function(plt, legend_df) {
+    spacing <- 0.15
+    linewidth <- bound_num(
+        abs(get_xr(plt)[2] - get_xr(plt)[1]) * 0.002, 0.001, 0.1
+    )
     max_radius <- max_rad(legend_df)
 
     xmin <- get_circle_x(legend_df) - max_radius - spacing
@@ -235,15 +241,15 @@ add_legend_backing <- function(plt, legend_df, spacing) {
 
     # add the back border rectangle
     plt <- plt + ggplot2::geom_rect(aes(
-            xmin = xmin - spacing, xmax = xmax + spacing,
-            ymin = ymin + spacing, ymax = ymax - spacing,
-            color = "black"
+            xmin = xmin - linewidth, xmax = xmax + linewidth,
+            ymin = ymin + linewidth, ymax = ymax - linewidth,
+            fill = "black"
         ))
     
     # add the white inside
     plt + ggplot2::geom_rect(aes(
             xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
-            color = "white"
+            fill = "white"
         ))
 }
 

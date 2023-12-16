@@ -49,6 +49,7 @@ vizAPOTC <- function(
     legend_spacing = "auto",
     legend_label = "Clone sizes",
     legend_text_size = 5,
+    add_legend_background = FALSE,
 
     verbose = TRUE
 ) {
@@ -96,6 +97,7 @@ vizAPOTC <- function(
         legend_color = legend_color,
         legend_spacing = legend_spacing,
         legend_label = legend_label,
-        legend_text_size = legend_text_size
+        legend_text_size = legend_text_size,
+        add_legend_background = add_legend_background
     )
 }

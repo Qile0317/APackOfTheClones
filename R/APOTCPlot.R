@@ -49,6 +49,8 @@
 #' `"clone sizes`.
 #' @param legend_text_size numeric. The text size of the letters and numbers on
 #' the legend
+#' @param add_legend_background logical. If `TRUE`, will add a border around the
+#' legend and fill the background to be white, overlaying anything else existing.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object
@@ -95,7 +97,8 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	legend_color = "#808080",
 	legend_spacing = "auto",
 	legend_label = "Clone sizes",
-	legend_text_size = 5
+	legend_text_size = 5,
+	add_legend_background = FALSE
 ) {
 	if (should_compute(object_id)) {
 		object_id <- parse_to_object_id(
@@ -145,7 +148,8 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 			n = res,
 			spacing = legend_spacing,
 			legend_label = legend_label,
-			legend_textsize = legend_text_size
+			legend_textsize = legend_text_size,
+			do_add_legend_border = add_legend_background
 		)
 	}
 
