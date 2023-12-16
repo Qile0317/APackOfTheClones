@@ -15,6 +15,9 @@
 #' 
 #' @inherit APOTCPlot return
 #' @export
+#'
+#' @examples
+#' # unfinished
 #' 
 vizAPOTC <- function(
     seurat_obj,
@@ -77,9 +80,6 @@ vizAPOTC <- function(
 
     APOTCPlot(
         seurat_obj,
-        reduction_base = NULL,
-        clonecall = NULL,
-        extra_filter = NULL,
         object_id = getLastApotcDataId(seurat_obj),
 
         res = res,

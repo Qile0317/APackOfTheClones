@@ -27,11 +27,9 @@ insert_legend <- function(
     if (should_estimate(spacing))
         spacing <- calculate_legend_spacing(spacing, plt, rad_decrease)
 
-    if (should_estimate(sizes))
-        sizes <- estimate_legend_sizes(apotc_obj)
+    if (should_estimate(sizes)) sizes <- estimate_legend_sizes(apotc_obj)
     
-    if (!is.numeric(pos))
-        pos <- correct_legend_coord_str(pos)
+    if (!is.numeric(pos)) pos <- correct_legend_coord_str(pos)
 
     # calculate circle positions
 
@@ -70,7 +68,7 @@ insert_legend <- function(
 
     # add the background   
     if (do_add_legend_border) {
-        plt <- add_legend_backing(plt, legend_df)
+        plt <- add_legend_backing(plt, legend_df) # FIXME smn wrong for more than 1 circle
     }
     
     # add the side number labels
@@ -151,14 +149,12 @@ get_unpositioned_y_coords <- function(radii, spacing) {
 }
 
 get_legend_dims <- function(unpositioned_legend_df) {
-    num_circles <- nrow(unpositioned_legend_df)
-    
     c(
         "x" = max_rad(unpositioned_legend_df) +
-            unpositioned_legend_df[num_circles, "label_x"],
+            get_label_x(unpositioned_legend_df),
 
-        "y" = unpositioned_legend_df[1, "rad"] +
-            unpositioned_legend_df[num_circles, "y"] +
+        "y" = min_rad(unpositioned_legend_df) +
+            abs(max_y(unpositioned_legend_df)) +
             max_rad(unpositioned_legend_df)
     )
 }
@@ -170,7 +166,6 @@ min_rad <- function(legend_df) legend_df[1, "rad"]
 max_rad <- function(legend_df) legend_df[nrow(legend_df), "rad"]
 
 get_circle_x <- function(legend_df) legend_df[1, "circle_x"]
-
 get_label_x <- function(legend_df) legend_df[1, "label_x"]
 
 # get the starting coordinate for the top left center of the *first circle*
@@ -231,8 +226,8 @@ add_legend_backing <- function(plt, legend_df) {
     xmin <- get_circle_x(legend_df) - max_radius - spacing
     xmax <- get_label_x(legend_df) + max_radius + spacing
 
-    ymin <- max_y(legend_df) + max_radius + spacing
-    ymax <- min_y(legend_df) - min_rad(legend_df) - spacing
+    ymin <- max_y(legend_df) - max_radius - spacing
+    ymax <- min_y(legend_df) + min_rad(legend_df) + spacing
 
     # add the back border rectangle
     plt <- plt + ggplot2::geom_rect(aes(
