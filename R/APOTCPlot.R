@@ -50,7 +50,7 @@
 #' @param legend_text_size numeric. The text size of the letters and numbers on
 #' the legend
 #' @param add_legend_background logical. If `TRUE`, will add a border around the
-#' legend and fill the background to be white, overlaying anything else existing.
+#' legend and fill the background to be white, overlaying anything else.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object

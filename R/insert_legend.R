@@ -60,7 +60,7 @@ insert_legend <- function(
         to_top_left_destination_coord = pos
     )
 
-    label_coord <- get_legend_title_coord(legend_df, spacing)
+    label_coord <- get_legend_title_coord(legend_df, legend_dims, spacing)
 
     # add the legend label on top
     plt <- plt + ggplot2::annotate(
@@ -216,14 +216,9 @@ move_unpositioned_legend_df <- function(
 }
 
 # get the coordinate in the middle of the top of the legend
-get_legend_title_coord <- function(legend_df, spacing) {
-    c(
-        "x" = abs(
-            legend_df[1, "label_x"] -
-                legend_df[1, "circle_x"] - max_rad(legend_df)
-        ),
-        "y" = legend_df[1, "y"] - spacing
-    )
+get_legend_title_coord <- function(legend_df, legend_dims, spacing) {
+    c("x" = get_circle_x(legend_df) - max_rad(legend_df) + (legend_dims[1] / 2),
+      "y" = min_y(legend_df) + min_rad(legend_df) + spacing)
 }
 
 add_legend_backing <- function(plt, legend_df) {

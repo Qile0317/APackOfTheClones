@@ -85,7 +85,7 @@ estimated value depending on plot size}
 the legend}
 
 \item{add_legend_background}{logical. If \code{TRUE}, will add a border around the
-legend and fill the background to be white, overlaying anything else existing.}
+legend and fill the background to be white, overlaying anything else.}
 }
 \value{
 A ggplot object of the APackOfTheClones clonal expansion plot of the
