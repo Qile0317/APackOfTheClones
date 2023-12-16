@@ -175,6 +175,12 @@ get_dx_dy_list <- function(old_coord_list, new_coord_list) {
 	output
 }
 
+# internal getters
+
+get_rad_decrease <- function(apotc_obj) {
+	apotc_obj@clone_scale_factor * (1 - apotc_obj@rad_scale_factor)
+}
+
 # should have getters and setters
 #
 # # should have a matchcolors func that takes into accoutn cluster names

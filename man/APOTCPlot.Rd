@@ -29,7 +29,7 @@ APOTCPlot(
 }
 \arguments{
 \item{seurat_obj}{A seurat object that has been integrated with clonotype
-data and has had \code{RunAPOTC} ran on it.}
+data and has had a valid run of \link{RunAPOTC}.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

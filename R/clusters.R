@@ -32,14 +32,23 @@ find_centroids <- function(df) {
 
 # get reduction centroids from seurat obj, where the barcodes in the reduction
 # cell embeddings will be filtered to be exactly the same as those left in the
-# metadata incase it was additionally filtered
+# metadata incase it was additionally filtered.
 # TODO test if barcodes are properly filtered
-get_cluster_centroids <- function(seurat_obj, reduction = "umap") {
+get_cluster_centroids <- function(
+  seurat_obj, reduction = "umap", passed_in_reduc_obj = FALSE
+) {
+
+  if (passed_in_reduc_obj) {
+    reduc_coords <- reduction@cell.embeddings[, 1:2]
+  } else {
+    reduc_coords <- get_2d_embedding(seurat_obj, reduction)
+  }
+
   find_centroids(
     data.frame(
       rcppFilterReductionCoords(
         seuratBarcodes = rownames(seurat_obj@meta.data),
-        reductionCoords = get_2d_embedding(seurat_obj, reduction)
+        reductionCoords = reduc_coords
       ),
       seurat_obj@meta.data[["seurat_clusters"]]
     )

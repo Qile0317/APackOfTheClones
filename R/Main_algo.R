@@ -4,7 +4,7 @@ pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_decrease = 0,
     ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE
 ){
-  output_list <- vector("list", num_clusters)
+  output_list <- init_list(num_elements = num_clusters, init_val = list())
 
   # initialize progress bar stats
   if (verbose) {
@@ -17,7 +17,6 @@ pack_into_clusterlists <- function(
       input_rad_vec <- sizes[[i]]
 
       if (!isnt_empty(input_rad_vec) || is.null(input_rad_vec)) {
-          output_list[[i]] <- list()
           next
       }
 
@@ -29,8 +28,10 @@ pack_into_clusterlists <- function(
           verbose = FALSE
       )
 
-      packed_clone_count <- packed_clone_count + length(input_rad_vec)
-      if (verbose) progress_bar(packed_clone_count, total_clone_count)
+      if (verbose) {
+        packed_clone_count <- packed_clone_count + length(input_rad_vec)
+        progress_bar(packed_clone_count, total_clone_count)
+      } 
   }
 
   if (verbose) message("")

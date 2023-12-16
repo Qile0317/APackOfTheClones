@@ -58,6 +58,10 @@ should_change <- function(obj) !is.null(obj)
 
 should_compute <- function(x) is.null(x)
 
+strip_spaces <- function(s) {
+    gsub(" ", "", s)
+}
+
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
 }
@@ -76,28 +80,29 @@ is_seurat_or_sce_object <- function(obj) {
     is_seurat_object(obj) || is_sce_object(obj)
 }
 
-# spelling related functions
+# math functions
 
-strip_spaces <- function(s) {
-    gsub(" ", "", s)
+bound_num <- function(num, lowerbound, upperbound) {
+    min(max(num, lowerbound), upperbound)
 }
 
-# attempt to correct a reduction name
-attempt_correction <- function(s) {
+# spelling related functions
+
+user_attempt_correction <- function(s, strset, stop_msg_start) {
     s <- strip_spaces(tolower(s))
-    if (identical(s, "t-sne")) {
-        s <- "tsne"
-    }
-    if (any(s == c("umap", "tsne", "pca"))) {
+    if (any(s == strset)) {
         return(s)
     }
     stop(paste(
-        "invalid reduction:", s, "did you mean:",
-        closest_word(s, c("umap", "tsne", "pca"))
+        stop_msg_start,
+        ": '", s, "', did you mean: ",
+        closest_word(s, strset),
+        sep = ""
     ))
 }
 
 closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
+    strset <- unique(strset)
     strset_lowercase <- tolower(strset)
     s <- tolower(s)
 

@@ -10,7 +10,7 @@
 #' parameters can be adjusted with the [AdjustAPOTC] function.
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
-#' data and has had `RunAPOTC` ran on it.
+#' data and has had a valid run of [RunAPOTC].
 #' @param res The number of points on the generated path per full circle. From
 #' plot viewers, if circles seem slightly too pixelated, it is recommended to
 #' first try to export the plot as an `.svg` before increasing `res` due to
@@ -91,7 +91,7 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	add_size_legend = TRUE,
 	legend_sizes = "auto",
 	legend_position = "top_left", # can now also be simply a coord
-	legend_buffer = 1.5,
+	legend_buffer = 0.2,
 	legend_color = "#808080",
 	legend_spacing = "auto",
 	legend_label = "Clone sizes",
@@ -135,15 +135,9 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	}
 
 	if (add_size_legend) {
-		if (should_estimate(legend_sizes))
-			legend_sizes <- estimate_legend_sizes(apotc_obj)
-
 		result_plot <- insert_legend(
 			plt = result_plot,
-			circ_scale_factor = apotc_obj@clone_scale_factor,
-			rad_decrease = convert_to_rad_decrease(
-				apotc_obj@rad_scale_factor, apotc_obj@clone_scale_factor
-			),
+			apotc_obj = apotc_obj,
 			sizes = legend_sizes,
 			pos = legend_position,
 			buffer = legend_buffer,

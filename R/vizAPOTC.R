@@ -44,7 +44,7 @@ vizAPOTC <- function(
     add_size_legend = TRUE,
     legend_sizes = "auto",
     legend_position = "top_left",
-    legend_buffer = 1.5,
+    legend_buffer = 0.2,
     legend_color = "#808080",
     legend_spacing = "auto",
     legend_label = "Clone sizes",
@@ -68,6 +68,7 @@ vizAPOTC <- function(
         repulsion_threshold = repulsion_threshold,
         repulsion_strength = repulsion_strength,
         max_repulsion_iter = max_repulsion_iter,
+        override = TRUE,
         verbose = verbose
     )
 

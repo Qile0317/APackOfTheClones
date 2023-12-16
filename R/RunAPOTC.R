@@ -20,9 +20,9 @@
 #' generated, the circular packing information can be modified
 #' with the [AdjustAPOTC] function.
 #'
-#' @param seurat_obj Seurat object with one or more dimension reductions. Must
-#' already have been integrated with a T cell library via
-#' `integrate_tcr(seurat_obj, tcr_df)`
+#' @param seurat_obj Seurat object with one or more dimension reductions and
+#' already have been integrated with a TCR/BCR library with
+#' [combineSeuratExpression] or [scRepertoire::combineExpression]
 #' @param reduction_base character. The seurat reduction to base the clonal
 #' expansion plotting on. Defaults to `'umap'` but can also be `'tsne'` or
 #' `'pca'`. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
@@ -122,6 +122,9 @@ RunAPOTC <- function(
     # compute inputs
     reduction_base <- attempt_correction(reduction_base)
 
+    #clonecall <- scRepertoire:::.theCall(clonecall, seurat_obj@meta.data)
+    clonecall <- .convertClonecall(clonecall)
+
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
         if (verbose) message(paste(
@@ -129,9 +132,6 @@ RunAPOTC <- function(
             round(clone_scale_factor, digits = 3)
         ))
     }
-
-    #clonecall <- scRepertoire:::.theCall(clonecall, seurat_obj@meta.data)
-    clonecall <- .convertClonecall(clonecall)
 
     metadata_filter_string <- parse_to_metadata_filter_str(
         metadata_filter = extra_filter, varargs_list = list(...)
@@ -155,7 +155,8 @@ RunAPOTC <- function(
     if (verbose) message("Packing clones into clusters")
 
     apotc_obj <- circlepackClones(
-        apotc_obj, order_clones, scramble_clones, try_place, verbose
+        apotc_obj = apotc_obj, ORDER = order_clones, scramble = scramble_clones,
+        try_place = try_place, verbose = verbose
     )
 
     if (repulse) {
