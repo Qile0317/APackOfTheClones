@@ -171,3 +171,7 @@ to compute clonal expansion information, and then generates a customizable
 ggplot2 object of the clonal expansion plot with a circle size legend
 (\link{APOTCPlot}).
 }
+\examples{
+# unfinished
+
+}

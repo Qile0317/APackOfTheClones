@@ -42,10 +42,6 @@ deprecation_docstring <- function() {
 #' @return Returns a new Seurat object with new elements in the metadata
 #'
 #' @export
-#' @importFrom grDevices hcl
-#' @importFrom stats aggregate
-#' @importFrom stats na.omit
-#' @importFrom utils setTxtProgressBar
 #' @importFrom data.table .GRP
 #' @importFrom data.table .SD
 #'
@@ -102,7 +98,7 @@ dev_integrate_tcr <- function(
 	# concatenated string with  the information we want to keep
 
 	if (verbose) {
-		tcr_collapsed <- tcr[, {setTxtProgressBar(pb, .GRP);
+		tcr_collapsed <- tcr[, {utils::setTxtProgressBar(pb, .GRP);
 			lapply(.SD, data_concater)},
 			by = "barcode"
 		]
@@ -113,8 +109,8 @@ dev_integrate_tcr <- function(
 	# assign rownames for integration and add metadata
 	rownames(tcr_collapsed) <- tcr_collapsed$barcode
 
-	# remove NA? - doesnt do anything
-	tcr_collapsed <- na.omit(tcr_collapsed)
+	# remove NA
+	tcr_collapsed <- stats::na.omit(tcr_collapsed)
 
 	seurat_obj <- Seurat::AddMetaData(
 		seurat_obj,
@@ -157,7 +153,9 @@ dev_integrate_tcr <- function(
 #' data("mini_clonotype_data","mini_seurat_obj")
 #'
 #' # produce an integrated seurat_object
-#' integrated_seurat_object <- integrate_tcr(mini_seurat_obj, mini_clonotype_data)
+#' integrated_seurat_object <- integrate_tcr(
+#'     mini_seurat_obj, mini_clonotype_data
+#' )
 #' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
 #' clonotype_counts
 #'
@@ -189,13 +187,19 @@ count_clone_sizes <- function(integrated_seurat_obj) {
 		"clonotype_ids" = integrated_seurat_obj@meta.data[["raw_clonotype_id"]]
 	)
 
-	freq_df <- aggregate(clonotype_ids ~ clusters, data = df, function(x) table(x))
+	freq_df <- stats::aggregate(
+		clonotype_ids ~ clusters, data = df, function(x) table(x)
+	)
 
-	num_clusters <- length(levels(integrated_seurat_obj@meta.data[["seurat_clusters"]]))
-	freq <- vector("list", num_clusters) # each element initialzes to NULL
-	for (i in 1:nrow(freq_df)) {
+	num_clusters <- length(levels(
+		integrated_seurat_obj@meta.data[["seurat_clusters"]]
+	))
+
+	freq <- vector("list", num_clusters)
+	for (i in seq_len(nrow(freq_df))) {
 		freq[[freq_df[[1]][i]]] <- table(as.numeric(freq_df[[2]][[i]]))
 	}
+	
 	freq
 }
 

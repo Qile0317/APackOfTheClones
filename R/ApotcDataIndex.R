@@ -92,9 +92,12 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stored under under @misc[["APackOfTheClones"]][[id]]
 
+utils::globalVariables(c(".idSepStr", ".idNullStr"))
+.idSepStr = ";"
+.idNullStr = "_"
+
 parse_to_object_id <- function(
-    reduction_base, clonecall, varargs_list, metadata_filter,
-    .idSepStr = ";", .idNullStr = "_"
+    reduction_base, clonecall, varargs_list, metadata_filter
 ) {
 	object_id <- paste(reduction_base, .idSepStr, clonecall, .idSepStr, sep = "")
 
@@ -137,6 +140,8 @@ varargs_list_to_id_segment <- function(varargs_list) {
     paste(sort(segments), collapse = ",")
 }
 
+#obj_id_to_readable_str
+
 # getting and setting
 
 containsApotcRun <- function(seurat_obj, obj_id) {
@@ -154,20 +159,39 @@ setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
 
 #' @title
 #' Get all object ids of previous RunAPOTC runs on a seurat object
-#' 
+#'
 #' @description
 #' A convenience function to get all object ids of previous RunAPOTC run IDs
-#' 
+#'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
 #' order of the functions being called.
-#' 
-#' @return a character vector of all object ids of previous RunAPOTC runs
+#'
+#' @return a character vector of all object ids of previous RunAPOTC runs, in
+#' the order they were ran.
 #' @export
 #' 
 #' @example
-#' # TODO
-#' 
-getApotcDataId <- function(seurat_obj) {
+# ' pbmc <- RunAPOTC(
+# '     seurat_obj = get(data("combined_pbmc")),
+# '     reduction_base = "umap",
+# '     clonecall = "strict",
+# '     verbose = FALSE
+# ' )
+#'
+#' getApotcDataIds(pbmc)
+#' #> [1] "umap;CTstrict;_;_"
+#'
+#' pbmc <- RunAPOTC(
+#'     seurat_obj = pbmc,
+#'     reduction_base = "umap",
+#'     clonecall = "gene",
+#'     verbose = FALSE
+#' )
+#'
+#' getApotcDataIds(pbmc)
+#' #> [1] "umap;CTstrict;_;_" "umap;CTgene;_;_"
+#'
+getApotcDataIds <- function(seurat_obj) {
     if (!is_seurat_object(seurat_obj)) {
         stop("input must be a seurat object")
     }
@@ -179,21 +203,21 @@ getApotcDataId <- function(seurat_obj) {
 }
 
 #' @title
-#' Get the object id of the last RunAPOTC run on a seurat object
-#' 
+#' Get the object id of the most recent RunAPOTC run on a seurat object
+#'
 #' @description
-#' A convenience function to get the last object ids of the previous RunAPOTC
-#' run, to be used by [APOTCPlot] and [AdjustAPOTC]
-#' 
+#' A convenience function to get the object id of the most recent valid
+#' [RunAPOTC] run, to be used by [APOTCPlot] and [AdjustAPOTC]
+#'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
 #' order of the functions being called.
-#' 
-#' @return a character of the object id of the last RunAPOTC call
+#'
+#' @return a character of the object id of the last [RunAPOTC] call
 #' @export
 #' 
 #' @example
 #' # TODO
 #' 
 getLastApotcDataId <- function(seurat_obj) {
-    getlast(getApotcDataId(seurat_obj))
+    getlast(getApotcDataIds(seurat_obj))
 }

@@ -30,6 +30,9 @@ df_full_join <- function(clstr_list) {
     df
 }
 
+get_plottable_df_with_color <- function(apotc_data) {
+    extract_and_add_colors(apotc_data, df_full_join(apotc_data@clusters))
+}
 
 # result plotting function. clusters is a list of clusterlists TRANSFORM into a
 # dataframe, which are clusters. A cluster list includes x, y, rad, centroid,
@@ -39,7 +42,8 @@ plot_clusters <- function(
   clusters, n = 360, linetype ="blank",
   title = "Sizes of clones within each cluster",
   haslegend = FALSE, void = TRUE,
-  origin = FALSE){
+  origin = FALSE
+){
 
   if (!origin) {
     p1 <- ggplot2::ggplot(data = clusters) +
@@ -53,7 +57,7 @@ plot_clusters <- function(
       ggplot2::scale_fill_identity() +
       ggplot2::labs(title = title) +
       ggplot2::coord_fixed()
-  }else {
+  } else {
     p1 <- ggplot2::ggplot(
       clusters,
       mapping = apotc_aes_string(x = "x", y = "y")
@@ -70,56 +74,18 @@ plot_clusters <- function(
   return(p1 + ggplot2::theme(legend.position = "none"))
 }
 
-# not rlly needed anymore
-plot_API <- function(
-  sizes, # list of size vectors,[[1]] c(a,b,..)
-  centroids, # centroids of size vectors [[1]] c(x,y)
-  num_clusters,
-  rad_decrease = 0,
-  ORDER = TRUE,
-  scramble = FALSE,
-  try_place = FALSE,
-  progbar = TRUE,
-  repulse = FALSE,
-  thr = 1,
-  G = 1,
-  max_repulsion_iter = 10,
-  n = 360,
-  linetype = "blank",
-  plot_title = "Sizes of clones within each cluster",
-  haslegend = TRUE,
-  void = TRUE,
-  origin = FALSE,
-  debug_mode = FALSE
-) {
+add_default_theme <- function(plt, reduction) {
+	label_hashmap <- hash::hash(
+		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
+	)
+	label <- label_hashmap[[reduction]]
 
-  ans <- pack_into_clusterlists(
-    sizes, centroids, num_clusters, rad_decrease, ORDER, scramble, try_place,
-    progbar
-  )
-
-  if (repulse) {
-    if(progbar){
-      message(
-        paste("\nrepulsing all clusters | max iterations =", max_repulsion_iter)
-      )
-    }
-    ans <- repulse_cluster(
-      ans, thr = thr, G = G, max_iter = max_repulsion_iter, verbose = progbar
-    )
-  }
-
-  #joining list into df, add color, then plot.
-  ans <- df_full_join(ans)
-  ans <- insert_colors(ans, num_clusters)
-
-  plt <- plot_clusters(
-    ans, n = n, linetype = linetype, title = plot_title, haslegend = haslegend,
-    void = void, origin = origin
-  )
-  plt
+	plt +
+		ggplot2::theme_classic() +
+		ggplot2::xlab(paste(label, 1, sep = "_")) +
+		ggplot2::ylab(paste(label, 2, sep = "_")) +
+		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
-
 
 # change the axis scales to fit the original plot approximately. Looks pretty bad atm.
 # A more advanced version could multiply axses by a small amount to retain ratios exactly
@@ -153,4 +119,3 @@ retain_scale <- function(seurat_obj, reduction, ball_pack_plt, buffer = 0) {
     )
   )
 }
-

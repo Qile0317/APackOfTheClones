@@ -56,7 +56,7 @@ get_rna_assay_barcodes <- function(seurat_obj) {
 # seurat cluster related functions
 
 count_num_clusters <- function(seurat_obj) {
-  length(unique(seurat_obj@meta.data[["seurat_clusters"]]))
+  data.table::uniqueN((seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 get_num_total_clusters <- function(seurat_obj) {
@@ -88,11 +88,9 @@ user_get_reduc_obj <- function(seurat_obj, reduction) {
 
   reduction <- attempt_correction(reduction)
 
-  if (!any(names(seurat_obj@reductions) == reduction)) {
+  if (!is_reduction_name(reduction)) {
     stop(paste("A", reduction, "has not been ran on the seurat object"))
   }
-
-  print(reduction)
 
   seurat_obj@reductions[[reduction]]
 }

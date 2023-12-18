@@ -16,6 +16,16 @@
 #' in the metadata, and new results will be stored in addition to other runs
 #' the users may have done.
 #'
+#' Each APackOfTheClones run is uniquely identified by the parameters
+#' `reduction_base`, `clonecall`, `extra_filter`, and any additional keywords
+#' passed to filter the metadata. Each distinct run result is stored in the
+#' seurat object and has an associated Id generated from the aforementioned
+#' parameters. To view the id of the latest run, call [getLastApotcDataId].
+#' To view all the ids of previous runs, call [getApotcDataIds]. To work further
+#' with a specific run (most importantly, plotting), the user can use this id
+#' in the arguments with is slightly more convinient than passing in the
+#' original RunAPOTC parameters again but both ways work.
+#'
 #' If the user wishes to manually customize/fix the expansion plot
 #' generated, the circular packing information can be modified
 #' with the [AdjustAPOTC] function.
@@ -74,14 +84,12 @@
 #' of the progress
 #'
 #' @details
-#' Each APackOfTheClones run is uniquely identified by the parameters
-#' `reduction_base`, `clonecall`, `extra_filter`, and any additional keywords
-#' passed to filter the metadata. Each distinct run is stored in the seurat
-#' object under the `@misc` slot in a list named `"APackOfTheClones"`, where
-#' each list element is an instance of the [ApotcData] class. Each element is
-#' named with an object id which is generated from the aforementioned parameters
-#' stored. The user can but is recommended heavily to not modify anything under
-#' the @misc$APackOfTheClones manually as it may cause unexpected behavior.
+#' All APackOfTheClones run data is stored in the seurat object under
+#' `seurat_object@misc$APackOfTheClones`, which is a list of [ApotcData] objects
+#' with each element corresponding to a unique run. The id of each run is the
+#' name of each element in the list. The user is ***recommended heavily*** to
+#' not manually modify anything as it may cause unexpected behavior with
+#' many other functions.
 #'
 #' @return A modified version of the input seurat object, which harbors data
 #' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
@@ -144,7 +152,11 @@ RunAPOTC <- function(
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
-    if (verbose) message(paste("* id for this run:", obj_id, "\n"))
+    if (verbose) {
+        message(paste("* id for this run:", obj_id, "\n"))
+        if (override && containsApotcRun(seurat_obj, obj_id))
+            message("* overriding results of the previous run\n")
+    }
 
     # run the packing algos
     apotc_obj <- ApotcData(

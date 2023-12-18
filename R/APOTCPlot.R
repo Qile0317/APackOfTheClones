@@ -100,6 +100,9 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 	legend_text_size = 5,
 	add_legend_background = FALSE
 ) {
+
+	APOTCPlot_error_handler(hash::hash(as.list(environment())))
+
 	if (should_compute(object_id)) {
 		object_id <- parse_to_object_id(
 			reduction_base = attempt_correction(reduction_base),
@@ -109,18 +112,18 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 		)
 	}
 
-	APOTCPlot_error_handler(hash::hash(as.list(environment())))
+	
 
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 
-	# convert clusterlists to dataframe and add colors
-	clusterlists_as_df <- df_full_join(apotc_obj@clusters)
-	clusterlists_as_df <- extract_and_add_colors(apotc_obj, clusterlists_as_df)
-
 	result_plot <- plot_clusters(
-		clusterlists_as_df, n = res, linetype = linetype,
-		title = "Sizes of Clones Within Each Cluster", haslegend = FALSE,
-		void = FALSE, origin = FALSE
+		clusters = get_plottable_df_with_color(apotc_obj),
+		n = res,
+		linetype = linetype,
+		title = "Sizes of Clones Within Each Cluster",
+		haslegend = FALSE,
+		void = FALSE,
+		origin = FALSE
 	)
 
 	#set theme
@@ -153,6 +156,8 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 		)
 	}
 
+	# TODO clonal linking here
+
 	if (show_labels) {
 		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
 	}
@@ -162,6 +167,7 @@ APOTCPlot <- function( # TODO also add a bool for whether one should get linked 
 
 APOTCPlot_error_handler <- function(args) {
 	if (!containsApotcRun(args$seurat_obj, args$object_id)) {
+
 		stop(paste(
 			"APackOfTheClones object with id", args$object_id,
 			"does not exist in the seurat object"
@@ -170,17 +176,4 @@ APOTCPlot_error_handler <- function(args) {
 	# TODO
 
 
-}
-
-add_default_theme <- function(plt, reduction) {
-	label_hashmap <- hash::hash(
-		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
-	)
-	label <- label_hashmap[[reduction]]
-
-	plt +
-		ggplot2::theme_classic() +
-		ggplot2::xlab(paste(label, 1, sep = "_")) +
-		ggplot2::ylab(paste(label, 2, sep = "_")) +
-		ggplot2::ggtitle("Sizes of clones within each cluster")
 }

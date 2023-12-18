@@ -2,7 +2,7 @@
 % Please edit documentation in R/ApotcDataIndex.R
 \name{getLastApotcDataId}
 \alias{getLastApotcDataId}
-\title{Get the object id of the last RunAPOTC run on a seurat object}
+\title{Get the object id of the most recent RunAPOTC run on a seurat object}
 \usage{
 getLastApotcDataId(seurat_obj)
 }
@@ -11,9 +11,9 @@ getLastApotcDataId(seurat_obj)
 order of the functions being called.}
 }
 \value{
-a character of the object id of the last RunAPOTC call
+a character of the object id of the last \link{RunAPOTC} call
 }
 \description{
-A convenience function to get the last object ids of the previous RunAPOTC
-run, to be used by \link{APOTCPlot} and \link{AdjustAPOTC}
+A convenience function to get the object id of the most recent valid
+\link{RunAPOTC} run, to be used by \link{APOTCPlot} and \link{AdjustAPOTC}
 }

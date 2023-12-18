@@ -58,9 +58,7 @@ should_change <- function(obj) !is.null(obj)
 
 should_compute <- function(x) is.null(x)
 
-strip_spaces <- function(s) {
-    gsub(" ", "", s)
-}
+strip_spaces <- function(s) gsub(" ", "", s)
 
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
@@ -197,24 +195,42 @@ getlast.list <- function(x) {
 
 # S3 method to represent vectors as strings
 
-repr_as_string <- function(input_vector, ...) {
+repr_as_string <- function(input, ...) {
     UseMethod("repr_as_string")
 }
 
-repr_as_string.character <- function(input_vector, ...) {
-    to_string_rep_with_insert(v = input_vector, insert = "'")
+repr_as_string.character <- function(input, ...) {
+    to_string_rep_with_insert(v = input, insert = "'")
 }
 
-repr_as_string.default <- function(input_vector, ...) {
-    to_string_rep_with_insert(v = input_vector, insert = "")
+repr_as_string.default <- function(input, ...) {
+    to_string_rep_with_insert(v = input, insert = "")
 }
 
+# represent vector as string - doesnt take into account of names!
 to_string_rep_with_insert <- function(v, insert) {
+    if (length(v) == 1) {
+        return(paste(insert, v, insert, sep = ""))
+    }
+
     output <- ""
     for (x in v) {
         output <- paste(output, insert, x, insert, ",", sep = "")
     }
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
+}
+
+repr_as_string.list <- function(input, ...) {
+    list_names <- names(input)
+    named <- !is.null(list_names)
+    output <- ""
+
+    for (i in seq_along(input)) {
+        if (named && list_names[i] != "")
+            output <- paste(output, list_names[i], "=", sep = "")
+        output <- paste(output, repr_as_string(input[[i]]), ",", sep = "")
+    }
+    paste("list(", substr(output, 1, nchar(output) - 1), ")", sep = "")
 }
 
 # R interface function for checking if metadata names to be added overlaps with

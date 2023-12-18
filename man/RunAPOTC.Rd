@@ -113,19 +113,27 @@ keyword arguments can be used to filter the cells by certain conditions
 in the metadata, and new results will be stored in addition to other runs
 the users may have done.
 
+Each APackOfTheClones run is uniquely identified by the parameters
+\code{reduction_base}, \code{clonecall}, \code{extra_filter}, and any additional keywords
+passed to filter the metadata. Each distinct run result is stored in the
+seurat object and has an associated Id generated from the aforementioned
+parameters. To view the id of the latest run, call \link{getLastApotcDataId}.
+To view all the ids of previous runs, call \link{getApotcDataIds}. To work further
+with a specific run (most importantly, plotting), the user can use this id
+in the arguments with is slightly more convinient than passing in the
+original RunAPOTC parameters again but both ways work.
+
 If the user wishes to manually customize/fix the expansion plot
 generated, the circular packing information can be modified
 with the \link{AdjustAPOTC} function.
 }
 \details{
-Each APackOfTheClones run is uniquely identified by the parameters
-\code{reduction_base}, \code{clonecall}, \code{extra_filter}, and any additional keywords
-passed to filter the metadata. Each distinct run is stored in the seurat
-object under the \verb{@misc} slot in a list named \code{"APackOfTheClones"}, where
-each list element is an instance of the \link{ApotcData} class. Each element is
-named with an object id which is generated from the aforementioned parameters
-stored. The user can but is recommended heavily to not modify anything under
-the @misc$APackOfTheClones manually as it may cause unexpected behavior.
+All APackOfTheClones run data is stored in the seurat object under
+\code{seurat_object@misc$APackOfTheClones}, which is a list of \link{ApotcData} objects
+with each element corresponding to a unique run. The id of each run is the
+name of each element in the list. The user is \emph{\strong{recommended heavily}} to
+not manually modify anything as it may cause unexpected behavior with
+many other functions.
 }
 \examples{
 data("combined_pbmc")
