@@ -1,30 +1,29 @@
-#' @title 
+#' @title
 #' Calculate seurat cluster centroids based on a Dimensional reduction
-#' 
+#'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' 
+#'
 #' Utility function to calculate the physical xy coordinates of each seurat
 #' cluster based on a dimensional reduction already present in the object.
 #' The results are returned in a list with the length of the number of distinct
 #' seurat clusters based on the seurat_obj `meta.data`.
-#' 
+#'
 #' @param seurat_obj input seurat object with the dimensional reduction of
 #' choice already present, and seurat clusters computed.
 #' @param reduction character. The reduction that the centroid calculation
 #' should be based on. Currently, can only be "umap", "tsne", or "pca".
-#' 
+#'
 #' @return A list of the length of the number of distinct clusters in the
 #' seurat object metadata, where each element of the list is a numeric vector
 #' of length 2, with the numbers corresponding to the x and y coordinate
 #' respectively of the seurat cluster with the corresponding index.
-#' 
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' data("combined_pbmc")
 #' getReductionCentroids(combined_pbmc, reduction = "umap")
-#' #>
 #' 
 getReductionCentroids <- function(seurat_obj, reduction = "umap") {
   get_cluster_centroids(

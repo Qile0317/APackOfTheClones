@@ -30,6 +30,5 @@ seurat clusters based on the seurat_obj \code{meta.data}.
 \examples{
 data("combined_pbmc")
 getReductionCentroids(combined_pbmc, reduction = "umap")
-#>
 
 }

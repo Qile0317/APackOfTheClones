@@ -1,10 +1,15 @@
 # vectorized circle_layout - outputs list of clusterlists
 # now with new progress bar, only noting progress of total clones
 pack_into_clusterlists <- function(
-    sizes, centroids, num_clusters, rad_decrease = 0,
+    sizes, centroids, num_clusters, rad_decrease,
     ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE
 ){
   output_list <- init_list(num_elements = num_clusters, init_val = list())
+
+  print(sizes)
+  print("")
+  print(centroids)
+  print(num_clusters)
 
   # initialize progress bar stats
   if (verbose) {

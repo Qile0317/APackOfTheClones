@@ -19,7 +19,9 @@ initialize_direction_vectors <- function(num_clusters) {
 }
 
 # Alias to initialize the overall repulsion vec
-initialize_list_of_transformation_vectors <- function(blank_vectors, num_clusters) {
+initialize_list_of_transformation_vectors <- function(
+  blank_vectors, num_clusters
+) {
   output <- vector("list", num_clusters)
   for (i in 1:num_clusters) {
     output[[i]] <- blank_vectors
@@ -36,7 +38,7 @@ do_cl_intersect <- function(Cn, Cm, thr = 1) {
 
 # check in current iteration if two clusters are worth repulsing
 do_proceed <- function(inp, i, j, thr) {
-  if ((i==j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
+  if ((i == j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
     return(FALSE)
   }
   do_cl_intersect(inp[[i]], inp[[j]], thr)
@@ -69,7 +71,6 @@ calculate_repulsion_vectors <- function(
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
 ) {
-  #if (G <= 0) {stop("repulsion strength must be a positive real number")} # whynot let attraction be a thing too :/
   start_progress_bar(verbose)
 
   #init variables - could use a class
@@ -99,10 +100,10 @@ repulse_cluster <- function(
         inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
       }
     }
-    if (verbose) {
-      progress_bar(curr_iteration, max_iter)
-    }
+
+    if (verbose) progress_bar(curr_iteration, max_iter)
   }
+  
   end_progress_bar(verbose)
   inp
 }
@@ -115,7 +116,7 @@ get_repulsed_clusterlists_and_centroids <- function(
   packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
   repulsion_strength, max_repulsion_iter, verbose
 ) {
-  if(verbose){
+  if (verbose) {
     message(paste(
       "\nrepulsing all clusters | max iterations =", max_repulsion_iter
     ))

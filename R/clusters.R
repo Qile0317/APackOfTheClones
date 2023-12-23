@@ -9,7 +9,7 @@
 # [["clRad"]] approximate radius of the cluster
 
 # centroid finder for a matrix of [x, y, cluster]
-find_centroids <- function(df) {
+find_centroids <- function(df, total_clusters) {
   cll <- split(df, factor(df[, 3])) #the last cluster column becomes redundant
   l <- length(cll)
 
@@ -23,9 +23,9 @@ find_centroids <- function(df) {
     yset[i] <- sum(cll[[i]][, 2]) / length(cll[[i]][, 2])
   }
   
-  list_output <- list()
+  list_output <- init_list(num_elements = total_clusters, init_val = list())
   for (i in 1:l) {
-    list_output[[nameset[i]]] <- c(xset[i], yset[i])
+    list_output[[as.integer(nameset[i])]] <- c(xset[i], yset[i])
   }
   return(list_output)
 }
@@ -33,7 +33,6 @@ find_centroids <- function(df) {
 # get reduction centroids from seurat obj, where the barcodes in the reduction
 # cell embeddings will be filtered to be exactly the same as those left in the
 # metadata incase it was additionally filtered.
-# TODO test if barcodes are properly filtered
 get_cluster_centroids <- function(
   seurat_obj, reduction = "umap", passed_in_reduc_obj = FALSE
 ) {
@@ -45,13 +44,14 @@ get_cluster_centroids <- function(
   }
 
   find_centroids(
-    data.frame(
+    df = data.frame(
       rcppFilterReductionCoords(
         seuratBarcodes = rownames(seurat_obj@meta.data),
         reductionCoords = reduc_coords
       ),
       seurat_obj@meta.data[["seurat_clusters"]]
-    )
+    ),
+    total_clusters = get_num_total_clusters(seurat_obj)
   )
 }
 
