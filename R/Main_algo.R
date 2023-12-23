@@ -6,11 +6,6 @@ pack_into_clusterlists <- function(
 ){
   output_list <- init_list(num_elements = num_clusters, init_val = list())
 
-  print(sizes)
-  print("")
-  print(centroids)
-  print(num_clusters)
-
   # initialize progress bar stats
   if (verbose) {
     packed_clone_count <- 0

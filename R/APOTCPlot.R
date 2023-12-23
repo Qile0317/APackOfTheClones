@@ -103,14 +103,13 @@ APOTCPlot <- function(
 
 	APOTCPlot_error_handler(hash::hash(as.list(environment())))
 
-	if (should_compute(object_id)) {
+	if (should_compute(object_id))
 		object_id <- parse_to_object_id(
 			reduction_base = attempt_correction(reduction_base),
 			clonecall = .theCall(seurat_obj@meta.data, clonecall),
 			varargs_list = list(...),
 			metadata_filter = extra_filter
 		)
-	}
 
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 
@@ -132,13 +131,12 @@ APOTCPlot <- function(
 	}
 
 	# retain axis scales on the resulting plot. The function sucks tho
-	if (retain_axis_scales) {
+	if (retain_axis_scales)
 		result_plot <- suppressMessages(invisible(
 			retain_scale(seurat_obj, reduction_base, result_plot)
 		))
-	}
 
-	if (add_size_legend) {
+	if (add_size_legend)
 		result_plot <- insert_legend(
 			plt = result_plot,
 			apotc_obj = apotc_obj,
@@ -152,13 +150,11 @@ APOTCPlot <- function(
 			legend_textsize = legend_text_size,
 			do_add_legend_border = add_legend_background
 		)
-	}
 
 	# TODO clonal linking here
 
-	if (show_labels) {
+	if (show_labels)
 		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
-	}
 
 	result_plot
 }

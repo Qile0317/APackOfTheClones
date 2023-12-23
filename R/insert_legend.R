@@ -1,9 +1,8 @@
 # script to make a custom circle size legend overlay
-# needs a rehaul to use an ApotcData getter to get the sizes incase the
-# implemntation changes in the future (basic OOP principle :P)
+# TODO estimate optimal legend placement position
 
 estimate_legend_sizes <- function(apotc_obj) {
-    sizes <- unlist(as.numeric(apotc_obj@clone_sizes))
+    sizes <- unlist(apotc_obj@clone_sizes)
     sort(unique(round(c(1, median(sizes), mean(sizes), max(sizes)))))
 }
 
@@ -15,10 +14,10 @@ insert_legend <- function(
     buffer,
     color = "#808080",
     n = 360,
-    spacing = "auto", 
+    spacing = "auto",
     legend_label = "Clone sizes",
     legend_textsize = 5,
-    do_add_legend_border = FALSE # TODO
+    do_add_legend_border = FALSE
 ) {
 
     # setup relevant variables
@@ -27,9 +26,11 @@ insert_legend <- function(
     if (should_estimate(spacing))
         spacing <- calculate_legend_spacing(spacing, plt, rad_decrease)
 
-    if (should_estimate(sizes)) sizes <- estimate_legend_sizes(apotc_obj)
+    if (should_estimate(sizes))
+        sizes <- estimate_legend_sizes(apotc_obj)
     
-    if (!is.numeric(pos)) pos <- correct_legend_coord_str(pos)
+    if (!is.numeric(pos))
+        pos <- correct_legend_coord_str(pos)
 
     # calculate circle positions
 
@@ -66,9 +67,9 @@ insert_legend <- function(
         label = legend_label, size = legend_textsize
     )
 
-    # add the background   
+    # add the background
     if (do_add_legend_border) {
-        plt <- add_legend_backing(plt, legend_df) # FIXME smn wrong for more than 1 circle
+        plt <- add_legend_backing(plt, legend_df)
     }
     
     # add the side number labels

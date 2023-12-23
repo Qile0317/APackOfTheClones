@@ -2,7 +2,7 @@
 #' Directly visualize clonal expansion of a contig combined seurat object
 #' 
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' This function combines the functionality of both `RunAPOTC` and `APOTCPlot`.
 #' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC])

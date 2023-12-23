@@ -163,7 +163,7 @@ A ggplot object of the APackOfTheClones clonal expansion plot of the
 seurat object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 This function combines the functionality of both \code{RunAPOTC} and \code{APOTCPlot}.
 Given a Seurat object, it first runs the APackOfTheClones method (\link{RunAPOTC})

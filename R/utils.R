@@ -80,9 +80,12 @@ is_seurat_or_sce_object <- function(obj) {
 
 # math functions
 
-bound_num <- function(num, lowerbound, upperbound) {
+bound_num <- function(num, lowerbound, upperbound)
     min(max(num, lowerbound), upperbound)
-}
+
+add <- function(x, y) x + y
+
+subtract <- function(x, y) x - y
 
 # spelling related functions
 
@@ -145,11 +148,13 @@ extract_2d_list_row <- function(l, row_index) {
     row_vector
 }
 
-# add two lists of the same length elementwise where everything has same length
-add_numeric_lists <- function(l1, l2) {
-    l <- vector("list", length(l1))
+# operate on non-empty elemetns of two lists of the same length
+# w/an 2arg function
+operate_on_same_length_lists <- function(func, l1, l2) {
+    l <- init_list(length(l1), list())
     for (i in seq_along(l1)) {
-        l[[i]] <- l1[[i]] + l2[[i]]
+        if (isnt_empty(l1[[i]]) && isnt_empty(l2[[i]]))
+            l[[i]] <- func(l1[[i]], l2[[i]])
     }
     l
 }

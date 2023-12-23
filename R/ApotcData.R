@@ -99,7 +99,6 @@ initializeApotcData <- function(
 
 # create subset / new obj based on new conditions, assuming valid!
 # based on an initialized (not nessecarily packed) apotc obj
-# creates a temporary apotc obj if it doesn exist already
 # assumes metadata_filter_condition cannot be null
 
 initializeSubsetApotcData <- function(
@@ -157,22 +156,19 @@ repulseClusters <- function(
 
 	apotc_obj@clusters <- repulsion_results[[1]]
 
-	apotc_obj@label_coords <- add_numeric_lists(
-		apotc_obj@label_coords,
-		get_dx_dy_list(apotc_obj@centroids, repulsion_results[[2]])
+	apotc_obj@label_coords <- operate_on_same_length_lists(
+		func = add,
+		l1 = apotc_obj@label_coords,
+		l2 = operate_on_same_length_lists(
+			func = subtract,
+			l1 = repulsion_results[[2]],
+			l2 = apotc_obj@centroids
+		)
 	)
 
 	apotc_obj@centroids <- repulsion_results[[2]]
 
 	apotc_obj
-}
-
-get_dx_dy_list <- function(old_coord_list, new_coord_list) {
-	output <- vector("list", length(old_coord_list))
-	for (i in seq_along(old_coord_list)) {
-		output[[i]] <- new_coord_list[[i]] - old_coord_list[[i]]
-	}
-	output
 }
 
 # internal getters
