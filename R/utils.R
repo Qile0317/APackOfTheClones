@@ -40,6 +40,7 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
 
 # readability functions
 
+is_empty <- function(inp) identical(inp, list())
 isnt_empty <- function(inp) !identical(inp, list())
 
 isnt_na <- function(inp) !any(is.na(inp))

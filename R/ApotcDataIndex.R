@@ -152,6 +152,10 @@ getApotcData <- function(seurat_obj, obj_id) {
     seurat_obj@misc[["APackOfTheClones"]][[obj_id]]
 }
 
+getLastApotcData <- function(seurat_obj) {
+    getApotcData(seurat_obj, getLastApotcDataId(seurat_obj))
+}
+
 setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
     seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
     seurat_obj

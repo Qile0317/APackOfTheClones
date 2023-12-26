@@ -18,9 +18,4 @@ estimate_clone_scale_factor <- function(seurat_obj, clonecall) {
 	bound_num(approx_clone_scale_factor, lowerbound = 0.05, upperbound = 1)
 }
 
-# for readability - assumes rad_scale_factor between 0 & 1
-convert_to_rad_decrease <- function(rad_scale_factor, clone_scale_factor) {
-	clone_scale_factor * (1 - rad_scale_factor)
-}
-
 # test ggobject for label addition

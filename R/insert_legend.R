@@ -101,12 +101,15 @@ correct_legend_coord_str <- function(pos) {
     pos <- tolower(strip_spaces(pos))
     pos <- switch(
         pos,
+        "auto" = "auto",
         "topleft" = "top_left",
         "topright" = "top_right",
         "bottomleft" = "bottom_left",
         "bottomright" = "bottom_right",
         pos
     )
+
+    if (should_estimate(pos)) return(pos)
 
     user_attempt_correction(
         s = pos,
@@ -120,7 +123,7 @@ correct_legend_coord_str <- function(pos) {
 estimate_best_legend_df <- function(
     plt, apotc_obj, unpositioned_legend_df, legend_dims, buffer
 ) {
-    curr_num_circles_covered <- Inf
+    min_num_circles_covered <- Inf
     best_legend_df <- data.frame()
 
     for (pos in c("top_left", "top_right", "bottom_left", "bottom_right")) {
@@ -143,15 +146,36 @@ estimate_best_legend_df <- function(
             min_num_circles_covered <- curr_num_circles_covered
             best_legend_df <- curr_legend_df
         }
-        
+         
     }
 
     best_legend_df
 }
 
 num_circles_covered_by_legend <- function(apotc_obj, minmax_dims) {
-    # FIXME see if this is too slow? its O(N)
-    0
+    num_circles_covered <- 0
+    for (cluster in apotc_obj@clusters) {
+        for (i in seq_along(cluster$x)) {
+            does_overlap_x <- is_bound_between(
+                cluster$x[i],
+                lowerbound = minmax_dims["xmin"] + cluster$rad[i],
+                upperbound = minmax_dims["xmax"] - cluster$rad[i]
+            )
+
+            does_overlap_y <- is_bound_between(
+                cluster$y[i],
+                lowerbound = minmax_dims["ymin"] + cluster$rad[i],
+                upperbound = minmax_dims["ymax"] - cluster$rad[i]
+            )
+
+            if (does_overlap_x && does_overlap_y) {
+                num_circles_covered <- num_circles_covered + 1
+            }
+        }
+        
+    }
+    
+    num_circles_covered
 }
 
 gen_unpositioned_legend_df <- function(

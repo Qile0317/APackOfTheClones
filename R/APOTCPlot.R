@@ -67,8 +67,8 @@
 #'
 APOTCPlot <- function(
 	seurat_obj,
-	reduction_base = "umap",
-	clonecall = "strict",
+	reduction_base = NULL,
+	clonecall = NULL,
 	...,
 	extra_filter = NULL,
 	object_id = NULL,
@@ -93,15 +93,12 @@ APOTCPlot <- function(
 	add_legend_background = TRUE
 ) {
 
-	APOTCPlot_error_handler(hash::hash(as.list(environment())))
+	args <- hash::hash(as.list(environment()))
+	APOTCPlot_error_handler(args)
 
-	if (should_compute(object_id))
-		object_id <- parse_to_object_id(
-			reduction_base = attempt_correction(reduction_base),
-			clonecall = .theCall(seurat_obj@meta.data, clonecall),
-			varargs_list = list(...),
-			metadata_filter = extra_filter
-		)
+	if (should_compute(object_id)) {
+		object_id <- infer_object_id(args = args, varargs_list = list(...))
+	}
 
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 
@@ -161,5 +158,22 @@ APOTCPlot_error_handler <- function(args) {
 	}
 	# TODO
 
+}
 
+infer_object_id <- function(args, varargs_list) {
+    if (
+        is.null(args$reduction_base) &&
+            is.null(args$clonecall) &&
+            is.null(args$extra_filter) &&
+            is_empty(varargs_list)
+    ) {
+        return(getLastApotcDataId(args$seurat_obj))
+    }
+
+    parse_to_object_id(
+        reduction_base = attempt_correction(args$reduction_base),
+        clonecall = .theCall(args$seurat_obj@meta.data, args$clonecall),
+        varargs_list = varargs_list,
+        metadata_filter = args$extra_filter
+    )
 }

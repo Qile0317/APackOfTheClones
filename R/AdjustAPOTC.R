@@ -103,9 +103,8 @@ change_clone_scale <- function(seurat_obj, new_clone_scale, verbose = TRUE) {
 		sizes = get_processed_clone_sizes(seurat_obj@reductions[['apotc']]),
 		centroids = seurat_obj@reductions[['apotc']]@centroids,
 		num_clusters = seurat_obj@reductions[['apotc']]@num_clusters,
-		rad_decrease = convert_to_rad_decrease(
-			seurat_obj@reductions[['apotc']]@rad_scale_factor,
-			new_clone_scale
+		rad_decrease = get_rad_decrease(
+			# FIXME
 		),
 		ORDER = get_cmd(seurat_obj, "ORDER"),
 		scramble = get_cmd(seurat_obj, "scramble"),

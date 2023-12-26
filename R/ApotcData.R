@@ -121,7 +121,8 @@ initializeSubsetApotcData <- function(
 circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 
 	rad_decrease <- convert_to_rad_decrease(
-		apotc_obj@rad_scale_factor, apotc_obj@clone_scale_factor
+		clone_scale_factor = apotc_obj@clone_scale_factor,
+		rad_scale_factor = apotc_obj@rad_scale_factor
 	)
 
 	apotc_obj@clusters <- pack_into_clusterlists(
@@ -173,8 +174,15 @@ repulseClusters <- function(
 
 # internal getters
 
+convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
+	clone_scale_factor * (1 - rad_scale_factor)
+}
+
 get_rad_decrease <- function(apotc_obj) {
-	apotc_obj@clone_scale_factor * (1 - apotc_obj@rad_scale_factor)
+	convert_to_rad_decrease(
+		clone_scale_factor = apotc_obj@clone_scale_factor,
+		rad_scale_factor = apotc_obj@rad_scale_factor
+	)
 }
 
 # should have getters and setters

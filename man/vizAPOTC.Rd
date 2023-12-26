@@ -27,7 +27,7 @@ vizAPOTC(
   label_size = 5,
   add_size_legend = TRUE,
   legend_sizes = "auto",
-  legend_position = "top_left",
+  legend_position = "auto",
   legend_buffer = 0.2,
   legend_color = "#808080",
   legend_spacing = "auto",

@@ -6,8 +6,8 @@
 \usage{
 APOTCPlot(
   seurat_obj,
-  reduction_base = "umap",
-  clonecall = "strict",
+  reduction_base = NULL,
+  clonecall = NULL,
   ...,
   extra_filter = NULL,
   object_id = NULL,
