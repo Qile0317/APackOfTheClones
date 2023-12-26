@@ -39,39 +39,26 @@ get_plottable_df_with_color <- function(apotc_data) {
 # clRad. the clusters imput is a dataframe.
 
 plot_clusters <- function(
-  clusters, n = 360, linetype ="blank",
-  title = "Sizes of clones within each cluster",
-  haslegend = FALSE, void = TRUE,
-  origin = FALSE
-){
-
-  if (!origin) {
-    p1 <- ggplot2::ggplot(data = clusters) +
-      ggforce::geom_circle(
-        mapping = apotc_aes_string(
-          x0 = "x", y0 = "y", r = "r", fill = "color"
-        ),
-        n = n,
-        linetype = linetype
-      ) +
-      ggplot2::scale_fill_identity() +
-      ggplot2::labs(title = title) +
-      ggplot2::coord_fixed()
-  } else {
-    p1 <- ggplot2::ggplot(
-      clusters,
-      mapping = apotc_aes_string(x = "x", y = "y")
-      ) +
-      ggplot2::geom_point() +
-      ggplot2::labs(title = title) +
-      ggplot2::coord_fixed()
-  }
-
-  if (void) {
-    p1 <- p1 + ggplot2::theme_void()
-  }
-
-  return(p1 + ggplot2::theme(legend.position = "none"))
+  clusters,
+  n = 360,
+  linetype = "blank"#,
+  #alpha = 1
+) {
+  ggplot2::ggplot(data = clusters) +
+    ggforce::geom_circle(
+      mapping = apotc_aes_string(
+        x0 = "x",
+        y0 = "y",
+        r = "r",
+        fill = "color"#,
+        #alpha = as.character(alpha)
+      ),
+      n = n,
+      linetype = linetype
+    ) +
+    ggplot2::scale_fill_identity() +
+    ggplot2::coord_fixed() +
+    ggplot2::theme(legend.position = "none")
 }
 
 add_default_theme <- function(plt, reduction) {

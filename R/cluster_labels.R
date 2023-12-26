@@ -1,7 +1,7 @@
 gen_labels <- function(num_clusters) {
-	label_vec <- vector('character', num_clusters)
-	for (i in 1:num_clusters) {
-		label_vec[i] <- paste("C", i-1, sep = "")
+	label_vec <- character(num_clusters)
+	for (i in seq_len(num_clusters)) {
+		label_vec[i] <- paste("C", i, sep = "")
 	}
 	label_vec
 }
@@ -15,8 +15,8 @@ insert_labels <- function(plt, apotc_obj, size) {
 
 		plt <- plt + ggplot2::annotate(
 			"text",
-			x = apotc_obj@label_coords[1],
-			y = apotc_obj@label_coords[2],
+			x = apotc_obj@label_coords[[i]][1],
+			y = apotc_obj@label_coords[[i]][2],
 			label = apotc_obj@labels[i],
 			size = size
 		)

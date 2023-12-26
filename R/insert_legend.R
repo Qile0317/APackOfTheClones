@@ -3,7 +3,9 @@
 
 estimate_legend_sizes <- function(apotc_obj) {
     sizes <- unlist(apotc_obj@clone_sizes)
-    sort(unique(round(c(1, median(sizes), mean(sizes), max(sizes)))))
+    sort(unique(round(c(
+        1, median(sizes), mean(sizes), mean(unique(sizes)), max(sizes)
+    ))))
 }
 
 insert_legend <- function(
@@ -32,7 +34,7 @@ insert_legend <- function(
     if (!is.numeric(pos))
         pos <- correct_legend_coord_str(pos)
 
-    # calculate circle positions
+    # calculate relevant legend plotting data
 
     unpositioned_legend_df <- gen_unpositioned_legend_df(
         legend_sizes = sizes,
@@ -44,22 +46,19 @@ insert_legend <- function(
 
     legend_dims <- get_legend_dims(unpositioned_legend_df)
 
-    if (!is.numeric(pos)) {
-        pos <- estimate_top_left_circ_coord(
-            unpositioned_legend_df = unpositioned_legend_df,
-            legend_dims = legend_dims,
-            destination_str = pos,
-            plt = plt,
-            buffer = buffer
+    if (should_estimate(pos)) {
+        legend_df <- estimate_best_legend_df(
+            plt, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+        )
+    } else {
+        legend_df <- generate_legend_df(
+            pos, unpositioned_legend_df, legend_dims, plt, buffer
         )
     }
 
-    legend_df <- move_unpositioned_legend_df(
-        unpositioned_legend_df,
-        to_top_left_destination_coord = pos
-    )
-
     label_coord <- get_legend_title_coord(legend_df, legend_dims, spacing)
+
+    # plotting
 
     # add the legend label on top
     plt <- plt + ggplot2::annotate(
@@ -116,6 +115,45 @@ correct_legend_coord_str <- function(pos) {
     )
 }
 
+# given the circle placements, estimate the legend dataframe with the least
+# *number* of circles that overlap
+estimate_best_legend_df <- function(
+    plt, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+) {
+    curr_num_circles_covered <- Inf
+    best_legend_df <- data.frame()
+
+    for (pos in c("top_left", "top_right", "bottom_left", "bottom_right")) {
+
+        curr_legend_df <- generate_legend_df(
+            pos, unpositioned_legend_df, legend_dims, plt, buffer
+        )
+
+        minmax_dims <- get_legend_backing_minmax_dims(plt, curr_legend_df)
+
+        curr_num_circles_covered <- num_circles_covered_by_legend(
+            apotc_obj, minmax_dims
+        )
+
+        if (curr_num_circles_covered == 0) {
+            return(curr_legend_df)
+        }
+
+        if (curr_num_circles_covered < min_num_circles_covered) {
+            min_num_circles_covered <- curr_num_circles_covered
+            best_legend_df <- curr_legend_df
+        }
+        
+    }
+
+    best_legend_df
+}
+
+num_circles_covered_by_legend <- function(apotc_obj, minmax_dims) {
+    # FIXME see if this is too slow? its O(N)
+    0
+}
+
 gen_unpositioned_legend_df <- function(
     legend_sizes, spacing, circ_scale_factor, rad_decrease, color
 ) {
@@ -135,7 +173,7 @@ gen_unpositioned_legend_df <- function(
 }
 
 get_unpositioned_y_coords <- function(radii, spacing) {
-    y_coords <- vector("numeric", length(radii))
+    y_coords <- numeric(length(radii))
     curr_y <- -spacing
     r <- 0
 
@@ -149,14 +187,35 @@ get_unpositioned_y_coords <- function(radii, spacing) {
     y_coords
 }
 
+# get the width and height of the circles and labels, NOT accounting for buffer
 get_legend_dims <- function(unpositioned_legend_df) {
     c(
         "x" = max_rad(unpositioned_legend_df) +
             get_label_x(unpositioned_legend_df),
 
         "y" = min_rad(unpositioned_legend_df) +
-            abs(max_y(unpositioned_legend_df)) +
+            abs(max_y(unpositioned_legend_df)) -
+            abs(min_y(unpositioned_legend_df)) +
             max_rad(unpositioned_legend_df)
+    )
+}
+
+generate_legend_df <- function(
+    pos, unpositioned_legend_df, legend_dims, plt, buffer
+) {
+    if (!is.numeric(pos)) {
+        pos <- estimate_top_left_circ_coord(
+            unpositioned_legend_df = unpositioned_legend_df,
+            legend_dims = legend_dims,
+            destination_str = pos,
+            plt = plt,
+            buffer = buffer
+        )
+    }
+
+    move_unpositioned_legend_df(
+        unpositioned_legend_df,
+        to_top_left_destination_coord = pos
     )
 }
 
@@ -174,27 +233,27 @@ estimate_top_left_circ_coord <- function(
     unpositioned_legend_df, legend_dims, destination_str, plt, buffer
 ) {
 
-    destination_str <- correct_legend_coord_str(destination_str)
-
     xr <- get_xr(plt)
     yr <- get_yr(plt)
     
     if (identical(destination_str, "top_left")) {
         return(c(xr[1] + max_rad(unpositioned_legend_df) + buffer, yr[2]))
     }
+
     if (identical(destination_str, "top_right")) {
         return(c(xr[2] - unpositioned_legend_df[1, "label_x"] - buffer, yr[2]))
     }
+
     if (identical(destination_str, "bottom_left")) {
         return(c(
             xr[1] + max_rad(unpositioned_legend_df) + buffer,
-            yr[1] - legend_dims[2]
+            yr[1] + legend_dims[2]
         ))
     }
     # bottom right
     return(c(
         xr[2] - unpositioned_legend_df[1, "label_x"] - buffer,
-        yr[1] - legend_dims[2]
+        yr[1] + legend_dims[2]
     ))
 }
 
@@ -218,30 +277,46 @@ get_legend_title_coord <- function(legend_df, legend_dims, spacing) {
 }
 
 add_legend_backing <- function(plt, legend_df) {
-    spacing <- 0.15
-    linewidth <- bound_num(
-        abs(get_xr(plt)[2] - get_xr(plt)[1]) * 0.002, 0.001, 0.1
-    )
-    max_radius <- max_rad(legend_df)
+    linewidth <- get_linewidth(plt)
+    dims <- get_legend_backing_minmax_dims(plt, legend_df)
 
+    # add the back border rectangle
+    plt <- plt + ggplot2::geom_rect(aes(
+            xmin = dims["xmin"] - linewidth, xmax = dims["xmax"] + linewidth,
+            ymin = dims["ymin"] - linewidth, ymax = dims["ymax"] + linewidth,
+            fill = "black"
+        ))
+    
+    # add the white inside
+    plt + ggplot2::geom_rect(aes(
+            xmin = dims["xmin"], xmax = dims["xmax"],
+            ymin = dims["ymin"], ymax = dims["ymax"],
+            fill = "white",
+            linetype = "blank"
+        )) +
+        ggplot2::theme(legend.position = "none")
+}
+
+get_linewidth <- function(plt) {
+    xr <- get_xr(plt)
+    bound_num(
+        abs(xr[2] - xr[1]) * 0.002,
+        lowerbound = 0.001,
+        upperbound = 0.1
+    )
+}
+
+get_legend_backing_minmax_dims <- function(plt, legend_df) {
+    spacing <- 0.15
+    max_radius <- max_rad(legend_df)
+    
     xmin <- get_circle_x(legend_df) - max_radius - spacing
     xmax <- get_label_x(legend_df) + max_radius + spacing
 
     ymin <- max_y(legend_df) - max_radius - spacing
     ymax <- min_y(legend_df) + min_rad(legend_df) + spacing
 
-    # add the back border rectangle
-    plt <- plt + ggplot2::geom_rect(aes(
-            xmin = xmin - linewidth, xmax = xmax + linewidth,
-            ymin = ymin + linewidth, ymax = ymax - linewidth,
-            fill = "black"
-        ))
-    
-    # add the white inside
-    plt + ggplot2::geom_rect(aes(
-            xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
-            fill = "white"
-        ))
+    c("xmin" = xmin, "xmax" = xmax, "ymin" = ymin, "ymax" = ymax)
 }
 
 # could put the ggplot color legend by sticking some points under something

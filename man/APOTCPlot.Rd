@@ -19,13 +19,13 @@ APOTCPlot(
   label_size = 5,
   add_size_legend = TRUE,
   legend_sizes = "auto",
-  legend_position = "top_left",
+  legend_position = "auto",
   legend_buffer = 0.2,
   legend_color = "#808080",
   legend_spacing = "auto",
   legend_label = "Clone sizes",
   legend_text_size = 5,
-  add_legend_background = FALSE
+  add_legend_background = TRUE
 )
 }
 \arguments{
@@ -60,13 +60,14 @@ relative sizes of clones. Note that it is simply an overlay and not a real
 ggplot2 legend.}
 
 \item{legend_sizes}{numeric vector. Indicates the circle sizes to be
-displayed on the legend and defaults to \code{c(1, 5, 10)}.}
+displayed on the legend, and will always be sorted from smallest to greatest.
+Defaults to \code{"auto"} which estimate a reasonable range of sizes to display.}
 
 \item{legend_position}{character or numeric. Can be set to either
 \code{"top_left"}, \code{"top_right"}, \code{"bottom_left"}, \code{"bottom_right"} and places the
 legend roughly in the corresponding position. Otherwise, can be a numeric
-vector of length 2 indicating the x and y position of the "top-center" of the
-legend}
+vector of length 2 indicating the x and y position of the \emph{topmost (smallest)
+circle} of the legend.}
 
 \item{legend_buffer}{numeric. Indicates how much to "push" the legend towards
 the center of the plot from the selected corner. If negative, will push away}
@@ -103,17 +104,7 @@ parameters can be adjusted with the \link{AdjustAPOTC} function.
 \examples{
 library(Seurat)
 suppressPackageStartupMessages(library(APackOfTheClones))
-data("mini_clonotype_data","mini_seurat_obj")
-
-# first the APOTC pipeline has to be run
-pbmc <- integrate_tcr(mini_seurat_obj, mini_clonotype_data, verbose = FALSE)
-pbmc <- RunAPOTC(pbmc, verbose = FALSE)
-
-# generate the default plot with APOTCPlot
-APOTCPlot(pbmc)
-
-# if plotting of the same object with different customizations
-APOTCPlot(pbmc, use_default_theme = FALSE, show_labels = TRUE)
+# TODO
 
 }
 \seealso{

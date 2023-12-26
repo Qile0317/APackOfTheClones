@@ -40,6 +40,7 @@ vizAPOTC <- function(
     linetype = "blank",
     use_default_theme = TRUE,
     retain_axis_scales = FALSE,
+    #alpha = 1,
 
     show_labels = FALSE,
     label_size = 5,
@@ -52,7 +53,7 @@ vizAPOTC <- function(
     legend_spacing = "auto",
     legend_label = "Clone sizes",
     legend_text_size = 5,
-    add_legend_background = FALSE,
+    add_legend_background = TRUE,
 
     verbose = TRUE
 ) {
@@ -86,6 +87,7 @@ vizAPOTC <- function(
         linetype = linetype,
         use_default_theme = use_default_theme,
         retain_axis_scales = retain_axis_scales,
+        alpha = alpha,
 
         show_labels = show_labels,
         label_size = label_size,

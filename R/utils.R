@@ -80,12 +80,16 @@ is_seurat_or_sce_object <- function(obj) {
 
 # math functions
 
-bound_num <- function(num, lowerbound, upperbound)
+bound_num <- function(num, lowerbound, upperbound) {
     min(max(num, lowerbound), upperbound)
+}
 
 add <- function(x, y) x + y
-
 subtract <- function(x, y) x - y
+
+is_bound_between <- function(num, lowerbound, upperbound) {
+    num >= lowerbound && num <= upperbound
+}
 
 # spelling related functions
 

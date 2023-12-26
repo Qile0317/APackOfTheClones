@@ -200,11 +200,11 @@ RunAPOTC_parameter_checker <- function(args) {
 	}
 
 	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
-		stop("`clone_scale_factor` has to be a positive number in (0, 1]")
+		stop("`clone_scale_factor` has to be a positive real number in (0, 1]")
 	}
 
     if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
-		stop("`rad_scale_factor` has to be a positive number in (0, 1]")
+		stop("`rad_scale_factor` has to be a positive real number in (0, 1]")
 	}
 
 	if (args[["order_clones"]] == args[["scramble_clones"]]) {
@@ -226,11 +226,11 @@ RunAPOTC_parameter_checker <- function(args) {
         }
     }
 
-    if (args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {
+    if (!args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {
         stop(paste(
             "An APackOfTheClones run with the the parameters", args[["obj_id"]],
             "appears to already have been ran. If this is a mistake,",
-            "set the `override` argument to `FALSE` and re-run."
+            "set the `override` argument to `TRUE` and re-run."
         ))
     }
 
