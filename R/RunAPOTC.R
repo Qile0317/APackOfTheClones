@@ -191,14 +191,6 @@ RunAPOTC <- function(
 
 RunAPOTC_parameter_checker <- function(args) {
 
-	if (is.null(args[["seurat_obj"]]@reductions[[attempt_correction(args[["reduction_base"]])]])) {
-		stop(paste(
-			"No", args[["reduction_base"]], "reduction found on the seurat object,",
-			"ensure the the reduction has been computed. Otherwise, did you",
-			"mean:", closest_word(args[["reduction_base"]], c("umap", "tsne", "pca"))
-		))
-	}
-
 	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
 		stop("`clone_scale_factor` has to be a positive real number in (0, 1]")
 	}

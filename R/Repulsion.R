@@ -9,6 +9,30 @@
 # - do_cluster_intersect(cn_c,cn_r,cm_c,cm_r,thr):
 #     check if two clusterlists overlap in c++
 
+# convinience function for more code conciseness
+# repulses clusters and returns a list of length 2.
+# first is the new modified list of clusterlists
+# second is the centroids
+get_repulsed_clusterlists_and_centroids <- function(
+  packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
+  repulsion_strength, max_repulsion_iter, verbose
+) {
+  if (verbose) {
+    message(paste(
+      "\nrepulsing all clusters | max iterations =", max_repulsion_iter
+    ))
+  }
+  packed_clusters <- repulse_cluster(
+    packed_clusters, repulsion_threshold, repulsion_strength,
+    max_repulsion_iter, verbose
+  )
+  initial_centroids <- read_centroids(
+    packed_clusters, initial_centroids, num_clusters
+  )
+
+  list(packed_clusters, initial_centroids)
+}
+
 # Alias to initialize direction vectors in a list
 initialize_direction_vectors <- function(num_clusters) {
   direction_vectors <- vector("list", num_clusters)
@@ -106,28 +130,4 @@ repulse_cluster <- function(
   
   end_progress_bar(verbose)
   inp
-}
-
-# convinience function for more code conciseness
-# repulses clusters and returns a list of length 2.
-# first is the new modified list of clusterlists
-# second is the centroids
-get_repulsed_clusterlists_and_centroids <- function(
-  packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
-  repulsion_strength, max_repulsion_iter, verbose
-) {
-  if (verbose) {
-    message(paste(
-      "\nrepulsing all clusters | max iterations =", max_repulsion_iter
-    ))
-  }
-  packed_clusters <- repulse_cluster(
-    packed_clusters, repulsion_threshold, repulsion_strength,
-    max_repulsion_iter, verbose
-  )
-  initial_centroids <- read_centroids(
-    packed_clusters, initial_centroids, num_clusters
-  )
-
-  list(packed_clusters, initial_centroids)
 }

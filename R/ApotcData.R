@@ -7,9 +7,8 @@
 #' An S4 class for storing information about T/B cell clonal expansion to be
 #' used by various [APackOfTheClones] functions. Instances of this object type
 #' are stored by [RunAPOTC] in a seurat object's `@misc` slot under a list named
-#' `"APackOfTheClones"`. This class is not meant to be directly instantiated nor
-#' modified by the user. Read the vignette about the various getters for this
-#' class.
+#' `"APackOfTheClones"`. This class is not meant to be directly instantiated,
+#' accessed, nor modified by the user.
 #'
 #' @slot clusters Clustered clones which is an R list of lists of length 5,
 #' with each list of length 5, with the first 3 elements being numeric vectors
@@ -31,7 +30,7 @@
 #' @slot label_coords list of numeric vectors of length two indicating the (x,y)
 #' coordinates of each label if plotted
 #'
-#' @export
+#' @keywords internal
 #'
 methods::setClass(
 	Class = "ApotcData",
@@ -120,16 +119,11 @@ initializeSubsetApotcData <- function(
 
 circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 
-	rad_decrease <- convert_to_rad_decrease(
-		clone_scale_factor = apotc_obj@clone_scale_factor,
-		rad_scale_factor = apotc_obj@rad_scale_factor
-	)
-
 	apotc_obj@clusters <- pack_into_clusterlists(
 		sizes = get_processed_clone_sizes(apotc_obj),
 		centroids = apotc_obj@centroids,
 		num_clusters = apotc_obj@num_clusters,
-		rad_decrease = rad_decrease,
+		rad_decrease = get_rad_decrease(apotc_obj),
 		ORDER = ORDER,
 		scramble = scramble,
 		try_place = try_place,
@@ -146,10 +140,10 @@ repulseClusters <- function(
 	verbose
 ) {
 	repulsion_results <- get_repulsed_clusterlists_and_centroids(
-		packed_clusters = apotc_obj@clusters,
-		initial_centroids = apotc_obj@centroids,
-		num_clusters = apotc_obj@num_clusters,
-		repulsion_threshold = repulsion_threshold,
+	    packed_clusters = get_clusterlists(apotc_obj),
+	    initial_centroids = get_centroids(apotc_obj),
+	    num_clusters = get_num_clusters(apotc_obj),
+	    repulsion_threshold = repulsion_threshold,
 		repulsion_strength = repulsion_strength,
 		max_repulsion_iter = max_repulsion_iter,
 		verbose = verbose
@@ -168,23 +162,97 @@ repulseClusters <- function(
 	)
 
 	apotc_obj@centroids <- repulsion_results[[2]]
-
 	apotc_obj
 }
-
-# internal getters
 
 convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 	clone_scale_factor * (1 - rad_scale_factor)
 }
 
+# getters
+
+get_reduction_base <- function(apotc_obj) {
+	apotc_obj@reduction_base
+}
+
+get_clonecall <- function(apotc_obj) {
+	apotc_obj@clonecall
+}
+
+get_metadata_filter_string <- function(apotc_obj) {
+	apotc_obj@metadata_filter_string
+}
+
+get_clusterlists <- function(apotc_obj) {
+	apotc_obj@clusters
+}
+
+get_centroids <- function(apotc_obj) {
+	apotc_obj@centroids
+	# lapply(
+	# 	X = get_clusterlists(apotc_obj),
+	# 	FUN = function(x) ifelse(isnt_empty(x), x$centroid, list())
+	# )
+}
+
+get_raw_clone_sizes <- function(apotc_obj) {
+	apotc_obj@clone_sizes
+}
+
+get_processed_clone_sizes <- function(apotc_obj) {
+  raw_tabled_clone_sizes <- get_raw_clone_sizes(apotc_obj)
+  processed_sizes <- init_list(get_num_clusters(apotc_obj), list())
+
+  for (i in seq_len(get_num_clusters(apotc_obj))) {
+    if (!is_empty_table(raw_tabled_clone_sizes[[i]])) {
+      processed_sizes[[i]] <- apotc_obj@clone_scale_factor *
+        sqrt(as.numeric(raw_tabled_clone_sizes[[i]][[1]]))
+    }
+  }
+  processed_sizes
+}
+
+get_num_clones <- function(apotc_obj) { # TODO test
+	sum(unlist(get_raw_clone_sizes(apotc_obj)))
+}
+
+get_num_clusters <- function(apotc_obj) {
+	apotc_obj@num_clusters
+}
+
+get_valid_num_clusters <- function(apotc_obj) {
+	n <- 0
+	for (cluster in apotc_obj@clusters) {
+		if (isnt_empty(cluster)) {
+			n <- n + 1
+		}
+	}
+	n
+}
+
+get_clone_scale_factor <- function(apotc_obj) {
+	apotc_obj@clone_scale_factor
+}
+
+get_rad_scale_factor <- function(apotc_obj) {
+	apotc_obj@rad_scale_factor
+}
+
 get_rad_decrease <- function(apotc_obj) {
 	convert_to_rad_decrease(
-		clone_scale_factor = apotc_obj@clone_scale_factor,
-		rad_scale_factor = apotc_obj@rad_scale_factor
+		clone_scale_factor = get_clone_scale_factor(apotc_obj),
+		rad_scale_factor = get_rad_scale_factor(apotc_obj)
 	)
 }
 
-# should have getters and setters
-#
-# # should have a matchcolors func that takes into accoutn cluster names
+get_cluster_colors <- function(apotc_obj) {
+	apotc_obj@cluster_colors
+}
+
+get_labels <- function(apotc_obj) {
+	apotc_obj@labels
+}
+
+get_label_coords <- function(apotc_obj) {
+	apotc_obj@label_coords
+}

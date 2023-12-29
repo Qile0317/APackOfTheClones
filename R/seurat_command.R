@@ -113,11 +113,6 @@ get_parent_params <- function(
     params
 }
 
-# convenience function (should remove)
-get_cmd <- function(seurat_obj, cmd) {
-    seurat_obj@commands[["RunAPOTC"]]@params[[cmd]]
-}
-
 log_and_index_command <- function(seurat_obj, func_name, command_obj) {
     func_name_len <- nchar(func_name)
     last_index <- -1L

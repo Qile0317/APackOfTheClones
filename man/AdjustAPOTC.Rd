@@ -7,8 +7,16 @@ object}
 \usage{
 AdjustAPOTC(
   seurat_obj,
+  reduction_base = NULL,
+  clonecall = NULL,
+  ...,
+  extra_filter = NULL,
+  object_id = NULL,
   new_rad_scale_factor = NULL,
   new_clone_scale_factor = NULL,
+  reorder = FALSE,
+  rescramble = FALSE,
+  invert_try_place = FALSE,
   repulse = FALSE,
   repulsion_threshold = 1,
   repulsion_strength = 1,
@@ -19,6 +27,7 @@ AdjustAPOTC(
   nudge_vector = NULL,
   recolor_cluster = NULL,
   new_color = NULL,
+  interactive = FALSE,
   verbose = TRUE
 )
 }
@@ -26,12 +35,53 @@ AdjustAPOTC(
 \item{seurat_obj}{The seurat object to be adjusted. Must have an \code{apotc}
 reduction}
 
+\item{reduction_base}{character. The seurat reduction to base the clonal
+expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or
+\code{'pca'}. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
+However, generally APackOfTheClones is used for displaying UMAP and
+occasionally t-SNE versions to intuitively highlight clonal expansion.}
+
+\item{clonecall}{character. The column name in the seurat object metadata to
+use. See \code{scRepertoire} documentation for more information about this
+parameter that is central to both packages.}
+
+\item{...}{additional keyword arguments indicating the rows corresponding to
+elements in the seurat object metadata that should be filtered by.
+For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
+those in seurat clusters 1, 9, and 10. Or, if there is some column named
+"sample", then sample = c("A", "B") will conduct a run only on those
+corresponding cells. A useful application for this is to run the function
+many times, once for each sample, and plot them all together with \link{APOTCPlot}
+down the line.}
+
+\item{extra_filter}{character. An additional string that should be formatted
+\emph{exactly} like a statement one would pass into \link[dplyr:filter]{dplyr::filter} that does
+\emph{additional} filtering to cells in the seurat object - on top of the other
+keyword arguments - based on the metadata. This is a more flexible
+alternative / addition to the filtering keyword arguments. For example, if
+one wanted to filter by the length of the amino acid sequence of TCRs, one
+could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}}
+
 \item{new_rad_scale_factor}{responsible for changing the rad_scale_factor of
 all circles. Can be a numerical value between 0 and 1.
 unfinished}
+
+\item{repulse}{If \code{TRUE}, will attempt to push overlapping clusters away from
+each other}
+
+\item{repulsion_threshold}{numeric. The radius that clonal circle clusters
+overlap is acceptable when repulsing}
+
+\item{repulsion_strength}{numeric. The smaller the value the less the
+clusters repulse each other per iteration, and vice versa}
+
+\item{max_repulsion_iter}{integer. The number of repulsion iterations}
+
+\item{verbose}{logical. Decides if visual cues are displayed to the R console
+of the progress}
 }
 \value{
-The adjusted (modified) \code{seurat_obj}
+The adjusted \code{seurat_obj}
 }
 \description{
 If the user is unsatisfied with the clonal expansion plot that

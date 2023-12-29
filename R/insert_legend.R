@@ -174,7 +174,6 @@ num_circles_covered_by_legend <- function(apotc_obj, minmax_dims) {
         }
         
     }
-    
     num_circles_covered
 }
 

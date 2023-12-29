@@ -10,9 +10,8 @@
 An S4 class for storing information about T/B cell clonal expansion to be
 used by various \link{APackOfTheClones} functions. Instances of this object type
 are stored by \link{RunAPOTC} in a seurat object's \verb{@misc} slot under a list named
-\code{"APackOfTheClones"}. This class is not meant to be directly instantiated nor
-modified by the user. Read the vignette about the various getters for this
-class.
+\code{"APackOfTheClones"}. This class is not meant to be directly instantiated,
+accessed, nor modified by the user.
 }
 \section{Slots}{
 
@@ -45,3 +44,4 @@ based off of}
 coordinates of each label if plotted}
 }}
 
+\keyword{internal}

@@ -1,3 +1,10 @@
+get_plottable_df_with_color <- function(apotc_data) {
+    extract_and_add_colors(
+      apotc_obj = apotc_data,
+      plot_df = df_full_join(get_clusterlists(apotc_data))
+    )
+}
+
 # full join a list of lists of (x,y,r) vectors into a dataframe with
 # generated labels.
 df_full_join <- function(clstr_list) {
@@ -9,7 +16,7 @@ df_full_join <- function(clstr_list) {
     )
 
     seurat_cluster_index <- 0
-    for(i in seq_along(clstr_list)){
+    for (i in seq_along(clstr_list)) {
         if (isnt_empty_nor_na(clstr_list[[i]])) {
             df <- dplyr::full_join(
                 df,
@@ -28,10 +35,6 @@ df_full_join <- function(clstr_list) {
         seurat_cluster_index <- seurat_cluster_index + 1
     }
     df
-}
-
-get_plottable_df_with_color <- function(apotc_data) {
-    extract_and_add_colors(apotc_data, df_full_join(apotc_data@clusters))
 }
 
 # result plotting function. clusters is a list of clusterlists TRANSFORM into a
@@ -99,10 +102,8 @@ retain_scale <- function(seurat_obj, reduction, ball_pack_plt, buffer = 0) {
   min_yr <- min(ball_pack_yr[1], reduction_yr[1]) - buffer
   max_yr <- max(ball_pack_yr[2], reduction_yr[2]) + buffer
 
-  return(
-    ball_pack_plt + ggplot2::coord_cartesian(
-      xlim = c(min_xr, max_xr),
-      ylim = c(min_yr, max_yr)
-    )
+  ball_pack_plt + ggplot2::coord_cartesian(
+    xlim = c(min_xr, max_xr),
+    ylim = c(min_yr, max_yr)
   )
 }

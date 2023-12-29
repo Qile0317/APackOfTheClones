@@ -92,6 +92,29 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stored under under @misc[["APackOfTheClones"]][[id]]
 
+infer_object_id <- function(args, varargs_list) {
+    if (
+        is.null(args$reduction_base) &&
+            is.null(args$clonecall) &&
+            is.null(args$extra_filter) &&
+            is_empty(varargs_list)
+    ) {
+        latest_id <- getLastApotcDataId(args$seurat_obj)
+        message(paste(
+            "* using the latest Apotc Run Data with object id:",
+            latest_id
+        ))
+        return(latest_id)
+    }
+
+    parse_to_object_id(
+        reduction_base = attempt_correction(args$reduction_base),
+        clonecall = .theCall(args$seurat_obj@meta.data, args$clonecall),
+        varargs_list = varargs_list,
+        metadata_filter = args$extra_filter
+    )
+}
+
 utils::globalVariables(c(".idSepStr", ".idNullStr"))
 .idSepStr = ";"
 .idNullStr = "_"
@@ -142,7 +165,7 @@ varargs_list_to_id_segment <- function(varargs_list) {
 
 #obj_id_to_readable_str
 
-# getting and setting
+# getting and setting related functions 
 
 containsApotcRun <- function(seurat_obj, obj_id) {
     return(!is.null(getApotcData(seurat_obj, obj_id)))
@@ -220,8 +243,28 @@ getApotcDataIds <- function(seurat_obj) {
 #' @export
 #' 
 #' @example
-#' # TODO
-#' 
+#' # first run
+# ' pbmc <- RunAPOTC(
+# '     seurat_obj = get(data("combined_pbmc")),
+# '     reduction_base = "umap",
+# '     clonecall = "strict",
+# '     verbose = FALSE
+# ' )
+#'
+#' getApotcDataIds(pbmc)
+#' #> [1] "umap;CTstrict;_;_"
+#'
+#' # second run with a different clonecall
+#' pbmc <- RunAPOTC(
+#'     seurat_obj = pbmc,
+#'     reduction_base = "umap",
+#'     clonecall = "gene",
+#'     verbose = FALSE
+#' )
+#'
+#' getApotcDataIds(pbmc)
+#' #> [1] "umap;CTgene;_;_"
+#'
 getLastApotcDataId <- function(seurat_obj) {
     getlast(getApotcDataIds(seurat_obj))
 }

@@ -82,7 +82,7 @@ move_cluster <- function(cluster, new_coord) {
   cluster
 }
 
-# function to GET a list of centroids from a list of clusterlists - needs tests
+# function to GET a list of centroids from a list of clusterlists,
 read_centroids <- function(
   list_of_clusterlists, initial_centroids, num_clusters
 ) {
