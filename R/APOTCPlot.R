@@ -149,13 +149,13 @@ APOTCPlot <- function(
 }
 
 APOTCPlot_error_handler <- function(args) {
-	if (!containsApotcRun(args$seurat_obj, args$object_id)) {
+	# if (!containsApotcRun(args$seurat_obj, args$object_id)) {
 
-		stop(paste(
-			"APackOfTheClones object with id", args$object_id,
-			"does not exist in the seurat object"
-		))
-	}
+	# 	stop(paste(
+	# 		"APackOfTheClones object with id", args$object_id,
+	# 		"does not exist in the seurat object"
+	# 	))
+	# }
 	# TODO
 
 }

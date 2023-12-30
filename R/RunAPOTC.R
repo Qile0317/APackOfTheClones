@@ -153,9 +153,9 @@ RunAPOTC <- function(
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
     if (verbose) {
-        message(paste("* id for this run:", obj_id, "\n"))
+        message(paste("* id for this run:", obj_id))
         if (override && containsApotcRun(seurat_obj, obj_id))
-            message("* overriding results of the previous run\n")
+            message("* overriding results of the previous run")
     }
 
     # run the packing algos
@@ -164,7 +164,7 @@ RunAPOTC <- function(
         clone_scale_factor, rad_scale_factor
     )
 
-    if (verbose) message("Packing clones into clusters")
+    if (verbose) message("\nPacking clones into clusters")
 
     apotc_obj <- circlepackClones(
         apotc_obj = apotc_obj, ORDER = order_clones, scramble = scramble_clones,

@@ -1,4 +1,4 @@
-#' @title 
+#' @title
 #' Adjust the paramaters of the APackOfTheClones reduction in a seurat
 #' object
 #'
@@ -7,10 +7,10 @@
 #' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
 #' arguments to modify the data and/or parameters of the visualization. Note
 #' that some of the arguments may conflict with eachother.
-#' 
+#'
 #' @param new_clone_scale_factor
 #' @inheritParams RunAPOTC
-#' 
+#'
 #' @param seurat_obj The seurat object to be adjusted. Must have an `apotc`
 #' reduction
 #' @param new_rad_scale_factor responsible for changing the rad_scale_factor of
@@ -31,7 +31,7 @@ AdjustAPOTC <- function(
 
 	new_rad_scale_factor = NULL,
 	new_clone_scale_factor = NULL,
-	
+
 	reorder = FALSE,
 	rescramble = FALSE,
 	invert_try_place = FALSE,
@@ -102,11 +102,11 @@ AdjustAPOTC <- function(
 
 AdjustAPOTC_error_handler <- function(args, varargs_list) {
 	# TODO
-	if (should_compute(args$new_rad_scale_factor))
+	if (!should_compute(args$new_rad_scale_factor))
 		if (args$new_rad_scale_factor < 0) {
 			return("new_rad_scale_factor must be a positive number")
 		}
-	
+
 	# if ((args$max_repulsion_iter < 1 || !is_int(args$max_repulsion_iter)) && args$adjust_repulsion) {
 	# return("max_repulsion_iter must be a positive integer")
 	# }
@@ -131,7 +131,7 @@ change_clone_scale <- function(args) {
 
 	args$apotc_obj@clone_scale_factor <- args$new_clone_scale
 
-	# mathematically transform
+	# TODO mathematically transform instead of repacking
 
 	args$apotc_obj
 }
@@ -139,7 +139,8 @@ change_clone_scale <- function(args) {
 change_rad_scale <- function(apotc_obj, new_factor) {
 
 	old_factor <- get_rad_scale_factor(apotc_obj)
-	conversion_num <- get_clone_scale_factor(apotc_obj) * (old_factor - new_factor)
+	conversion_num <- get_clone_scale_factor(apotc_obj) *
+		(new_factor - old_factor)
 
 	for (i in seq_len(get_num_clusters(apotc_obj))) {
 		curr <- apotc_obj@clusters[[i]]
