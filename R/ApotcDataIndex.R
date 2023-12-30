@@ -14,9 +14,9 @@ is_valid_args  <- function(varargs_list) {
 # from the input of RunAPOTC, convert the condition to a call to be put in
 # @meta.data %>% dpylr::filter(eval(parse(text = "output of this func")))
 # assume that metadata_filter is a valid ADDITIONAL filter condition.
-#
 # assume that varargs_list is a valid named list where each name is a column
 # and element is a string vector of which factors to INCLUDE
+#
 parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     if (!is_valid_args(varargs_list)) {
@@ -165,7 +165,7 @@ varargs_list_to_id_segment <- function(varargs_list) {
 
 #obj_id_to_readable_str
 
-# getting and setting related functions 
+# getting and setting related functions
 
 containsApotcRun <- function(seurat_obj, obj_id) {
     return(!is.null(getApotcData(seurat_obj, obj_id)))
@@ -196,7 +196,7 @@ setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
 #' @return a character vector of all object ids of previous RunAPOTC runs, in
 #' the order they were ran.
 #' @export
-#' 
+#'
 #' @example
 # ' pbmc <- RunAPOTC(
 # '     seurat_obj = get(data("combined_pbmc")),
@@ -241,7 +241,7 @@ getApotcDataIds <- function(seurat_obj) {
 #'
 #' @return a character of the object id of the last [RunAPOTC] call
 #' @export
-#' 
+#'
 #' @example
 #' # first run
 # ' pbmc <- RunAPOTC(

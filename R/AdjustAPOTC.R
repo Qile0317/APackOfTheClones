@@ -66,10 +66,9 @@ AdjustAPOTC <- function(
 
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 
-	# # TODO
-	# if (should_change(new_clone_scale_factor)) {
-	# 	apotc_obj <- change_clone_scale(args)
-	# }
+	if (should_change(new_clone_scale_factor)) {
+		apotc_obj <- change_clone_scale(args)
+	}
 
 	if (should_change(new_rad_scale_factor)) {
 		apotc_obj <- change_rad_scale(apotc_obj, new_rad_scale_factor)
@@ -101,15 +100,21 @@ AdjustAPOTC <- function(
 }
 
 AdjustAPOTC_error_handler <- function(args, varargs_list) {
-	# TODO
-	if (!should_compute(args$new_rad_scale_factor))
-		if (args$new_rad_scale_factor < 0) {
-			return("new_rad_scale_factor must be a positive number")
-		}
+	# TODO - type check
+	# TODO rest of errors
 
-	# if ((args$max_repulsion_iter < 1 || !is_int(args$max_repulsion_iter)) && args$adjust_repulsion) {
-	# return("max_repulsion_iter must be a positive integer")
-	# }
+	if (!should_compute(args$new_rad_scale_factor)) {
+		if (args$new_rad_scale_factor < 0) {
+			stop("new_rad_scale_factor must be a positive number")
+		}
+	}
+
+	if (args$repulse) {
+		if ((args$max_repulsion_iter < 1 || !is_int(args$max_repulsion_iter)) && args$adjust_repulsion) {
+			stop("max_repulsion_iter must be a positive integer")
+		}
+	}
+
 	# if (!is.null(args$relocation_coord) && (length(args$relocate_cluster) != length(args$relocation_coord))) {
 	# return("length of relocate_cluster must be the same as the length of relocation_coord")
 	# }
@@ -121,19 +126,30 @@ AdjustAPOTC_error_handler <- function(args, varargs_list) {
 	# 		return("There are repeated elements in relocate_cluster and/or nudge_cluster")
 	# 	}
 	# }
-	# return(NULL)
 }
 
-# FIXME
+# TODO it should be more efficient + safer to mathematically transform all values
 change_clone_scale <- function(args) {
 
-	if (args$verbose) message("Repacking all clusters with new clone scale factor")
+	if (args$verbose) {
+		message("Repacking all clusters with new clone scale factor")
+	}
+
+	past_params <- find_seurat_command(
+		seurat_obj = args$seurat_obj,
+		func_name = "RunAPOTC",
+		id = args$object_id
+	)@params
 
 	args$apotc_obj@clone_scale_factor <- args$new_clone_scale
 
-	# TODO mathematically transform instead of repacking
-
-	args$apotc_obj
+	circlepackClones(
+		apotc_obj = args$apotc_obj,
+		ORDER = past_params$order_clones,
+		scramble = past_params$scramble_clones,
+		try_place = past_params$try_place,
+		verbose = args$verbose
+	)
 }
 
 change_rad_scale <- function(apotc_obj, new_factor) {
@@ -153,8 +169,8 @@ change_rad_scale <- function(apotc_obj, new_factor) {
 	apotc_obj
 }
 
-# should probably fool proof this and the next function more
-relocate_clusters <- function(seurat_obj, relocate_cluster, relocation_coord) {
+# should probably make this S4
+relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 	for(i in seq_along(relocate_cluster)) {
 		cl_ind <- relocate_cluster[i]
 		apotc_obj@clusters[[cl_ind]] <- move_cluster(
@@ -162,10 +178,10 @@ relocate_clusters <- function(seurat_obj, relocate_cluster, relocation_coord) {
 	    	new_coord = relocation_coord[[i]]
 	    )
 	}
-	seurat_obj
+	apotc_obj
 }
 
-nudge_clusters <- function(seurat_obj, nudge_cluster, nudge_vector) {
+nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 	for(i in seq_along(nudge_cluster)) {
 		cl_ind <- nudge_cluster[i]
 		apotc_obj@clusters[[cl_ind]] <- trans_coord(
@@ -173,14 +189,14 @@ nudge_clusters <- function(seurat_obj, nudge_cluster, nudge_vector) {
 			new_coord = nudge_vector[[i]]
 		)
 	}
-	seurat_obj
+	apotc_obj
 }
 
-recolor_clusters <- function(seurat_obj, recolor_cluster, new_color) {
+recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
 	for (i in seq_along(recolor_cluster)) {
 		apotc_obj@cluster_colors[recolor_cluster[i]] <- new_color[[i]]
 	}
-	seurat_obj
+	apotc_obj
 }
 
 # need functions for readjusting the apotc reduction for better visuals

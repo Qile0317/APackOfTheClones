@@ -181,8 +181,13 @@ RunAPOTC <- function(
     # store the apotc object in the correct slot with the correct id
     seurat_obj <- setApotcData(seurat_obj, obj_id, apotc_obj)
 
-    seurat_obj <- log_and_index_command(
-        seurat_obj, "RunAPOTC", command_obj = make_apotc_command(call_time)
+    # TODO this could be simplified, something with looking at the grandparent
+    # environment frame with n = 2
+    command_obj <- make_apotc_command(call_time)
+    seurat_obj <- log_seurat_command(
+        seurat_obj = seurat_obj,
+        command_obj = command_obj,
+        id = obj_id
     )
 
     if (verbose) print_completion_time(call_time, newline = TRUE)

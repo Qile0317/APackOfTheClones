@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Qile Yang \email{qile0317@gmail.com} [copyright holder]
+\strong{Maintainer}: Qile Yang \email{qile.yang@berkeley.edu} [copyright holder]
 
 }
 \keyword{internal}

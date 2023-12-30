@@ -1,10 +1,39 @@
 # script for the function to add the APOTC command records to seurat objects
 # Is copied from SeuratObject R/command.R script, under the MIT license
 
+log_seurat_command <- function(
+    seurat_obj, command_obj, id = NULL
+) {
+    seurat_obj@commands[[get_command_name(command_obj, id)]] <- command_obj
+    seurat_obj
+}
+
+find_seurat_command <- function(seurat_obj, func_name, id = NULL) {
+    seurat_obj@commands[[get_command_name(func_name, id)]]
+}
+
+utils::globalVariables(c(".commandIdSepStr"))
+.commandIdSepStr = "."
+
+get_command_name <- function(command, id = NULL) {
+    command_name <- ifelse(
+        test = is.character(command),
+        yes = command,
+        no = command@name
+    )
+
+    ifelse(
+        test = is.null(id),
+        yes = command_name,
+        no = paste(command_name, id, sep = .commandIdSepStr)
+    )
+}
+
+# function to create the seurat command
 # almost identical to seurat version except only data.frame's names are saved in
 # params and assay.used is only "RNA"
 make_apotc_command <- function(call_time = "auto", assay = "RNA") {
-    if (should_assume(call_time)) {call_time <- Sys.time()}
+    if (should_assume(call_time)) call_time <- Sys.time()
 
     if (as.character(x = sys.calls()[[1]])[1] == "do.call") {
         call_string <- deparse(expr = sys.calls()[[1]])
@@ -48,9 +77,9 @@ seurat_extractfield <- function(string, field = 1, delim = "_") {
     if (length(x = fields) == 1) {
         return(strsplit(x = string, split = delim)[[1]][field])
     }
-    return(paste(
+    paste(
         strsplit(x = string, split = delim)[[1]][fields], collapse = delim
-    ))
+    )
 }
 
 # function to be used within another parent function, extracting the arguments
@@ -81,8 +110,8 @@ process_argnames <- function(argnames) {
 
 get_parent_params <- function(
     n = 1,
-    excluded_types = c("Seurat", "list"),
-    only_named_types = c("data.frame", "data.table")
+    excluded_types = c("Seurat"),
+    only_named_types = c("data.frame", "data.table", "list")
 ) {
     argnames <- names(formals(fun = sys.function(which = sys.parent(n = n))))
     argnames <- process_argnames(argnames)
@@ -111,19 +140,4 @@ get_parent_params <- function(
         params[[arg]] <- param_value
     }
     params
-}
-
-log_and_index_command <- function(seurat_obj, func_name, command_obj) {
-    func_name_len <- nchar(func_name)
-    last_index <- -1L
-    for (past_command_name in names(seurat_obj@commands)) {
-        if (substr(past_command_name, 1, func_name_len) == func_name) {
-            last_index <- as.integer(substr(
-                past_command_name, func_name_len + 1, nchar(past_command_name)
-            ))
-        }
-    }
-    actual_func_name <- paste(func_name, last_index + 1L, sep = "")
-    seurat_obj@commands[[actual_func_name]] <- command_obj
-    seurat_obj
 }
