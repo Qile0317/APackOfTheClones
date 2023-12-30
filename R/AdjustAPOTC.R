@@ -32,10 +32,6 @@ AdjustAPOTC <- function(
 	new_rad_scale_factor = NULL,
 	new_clone_scale_factor = NULL,
 
-	reorder = FALSE,
-	rescramble = FALSE,
-	invert_try_place = FALSE,
-
 	repulse = FALSE,
 	repulsion_threshold = 1,
 	repulsion_strength = 1,
@@ -170,7 +166,7 @@ change_rad_scale <- function(apotc_obj, new_factor) {
 	apotc_obj
 }
 
-# should probably make this S4
+# should probably make this S4 - also need to handle label coords moving
 relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 	for(i in seq_along(relocate_cluster)) {
 		cl_ind <- relocate_cluster[i]

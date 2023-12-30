@@ -79,7 +79,7 @@ is_seurat_or_sce_object <- function(obj) {
     is_seurat_object(obj) || is_sce_object(obj)
 }
 
-# math functions
+# math utils
 
 bound_num <- function(num, lowerbound, upperbound) {
     min(max(num, lowerbound), upperbound)
@@ -124,7 +124,7 @@ closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
     closest_w
 }
 
-# data extraction / analysis utilities
+# data extraction / indexing / analysis utilities
 
 last_occurence_index <- function(str, char) {
     ind <- 0
@@ -154,14 +154,31 @@ extract_2d_list_row <- function(l, row_index) {
 }
 
 # operate on non-empty elemetns of two lists of the same length
-# w/an 2arg function
+# with a 2-argument function
 operate_on_same_length_lists <- function(func, l1, l2) {
     l <- init_list(length(l1), list())
     for (i in seq_along(l1)) {
-        if (isnt_empty(l1[[i]]) && isnt_empty(l2[[i]]))
-            l[[i]] <- func(l1[[i]], l2[[i]])
+        if (isnt_empty(l1[[i]]) && isnt_empty(l2[[i]])) {
+            if (!(is.null(l1[i]) || is.null(l2[i]))) {
+                l[[i]] <- func(l1[[i]], l2[[i]])
+            }
+        }
     }
     l
+}
+
+move_coord_list_by_same_amount <- function(
+    coord_list, original_coord_list, new_coord_list
+) {
+    operate_on_same_length_lists(
+        func = add,
+        l1 = coord_list,
+        l2 = operate_on_same_length_lists(
+            func = subtract,
+            l1 = new_coord_list,
+            l2 = original_coord_list
+        )
+    )
 }
 
 #' Take a list of character vectors and join each element of the vectors
@@ -191,17 +208,9 @@ init_list <- function(num_elements, init_val = NULL) {
     l
 }
 
-getlast <- function(x) {
-    UseMethod("getlast")
-}
-
-getlast.default <- function(x) {
-    x[length(x)]
-}
-
-getlast.list <- function(x) {
-    x[[length(x)]]
-}
+getlast <- function(x) UseMethod("getlast")
+getlast.default <- function(x) x[length(x)]
+getlast.list <- function(x) x[[length(x)]]
 
 # S3 method to represent vectors as strings
 
@@ -241,24 +250,6 @@ repr_as_string.list <- function(input, ...) {
         output <- paste(output, repr_as_string(input[[i]]), ",", sep = "")
     }
     paste("list(", substr(output, 1, nchar(output) - 1), ")", sep = "")
-}
-
-# R interface function for checking if metadata names to be added overlaps with
-# existing (probably shouldnt be placed here :/)
-metadata_name_warnstring <- function(seurat_obj, tcr_dataframe) {
-
-    seurat_names <- names(seurat_obj@meta.data)
-    tcr_names <- names(tcr_dataframe)
-
-    if (any(is.na(tcr_names))) {
-        return("tcr_dataframe has NAs in names, please fix")
-    }
-
-    if (has_common_strs(seurat_names, tcr_names)) {
-        return("tcr_dataframe has repeated names with the seurat_object metadata")
-    }
-
-    return(NULL)
 }
 
 # Seurat utils
@@ -327,7 +318,7 @@ get_num_total_clusters <- function(seurat_obj) {
   length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
-# reduction related functions
+# seurat reduction related functions
 
 get_2d_embedding <- function(seurat_obj, reduction) {
   seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2]

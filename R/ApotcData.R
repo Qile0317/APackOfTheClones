@@ -2,14 +2,21 @@
 #' The ApotcData class
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
+#' `r lifecycle::badge("experimental")`
 #'
 #' An S4 class for storing information about T/B cell clonal expansion to be
 #' used by various [APackOfTheClones] functions. Instances of this object type
 #' are stored by [RunAPOTC] in a seurat object's `@misc` slot under a list named
 #' `"APackOfTheClones"`. This class is not meant to be directly instantiated,
-#' accessed, nor modified by the user.
+#' accessed, nor modified by the user. Attributes should only be accessed by the
+#' associated getters so its independent of implementation.
 #'
+#' @slot reduction_base character indicating the reduction the plotting was
+#' based off of.
+#' @slot clonecall character indicating the column name of the seurat object's
+#' metadata that contains the clone information.
+#' @slot metadata_filter_string character indicating the metadata filter string
+#' used to subset the seurat object before running APOTC.
 #' @slot clusters Clustered clones which is an R list of lists of length 5,
 #' with each list of length 5, with the first 3 elements being numeric vectors
 #' containing the x and y coordinates and radii of each clone in the cluster.
@@ -31,6 +38,7 @@
 #' coordinates of each label if plotted
 #'
 #' @keywords internal
+#' @noRd
 #'
 methods::setClass(
 	Class = "ApotcData",
@@ -117,18 +125,29 @@ initializeSubsetApotcData <- function(
 	apotc_obj
 }
 
+# pack the clones assuming centroids are present
 circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 
 	apotc_obj@clusters <- pack_into_clusterlists(
 		sizes = get_processed_clone_sizes(apotc_obj),
-		centroids = apotc_obj@centroids,
-		num_clusters = apotc_obj@num_clusters,
+		centroids = get_centroids(apotc_obj),
+		num_clusters = get_num_clusters(apotc_obj),
 		rad_decrease = get_rad_decrease(apotc_obj),
 		ORDER = ORDER,
 		scramble = scramble,
 		try_place = try_place,
 		verbose = verbose
 	)
+
+	# see which elemens of sizes are empty and set corresponding elements empty
+	for (i in seq_len(get_num_clusters(apotc_obj))) {
+		if (isnt_empty(apotc_obj@clusters[[i]])) {
+			next
+		}
+		apotc_obj@centroids[[i]] <- list()
+		apotc_obj@label_coords[[i]] <- list()
+		# technically colors too :/
+	}
 
 	apotc_obj
 }
@@ -139,7 +158,7 @@ repulseClusters <- function(
 	apotc_obj, repulsion_threshold, repulsion_strength, max_repulsion_iter,
 	verbose
 ) {
-	repulsion_results <- get_repulsed_clusterlists_and_centroids(
+	repulsed_clusters <- get_repulsed_clusterlists(
 	    packed_clusters = get_clusterlists(apotc_obj),
 	    initial_centroids = get_centroids(apotc_obj),
 	    num_clusters = get_num_clusters(apotc_obj),
@@ -149,19 +168,33 @@ repulseClusters <- function(
 		verbose = verbose
 	)
 
-	apotc_obj@clusters <- repulsion_results[[1]]
+	setModifiedClusterlists(
+		apotc_obj, modified_clusterlists = repulsed_clusters
+	)
+}
+
+# function to modify the apotc_obj's relevant slots when modified clusterlists
+# are introduced e.g. for cluster repulsion or relocation. This cannot be used
+# for completely new irrelevant clusterlists, as the centroids and label_coords
+# are modified correspondingly to the original clusters.
+setModifiedClusterlists <- function(apotc_obj, modified_clusterlists) {
+
+	original_centroids <- get_centroids(apotc_obj)
+	modified_centroids <- read_centroids(modified_clusterlists)
 
 	apotc_obj@label_coords <- operate_on_same_length_lists(
-		func = add,
-		l1 = apotc_obj@label_coords,
-		l2 = operate_on_same_length_lists(
-			func = subtract,
-			l1 = repulsion_results[[2]],
-			l2 = apotc_obj@centroids
-		)
-	)
+        func = add,
+        l1 = get_label_coords(apotc_obj),
+        l2 = operate_on_same_length_lists(
+            func = subtract,
+            l1 = modified_centroids,
+            l2 = original_centroids
+        )
+    )
 
-	apotc_obj@centroids <- repulsion_results[[2]]
+	apotc_obj@clusters <- modified_clusterlists
+	apotc_obj@centroids <- modified_centroids
+
 	apotc_obj
 }
 
@@ -189,10 +222,6 @@ get_clusterlists <- function(apotc_obj) {
 
 get_centroids <- function(apotc_obj) {
 	apotc_obj@centroids
-	# lapply(
-	# 	X = get_clusterlists(apotc_obj),
-	# 	FUN = function(x) ifelse(isnt_empty(x), x$centroid, list())
-	# )
 }
 
 get_raw_clone_sizes <- function(apotc_obj) {

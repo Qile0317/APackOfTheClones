@@ -13,7 +13,7 @@
 # repulses clusters and returns a list of length 2.
 # first is the new modified list of clusterlists
 # second is the centroids
-get_repulsed_clusterlists_and_centroids <- function(
+get_repulsed_clusterlists <- function(
   packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
   repulsion_strength, max_repulsion_iter, verbose
 ) {
@@ -26,11 +26,8 @@ get_repulsed_clusterlists_and_centroids <- function(
     packed_clusters, repulsion_threshold, repulsion_strength,
     max_repulsion_iter, verbose
   )
-  initial_centroids <- read_centroids(
-    packed_clusters, initial_centroids, num_clusters
-  )
 
-  list(packed_clusters, initial_centroids)
+  list(packed_clusters)
 }
 
 # Alias to initialize direction vectors in a list
@@ -53,13 +50,6 @@ initialize_list_of_transformation_vectors <- function(
   output
 }
 
-# do_cl_intersect has been replaced by do_cluster_intersect, this is a wrapper
-do_cl_intersect <- function(Cn, Cm, thr = 1) {
-  do_cluster_intersect(
-    Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
-  )
-}
-
 # check in current iteration if two clusters are worth repulsing
 do_proceed <- function(inp, i, j, thr) {
   if ((i == j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
@@ -68,7 +58,11 @@ do_proceed <- function(inp, i, j, thr) {
   do_cl_intersect(inp[[i]], inp[[j]], thr)
 }
 
-# cluster attraction is possible too
+do_cl_intersect <- function(Cn, Cm, thr = 1) {
+  do_cluster_intersect(
+    Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
+  )
+}
 
 # O(N^2) operation to calculate all repulsion vectors for each cluster
 calculate_repulsion_vectors <- function(
