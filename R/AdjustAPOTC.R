@@ -65,9 +65,10 @@ AdjustAPOTC <- function(
 	}
 
 	apotc_obj <- getApotcData(seurat_obj, object_id)
+	args <- hash::hash(as.list(environment()))
 
 	if (should_change(new_clone_scale_factor)) {
-		apotc_obj <- change_clone_scale(args)
+		apotc_obj <- change_clone_scale(seurat_obj, args)
 	}
 
 	if (should_change(new_rad_scale_factor)) {
@@ -129,19 +130,19 @@ AdjustAPOTC_error_handler <- function(args, varargs_list) {
 }
 
 # TODO it should be more efficient + safer to mathematically transform all values
-change_clone_scale <- function(args) {
+change_clone_scale <- function(seurat_obj, args) {
 
 	if (args$verbose) {
 		message("Repacking all clusters with new clone scale factor")
 	}
 
 	past_params <- find_seurat_command(
-		seurat_obj = args$seurat_obj,
+		seurat_obj = seurat_obj,
 		func_name = "RunAPOTC",
 		id = args$object_id
 	)@params
 
-	args$apotc_obj@clone_scale_factor <- args$new_clone_scale
+	args$apotc_obj@clone_scale_factor <- args$new_clone_scale_factor
 
 	circlepackClones(
 		apotc_obj = args$apotc_obj,
