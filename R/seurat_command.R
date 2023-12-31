@@ -32,9 +32,8 @@ get_command_name <- function(command, id = NULL) {
 # function to create the seurat command
 # almost identical to seurat version except only data.frame's names are saved in
 # params and assay.used is only "RNA"
-make_apotc_command <- function(call_time = "auto", assay = "RNA") {
-    if (should_assume(call_time)) call_time <- Sys.time()
-
+make_apotc_command <- function(call_time, assay = "RNA") {
+    
     if (as.character(x = sys.calls()[[1]])[1] == "do.call") {
         call_string <- deparse(expr = sys.calls()[[1]])
         command_name <- as.character(x = sys.calls()[[1]])[2]

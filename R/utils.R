@@ -61,6 +61,8 @@ should_compute <- function(x) is.null(x)
 
 strip_spaces <- function(s) gsub(" ", "", s)
 
+strip_and_lower <- function(s) strip_spaces(tolower(s))
+
 get_xr <- function(plt) {
     ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
 }
@@ -94,8 +96,9 @@ is_bound_between <- function(num, lowerbound, upperbound) {
 
 # spelling related functions
 
-user_attempt_correction <- function(s, strset, stop_msg_start) {
-    s <- strip_spaces(tolower(s))
+user_attempt_correction <- function(s, strset, stop_msg_start) { # badly written, shouldnt make everything lowercase
+    s <- strip_and_lower(s)
+    strset <- sapply(strset, strip_and_lower)
     if (any(s == strset)) {
         return(s)
     }
@@ -326,7 +329,7 @@ get_2d_embedding <- function(seurat_obj, reduction) {
 
 attempt_correction <- function(s) {
     user_attempt_correction(
-      s = strip_spaces(tolower(s)),
+      s = strip_and_lower(s),
       strset = c("umap", "tsne", "pca"),
       stop_msg_start = "Invalid reduction"
     )

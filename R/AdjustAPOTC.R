@@ -173,11 +173,13 @@ recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
 	apotc_obj
 }
 
-# should make these S4 generics to handle diff inputs :/
-
-#methods::setGeneric()
+#FIXME (again :/)
 
 relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
+
+	if (is.numeric(relocation_coord)) {
+		relocation_coord <- init_list(length(relocate_cluster), relocation_coord)
+	}
 
 	new_clusterlist <- get_clusterlists(apotc_obj)
 
@@ -193,6 +195,11 @@ relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 }
 
 nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
+
+	if (is.numeric(nudge_vector)) {
+		nudge_vector <- init_list(length(nudge_cluster), nudge_vector)
+	}
+
 	relocate_clusters(
 		apotc_obj,
 		relocate_cluster = nudge_cluster,
@@ -204,7 +211,7 @@ nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 	)
 }
 
-
+# TODO label movement
 
 # need functions for readjusting the apotc reduction for better visuals
 # also possible to boot up a shiny window in the future?

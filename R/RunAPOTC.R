@@ -110,6 +110,7 @@ RunAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    run_id = "auto",
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -145,10 +146,14 @@ RunAPOTC <- function(
         metadata_filter = extra_filter, varargs_list = list(...)
     )
 
-    obj_id <- parse_to_object_id(
-        reduction_base = reduction_base, clonecall =  clonecall,
-        varargs_list = list(...), metadata_filter = extra_filter
-    )
+    if (should_assume(run_id)) {
+        obj_id <- parse_to_object_id(
+            reduction_base = reduction_base, clonecall =  clonecall,
+            varargs_list = list(...), metadata_filter = extra_filter
+        )
+    } else {
+        obj_id <- run_id
+    }
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 

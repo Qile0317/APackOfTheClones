@@ -52,7 +52,7 @@ methods::setClass(
 		clone_sizes = 'list',
 		num_clusters = 'numeric',
 
-		clone_scale_factor = 'numeric', # make these overridable in APOTCPlot, and choose if they want to modify
+		clone_scale_factor = 'numeric', # should make these overridable in APOTCPlot, and choose if they want to modify
 		rad_scale_factor = 'numeric',
 		cluster_colors = 'character',
 		labels = 'character',
