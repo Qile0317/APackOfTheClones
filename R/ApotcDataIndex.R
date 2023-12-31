@@ -101,7 +101,7 @@ infer_object_id <- function(args, varargs_list) {
     ) {
         latest_id <- getLastApotcDataId(args$seurat_obj)
         message(paste(
-            "* using the latest Apotc Run Data with object id:",
+            "* using the latest APackOfTheClones Run Data with object id:",
             latest_id
         ))
         return(latest_id)

@@ -27,7 +27,7 @@ get_repulsed_clusterlists <- function(
     max_repulsion_iter, verbose
   )
 
-  list(packed_clusters)
+  packed_clusters
 }
 
 # Alias to initialize direction vectors in a list

@@ -86,6 +86,13 @@ move_cluster <- function(cluster, new_coord) {
 read_centroids <- function(list_of_clusterlists) {
   lapply(
 		X = list_of_clusterlists,
-		FUN = function(x) ifelse(isnt_empty(x), x$centroid, list())
+		FUN = function(x) ifelse(isnt_empty(x), get_centroid(x), list())
 	)
 }
+
+# getters for a single clusterlist
+get_x_coords <- function(l) l[[1]]
+get_y_coords <- function(l) l[[2]]
+get_radii <- function(l) l[[3]]
+get_centroid <- function(l) l[[4]]
+get_cluster_radius <- function(l) l[[5]]

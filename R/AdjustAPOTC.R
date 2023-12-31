@@ -166,35 +166,45 @@ change_rad_scale <- function(apotc_obj, new_factor) {
 	apotc_obj
 }
 
-# should probably make this S4 - also need to handle label coords moving
-relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
-	for(i in seq_along(relocate_cluster)) {
-		cl_ind <- relocate_cluster[i]
-		apotc_obj@clusters[[cl_ind]] <- move_cluster(
-	    	cluster = apotc_obj@clusters[[cl_ind]],
-	    	new_coord = relocation_coord[[i]]
-	    )
-	}
-	apotc_obj
-}
-
-nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
-	for(i in seq_along(nudge_cluster)) {
-		cl_ind <- nudge_cluster[i]
-		apotc_obj@clusters[[cl_ind]] <- trans_coord(
-			cluster = apotc_obj@clusters[[cl_ind]],
-			new_coord = nudge_vector[[i]]
-		)
-	}
-	apotc_obj
-}
-
 recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
 	for (i in seq_along(recolor_cluster)) {
 		apotc_obj@cluster_colors[recolor_cluster[i]] <- new_color[[i]]
 	}
 	apotc_obj
 }
+
+# should make these S4 generics to handle diff inputs :/
+
+#methods::setGeneric()
+
+relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
+
+	new_clusterlist <- get_clusterlists(apotc_obj)
+
+	for(i in seq_along(relocate_cluster)) {
+		cl_ind <- relocate_cluster[i]
+		new_clusterlist[[cl_ind]] <- move_cluster(
+	    	cluster = new_clusterlist[[cl_ind]],
+	    	new_coord = relocation_coord[[i]]
+	    )
+	}
+
+	setModifiedClusterlists(apotc_obj, new_clusterlist)
+}
+
+nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
+	relocate_clusters(
+		apotc_obj,
+		relocate_cluster = nudge_cluster,
+		relocation_coord = operate_on_same_length_lists(
+			func = add,
+			l1 = nudge_vector,
+			l2 = get_centroids(apotc_obj)
+		)
+	)
+}
+
+
 
 # need functions for readjusting the apotc reduction for better visuals
 # also possible to boot up a shiny window in the future?
