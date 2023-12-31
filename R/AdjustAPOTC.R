@@ -52,10 +52,8 @@ AdjustAPOTC <- function(
 	args <- hash::hash(as.list(environment()))
 	AdjustAPOTC_error_handler(args = args, varargs_list = list(...))
 
-	apotc_obj <- getApotcData(
-		seurat_obj, infer_object_id_if_needed(args, varargs_list = list(...))
-	)
-
+	object_id <- infer_object_id_if_needed(args, varargs_list = list(...))
+	apotc_obj <- getApotcData(seurat_obj, object_id)
 	args <- hash::hash(as.list(environment()))
 
 	# TODO interactive shiny code here in the future
@@ -178,19 +176,20 @@ relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 		relocation_coord <- init_list(length(relocate_cluster), relocation_coord)
 	}
 
-	new_clusterlist <- get_clusterlists(apotc_obj)
+	new_clusterlists <- get_clusterlists(apotc_obj)
 
-	for(i in seq_along(relocate_cluster)) {
+	for (i in seq_along(relocate_cluster)) {
 		cl_ind <- relocate_cluster[i]
-		new_clusterlist[[cl_ind]] <- move_cluster(
-	    	cluster = new_clusterlist[[cl_ind]],
+		new_clusterlists[[cl_ind]] <- move_cluster(
+	    	cluster = new_clusterlists[[cl_ind]],
 	    	new_coord = relocation_coord[[i]]
 	    )
 	}
 
-	setModifiedClusterlists(apotc_obj, new_clusterlist)
+	setModifiedClusterlists(apotc_obj, new_clusterlists)
 }
 
+# FIXME broken for nudge_cluster=c(1,3),nudge_vector=c(1,1)
 nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 
 	if (is.numeric(nudge_vector)) {
