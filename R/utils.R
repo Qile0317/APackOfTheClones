@@ -96,10 +96,8 @@ is_bound_between <- function(num, lowerbound, upperbound) {
 
 # spelling related functions
 
-user_attempt_correction <- function(s, strset, stop_msg_start) { # badly written, shouldnt make everything lowercase
-    s <- strip_and_lower(s)
-    strset <- sapply(strset, strip_and_lower)
-    if (any(s == strset)) {
+user_attempt_correction <- function(s, strset, stop_msg_start) {
+    if (any(strip_and_lower(s) == strip_and_lower(strset))) {
         return(s)
     }
     stop(paste(

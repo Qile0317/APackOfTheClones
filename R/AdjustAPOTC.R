@@ -27,7 +27,7 @@ AdjustAPOTC <- function(
 	clonecall = NULL,
 	...,
 	extra_filter = NULL,
-	object_id = NULL,
+	run_id = NULL,
 
 	new_rad_scale_factor = NULL,
 	new_clone_scale_factor = NULL,
@@ -52,16 +52,13 @@ AdjustAPOTC <- function(
 	args <- hash::hash(as.list(environment()))
 	AdjustAPOTC_error_handler(args = args, varargs_list = list(...))
 
-	if (should_compute(object_id)) {
-		object_id <- infer_object_id(args = args, varargs_list = list(...))
-	}
+	apotc_obj <- getApotcData(
+		seurat_obj, infer_object_id_if_needed(args, varargs_list = list(...))
+	)
 
-	if (interactive) {
-		# TODO shiny app code here
-	}
-
-	apotc_obj <- getApotcData(seurat_obj, object_id)
 	args <- hash::hash(as.list(environment()))
+
+	# TODO interactive shiny code here in the future
 
 	if (should_change(new_clone_scale_factor)) {
 		apotc_obj <- change_clone_scale(seurat_obj, args)

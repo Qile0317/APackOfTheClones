@@ -71,7 +71,7 @@ APOTCPlot <- function(
 	clonecall = NULL,
 	...,
 	extra_filter = NULL,
-	object_id = NULL,
+	run_id = NULL,
 
 	res = 360,
 	linetype = "blank",
@@ -96,11 +96,9 @@ APOTCPlot <- function(
 	args <- hash::hash(as.list(environment()))
 	APOTCPlot_error_handler(args)
 
-	if (should_compute(object_id)) {
-		object_id <- infer_object_id(args = args, varargs_list = list(...))
-	}
-
-	apotc_obj <- getApotcData(seurat_obj, object_id)
+	apotc_obj <- getApotcData(
+		seurat_obj, infer_object_id_if_needed(args, varargs_list = list(...))
+	)
 
 	result_plot <- plot_clusters(
 		clusters = get_plottable_df_with_color(apotc_obj),
@@ -111,7 +109,7 @@ APOTCPlot <- function(
 
 	#set theme
 	if (use_default_theme) {
-		result_plot <- add_default_theme(result_plot, apotc_obj@reduction_base)
+		result_plot <- add_default_theme(result_plot, get_reduction_base(apotc_obj))
 	} else {
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
@@ -119,7 +117,7 @@ APOTCPlot <- function(
 	# retain axis scales on the resulting plot. The function sucks tho
 	if (retain_axis_scales) {
 		result_plot <- suppressMessages(invisible(
-			retain_scale(seurat_obj, reduction_base, result_plot)
+			retain_scale(seurat_obj, get_reduction_base(apotc_obj), result_plot)
 		))
 	}
 

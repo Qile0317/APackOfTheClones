@@ -31,8 +31,7 @@ insert_legend <- function(
     if (should_estimate(sizes))
         sizes <- estimate_legend_sizes(apotc_obj)
     
-    if (!is.numeric(pos))
-        pos <- correct_legend_coord_str(pos)
+    pos <- correct_legend_coord_if_str(pos)
 
     # calculate relevant legend plotting data
 
@@ -97,8 +96,12 @@ calculate_legend_spacing <- function(
     (abs(get_xr(plt)[1]) * portion) - (2 * rad_decrease)
 }
 
-correct_legend_coord_str <- function(pos) {
-    pos <- tolower(strip_spaces(pos))
+correct_legend_coord_if_str <- function(pos) {
+    if (is.numeric(pos)) {
+        return(pos)
+    }
+
+    pos <- strip_and_lower(pos)
     pos <- switch(
         pos,
         "auto" = "auto",

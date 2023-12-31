@@ -92,7 +92,11 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stored under under @misc[["APackOfTheClones"]][[id]]
 
-infer_object_id <- function(args, varargs_list) {
+infer_object_id_if_needed <- function(args, varargs_list) {
+    if (!should_compute(args$run_id)) {
+        return(args$run_id)
+    }
+    
     if (
         is.null(args$reduction_base) &&
             is.null(args$clonecall) &&
@@ -163,18 +167,7 @@ varargs_list_to_id_segment <- function(varargs_list) {
     paste(sort(segments), collapse = ",")
 }
 
-#obj_id_to_readable_str
-
 # getting and setting related functions
-
-containsApotcRun <- function(seurat_obj, obj_id) {
-    return(!is.null(getApotcData(seurat_obj, obj_id)))
-}
-
-user_contains_apotc_run <- function(seurat_obj, obj_id) {
-    # TODO
-    containsApotcRun(obj_id)
-}
 
 getApotcData <- function(seurat_obj, obj_id) {
     seurat_obj@misc[["APackOfTheClones"]][[obj_id]]
@@ -187,6 +180,50 @@ getLastApotcData <- function(seurat_obj) {
 setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
     seurat_obj@misc[["APackOfTheClones"]][[obj_id]] <- apotc_obj
     seurat_obj
+}
+
+containsAnyApotcData <- function(seurat_obj) {
+    !is.null(seurat_obj@misc[["APackOfTheClones"]])
+}
+
+#' @title
+#' Check for the existence of an APackOfTheClones run with its run id
+#' 
+#' @description
+#' A convenience function to check for the existence of an APackOfTheClones
+#' run with its run id, regardless of if any run has been made
+#' 
+#' @param seurat_obj a seurat object
+#' @param run_id character. The id of the associated ApotcRun.
+#' 
+#' @return A logical indicating whether the run exists.
+#' @export
+#' 
+#' @examples
+#' pbmc <- RunAPOTC(
+# '     seurat_obj = get(data("combined_pbmc")),
+# '     reduction_base = "umap",
+# '     clonecall = "strict",
+#'      run_id = "run1"
+# '     verbose = FALSE
+# ' )
+#' 
+#' containsApotcRun(pbmc, "run1")
+#' #> [1] TRUE
+#' 
+#' containsApotcRun(pbmc, "run2")
+#' #> [1] FALSE
+#' 
+containsApotcRun <- function(seurat_obj, run_id) {
+
+    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
+
+    if (!containsAnyApotcData(seurat_obj)) {
+        return(FALSE)
+    }
+
+    any(getApotcDataIds(seurat_obj) == run_id)
 }
 
 #' @title
@@ -224,7 +261,8 @@ deleteApotcData <- function(seurat_obj, run_id) {
 
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
     if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
-    user_contains_apotc_run(seurat_obj, run_id)
+    if (!containsApotcRun(seurat_obj, run_id))
+        stop(paste("no run with id:", run_id, "is present"))
 
     seurat_obj <- setApotcData(seurat_obj, run_id, NULL)
     seurat_obj@commands[[get_command_name("RunAPOTC", run_id)]] <- NULL
@@ -266,11 +304,13 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #' #> [1] "umap;CTstrict;_;_" "umap;CTgene;_;_"
 #'
 getApotcDataIds <- function(seurat_obj) {
+
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
     obj_list <- seurat_obj@misc[["APackOfTheClones"]]
-    if (!isnt_empty(obj_list) && !is.null(obj_list)) {
+    if (is_empty(obj_list) || is.null(obj_list)) {
         stop("No APackOfTheClones data found in seurat object")
     }
+    
     names(obj_list)
 }
 
