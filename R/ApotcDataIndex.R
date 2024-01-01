@@ -327,7 +327,7 @@ getApotcDataIds <- function(seurat_obj) {
 #' @return a character of the object id of the last [RunAPOTC] call
 #' @export
 #'
-#' @example
+#' @examples
 #' # first run
 # ' pbmc <- RunAPOTC(
 # '     seurat_obj = get(data("combined_pbmc")),

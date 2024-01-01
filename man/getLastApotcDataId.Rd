@@ -17,3 +17,21 @@ a character of the object id of the last \link{RunAPOTC} call
 A convenience function to get the object id of the most recent valid
 \link{RunAPOTC} run, to be used by \link{APOTCPlot} and \link{AdjustAPOTC}
 }
+\examples{
+# first run
+
+getApotcDataIds(pbmc)
+#> [1] "umap;CTstrict;_;_"
+
+# second run with a different clonecall
+pbmc <- RunAPOTC(
+    seurat_obj = pbmc,
+    reduction_base = "umap",
+    clonecall = "gene",
+    verbose = FALSE
+)
+
+getApotcDataIds(pbmc)
+#> [1] "umap;CTgene;_;_"
+
+}

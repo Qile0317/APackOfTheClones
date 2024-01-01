@@ -2,7 +2,7 @@
 % Please edit documentation in R/ApotcDataIndex.R
 \name{getApotcDataIds}
 \alias{getApotcDataIds}
-\title{Get all object ids of previous RunAPOTC runs on a seurat object}
+\title{Get all run ids of previous RunAPOTC runs on a seurat object}
 \usage{
 getApotcDataIds(seurat_obj)
 }
@@ -11,9 +11,25 @@ getApotcDataIds(seurat_obj)
 order of the functions being called.}
 }
 \value{
-a character vector of all object ids of previous RunAPOTC runs, in
-the order they were ran.
+a character vector of all run ids of previous RunAPOTC runs, in
+the order they were ran in.
 }
 \description{
-A convenience function to get all object ids of previous RunAPOTC run IDs
+A convenience function to get all run ids of previous RunAPOTC run IDs
+}
+\examples{
+
+getApotcDataIds(pbmc)
+#> [1] "umap;CTstrict;_;_"
+
+pbmc <- RunAPOTC(
+    seurat_obj = pbmc,
+    reduction_base = "umap",
+    clonecall = "gene",
+    verbose = FALSE
+)
+
+getApotcDataIds(pbmc)
+#> [1] "umap;CTstrict;_;_" "umap;CTgene;_;_"
+
 }

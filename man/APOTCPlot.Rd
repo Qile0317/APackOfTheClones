@@ -10,7 +10,7 @@ APOTCPlot(
   clonecall = NULL,
   ...,
   extra_filter = NULL,
-  object_id = NULL,
+  run_id = NULL,
   res = 360,
   linetype = "blank",
   use_default_theme = TRUE,

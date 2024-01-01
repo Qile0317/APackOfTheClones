@@ -11,7 +11,7 @@ AdjustAPOTC(
   clonecall = NULL,
   ...,
   extra_filter = NULL,
-  object_id = NULL,
+  run_id = NULL,
   new_rad_scale_factor = NULL,
   new_clone_scale_factor = NULL,
   repulse = FALSE,
@@ -24,7 +24,6 @@ AdjustAPOTC(
   nudge_vector = NULL,
   recolor_cluster = NULL,
   new_color = NULL,
-  interactive = FALSE,
   verbose = TRUE
 )
 }
@@ -57,11 +56,22 @@ down the line.}
 keyword arguments - based on the metadata. This is a more flexible
 alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
-could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}}
+could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
+involving characters, ensure to enclose with single quotes.}
 
-\item{new_rad_scale_factor}{responsible for changing the rad_scale_factor of
-all circles. Can be a numerical value between 0 and 1.
-unfinished}
+\item{run_id}{character. This will be the ID associated with the data of a
+run, and will be used by other important functions like \link{APOTCPlot} and
+\link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
+in the following format:
+\verb{reduction_base;clonecall;keyword_arguments;extra_filter} where if
+keyword arguments and extra_filter are underscore characters if there was
+no input for the \code{...} and \code{extra_filter} parameters.}
+
+\item{new_rad_scale_factor}{numeric in (0, 1]. changes the rad_scale_factor
+of all circles.}
+
+\item{new_clone_scale_factor}{numeric in (0, 1]. changes the
+clone_scale_factor}
 
 \item{repulse}{If \code{TRUE}, will attempt to push overlapping clusters away from
 each other}
@@ -74,6 +84,18 @@ clusters repulse each other per iteration, and vice versa}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations}
 
+\item{relocate_cluster}{TODO}
+
+\item{relocation_coord}{TODO}
+
+\item{nudge_cluster}{TODO}
+
+\item{nudge_vector}{TODO}
+
+\item{recolor_cluster}{TODO}
+
+\item{new_color}{TODO}
+
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress}
 }
@@ -81,8 +103,15 @@ of the progress}
 The adjusted \code{seurat_obj}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 If the user is unsatisfied with the clonal expansion plot that
 was generated from \code{RunAPOTC} and \code{APOTCPlot}, this function has a range of
 arguments to modify the data and/or parameters of the visualization. Note
 that some of the arguments may conflict with eachother.
+}
+\examples{
+pbmc <- RunAPOTC(get(data("combined_pbmc")))
+# unfinished
+
 }

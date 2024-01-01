@@ -1,6 +1,6 @@
 #' @title
-#' Directly visualize clonal expansion of a contig combined seurat object
-#' 
+#' Directly visualize clonal expansion of a combined seurat object
+#'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
@@ -17,7 +17,16 @@
 #' @export
 #'
 #' @examples
-#' # unfinished
+#' library(APackOfTheClones)
+#' data("combined_pbmc")
+#'
+#' # plot with default parameters
+#' vizAPOTC(combined_pbmc, verbose = FALSE)
+#'
+#' # use arguments from RunAPOTC and APOTCPlot
+#' vizAPOTC(
+#'     combined_pbmc, try_place = TRUE, show_labels = TRUE, verbose = FALSE
+#' )
 #' 
 vizAPOTC <- function(
     seurat_obj,
@@ -31,6 +40,7 @@ vizAPOTC <- function(
     order_clones = TRUE,
     scramble_clones = FALSE,
     try_place = FALSE,
+    
     repulse = TRUE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
@@ -63,6 +73,7 @@ vizAPOTC <- function(
         clonecall = clonecall,
         ...,
         extra_filter = extra_filter,
+        run_id = "vizAPOTC",
 
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,
@@ -81,7 +92,7 @@ vizAPOTC <- function(
 
     APOTCPlot(
         seurat_obj,
-        object_id = getLastApotcDataId(seurat_obj),
+        run_id = "vizAPOTC",
 
         res = res,
         linetype = linetype,

@@ -55,7 +55,15 @@
 #' keyword arguments - based on the metadata. This is a more flexible
 #' alternative / addition to the filtering keyword arguments. For example, if
 #' one wanted to filter by the length of the amino acid sequence of TCRs, one
-#' could pass in something like `extra_filter = "nchar(CTaa) - 1 > 10"`
+#' could pass in something like `extra_filter = "nchar(CTaa) - 1 > 10"`. When
+#' involving characters, ensure to enclose with single quotes.
+#' @param run_id character. This will be the ID associated with the data of a
+#' run, and will be used by other important functions like [APOTCPlot] and
+#' [AdjustAPOTC]. Defaults to `NULL`, in which case the ID will be generated
+#' in the following format:
+#' `reduction_base;clonecall;keyword_arguments;extra_filter` where if
+#' keyword arguments and extra_filter are underscore characters if there was
+#' no input for the `...` and `extra_filter` parameters.
 #' @param clone_scale_factor Dictates how much to scale each circle(between 0,1)
 #' radius when converting from clonotype counts into circles that represent
 #' individual clonotypes. The argument defaults to the character `"auto"`, and
@@ -87,8 +95,8 @@
 #' All APackOfTheClones run data is stored in the seurat object under
 #' `seurat_object@misc$APackOfTheClones`, which is a list of [ApotcData] objects
 #' with each element corresponding to a unique run. The id of each run is the
-#' name of each element in the list. The user is ***recommended heavily*** to
-#' not manually modify anything as it may cause unexpected behavior with
+#' name of each element in the list. The user ***really shouldn't***
+#' manually modify anything as it may cause unexpected behavior with
 #' many other functions.
 #'
 #' @return A modified version of the input seurat object, which harbors data
@@ -96,13 +104,30 @@
 #' and has a friendly user interface to modify certain attributes with
 #' [AdjustAPOTC].
 #'
-#' @seealso [APOTCPlot], [AdjustAPOTC]
+#' @seealso [APOTCPlot], [AdjustAPOTC], [getApotcDataIds]
 #'
 #' @export
 #'
 #' @examples
 #' data("combined_pbmc")
-#' combined_pbmc <- RunAPOTC(combined_pbmc, verbose = FALSE)
+#'
+#' # this is the recommended approach to use a custom run_id with default params
+#' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "default")
+#'
+#' # here's a seperate run with some filters to the meta data, where
+#' # `orig.ident` is a custom column in the example data. Notice that it is not
+#' # a `RunAPOTC` parameter but a user keyword argument
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L")
+#' )
+#'
+#' # the exact same thing can be achieved with the `extra_filter` parameter
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc,
+#'     run_id = "sample17",
+#'     extra_filter = "substr(orig.ident, 2, 3) == '17'",
+#'     override = TRUE
+#' )
 #'
 RunAPOTC <- function(
     seurat_obj,
@@ -110,7 +135,7 @@ RunAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
-    run_id = "auto",
+    run_id = NULL,
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -130,9 +155,7 @@ RunAPOTC <- function(
 
     # compute inputs
     reduction_base <- attempt_correction(reduction_base)
-
-    #clonecall <- scRepertoire:::.theCall(clonecall, seurat_obj@meta.data)
-    clonecall <- .convertClonecall(clonecall)
+    clonecall <- .theCall(seurat_obj@meta.data, clonecall)
 
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
@@ -146,14 +169,7 @@ RunAPOTC <- function(
         metadata_filter = extra_filter, varargs_list = list(...)
     )
 
-    if (should_assume(run_id)) {
-        obj_id <- parse_to_object_id(
-            reduction_base = reduction_base, clonecall =  clonecall,
-            varargs_list = list(...), metadata_filter = extra_filter
-        )
-    } else {
-        obj_id <- run_id
-    }
+    obj_id <- infer_object_id_if_needed(args, varargs_list = list(...))
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 
@@ -165,21 +181,31 @@ RunAPOTC <- function(
 
     # run the packing algos
     apotc_obj <- ApotcData(
-        seurat_obj, metadata_filter_string, clonecall, reduction_base,
-        clone_scale_factor, rad_scale_factor
+        seurat_obj,
+        metadata_filter_string,
+        clonecall,
+        reduction_base,
+        clone_scale_factor,
+        rad_scale_factor
     )
 
     if (verbose) message("\nPacking clones into clusters")
 
     apotc_obj <- circlepackClones(
-        apotc_obj = apotc_obj, ORDER = order_clones, scramble = scramble_clones,
-        try_place = try_place, verbose = verbose
+        apotc_obj,
+        ORDER = order_clones,
+        scramble = scramble_clones,
+        try_place = try_place,
+        verbose = verbose
     )
 
     if (repulse) {
         apotc_obj <- repulseClusters(
-            apotc_obj, repulsion_threshold, repulsion_strength,
-            max_repulsion_iter, verbose
+            apotc_obj,
+            repulsion_threshold,
+            repulsion_strength,
+            max_repulsion_iter,
+            verbose
         )
     }
 

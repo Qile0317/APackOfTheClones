@@ -11,6 +11,7 @@ RunAPOTC(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
+  run_id = NULL,
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
   order_clones = TRUE,
@@ -54,7 +55,16 @@ down the line.}
 keyword arguments - based on the metadata. This is a more flexible
 alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
-could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}}
+could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
+involving characters, ensure to enclose with single quotes.}
+
+\item{run_id}{character. This will be the ID associated with the data of a
+run, and will be used by other important functions like \link{APOTCPlot} and
+\link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
+in the following format:
+\verb{reduction_base;clonecall;keyword_arguments;extra_filter} where if
+keyword arguments and extra_filter are underscore characters if there was
+no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
@@ -131,15 +141,32 @@ with the \link{AdjustAPOTC} function.
 All APackOfTheClones run data is stored in the seurat object under
 \code{seurat_object@misc$APackOfTheClones}, which is a list of \link{ApotcData} objects
 with each element corresponding to a unique run. The id of each run is the
-name of each element in the list. The user is \emph{\strong{recommended heavily}} to
-not manually modify anything as it may cause unexpected behavior with
+name of each element in the list. The user \emph{\strong{really shouldn't}}
+manually modify anything as it may cause unexpected behavior with
 many other functions.
 }
 \examples{
 data("combined_pbmc")
-combined_pbmc <- RunAPOTC(combined_pbmc, verbose = FALSE)
+
+# this is the recommended approach to use a custom run_id with default params
+combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "default")
+
+# here's a seperate run with some filters to the meta data, where
+# `orig.ident` is a custom column in the example data. Notice that it is not
+# a `RunAPOTC` parameter but a user keyword argument
+combined_pbmc <- RunAPOTC(
+    combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L")
+)
+
+# the exact same thing can be achieved with the `extra_filter` parameter
+combined_pbmc <- RunAPOTC(
+    combined_pbmc,
+    run_id = "sample17",
+    extra_filter = "substr(orig.ident, 2, 3) == '17'",
+    override = TRUE
+)
 
 }
 \seealso{
-\link{APOTCPlot}, \link{AdjustAPOTC}
+\link{APOTCPlot}, \link{AdjustAPOTC}, \link{getApotcDataIds}
 }

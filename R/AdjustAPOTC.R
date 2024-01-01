@@ -3,23 +3,34 @@
 #' object
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' If the user is unsatisfied with the clonal expansion plot that
 #' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
 #' arguments to modify the data and/or parameters of the visualization. Note
 #' that some of the arguments may conflict with eachother.
-#'
-#' @param new_clone_scale_factor
+#' 
 #' @inheritParams RunAPOTC
-#'
+#' 
 #' @param seurat_obj The seurat object to be adjusted. Must have an `apotc`
 #' reduction
-#' @param new_rad_scale_factor responsible for changing the rad_scale_factor of
-#' all circles. Can be a numerical value between 0 and 1.
-#' unfinished
+#' @param new_clone_scale_factor numeric in (0, 1]. changes the
+#' clone_scale_factor
+#' @param new_rad_scale_factor numeric in (0, 1]. changes the rad_scale_factor
+#' of all circles.
+#' @param relocate_cluster TODO
+#' @param relocation_coord TODO
+#' @param nudge_cluster TODO
+#' @param nudge_vector TODO
+#' @param recolor_cluster TODO
+#' @param new_color TODO
 #'
 #' @return The adjusted `seurat_obj`
-#'
 #' @export
+#' 
+#' @examples
+#' pbmc <- RunAPOTC(get(data("combined_pbmc")))
+#' # unfinished
 #'
 AdjustAPOTC <- function(
 	seurat_obj,
@@ -46,7 +57,7 @@ AdjustAPOTC <- function(
 	recolor_cluster = NULL, #same as above
 	new_color = NULL,
 
-	interactive = FALSE,
+	#interactive = FALSE,
 	verbose = TRUE
 ) {
 	args <- hash::hash(as.list(environment()))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/vizAPOTC.R
 \name{vizAPOTC}
 \alias{vizAPOTC}
-\title{Directly visualize clonal expansion of a contig combined seurat object}
+\title{Directly visualize clonal expansion of a combined seurat object}
 \usage{
 vizAPOTC(
   seurat_obj,
@@ -67,7 +67,8 @@ down the line.}
 keyword arguments - based on the metadata. This is a more flexible
 alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
-could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}}
+could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
+involving characters, ensure to enclose with single quotes.}
 
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
@@ -173,6 +174,15 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 (\link{APOTCPlot}).
 }
 \examples{
-# unfinished
+library(APackOfTheClones)
+data("combined_pbmc")
+
+# plot with default parameters
+vizAPOTC(combined_pbmc, verbose = FALSE)
+
+# use arguments from RunAPOTC and APOTCPlot
+vizAPOTC(
+    combined_pbmc, try_place = TRUE, show_labels = TRUE, verbose = FALSE
+)
 
 }
