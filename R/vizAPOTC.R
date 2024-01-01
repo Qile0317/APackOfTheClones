@@ -12,7 +12,7 @@
 #'
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
-#' 
+#'
 #' @inherit APOTCPlot return
 #' @export
 #'

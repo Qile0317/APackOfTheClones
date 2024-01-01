@@ -12,12 +12,19 @@ order of the functions being called.}
 }
 \value{
 a character vector of all run ids of previous RunAPOTC runs, in
-the order they were ran in.
+the order they were ran in. If there are no runs on the object, it returns
+\code{NULL}.
 }
 \description{
 A convenience function to get all run ids of previous RunAPOTC run IDs
 }
 \examples{
+pbmc <- RunAPOTC(
+    seurat_obj = get(data("combined_pbmc")),
+    reduction_base = "umap",
+    clonecall = "strict",
+    verbose = FALSE
+)
 
 getApotcDataIds(pbmc)
 #> [1] "umap;CTstrict;_;_"

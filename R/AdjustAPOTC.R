@@ -9,25 +9,39 @@
 #' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
 #' arguments to modify the data and/or parameters of the visualization. Note
 #' that some of the arguments may conflict with eachother.
-#' 
+#'
 #' @inheritParams RunAPOTC
-#' 
-#' @param seurat_obj The seurat object to be adjusted. Must have an `apotc`
-#' reduction
-#' @param new_clone_scale_factor numeric in (0, 1]. changes the
+#'
+#' @param seurat_obj The seurat object to be adjusted.
+#' @param new_clone_scale_factor a single numeric in (0, 1]. changes the
 #' clone_scale_factor
-#' @param new_rad_scale_factor numeric in (0, 1]. changes the rad_scale_factor
-#' of all circles.
-#' @param relocate_cluster TODO
-#' @param relocation_coord TODO
-#' @param nudge_cluster TODO
-#' @param nudge_vector TODO
-#' @param recolor_cluster TODO
-#' @param new_color TODO
+#' @param new_rad_scale_factor a single numeric in (0, 1]. changes the
+#' radius scaling factor of all circles.
+#' @param relocate_cluster numeric of arbitrary length. Indicates which
+#' cluster(s) to relocate to new coordinates
+#' @param relocation_coord numeric of length two or a list of numerics of length
+#' two of length of `relocate_cluster`. If its a list, indicates each coordinate
+#' that the clusters in `relocate_cluster` should move to. If its just a
+#' numeric, then will relocate all clusters in `relocate_cluster` to the input,
+#' which is likely not desired behaviour, so this should only be convinience
+#' syntax if `relocate_cluster` has length 1.
+#' @param nudge_cluster numeric of arbitrary length. Indicates which
+#' cluster(s) to "nudge"/translate their coordinate(s) by.
+#' @param nudge_vector numeric of length two or a list of numerics of length
+#' two of length of `nudge_cluster`. If its a list, indicates each translation
+#' vector (in other words, x-y coordinates) that the clusters in
+#' `nudge_cluster` should be translate by. If its just a numeric, then will
+#' translate all clusters in `nudge_cluster` by the input - which mostly is
+#' syntactic sugar for translating a single cluster if the input of
+#' `nudge_cluster` is of length 1.
+#' @param recolor_cluster numeric of arbitrary length. Indicates which
+#' cluster(s) to change their color by.
+#' @param new_color character of arbitrary length. Indicates the corresponding
+#' new colors that selected clusters in `recolor_cluster` should be changed to.
 #'
 #' @return The adjusted `seurat_obj`
 #' @export
-#' 
+#'
 #' @examples
 #' pbmc <- RunAPOTC(get(data("combined_pbmc")))
 #' # unfinished

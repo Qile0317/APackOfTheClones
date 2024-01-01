@@ -28,8 +28,7 @@ AdjustAPOTC(
 )
 }
 \arguments{
-\item{seurat_obj}{The seurat object to be adjusted. Must have an \code{apotc}
-reduction}
+\item{seurat_obj}{The seurat object to be adjusted.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or
@@ -67,10 +66,10 @@ in the following format:
 keyword arguments and extra_filter are underscore characters if there was
 no input for the \code{...} and \code{extra_filter} parameters.}
 
-\item{new_rad_scale_factor}{numeric in (0, 1]. changes the rad_scale_factor
-of all circles.}
+\item{new_rad_scale_factor}{a single numeric in (0, 1]. changes the
+radius scaling factor of all circles.}
 
-\item{new_clone_scale_factor}{numeric in (0, 1]. changes the
+\item{new_clone_scale_factor}{a single numeric in (0, 1]. changes the
 clone_scale_factor}
 
 \item{repulse}{If \code{TRUE}, will attempt to push overlapping clusters away from
@@ -84,17 +83,32 @@ clusters repulse each other per iteration, and vice versa}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations}
 
-\item{relocate_cluster}{TODO}
+\item{relocate_cluster}{numeric of arbitrary length. Indicates which
+cluster(s) to relocate to new coordinates}
 
-\item{relocation_coord}{TODO}
+\item{relocation_coord}{numeric of length two or a list of numerics of length
+two of length of \code{relocate_cluster}. If its a list, indicates each coordinate
+that the clusters in \code{relocate_cluster} should move to. If its just a
+numeric, then will relocate all clusters in \code{relocate_cluster} to the input,
+which is likely not desired behaviour, so this should only be convinience
+syntax if \code{relocate_cluster} has length 1.}
 
-\item{nudge_cluster}{TODO}
+\item{nudge_cluster}{numeric of arbitrary length. Indicates which
+cluster(s) to "nudge"/translate their coordinate(s) by.}
 
-\item{nudge_vector}{TODO}
+\item{nudge_vector}{numeric of length two or a list of numerics of length
+two of length of \code{nudge_cluster}. If its a list, indicates each translation
+vector (in other words, x-y coordinates) that the clusters in
+\code{nudge_cluster} should be translate by. If its just a numeric, then will
+translate all clusters in \code{nudge_cluster} by the input - which mostly is
+syntactic sugar for translating a single cluster if the input of
+\code{nudge_cluster} is of length 1.}
 
-\item{recolor_cluster}{TODO}
+\item{recolor_cluster}{numeric of arbitrary length. Indicates which
+cluster(s) to change their color by.}
 
-\item{new_color}{TODO}
+\item{new_color}{character of arbitrary length. Indicates the corresponding
+new colors that selected clusters in \code{recolor_cluster} should be changed to.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress}

@@ -183,7 +183,7 @@ setApotcData <- function(seurat_obj, obj_id, apotc_obj) {
 }
 
 containsAnyApotcData <- function(seurat_obj) {
-    !is.null(seurat_obj@misc[["APackOfTheClones"]])
+    !is.null(getApotcDataIds(seurat_obj))
 }
 
 #' @title
@@ -201,12 +201,12 @@ containsAnyApotcData <- function(seurat_obj) {
 #' 
 #' @examples
 #' pbmc <- RunAPOTC(
-# '     seurat_obj = get(data("combined_pbmc")),
-# '     reduction_base = "umap",
-# '     clonecall = "strict",
+#'     seurat_obj = get(data("combined_pbmc")),
+#'     reduction_base = "umap",
+#'     clonecall = "strict",
 #'      run_id = "run1"
-# '     verbose = FALSE
-# ' )
+#'     verbose = FALSE
+#' )
 #' 
 #' containsApotcRun(pbmc, "run1")
 #' #> [1] TRUE
@@ -228,32 +228,34 @@ containsApotcRun <- function(seurat_obj, run_id) {
 
 #' @title
 #' Delete the results of an APackOfTheClones run
-#' 
+#'
 #' @description
 #' A convenience function to erase all data associated with a particular run,
-#' including the ApotcData and command in seurat_obj@command.
-#' 
+#' including the ApotcData and command in seurat_obj@command. The run_id would
+#' be no longer accessible afterwards.
+#'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
 #' order of the functions being called.
 #' @param run_id character. The id of the associated ApotcRun.
-#' 
+#'
 #' @return The modified input seurat object
 #' @export
-#' 
+#'
 #' @examples
 #' pbmc <- RunAPOTC(
-# '     seurat_obj = get(data("combined_pbmc")),
-# '     reduction_base = "umap",
-# '     clonecall = "strict",
+#'     seurat_obj = get(data("combined_pbmc")),
+#'     reduction_base = "umap",
+#'     clonecall = "strict",
 #'      run_id = "run1"
-# '     verbose = FALSE
-# ' )
-#' 
+#'     verbose = FALSE
+#' )
+#'
 #' getApotcDataIds(pbmc)
 #' #> [1] "run1"
 #' 
+#' # delete the data
 #' pbmc <- deleteApotcData(seurat_obj, run_id)
-#' 
+#'
 #' getApotcDataIds(pbmc)
 #' #> NULL
 #' 
@@ -279,16 +281,17 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #' order of the functions being called.
 #'
 #' @return a character vector of all run ids of previous RunAPOTC runs, in
-#' the order they were ran in.
+#' the order they were ran in. If there are no runs on the object, it returns
+#' `NULL`.
 #' @export
 #'
 #' @examples
-# ' pbmc <- RunAPOTC(
-# '     seurat_obj = get(data("combined_pbmc")),
-# '     reduction_base = "umap",
-# '     clonecall = "strict",
-# '     verbose = FALSE
-# ' )
+#' pbmc <- RunAPOTC(
+#'     seurat_obj = get(data("combined_pbmc")),
+#'     reduction_base = "umap",
+#'     clonecall = "strict",
+#'     verbose = FALSE
+#' )
 #'
 #' getApotcDataIds(pbmc)
 #' #> [1] "umap;CTstrict;_;_"
@@ -304,14 +307,8 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #' #> [1] "umap;CTstrict;_;_" "umap;CTgene;_;_"
 #'
 getApotcDataIds <- function(seurat_obj) {
-
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
-    obj_list <- seurat_obj@misc[["APackOfTheClones"]]
-    if (is_empty(obj_list) || is.null(obj_list)) {
-        stop("No APackOfTheClones data found in seurat object")
-    }
-    
-    names(obj_list)
+    names(seurat_obj@misc[["APackOfTheClones"]])
 }
 
 #' @title
