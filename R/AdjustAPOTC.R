@@ -189,7 +189,6 @@ relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 	setModifiedClusterlists(apotc_obj, new_clusterlists)
 }
 
-# FIXME broken for nudge_cluster=c(1,3),nudge_vector=c(1,1)
 nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 
 	if (is.numeric(nudge_vector)) {
@@ -202,7 +201,7 @@ nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 		relocation_coord = operate_on_same_length_lists(
 			func = add,
 			l1 = nudge_vector,
-			l2 = get_centroids(apotc_obj)
+			l2 = get_centroids(apotc_obj)[nudge_cluster]
 		)
 	)
 }
