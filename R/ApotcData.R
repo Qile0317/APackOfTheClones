@@ -112,6 +112,7 @@ initializeSubsetApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
+
 	# subset the seurat metadata
 	seurat_obj@meta.data <- seurat_obj@meta.data %>% dplyr::filter(eval(parse(
 		text = metadata_filter_condition

@@ -169,7 +169,9 @@ RunAPOTC <- function(
         metadata_filter = extra_filter, varargs_list = list(...)
     )
 
-    obj_id <- infer_object_id_if_needed(args, varargs_list = list(...))
+    obj_id <- infer_object_id_if_needed(
+        args = hash::hash(as.list(environment())), varargs_list = list(...)
+    )
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
 

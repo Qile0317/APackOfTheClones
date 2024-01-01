@@ -93,9 +93,7 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 # stored under under @misc[["APackOfTheClones"]][[id]]
 
 infer_object_id_if_needed <- function(args, varargs_list) {
-    if (!should_compute(args$run_id)) {
-        return(args$run_id)
-    }
+    if (!should_compute(args$run_id)) return(args$run_id)
     
     if (
         is.null(args$reduction_base) &&

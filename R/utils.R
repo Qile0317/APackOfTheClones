@@ -40,6 +40,15 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
 
 # readability functions
 
+create_empty_table <- function() {
+    structure(
+        integer(0),
+        dim = 0L,
+        dimnames = structure(list(NULL), names = ""),
+        class = "table"
+    )
+}
+
 is_empty <- function(inp) identical(inp, list())
 isnt_empty <- function(inp) !identical(inp, list())
 
