@@ -1,4 +1,4 @@
-source("testdata/cluster_lists.R")
+sourcedata("v0", "cluster_lists")
 
 test_that("get_average_vector() works", {
   expect_equal(get_average_vector(list(c(1, 1), c(1, 2), c(-1, -9))), c(1/3,-2))

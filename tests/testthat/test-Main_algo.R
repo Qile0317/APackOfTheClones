@@ -1,4 +1,4 @@
-source("testdata/cluster_lists.R")
+sourcedata("v0", "cluster_lists")
 
 # testing cpp_circle_layout
 test_that("cpp_circle_layout() works", {

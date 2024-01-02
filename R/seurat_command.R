@@ -32,6 +32,10 @@ get_command_name <- function(command, id = NULL) {
 # function to create the seurat command
 # almost identical to seurat version except only data.frame's names are saved in
 # params and assay.used is only "RNA"
+#
+# NOTE: the clone_scale_factor will always be its actual value even if it was
+# originally "auto" during the input.
+#
 make_apotc_command <- function(call_time, assay = "RNA") {
     
     if (as.character(x = sys.calls()[[1]])[1] == "do.call") {

@@ -1,4 +1,4 @@
-source("testdata/SCIP.R")
+sourcedata("v0", "SCIP")
 
 test_that("count_umap_clusters() works", {
   expect_equal(count_umap_clusters(test_pbmc), 2)

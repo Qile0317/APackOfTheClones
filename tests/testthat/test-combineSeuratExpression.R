@@ -29,3 +29,5 @@ test_that("combineSeuratExpression output is compatible with scRepertoire", {
 
 	# TODO unnamed test! (was a problem in scRepertoire)
 })
+
+# TODO try this on the v0 objects

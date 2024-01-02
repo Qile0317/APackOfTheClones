@@ -99,7 +99,7 @@ test_that("parse_to_object_id works for single varargs", {
     expect_identical(
         parse_to_object_id(
             reduction_base = "umap", clonecall = "CTstrict",
-            varargs_list = list(NULL), metadata_filter = NULL
+            varargs_list = list(), metadata_filter = NULL
         ),
         "umap;CTstrict;_;_"
     )

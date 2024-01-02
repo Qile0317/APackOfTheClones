@@ -147,14 +147,13 @@ circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 		}
 		apotc_obj@centroids[[i]] <- list()
 		apotc_obj@label_coords[[i]] <- list()
-		# technically colors too :/
+		# colors ignored, should have some way to match with seurat colors
 	}
 
 	apotc_obj
 }
 
 # function to do repulsion for both cases
-
 repulseClusters <- function(
 	apotc_obj, repulsion_threshold, repulsion_strength, max_repulsion_iter,
 	verbose

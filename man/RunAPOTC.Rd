@@ -130,7 +130,7 @@ seurat object and has an associated Id generated from the aforementioned
 parameters. To view the id of the latest run, call \link{getLastApotcDataId}.
 To view all the ids of previous runs, call \link{getApotcDataIds}. To work further
 with a specific run (most importantly, plotting), the user can use this id
-in the arguments with is slightly more convinient than passing in the
+in the arguments with is slightly more convenient than passing in the
 original RunAPOTC parameters again but both ways work.
 
 If the user wishes to manually customize/fix the expansion plot

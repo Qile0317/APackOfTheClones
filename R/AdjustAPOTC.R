@@ -1,5 +1,5 @@
 #' @title
-#' Adjust the paramaters of the APackOfTheClones reduction in a seurat
+#' Adjust the parameters of the APackOfTheClones reduction in a seurat
 #' object
 #'
 #' @description
@@ -23,7 +23,7 @@
 #' two of length of `relocate_cluster`. If its a list, indicates each coordinate
 #' that the clusters in `relocate_cluster` should move to. If its just a
 #' numeric, then will relocate all clusters in `relocate_cluster` to the input,
-#' which is likely not desired behaviour, so this should only be convinience
+#' which is likely not desired behavior, so this should only be convenience
 #' syntax if `relocate_cluster` has length 1.
 #' @param nudge_cluster numeric of arbitrary length. Indicates which
 #' cluster(s) to "nudge"/translate their coordinate(s) by.

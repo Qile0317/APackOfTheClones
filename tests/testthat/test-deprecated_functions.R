@@ -1,4 +1,7 @@
 sourcedata("deprecated_functions", "SCIP")
+test_integrated_pbmc <- getdata(
+    "deprecated_functions", "mini_integrated_seurat_obj"
+)
 
 test_that("integrate_tcr() works and is deprecated", {
 
@@ -25,7 +28,7 @@ test_that("integrate_tcr() works and is deprecated", {
 test_that("percent_na() works", {
 	expect_equal(percent_na(test_integrated_pbmc), 0)
 	temp_pbmc <- test_integrated_pbmc
-	for (i in 1:3) {temp_pbmc@meta.data[["barcode"]][[i]] <- NA}
+	for (i in 1:3) temp_pbmc@meta.data[["barcode"]][[i]] <- NA
 	expect_equal(round(percent_na(temp_pbmc)), 4)
 })
 

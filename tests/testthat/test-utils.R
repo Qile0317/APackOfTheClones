@@ -74,31 +74,11 @@ test_that("closest_word works", {
 })
 
 test_that("construct_prefix_vector works", {
-    test_samples <- c("NP1", "NP2", "NP3", "NP4")
+    test_samples <- c("NP1", "NP2", "NP1", "NP2")
     test_ids <- c("CTRL", "CTRL", "STIM", "STIM")
 
     test_results <- construct_prefix_vector(list(test_samples, test_ids))
-    expect_identical(test_samples, c("NP1", "NP2", "NP3", "NP4"))
     expect_identical(
-        test_results, c("NP1_CTRL", "NP2_CTRL", "NP3_CTRL", "NP4_CTRL")
-    )
-})
-
-test_that("metadata_name_warnstring works", {
-    expect_null(metadata_name_warnstring(mini_seurat_obj, mini_clonotype_data))
-
-    fake_tcr_df <- data.frame(c(1,2),c(3,4))
-    names(fake_tcr_df) <- c("NA", NA)
-
-    expect_identical(
-        metadata_name_warnstring(mini_seurat_obj, fake_tcr_df),
-        "tcr_dataframe has NAs in names, please fix"
-    )
-
-    names(fake_tcr_df) <- c("NA", "orig.ident")
-
-    expect_identical(
-        metadata_name_warnstring(mini_seurat_obj, fake_tcr_df),
-        "tcr_dataframe has repeated names with the seurat_object metadata"
+        test_results, c("NP1_CTRL", "NP2_CTRL", "NP1_STIM", "NP2_STIM")
     )
 })

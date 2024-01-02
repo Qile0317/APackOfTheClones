@@ -32,6 +32,8 @@
 
 #' @title
 #' Artificially generated T cell receptor library
+#' 
+#' @keywords internal
 #'
 #' @description
 #' `r lifecycle::badge("deprecated")`

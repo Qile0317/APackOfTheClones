@@ -163,7 +163,21 @@ extract_2d_list_row <- function(l, row_index) {
     row_vector
 }
 
-# operate on non-empty elemetns of two lists of the same length
+# list utilities
+
+init_list <- function(num_elements, init_val = NULL) {
+    l <- vector("list", num_elements)
+    for (i in 1:num_elements) {
+        l[[i]] <- init_val
+    }
+    l
+}
+
+getlast <- function(x) UseMethod("getlast")
+getlast.default <- function(x) x[length(x)]
+getlast.list <- function(x) x[[length(x)]]
+
+# operate on non-empty elements of two lists of the same length
 # with a 2-argument function
 operate_on_same_length_lists <- function(func, l1, l2) {
     l <- init_list(length(l1), list())
@@ -192,35 +206,28 @@ move_coord_list_by_same_amount <- function(
 }
 
 #' Take a list of character vectors and join each element of the vectors
-#' together, separating each character by sep
+#' together, separating each character by sep. Currently recursive which
+#' will be bad for larger inputs :P
 #' @return a character vector
 #' @noRd
 construct_prefix_vector <- function(params, sep = "_") {
-    num_params <- length(params)
-    num_samples <- length(params[[1]])
-    prefix_vector <- vector("character", num_samples)
-
-    for (i in 1:num_samples) {
-        for (j in 1:num_params) {
-            prefix_vector[i] <- paste(
-                prefix_vector[i], params[[j]][i], sep = sep
-            )
-        }
-    }
-    prefix_vector
+    unlist(join_list_of_characters(params, sep))
 }
 
-init_list <- function(num_elements, init_val = NULL) {
-    l <- vector("list", num_elements)
-    for (i in 1:num_elements) {
-        l[[i]] <- init_val
-    }
-    l
-}
+join_list_of_characters <- function(params, sep = "_") {
 
-getlast <- function(x) UseMethod("getlast")
-getlast.default <- function(x) x[length(x)]
-getlast.list <- function(x) x[[length(x)]]
+    if (length(params) == 2) {
+        l2 <- params[[2]]
+    } else {
+        l2 <- construct_prefix_vector(params[2:length(params)])
+    }
+
+    operate_on_same_length_lists(
+        func = function(x, y) paste(x, y, sep = sep),
+        l1 = params[[1]],
+        l2 = l2
+    )
+}
 
 # S3 method to represent vectors as strings
 
@@ -335,8 +342,12 @@ get_2d_embedding <- function(seurat_obj, reduction) {
 }
 
 attempt_correction <- function(s) {
+
+    s <- strip_and_lower(s)
+    s <- ifelse(test = identical(s, "t-sne"), yes = "tsne", no = s)
+
     user_attempt_correction(
-      s = strip_and_lower(s),
+      s,
       strset = c("umap", "tsne", "pca"),
       stop_msg_start = "Invalid reduction"
     )

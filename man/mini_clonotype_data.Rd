@@ -32,4 +32,4 @@ actually do not contain all of clonotype\code{1}...clonotype\code{n}
 \seealso{
 \code{\link[=mini_seurat_obj]{mini_seurat_obj()}}
 }
-\keyword{datasets}
+\keyword{internal}

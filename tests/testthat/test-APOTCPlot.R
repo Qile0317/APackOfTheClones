@@ -1,4 +1,8 @@
-source("testdata/SCIP.R")
+test_that("APOTCPlot works", {
+	expect_doppelganger(
+		"default_apotcplot", APOTCPlot(RunAPOTC(combined_pbmc, verbose = FALSE))
+	)
+})
 
 test_that("add_default_theme works", {
 	plt <- ggplot2::ggplot(data.frame("x" = c(1, 2), "y" = c(3, 4))) +
@@ -6,8 +10,4 @@ test_that("add_default_theme works", {
 	expect_doppelganger("add_default_theme_plot", add_default_theme(plt, 'pca'))
 })
 
-test_that("APOTCPlot works", {
-	expect_doppelganger(
-		"default_APOTCPlot", APOTCPlot(RunAPOTC(test_integrated_pbmc))
-	)
-})
+# TODO more tests

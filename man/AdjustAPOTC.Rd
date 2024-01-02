@@ -2,7 +2,7 @@
 % Please edit documentation in R/AdjustAPOTC.R
 \name{AdjustAPOTC}
 \alias{AdjustAPOTC}
-\title{Adjust the paramaters of the APackOfTheClones reduction in a seurat
+\title{Adjust the parameters of the APackOfTheClones reduction in a seurat
 object}
 \usage{
 AdjustAPOTC(
@@ -90,7 +90,7 @@ cluster(s) to relocate to new coordinates}
 two of length of \code{relocate_cluster}. If its a list, indicates each coordinate
 that the clusters in \code{relocate_cluster} should move to. If its just a
 numeric, then will relocate all clusters in \code{relocate_cluster} to the input,
-which is likely not desired behaviour, so this should only be convinience
+which is likely not desired behavior, so this should only be convenience
 syntax if \code{relocate_cluster} has length 1.}
 
 \item{nudge_cluster}{numeric of arbitrary length. Indicates which
