@@ -64,8 +64,7 @@ also calculates the combined clonotype frequencies.
 
 Importantly, before using this function, ensure the barcodes of the seurat
 object match the barcodes in the output of the \link[scRepertoire:combineTCR]{scRepertoire::combineTCR}
-or \link[scRepertoire:combineBCR]{scRepertoire::combineBCR} call. Check \link{AddSampleBarcode}
-to change the prefixes of the Seurat object. If combining more than one
+or \link[scRepertoire:combineBCR]{scRepertoire::combineBCR} call. If combining more than one
 immune receptor type, barcodes with both receptors will be removed during the
 combination process.
 }

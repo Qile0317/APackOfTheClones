@@ -23,7 +23,7 @@ pbmc <- RunAPOTC(
     seurat_obj = get(data("combined_pbmc")),
     reduction_base = "umap",
     clonecall = "strict",
-     run_id = "run1"
+    run_id = "run1",
     verbose = FALSE
 )
 

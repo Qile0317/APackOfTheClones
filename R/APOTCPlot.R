@@ -35,8 +35,7 @@
 #' of the original UMAP. However, it will only attempt to extend the axes and
 #' never shorten.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
-#' defaulting to "C0, C1, ...". labels and their coordinates can also be
-#' manually edited with the [ModifyLabels] or [AdjustAPOTC] functions.
+#' defaulting to "C0, C1, ...".
 #' @param label_size The text size of labels if shown. Defaults to 5.
 #' @param add_size_legend If `TRUE`, adds a legend to the plot visualizing the
 #' relative sizes of clones. Note that it is simply an overlay and not a real
@@ -73,14 +72,14 @@
 #' @examples
 #' library(Seurat)
 #' suppressPackageStartupMessages(library(APackOfTheClones))
-#' 
+#'
 #' # 2 arbitrary APackOfTheClones runs named "run1" and "run2"
 #' combined_pbmc <- RunAPOTC(get(data("combined_pbmc")), run_id = "run1")
 #' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run2", try_place = TRUE)
-#' 
+#'
 #' # plotting with default arguments will plot the "run2" results as its latest
 #' APOTCPlot(combined_pbmc)
-#' 
+#'
 #' # otherwise, one should plot with the run_id argument for other runs
 #' APOTCPlot(combined_pbmc, run_id = "run2")
 #'

@@ -98,8 +98,7 @@ vizAPOTC <- function(
         linetype = linetype,
         use_default_theme = use_default_theme,
         retain_axis_scales = retain_axis_scales,
-        alpha = alpha,
-
+        
         show_labels = show_labels,
         label_size = label_size,
 

@@ -4,7 +4,7 @@
 estimate_legend_sizes <- function(apotc_obj) {
     sizes <- unlist(apotc_obj@clone_sizes)
     sort(unique(round(c(
-        1, median(sizes), mean(sizes), mean(unique(sizes)), max(sizes)
+        1, stats::median(sizes), mean(sizes), mean(unique(sizes)), max(sizes)
     ))))
 }
 
@@ -307,14 +307,14 @@ add_legend_backing <- function(plt, legend_df) {
     dims <- get_legend_backing_minmax_dims(plt, legend_df)
 
     # add the back border rectangle
-    plt <- plt + ggplot2::geom_rect(aes(
+    plt <- plt + ggplot2::geom_rect(ggplot2::aes(
             xmin = dims["xmin"] - linewidth, xmax = dims["xmax"] + linewidth,
             ymin = dims["ymin"] - linewidth, ymax = dims["ymax"] + linewidth,
             fill = "black"
         ))
     
     # add the white inside
-    plt + ggplot2::geom_rect(aes(
+    plt + ggplot2::geom_rect(ggplot2::aes(
             xmin = dims["xmin"], xmax = dims["xmax"],
             ymin = dims["ymin"], ymax = dims["ymax"],
             fill = "white",

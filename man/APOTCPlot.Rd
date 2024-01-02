@@ -86,8 +86,7 @@ of the original UMAP. However, it will only attempt to extend the axes and
 never shorten.}
 
 \item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
-defaulting to "C0, C1, ...". labels and their coordinates can also be
-manually edited with the \link{ModifyLabels} or \link{AdjustAPOTC} functions.}
+defaulting to "C0, C1, ...".}
 
 \item{label_size}{The text size of labels if shown. Defaults to 5.}
 

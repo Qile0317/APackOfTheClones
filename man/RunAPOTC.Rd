@@ -139,7 +139,8 @@ with the \link{AdjustAPOTC} function.
 }
 \details{
 All APackOfTheClones run data is stored in the seurat object under
-\code{seurat_object@misc$APackOfTheClones}, which is a list of \link{ApotcData} objects
+\code{seurat_object@misc$APackOfTheClones}, which is a list of s4 "ApotcData"
+objects
 with each element corresponding to a unique run. The id of each run is the
 name of each element in the list. The user \emph{\strong{really shouldn't}}
 manually modify anything as it may cause unexpected behavior with

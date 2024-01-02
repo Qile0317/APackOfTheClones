@@ -102,6 +102,8 @@ infer_object_id_if_needed <- function(args, varargs_list) {
             is_empty(varargs_list)
     ) {
         latest_id <- getLastApotcDataId(args$seurat_obj)
+
+        # verbosity?
         message(paste(
             "* using the latest APackOfTheClones Run Data with object id:",
             latest_id
@@ -202,7 +204,7 @@ containsAnyApotcData <- function(seurat_obj) {
 #'     seurat_obj = get(data("combined_pbmc")),
 #'     reduction_base = "umap",
 #'     clonecall = "strict",
-#'      run_id = "run1"
+#'     run_id = "run1",
 #'     verbose = FALSE
 #' )
 #' 
