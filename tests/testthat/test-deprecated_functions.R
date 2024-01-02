@@ -5,7 +5,7 @@ test_integrated_pbmc <- getdata(
 
 test_that("integrate_tcr() works and is deprecated", {
 
-	withr::local_options(lifecycle_verbosity = "quiet")
+	options(lifecycle_verbosity = "quiet")
 	lifecycle::expect_deprecated(
 		integrate_tcr(test_pbmc, test_tcr, FALSE)
 	)
@@ -33,7 +33,7 @@ test_that("percent_na() works", {
 })
 
 test_that("count_clone_sizes works and is deprecated", {
-	withr::local_options(lifecycle_verbosity = "quiet")
+	options(lifecycle_verbosity = "quiet")
 	lifecycle::expect_deprecated(
 		count_clone_sizes(test_integrated_pbmc)
 	)
@@ -47,6 +47,6 @@ test_that("count_clone_sizes works and is deprecated", {
 })
 
 test_that("clonal_expansion_plot is defunct", {
-	withr::local_options(lifecycle_verbosity = "quiet")
+	options(lifecycle_verbosity = "quiet")
 	lifecycle::expect_defunct(clonal_expansion_plot())
 })

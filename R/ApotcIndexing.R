@@ -207,13 +207,13 @@ containsAnyApotcData <- function(seurat_obj) {
 #'     run_id = "run1",
 #'     verbose = FALSE
 #' )
-#' 
+#'
 #' containsApotcRun(pbmc, "run1")
 #' #> [1] TRUE
-#' 
+#'
 #' containsApotcRun(pbmc, "run2")
 #' #> [1] FALSE
-#' 
+#'
 containsApotcRun <- function(seurat_obj, run_id) {
 
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
@@ -246,7 +246,7 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #'     seurat_obj = get(data("combined_pbmc")),
 #'     reduction_base = "umap",
 #'     clonecall = "strict",
-#'      run_id = "run1"
+#'     run_id = "run1",
 #'     verbose = FALSE
 #' )
 #'

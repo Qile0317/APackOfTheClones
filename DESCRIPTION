@@ -34,10 +34,7 @@ Imports:
     methods,
     Rcpp,
     rlang,
-    Seurat,
-    stats,
-    utils,
-    withr
+    Seurat
 Remotes:
     ncborcherding/scRepertoire
 RoxygenNote: 7.2.3

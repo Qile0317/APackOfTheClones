@@ -1,4 +1,5 @@
 test_that("APOTCPlot works", {
+	data("combined_pbmc")
 	expect_doppelganger(
 		"default_apotcplot", APOTCPlot(RunAPOTC(combined_pbmc, verbose = FALSE))
 	)

@@ -90,19 +90,19 @@ seurat_extractfield <- function(string, field = 1, delim = "_") {
 # filtering out of certain object types to save memory
 
 process_argnames <- function(argnames) {
-    argnames <- BiocGenerics::grep(
+    argnames <- grep(
         pattern = "object",
         x = argnames,
         invert = TRUE,
         value = TRUE
     )
-    argnames <- BiocGenerics::grep(
+    argnames <- grep(
         pattern = "anchorset",
         x = argnames,
         invert = TRUE,
         value = TRUE
     )
-    argnames <- BiocGenerics::grep(
+    argnames <- grep(
         pattern = "\\.\\.\\.",
         x = argnames,
         invert = TRUE,
