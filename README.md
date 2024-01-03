@@ -52,7 +52,7 @@ pbmc <- combineSeuratExpression(
     sc.data = get(data("scRep_example"))
 )
 
-# produce the ball-packing plot
+# produce the ball-packing plot with the default parameters
 vizAPOTC(pbmc)
 
 # there are many parameters to adjust, but most importantly, one can filter for
@@ -63,14 +63,33 @@ vizAPOTC(pbmc)
 vizAPOTC(pbmc, orig.ident = c("P17B", "P17L"), seurat_clusters = c(1, 3, 4))
 ```
 
-For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot```. (TODO)
+For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot```, like so:
+
+```R
+# using the same seurat object as before, run and store associated data,
+# identifying it with a run id.
+pbmc <- RunAPOTC(pbmc, run_id = "default_run_1")
+
+# plot the corresponding data with the run_id. If not provided, will use the latest run.
+APOTCPlot(pbmc, run_id = "default_run_1")
+
+# adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was
+# left empty for no particular reason, but it will use "default_run_1" since its the latest
+pbmc <- AdjustAPOTC(
+    pbmc,
+    new_clone_scale_factor = 0.25,
+    relocate_cluster = 2,
+    relocation_coord = c(0, 0)
+)
+
+# one can also do another run with different parameters and a different id. TODO
+
+```
 
 ## Documentation
 Comprehensive documentation, vignettes, and a changelog is deployed at https://qile0317.github.io/APackOfTheClones/
 
 All exported functions has function level documentation which can be called with `?function`.
-
-Currently, there is only one introductory vignette named `"Clonal_expansion_plotting"` which is a walkthrough on the clonal expansion visualization workflow. The vignette is ONLINE-ONLY and can be viewed at https://qile0317.github.io/APackOfTheClones/articles/
 
 ## Contributing
 Github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
