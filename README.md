@@ -43,10 +43,10 @@ library(Seurat)
 library(scRepertoire)
 library(APackOfTheClones)
 
-# integrate the contigs with scRepertoire example data
+# integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"
 pbmc <- combineSeuratExpression(
     input.data = scRepertoire::combineTCR(
-        get(data("mini_contig_list")),
+        input.data = get(data("mini_contig_list")),
         samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L")
     ),
     sc.data = get(data("scRep_example"))

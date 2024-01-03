@@ -92,13 +92,18 @@
 #' of the progress
 #'
 #' @details
-#' All APackOfTheClones run data is stored in the seurat object under
-#' `seurat_object@misc$APackOfTheClones`, which is a list of s4 "ApotcData"
-#' objects
-#' with each element corresponding to a unique run. The id of each run is the
-#' name of each element in the list. The user ***really shouldn't***
-#' manually modify anything as it may cause unexpected behavior with
-#' many other functions.
+#' All APackOfTheClones run data is stored in the Seurat object under
+#' `seurat_object@misc$APackOfTheClones`, which is a list of S4 objects of the
+#' type "ApotcData", with each element corresponding to a unique run. The id of
+#' each run is the name of each element in the list. The user
+#' ***really shouldn't*** manually modify anything in the list as it may cause
+#' unexpected behavior with many other functions.
+#'
+#' Additionally, it also logs a seurat command associated with the run in the
+#' `seurat_object@commands` slot as a "SeuratCommand" object (from Seurat),
+#' where the name of the object in the list is formatted as `RunAPOTC.run_id`.
+#' Again, the user should not modify anything in these objects as they are used
+#' by some related functions, mainly [AdjustAPOTC].
 #'
 #' @return A modified version of the input seurat object, which harbors data
 #' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]

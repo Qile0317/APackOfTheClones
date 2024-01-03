@@ -242,19 +242,19 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #' @export
 #'
 #' @examples
-#' pbmc <- RunAPOTC(
-#'     seurat_obj = get(data("combined_pbmc")),
-#'     reduction_base = "umap",
-#'     clonecall = "strict",
-#'     run_id = "run1",
-#'     verbose = FALSE
-#' )
+# ' pbmc <- RunAPOTC(
+# '     seurat_obj = get(data("combined_pbmc")),
+# '     reduction_base = "umap",
+# '     clonecall = "strict",
+# '     run_id = "run1",
+# '     verbose = FALSE
+# ' )
 #'
 #' getApotcDataIds(pbmc)
 #' #> [1] "run1"
-#' 
+#'
 #' # delete the data
-#' pbmc <- deleteApotcData(seurat_obj, run_id)
+#' pbmc <- deleteApotcData(pbmc, "run1")
 #'
 #' getApotcDataIds(pbmc)
 #' #> NULL
@@ -308,7 +308,9 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #'
 getApotcDataIds <- function(seurat_obj) {
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
-    names(seurat_obj@misc[["APackOfTheClones"]])
+    ids <- names(seurat_obj@misc[["APackOfTheClones"]])
+    if (identical(ids, character(0)) || is.null(ids)) return(NULL)
+    ids
 }
 
 #' @title

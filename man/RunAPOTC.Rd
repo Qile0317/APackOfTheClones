@@ -138,13 +138,18 @@ generated, the circular packing information can be modified
 with the \link{AdjustAPOTC} function.
 }
 \details{
-All APackOfTheClones run data is stored in the seurat object under
-\code{seurat_object@misc$APackOfTheClones}, which is a list of s4 "ApotcData"
-objects
-with each element corresponding to a unique run. The id of each run is the
-name of each element in the list. The user \emph{\strong{really shouldn't}}
-manually modify anything as it may cause unexpected behavior with
-many other functions.
+All APackOfTheClones run data is stored in the Seurat object under
+\code{seurat_object@misc$APackOfTheClones}, which is a list of S4 objects of the
+type "ApotcData", with each element corresponding to a unique run. The id of
+each run is the name of each element in the list. The user
+\emph{\strong{really shouldn't}} manually modify anything in the list as it may cause
+unexpected behavior with many other functions.
+
+Additionally, it also logs a seurat command associated with the run in the
+\code{seurat_object@commands} slot as a "SeuratCommand" object (from Seurat),
+where the name of the object in the list is formatted as \code{RunAPOTC.run_id}.
+Again, the user should not modify anything in these objects as they are used
+by some related functions, mainly \link{AdjustAPOTC}.
 }
 \examples{
 data("combined_pbmc")
