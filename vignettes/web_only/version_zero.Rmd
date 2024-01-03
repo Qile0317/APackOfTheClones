@@ -1,5 +1,5 @@
 ---
-title: " A walkthrough of APackOfTheClones v0.1.x"
+title: "DEPRECATED: A walkthrough of APackOfTheClones v0.1.x"
 output: rmarkdown::html_vignette
 description: >
   A full walkthrough of the clonal expansion visualization workflow.
@@ -24,7 +24,7 @@ quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
   if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
     if (CRAN) {
       invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
-    }else {
+    } else {
       suppressWarnings(suppressMessages(
         devtools::install_github(paste(dev_dir, pkg, sep = ""))
       ))
@@ -42,6 +42,9 @@ quiet_load_all_CRAN <- function(...) {
 view_head <- function(df) {
   knitr::kable(head(df))
 }
+
+# load the legacy version from github
+quiet_load(pkg = "APackOfTheClones", CRAN = FALSE, dev_dir = "Qile0317@v0/")
 
 # load pkgs & data
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools", "APackOfTheClones")
