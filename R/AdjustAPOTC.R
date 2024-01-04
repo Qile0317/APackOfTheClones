@@ -81,7 +81,10 @@ AdjustAPOTC <- function(
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 	args <- hash::hash(as.list(environment()))
 
-	# TODO interactive shiny code here in the future
+	# # TODO
+	# if (interactive) {
+	# 	return(runShinyAdjustAPOTC(args))
+	# }
 
 	if (should_change(new_clone_scale_factor)) {
 		apotc_obj <- change_clone_scale(seurat_obj, args)

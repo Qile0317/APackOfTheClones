@@ -82,7 +82,14 @@ pbmc <- AdjustAPOTC(
     relocation_coord = c(0, 0)
 )
 
-# one can also do another run with different parameters and a different id. TODO
+# one can also do another run with different parameters and a different id.
+pbmc <- RunAPOTC(pbmc, run_id = "run2", try_place = TRUE, repulse = FALSE)
+
+# plot both runs side by side
+library(cowplot)
+cowplot::plot_grid(
+    APOTCPlot(pbmc, run_id = "default_run_1"), APOTCPlot(pbmc, run_id = "run2")
+)
 
 ```
 
@@ -91,6 +98,8 @@ Comprehensive documentation, vignettes, and a changelog is deployed at https://q
 
 All exported functions has function level documentation which can be called with `?function`.
 
+TODO
+
 ## Contributing
 Github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
 
@@ -98,7 +107,7 @@ An explanation of the algorithms will eventually be made publicly available in a
 
 ## Upcoming features
 
-One novel feature in the making is the ability to visualize shared clonotypes on the ball packing plot
+One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.
 
 ## Contact
 Qile Yang - qile.yang@berkeley.edu

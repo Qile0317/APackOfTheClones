@@ -1,0 +1,150 @@
+---
+title: "A Simple Walkthrough of APackOfTheClones v1"
+output: rmarkdown::html_vignette
+description: >
+  A full walkthrough of the clonal expansion visualization workflow.
+vignette: >
+  %\VignetteIndexEntry{APackOfTheClones-main}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_chunk$set(echo = FALSE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+
+# utility functions
+head <- function(df) {
+  knitr::kable(utils::head(df))
+}
+
+quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
+  if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
+    if (CRAN) {
+      invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
+    } else {
+      suppressWarnings(suppressMessages(
+        devtools::install_github(paste(dev_dir, pkg, sep = ""))
+      ))
+    }
+  }
+  suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
+}
+
+quiet_load_all_CRAN <- function(...) {
+  pkgs <- list(...)
+  for (pkg in pkgs) {quiet_load(pkg)}
+}
+
+# load packages and data
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools", "APackOfTheClones")
+# TODO use a nice looking dataset
+```
+
+```{r setup}
+library(APackOfTheClones)
+```
+
+# Introduction
+
+Single-cell RNA sequencing (scRNA-seq) and T/B cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide valuable insights into the immune system, including clonal expansion. `APackOfTheClones` provides a simple, easily customizable, and publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot2`, and can be easily slotted into any analysis pipeline.
+
+In this user vignette, basic familiarity with the `R` language, the `Seurat` package, and the `scRepertoire` package is assumed. T
+
+# Setting up the Seurat Object and Receptor Library with scRepertoire
+
+TODO
+
+# Simple ball packing visualization
+
+TODO vizAPOTC with only essential args
+
+## Key characteristics about the plot
+* The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
+* The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
+* On the TODO, there is a somewhat covered visual legend of the relative clone sizes
+* The red and green clusters have considerable visual overlap
+* The returned plot is a fully customizable `ggplot` object
+
+As `APackOfTheClones` is in a rapid-development phase, the resulting clonal expansion plot may not be visually satisfactory on the first run without customizations. However, there are many optional arguments and `ggplot` tricks covered in the TODO vignette to fine-tune the visualization till it is publication quality
+
+# Working with a data subset
+
+A key feature of version 1 is the ability to conviniently visualize subsets of the seurat data, for example only the control samples or samples from one treatment condition. The arguments to do so are as follows:
+
+```{r, echo = TRUE, eval = FALSE}
+reduction_base = "umap",
+clonecall = "strict",
+...,
+extra_filter = NULL,
+```
+
+TODO
+
+# Customization of visual parameters
+
+TODO
+
+## Cluster repulsion
+
+Considerable visual overlap between clusters (due to the algorithm's attempt to fit clusters to the original UMAP coordinates) may ocurr sometimes and obstruct eachother excessively.
+
+To account for this, there are four optional arguments:
+
+```{r, echo = TRUE, eval = FALSE}
+repulse = TRUE,
+repulsion_threshold = 1,
+repulsion_strength = 1,
+max_repulsion_iter = 10
+```
+
+For more details on them, read the "Arguments" section in the function documentation. Briefly, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form, see the vignette `TODO`.) 
+
+Setting repulse to TRUE with those default parameters should probably yield something like the following:
+
+```{r, repulse, echo = TRUE}
+TODO
+```
+
+If you are still unhappy with the spacing of the plot, see the following ways to adjust the spacing:
+
+* `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. However, using negative spacing may cause the plot to look very spaced out. Keep reading to see alternatives to doing so.
+* `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
+* `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
+
+## Managing the clone size legend
+
+TODO
+
+## Visually scaling circle sizes
+
+TODO
+
+## Other modifications
+
+# Final product and further modifications
+
+That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready.
+
+For fun, here's a side-by-side comparison of the UMAP plot and the clonal expansion plot:
+
+```{r, final, echo = TRUE}
+library(ggplot2)
+library(cowplot)
+
+cowplot::plot_grid(
+  umap_plot + ggtitle("scRNA-seq UMAP"),
+  pbmc_expansion_plot + ggtitle("APackOfTheClones clonal expansion plot"),
+  labels = "AUTO"
+)
+```
+
+There are a lot more features to the package to be read, see
+- RunAPOTC + AdjustAPOTC + APOTCPlot workflow, and the ApotcDataId getters

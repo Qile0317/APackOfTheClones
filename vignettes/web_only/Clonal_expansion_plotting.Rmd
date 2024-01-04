@@ -236,6 +236,7 @@ pbmc_expansion_plot <- clonal_expansion_plot(
 )
 pbmc_expansion_plot
 ```
+
 We can even change the circle (clone) sizes displayed in the legend by changing the vector `legend_sizes`:
 
 ```{r, adj_legend_sizes, echo = TRUE}
@@ -295,7 +296,7 @@ clonal_expansion_plot(
 Additionally, if you really want the plot to reflect the original UMAP plot, you could try using `ggplot2`'s `xlim` and `ylim` functions.
 
 # Final product
-That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready. 
+That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready.
 
 For fun, here's a side-by-side comparison of the UMAP plot and the clonal expansion plot:
 ```{r, final, echo = TRUE}
