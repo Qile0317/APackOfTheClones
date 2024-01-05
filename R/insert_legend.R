@@ -1,15 +1,19 @@
 # script to make a custom circle size legend overlay
-# TODO estimate optimal legend placement position
 
 estimate_legend_sizes <- function(apotc_obj) {
     sizes <- unlist(apotc_obj@clone_sizes)
     sort(unique(round(c(
-        1, stats::median(sizes), mean(sizes), mean(unique(sizes)), max(sizes)
+        1,
+        stats::median(sizes), mean(sizes), mean(unique(sizes)),
+        max(sizes)
     ))))
 }
 
+# FIXME somethings wrong when i do vizAPOTC(sce), 46 appears twice but one of circles are smaller
+
 insert_legend <- function(
     plt,
+    plt_dims,
     apotc_obj,
     sizes,
     pos,
@@ -26,7 +30,7 @@ insert_legend <- function(
     rad_decrease <- get_rad_decrease(apotc_obj)
 
     if (should_estimate(spacing))
-        spacing <- calculate_legend_spacing(spacing, plt, rad_decrease)
+        spacing <- calculate_legend_spacing(spacing, plt_dims, rad_decrease)
 
     if (should_estimate(sizes))
         sizes <- estimate_legend_sizes(apotc_obj)
@@ -47,11 +51,11 @@ insert_legend <- function(
 
     if (should_estimate(pos)) {
         legend_df <- estimate_best_legend_df(
-            plt, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+            plt_dims, apotc_obj, unpositioned_legend_df, legend_dims, buffer
         )
     } else {
         legend_df <- generate_legend_df(
-            pos, unpositioned_legend_df, legend_dims, plt, buffer
+            pos, unpositioned_legend_df, legend_dims, plt_dims, buffer
         )
     }
 
@@ -67,7 +71,9 @@ insert_legend <- function(
 
     # add the background
     if (do_add_legend_border) {
-        plt <- add_legend_backing(plt, legend_df)
+        plt <- add_legend_backing(
+            plt = plt, plt_dims = plt_dims, legend_df = legend_df
+        )
     }
     
     # add the side number labels
@@ -91,9 +97,9 @@ insert_legend <- function(
 }
 
 calculate_legend_spacing <- function(
-    spacing, plt, rad_decrease, portion = 0.05
+    spacing, plt_dims, rad_decrease, portion = 0.05
 ) {
-    (abs(get_xr(plt)[1]) * portion) - (2 * rad_decrease)
+    (abs(get_xr(plt_dims)[1]) * portion) - (2 * rad_decrease)
 }
 
 correct_legend_coord_if_str <- function(pos) {
@@ -124,21 +130,20 @@ correct_legend_coord_if_str <- function(pos) {
 # given the circle placements, estimate the legend dataframe with the least
 # *number* of circles that overlap
 estimate_best_legend_df <- function(
-    plt, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+    plt_dims, apotc_obj, unpositioned_legend_df, legend_dims, buffer
 ) {
     min_num_circles_covered <- Inf
     best_legend_df <- data.frame()
 
     for (pos in c("top_left", "top_right", "bottom_left", "bottom_right")) {
-
+        
         curr_legend_df <- generate_legend_df(
-            pos, unpositioned_legend_df, legend_dims, plt, buffer
+            pos, unpositioned_legend_df, legend_dims, plt_dims, buffer
         )
 
-        minmax_dims <- get_legend_backing_minmax_dims(plt, curr_legend_df)
-
         curr_num_circles_covered <- num_circles_covered_by_legend(
-            apotc_obj, minmax_dims
+            apotc_obj,
+            minmax_dims = get_legend_backing_minmax_dims(curr_legend_df)
         )
 
         if (curr_num_circles_covered == 0) {
@@ -227,14 +232,14 @@ get_legend_dims <- function(unpositioned_legend_df) {
 }
 
 generate_legend_df <- function(
-    pos, unpositioned_legend_df, legend_dims, plt, buffer
+    pos, unpositioned_legend_df, legend_dims, plt_dims, buffer
 ) {
     if (!is.numeric(pos)) {
         pos <- estimate_top_left_circ_coord(
             unpositioned_legend_df = unpositioned_legend_df,
             legend_dims = legend_dims,
             destination_str = pos,
-            plt = plt,
+            plt_dims = plt_dims,
             buffer = buffer
         )
     }
@@ -256,11 +261,11 @@ get_label_x <- function(legend_df) legend_df[1, "label_x"]
 
 # get the starting coordinate for the top left center of the *first circle*
 estimate_top_left_circ_coord <- function(
-    unpositioned_legend_df, legend_dims, destination_str, plt, buffer
+    unpositioned_legend_df, legend_dims, destination_str, plt_dims, buffer
 ) {
 
-    xr <- get_xr(plt)
-    yr <- get_yr(plt)
+    xr <- get_xr(plt_dims)
+    yr <- get_yr(plt_dims)
     
     if (identical(destination_str, "top_left")) {
         return(c(xr[1] + max_rad(unpositioned_legend_df) + buffer, yr[2]))
@@ -302,9 +307,9 @@ get_legend_title_coord <- function(legend_df, legend_dims, spacing) {
       "y" = min_y(legend_df) + min_rad(legend_df) + spacing)
 }
 
-add_legend_backing <- function(plt, legend_df) {
-    linewidth <- get_linewidth(plt)
-    dims <- get_legend_backing_minmax_dims(plt, legend_df)
+add_legend_backing <- function(plt, plt_dims, legend_df) {
+    linewidth <- get_linewidth(plt_dims)
+    dims <- get_legend_backing_minmax_dims(legend_df)
 
     # add the back border rectangle
     plt <- plt + ggplot2::geom_rect(ggplot2::aes(
@@ -332,7 +337,7 @@ get_linewidth <- function(plt) {
     )
 }
 
-get_legend_backing_minmax_dims <- function(plt, legend_df) {
+get_legend_backing_minmax_dims <- function(legend_df) {
     spacing <- 0.15
     max_radius <- max_rad(legend_df)
     

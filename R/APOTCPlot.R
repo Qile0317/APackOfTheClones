@@ -127,7 +127,10 @@ APOTCPlot <- function(
 
 	#set theme
 	if (use_default_theme) {
-		result_plot <- add_default_theme(result_plot, get_reduction_base(apotc_obj))
+		result_plot <- add_default_theme(
+			plt = result_plot,
+			reduction = get_reduction_base(apotc_obj)
+		)
 	} else {
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
@@ -139,15 +142,16 @@ APOTCPlot <- function(
 		))
 	}
 
+	# TODO clonal link computation here
+
 	if (show_labels) {
 		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
 	}
 
-	# TODO clonal link computation here
-
 	if (add_size_legend) {
 		result_plot <- insert_legend(
 			plt = result_plot,
+			plt_dims = get_plot_dims(result_plot),
 			apotc_obj = apotc_obj,
 			sizes = legend_sizes,
 			pos = legend_position,

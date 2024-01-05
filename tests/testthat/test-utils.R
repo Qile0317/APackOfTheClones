@@ -59,6 +59,7 @@ test_that("get_xr and get_yr works", {
 
     expect_equal(get_xr(plt), c(1, 2))
     expect_equal(get_yr(plt), c(3, 4))
+    # TODO more tests
 })
 
 test_that("attempt_correction works", {

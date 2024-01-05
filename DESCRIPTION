@@ -7,7 +7,6 @@ Maintainer: Qile Yang <qile0317@gmail.com>
 Description: Visualize T-cell clonal expansion via circle-packing. 'APackOfTheClones' can integrate single-cell RNA sequencing and T-cell receptor libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
 BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
 Depends:
-    scRepertoire (>= 2.0.0),
     R (>= 4.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -34,6 +33,7 @@ Imports:
     methods,
     Rcpp,
     rlang,
+    scRepertoire (>= 2.0.0),
     Seurat
 Remotes:
     ncborcherding/scRepertoire

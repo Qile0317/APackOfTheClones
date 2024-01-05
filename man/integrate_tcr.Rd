@@ -42,7 +42,10 @@ library(APackOfTheClones)
 data("mini_clonotype_data","mini_seurat_obj")
 
 # integrate the TCR data into new seurat object
-integrated_seurat_object <-integrate_tcr(mini_seurat_obj,mini_clonotype_data)
+integrated_seurat_object <- integrate_tcr(
+    mini_seurat_obj, mini_clonotype_data, verbose = FALSE
+)
+
 integrated_seurat_object
 
 }

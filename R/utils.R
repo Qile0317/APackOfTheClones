@@ -72,12 +72,29 @@ strip_spaces <- function(s) gsub(" ", "", s)
 
 strip_and_lower <- function(s) strip_spaces(tolower(s))
 
-get_xr <- function(plt) {
-    ggplot2::ggplot_build(plt)$layout$panel_scales_x[[1]]$range$range
+#' @title Get the xmin, xmax, ymin, ymax of a ggplot object
+#' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
+#' @noRd
+get_plot_dims <- function(plt) {
+    built_plt_layout <- ggplot2::ggplot_build(plt)$layout
+    list(
+        xr = built_plt_layout$panel_scales_x[[1]]$range$range,
+        yr = built_plt_layout$panel_scales_y[[1]]$range$range
+    )
 }
 
-get_yr <- function(plt) {
-    ggplot2::ggplot_build(plt)$layout$panel_scales_y[[1]]$range$range
+get_xr <- function(p) {
+    if (is.ggplot(p)) {
+        return(ggplot2::ggplot_build(p)$layout$panel_scales_x[[1]]$range$range)
+    }
+    p[[1]]
+}
+
+get_yr <- function(p) {
+    if (is.ggplot(p)) {
+        return(ggplot2::ggplot_build(p)$layout$panel_scales_y[[1]]$range$range)
+    }
+    p[[2]]
 }
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
