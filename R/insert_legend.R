@@ -29,12 +29,11 @@ insert_legend <- function(
     # setup relevant variables
     rad_decrease <- get_rad_decrease(apotc_obj)
 
+    sizes <- get_processed_legend_sizes(apotc_obj, sizes)
+
     if (should_estimate(spacing))
         spacing <- calculate_legend_spacing(spacing, plt_dims, rad_decrease)
 
-    if (should_estimate(sizes))
-        sizes <- estimate_legend_sizes(apotc_obj)
-    
     pos <- correct_legend_coord_if_str(pos)
 
     # calculate relevant legend plotting data
@@ -94,6 +93,12 @@ insert_legend <- function(
         linetype = "blank",
         n = n
     )
+}
+
+get_processed_legend_sizes <- function(apotc_obj, s) {
+    if (is.numeric(s)) return(sort(unique(c(1, s))))
+    if (should_estimate(s)) return(estimate_legend_sizes(apotc_obj))
+    s
 }
 
 calculate_legend_spacing <- function(
