@@ -53,7 +53,10 @@ deprecation_docstring <- function() {
 #' data("mini_clonotype_data","mini_seurat_obj")
 #'
 #' # integrate the TCR data into new seurat object
-#' integrated_seurat_object <-integrate_tcr(mini_seurat_obj,mini_clonotype_data)
+#' integrated_seurat_object <- integrate_tcr(
+#'     mini_seurat_obj, mini_clonotype_data, verbose = FALSE
+#' )
+#' 
 #' integrated_seurat_object
 #'
 #' @references
@@ -68,13 +71,13 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
 		what = I("integrate_tcr")
 	)
 
-	dev_integrate_tcr(seurat_obj, tcr_file, verbose, FALSE, time_called)
-	seurat_obj[["integrate_tcr"]] <- make_apotc_command(time_called)
+	seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_file, verbose)
+
+	seurat_obj@commands[["integrate_tcr"]] <- make_apotc_command(time_called)
+	seurat_obj
 }
 
-dev_integrate_tcr <- function(
-		seurat_obj, tcr_file, verbose, do_add_command, time_called = Sys.time()
-) {
+dev_integrate_tcr <- function(seurat_obj, tcr_file, verbose) {
 	tcr <- data.table::as.data.table(tcr_file)
 
 	# Prepare a progress bar to monitor progress (helpful for large aggregations)
@@ -147,18 +150,6 @@ dev_integrate_tcr <- function(
 #' \code{\link{integrate_tcr}}. More specifically, in the metadata, there must
 #' at least be the elements `seurat_clusters` and `raw_clonotype_id`
 #'
-#' @examples
-#' library(Seurat)
-#' library(APackOfTheClones)
-#' data("mini_clonotype_data","mini_seurat_obj")
-#'
-#' # produce an integrated seurat_object
-#' integrated_seurat_object <- integrate_tcr(
-#'     mini_seurat_obj, mini_clonotype_data
-#' )
-#' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
-#' clonotype_counts
-#'
 #' @return A list of `table` objects, where each element is tabled
 #' clonotype frequencies for the seurat cluster corresponding to the same index
 #' - 1. For example, the 5th element is a tabled frequency of counts that
@@ -167,6 +158,19 @@ dev_integrate_tcr <- function(
 #' receptor barcode for the cells in the cluster.
 #'
 #' @export
+#' 
+#' @examples
+#' library(Seurat)
+#' library(APackOfTheClones)
+#' data("mini_clonotype_data","mini_seurat_obj")
+#'
+#' # produce an integrated seurat_object
+#' integrated_seurat_object <- integrate_tcr(
+#'     mini_seurat_obj, mini_clonotype_data, verbose = FALSE
+#' )
+#'
+#' clonotype_counts <- count_clone_sizes(integrated_seurat_object)
+#' clonotype_counts
 #'
 count_clone_sizes <- function(integrated_seurat_obj) {
 

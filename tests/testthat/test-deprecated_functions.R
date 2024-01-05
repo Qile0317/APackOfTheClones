@@ -7,12 +7,12 @@ test_that("integrate_tcr() works and is deprecated", {
 
 	options(lifecycle_verbosity = "quiet")
 	lifecycle::expect_deprecated(
-		integrate_tcr(test_pbmc, test_tcr, FALSE)
+		integrate_tcr(test_pbmc, test_tcr, verbose = FALSE)
 	)
 
 	capture_output(
 		integration_attempt <- suppressMessages(
-			dev_integrate_tcr(test_pbmc, test_tcr, TRUE, FALSE)
+			dev_integrate_tcr(test_pbmc, test_tcr, verbose = TRUE)
 		)
 	)
 	expect_identical(
@@ -20,7 +20,7 @@ test_that("integrate_tcr() works and is deprecated", {
 	)
 
 	expect_identical(
-		dev_integrate_tcr(test_pbmc, test_tcr, verbose = FALSE, FALSE),
+		dev_integrate_tcr(test_pbmc, test_tcr, verbose = FALSE),
 		test_integrated_pbmc
 	)
 })
@@ -41,7 +41,7 @@ test_that("count_clone_sizes works and is deprecated", {
 
 	expect_equal(length(trial), 2)
 
-	untable <- function(a) {as.numeric(unname(a))}
+	untable <- function(a) as.numeric(unname(a))
 	expect_equal(untable(trial[[1]]), c(12, 12, 2, 2))
 	expect_equal(untable(trial[[2]]), c(10, 7, 2))
 })

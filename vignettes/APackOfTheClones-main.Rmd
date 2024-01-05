@@ -67,6 +67,7 @@ TODO
 TODO vizAPOTC with only essential args
 
 ## Key characteristics about the plot
+
 * The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
 * The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
 * On the TODO, there is a somewhat covered visual legend of the relative clone sizes
@@ -123,13 +124,30 @@ If you are still unhappy with the spacing of the plot, see the following ways to
 
 TODO
 
+The plot we've generated here has a size legend on the top left, but we see that it is partially outside of the plot. Unfortunately the algorithm for placing the legend is far from perfect in version 0 so the user will have to do a little extra work.
+
+There are the following six parameters to adjust the legend:
+
+```{r, legend_params, echo = TRUE, eval = FALSE}
+add_size_legend = TRUE,
+legend_sizes = "auto",
+legend_position = "auto",
+legend_buffer = 0.2 ,
+legend_color = "#808080",
+legend_spacing = "auto"
+```
+
+TODO
+
+More details about these arguments can be read in the function documentation.
+
 ## Visually scaling circle sizes
 
 TODO
 
 ## Other modifications
 
-# Final product and further modifications
+# Final product
 
 That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready.
 
