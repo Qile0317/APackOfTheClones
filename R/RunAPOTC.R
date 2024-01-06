@@ -236,7 +236,7 @@ RunAPOTC <- function(
 RunAPOTC_parameter_checker <- function(args) {
 
     # typechecks
-    if (!inherits(args[["seurat_obj"]], "Seurat")) {
+    if (!is_seurat_object(args[["seurat_obj"]])) {
         stop("`seurat_obj` must be a Seurat object.")
     }
 
@@ -250,19 +250,14 @@ RunAPOTC_parameter_checker <- function(args) {
         stop("`clonecall` must be a character of length 1.")
     }
 
-    # Check if ... is a list
-    if (!is.list(args[["..."]])) {
-        stop("Additional keyword arguments must be provided as a list.")
-    }
-
     # Check if extra_filter is character or NULL
     if (!is.null(args[["extra_filter"]]) && (!is.character(args[["extra_filter"]]) || length(args[["extra_filter"]]) != 1)) {
         stop("`extra_filter` must be a character or NULL of length 1.")
     }
 
-    # Check if run_id is character or NULL
-    if (!is.null(args[["run_id"]]) && (!is.character(args[["run_id"]]) || length(args[["run_id"]]) != 1)) {
-        stop("`run_id` must be a character or NULL of length 1.")
+    # Check if run_id is character or numeric or NULL
+    if (!is.null(args[["run_id"]]) && (!is.character(args[["run_id"]]) || !is.numeric(args[["run_id"]]) || length(args[["run_id"]]) != 1)) {
+        stop("`run_id` must be a character, numeric, or NULL of length 1.")
     }
 
     # Check if clone_scale_factor is numeric of length 1
