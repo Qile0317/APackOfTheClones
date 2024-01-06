@@ -9,7 +9,7 @@
 #' clonal expansion plot ([APOTCPlot]) and stores it in the seurat object.
 #' Gets sizes of unique clones and utilizes a circle-packing algorithm to
 #' pack circles representing individual clones in approximately the same
-#' dimensional  reduction (`reduction_base`) coordinates.
+#' dimensional reduction (`reduction_base`) coordinates.
 #'
 #' The parameter `extra_filter` along with an unlimited number of additional
 #' keyword arguments can be used to filter the cells by certain conditions
@@ -235,7 +235,6 @@ RunAPOTC <- function(
 
 RunAPOTC_parameter_checker <- function(args) {
 
-    # typechecks
     if (!is_seurat_object(args[["seurat_obj"]])) {
         stop("`seurat_obj` must be a Seurat object.")
     }

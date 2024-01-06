@@ -107,6 +107,26 @@ is_seurat_or_sce_object <- function(obj) {
     is_seurat_object(obj) || is_sce_object(obj)
 }
 
+is_a_character <- function(x) {
+    if (length(x) != 1) return(FALSE)
+    is.character(x)
+}
+
+is_an_integer <- function(x) {
+    if (length(x) != 1) return(FALSE)
+    is.integer(x)
+}
+
+is_a_numeric <- function(x) {
+    if (length(x) != 1) return(FALSE)
+    is.numeric(x)
+}
+
+is_a_logical <- function(x) {
+    if (length(x) != 1) return(FALSE)
+    is.logical(x)
+}
+
 # math utils
 
 bound_num <- function(num, lowerbound, upperbound) {
@@ -314,7 +334,7 @@ repr_as_string.list <- function(input, ...) {
 #' @examples
 #' data("combined_pbmc")
 #' getReductionCentroids(combined_pbmc, reduction = "umap")
-#' 
+#'
 getReductionCentroids <- function(seurat_obj, reduction = "umap") {
   get_cluster_centroids(
     seurat_obj = seurat_obj,

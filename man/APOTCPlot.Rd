@@ -11,7 +11,7 @@ APOTCPlot(
   ...,
   extra_filter = NULL,
   run_id = NULL,
-  res = 360,
+  res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
   retain_axis_scales = FALSE,

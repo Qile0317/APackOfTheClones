@@ -91,7 +91,7 @@ APOTCPlot <- function(
 	extra_filter = NULL,
 	run_id = NULL,
 
-	res = 360,
+	res = 360L,
 	linetype = "blank",
 	use_default_theme = TRUE,
 	retain_axis_scales = FALSE,
@@ -169,13 +169,57 @@ APOTCPlot <- function(
 }
 
 APOTCPlot_error_handler <- function(args) {
-	# if (!containsApotcRun(args$seurat_obj, args$object_id)) {
+	if (!is_seurat_object(args[["seurat_obj"]])) {
+        stop("`seurat_obj` must be a Seurat object.")
+    }
 
-	# 	stop(paste(
-	# 		"APackOfTheClones object with id", args$object_id,
-	# 		"does not exist in the seurat object"
-	# 	))
-	# }
-	# TODO
+	if (!is.null(args$reduction_base) && !is_a_character(args$reduction_base)) {
+		stop("`reduction_base` must be a character of length 1.")
+	}
+    
+	if (!is.null(args$clonecall) && !is_a_character(args$clonecall)) {
+		stop("`clonecall` must be a character of length 1.")
+	}
 
+	if (!is.null(args$extra_filter) && !is_a_character(args$extra_filter)) {
+		stop("`extra_filter` must be a character or NULL of length 1.")
+	}
+
+    if (!is_an_integer(args$res)) {
+        stop("`res` must be an integer value of length 1.")
+    }
+
+    if (!is_a_character(args$linetype)) {
+        stop("`linetype` must be a character of length 1.")
+    }
+
+    if (!is_a_logical(args$use_default_theme)) {
+        stop("`use_default_theme` must be a logical value of length 1.")
+    }
+
+    if (!is_a_logical(args$retain_axis_scales)) {
+        stop("`retain_axis_scales` must be a logical value of length 1.")
+    }
+
+    if (!is_a_logical(args$show_labels)) {
+        stop("`show_labels` must be a logical value of length 1.")
+    }
+
+    if (!is_a_numeric(args$label_size)) {
+        stop("`label_size` must be a numeric value of length 1.")
+    }
+
+    if (!is_a_logical(args$add_size_legend)) {
+        stop("`add_size_legend` must be a logical value of length 1.")
+    }
+
+	# check object_id validity
+	if (!containsApotcRun(args$seurat_obj, args$run_id)) {
+		stop(paste(
+			"APackOfTheClones object with id", args$run_id,
+			"does not exist in the seurat object"
+		))
+	}
+
+    # TODO: Add more specific checks for other parameters
 }

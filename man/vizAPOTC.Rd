@@ -19,7 +19,7 @@ vizAPOTC(
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
-  res = 360,
+  res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
   retain_axis_scales = FALSE,

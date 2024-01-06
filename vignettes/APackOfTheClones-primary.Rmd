@@ -44,7 +44,7 @@ quiet_load_all_CRAN <- function(...) {
 }
 
 # load packages and data
-quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools", "APackOfTheClones")
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
 # TODO use a nice looking dataset
 ```
 
@@ -56,11 +56,15 @@ suppressPackageStartupMessages(library(APackOfTheClones))
 
 Single-cell RNA sequencing (scRNA-seq) and T/B cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide valuable insights into the immune system, including clonal expansion. `APackOfTheClones` provides a simple, easily customizable, and publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot2`, and can be easily slotted into any analysis pipeline.
 
-In this user vignette, basic familiarity with the `R` language, the `Seurat` package, and the `scRepertoire` package *VERSION TWO* is assumed. As version two of `scRepertoire` is relatively new and introduces some small breaking changes, it is *essential* that its [new vignettes](https://www.borch.dev/uploads/screpertoire/) are read.
+The method counts clonotypes, and using a dimensional reduction (e.g. UMAP) of all cells in a single cell immune profiling experiment as a base, it circle-packs all clone sizes directly as circles within circular clusters according to its seurat cluster. The advantage of this method compared to other (very limited) visualizations of clonal expansion out there is that its arguably much more intuitive. To see it in action, see [this paper](https://doi.org/10.1126/sciimmunol.abg6356) and [this paper](https://doi.org/10.1111/all.15399).
+
+Basic familiarity with the `R` language, the `Seurat` package, and the `scRepertoire` package *VERSION TWO* is assumed. As version two of `scRepertoire` is relatively new and introduces some small breaking changes, it is *essential* that its [new vignettes](https://www.borch.dev/uploads/screpertoire/) are read.
+
+In this vignette, the most essential functionalities of the package are covered, from preparing the data with scRepertoire, to producing and fine-tuning a barebones visualization of clonal expansion.
 
 ### Setting up the Seurat Object and Receptor Library with scRepertoire
 
-The premise of the package is that it provides an additional analysis tool on top of `scRepertoire`'s many functions, which are all ran after combining all TCR/BCR contigs into clones, and integrating the clonal information into the seurat object. Here are the corresponding vignettes to read in order for combining contigs:
+The premise of the package is that it provides an additional analysis tool on top of `scRepertoire`'s many functions, which are all ran after combining all TCR/BCR contigs into clones, and integrating the clonal information into a seurat object with a dimensional reduction(s). Here are the corresponding vignettes to read in order for combining contigs:
 
 1. [Loading Data](https://www.borch.dev/uploads/screpertoire/articles/loading)
 2. [Combining Contigs into Clones](https://www.borch.dev/uploads/screpertoire/articles/combining_contigs)
@@ -92,7 +96,7 @@ head(combined_contig_list[[1]])
 
 For integrating the clonal information, ```scRepertoire::combineExpression``` is the function used [to do so](https://www.borch.dev/uploads/screpertoire/articles/attaching_sc). However, for convenience and safety, an `APackOfTheClones` wrapper ```combineSeuratExpression``` is provided, which will produce a functionally equivalent object, which can *only* work on seurat objects:
 
-```{r, eval = FALSE}
+```{r, echo = FALSE}
 # remove the raw contig_list from memory
 rm("contig_list")
 
@@ -113,6 +117,12 @@ pbmc <- combineSeuratExpression(
 print(pbmc)
 ```
 
+And as a reference, here is the corresponding UMAP plot of the seurat object
+```{r, umap, echo = TRUE}
+pbmc_umap_plot <- UMAPPlot(pbmc)
+pbmc_umap_plot
+```
+
 ## Simple ball packing visualization
 
 ```vizAPOTC``` (short for "visualize APackOfTheClones") is the main convenience function of the package to directly produce the ball packing clonal expansion plot. It takes in a main argument of a combined seurat object (with a long list of optional arguments which will be covered in later sections), and outputs a ggplot object:
@@ -123,10 +133,11 @@ vizAPOTC(pbmc, verbose = FALSE)
 
 ### Key characteristics of the plot
 
+* One should notice the immediate correspondence of circular clusters to umap clusters, and be able to derive some immediate insights about which clusters have expanded.
 * The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
 * The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
-* On the TODO, there is a somewhat covered visual legend of the relative clone sizes
-* The red and green clusters have considerable visual overlap
+* On the plot, there is a somewhat imperfect visual legend of the relative clone sizes
+* Some clusters have considerable visual overlap
 * The returned plot is a fully customizable `ggplot` object
 
 The resulting clonal expansion plot may not be visually satisfactory on the first run without customizations from optional arguments. These arguments and other `ggplot` tricks will be covered to fine-tune the visualization until publication-ready.
@@ -142,7 +153,7 @@ clonecall = "strict",
 extra_filter = NULL,
 ```
 
-TODO
+`reduction_base` indicates what each cl
 
 ## Customization of visual parameters
 
@@ -165,7 +176,7 @@ For more details on them, read the "Arguments" section in the function documenta
 
 Setting repulse to TRUE with those default parameters should probably yield something like the following:
 
-```{r, repulse, echo = TRUE}
+```{r, repulse, echo = TRUE, eval = FALSE}
 TODO
 ```
 
