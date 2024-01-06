@@ -256,8 +256,10 @@ RunAPOTC_parameter_checker <- function(args) {
     }
 
     # Check if run_id is character or numeric or NULL
-    if (!is.null(args[["run_id"]]) && (!is.character(args[["run_id"]]) || !is.numeric(args[["run_id"]]) || length(args[["run_id"]]) != 1)) {
-        stop("`run_id` must be a character, numeric, or NULL of length 1.")
+    if (!is.null(args[["run_id"]])) {
+        if ((!is.character(args[["run_id"]]) && !is.numeric(args[["run_id"]])) || length(args[["run_id"]]) != 1) {
+            stop("`run_id` must be a character or numeric of length 1.")
+        }
     }
 
     # Check if clone_scale_factor is numeric of length 1

@@ -1,8 +1,7 @@
 test_that("combineSeuratExpression output is compatible with scRepertoire", {
 
 	# scRepertoire data
-	data("scRep_example")
-	data("mini_contig_list")
+	data("scRep_example", "mini_contig_list", package = "scRepertoire")
 
 	# named test
 	mini_combined <- scRepertoire::combineTCR(

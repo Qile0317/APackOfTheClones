@@ -103,6 +103,7 @@ test_that("cpp_circle_layout(rad_decrease = 0.1) works", {
 })
 
 test_that("process_rad_vec works", {
+    set.seed(42)
     expect_equal(process_rad_vec(c(4,2,5,1,3), TRUE, FALSE), c(5,4,3,2,1))
     expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, TRUE), c(4,3,1,5,2))
     expect_equal(process_rad_vec(c(4,2,5,1,3), FALSE, FALSE), c(4,2,5,1,3))

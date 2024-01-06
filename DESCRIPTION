@@ -43,3 +43,4 @@ LinkingTo:
     Rcpp,
     testthat
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
