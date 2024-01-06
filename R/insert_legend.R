@@ -1,14 +1,5 @@
 # script to make a custom circle size legend overlay
 
-estimate_legend_sizes <- function(apotc_obj) {
-    sizes <- unlist(apotc_obj@clone_sizes)
-    sort(unique(round(c(
-        1,
-        stats::median(sizes), mean(sizes), mean(unique(sizes)),
-        max(sizes)
-    ))))
-}
-
 # FIXME somethings wrong when i do vizAPOTC(sce), 46 appears twice but one of circles are smaller
 
 insert_legend <- function(
@@ -28,13 +19,9 @@ insert_legend <- function(
 
     # setup relevant variables
     rad_decrease <- get_rad_decrease(apotc_obj)
-
     sizes <- get_processed_legend_sizes(apotc_obj, sizes)
-
-    if (should_estimate(spacing))
-        spacing <- calculate_legend_spacing(spacing, plt_dims, rad_decrease)
-
     pos <- correct_legend_coord_if_str(pos)
+    spacing <- process_legend_spacing(spacing, plt_dims, rad_decrease)
 
     # calculate relevant legend plotting data
 
@@ -101,10 +88,13 @@ get_processed_legend_sizes <- function(apotc_obj, s) {
     s
 }
 
-calculate_legend_spacing <- function(
-    spacing, plt_dims, rad_decrease, portion = 0.05
-) {
-    (abs(get_xr(plt_dims)[1]) * portion) - (2 * rad_decrease)
+estimate_legend_sizes <- function(apotc_obj) {
+    sizes <- unlist(apotc_obj@clone_sizes)
+    sort(unique(round(c(
+        1,
+        stats::median(sizes), mean(sizes), mean(unique(sizes)),
+        max(sizes)
+    ))))
 }
 
 correct_legend_coord_if_str <- function(pos) {
@@ -130,6 +120,19 @@ correct_legend_coord_if_str <- function(pos) {
         strset = c("top_left", "top_right", "bottom_left", "bottom_right"),
         stop_msg_start = "invalid legend coordinate string"
     )
+}
+
+process_legend_spacing <- function(spacing, plt_dims, rad_decrease) {
+    if (should_estimate(spacing)) {
+        return(calculate_legend_spacing(spacing, plt_dims, rad_decrease))
+    }
+    spacing
+}
+
+calculate_legend_spacing <- function(
+    spacing, plt_dims, rad_decrease, portion = 0.05
+) {
+    (abs(get_xr(plt_dims)[1]) * portion) - (2 * rad_decrease)
 }
 
 # given the circle placements, estimate the legend dataframe with the least

@@ -235,6 +235,89 @@ RunAPOTC <- function(
 
 RunAPOTC_parameter_checker <- function(args) {
 
+    # typechecks
+    if (!inherits(args[["seurat_obj"]], "Seurat")) {
+        stop("`seurat_obj` must be a Seurat object.")
+    }
+
+    # Check if reduction_base is character of length 1
+    if (!is.character(args[["reduction_base"]]) || length(args[["reduction_base"]]) != 1) {
+        stop("`reduction_base` must be a character of length 1.")
+    }
+
+    # Check if clonecall is character of length 1
+    if (!is.character(args[["clonecall"]]) || length(args[["clonecall"]]) != 1) {
+        stop("`clonecall` must be a character of length 1.")
+    }
+
+    # Check if ... is a list
+    if (!is.list(args[["..."]])) {
+        stop("Additional keyword arguments must be provided as a list.")
+    }
+
+    # Check if extra_filter is character or NULL
+    if (!is.null(args[["extra_filter"]]) && (!is.character(args[["extra_filter"]]) || length(args[["extra_filter"]]) != 1)) {
+        stop("`extra_filter` must be a character or NULL of length 1.")
+    }
+
+    # Check if run_id is character or NULL
+    if (!is.null(args[["run_id"]]) && (!is.character(args[["run_id"]]) || length(args[["run_id"]]) != 1)) {
+        stop("`run_id` must be a character or NULL of length 1.")
+    }
+
+    # Check if clone_scale_factor is numeric of length 1
+    if (!is.numeric(args[["clone_scale_factor"]]) || length(args[["clone_scale_factor"]]) != 1) {
+        stop("`clone_scale_factor` must be a numeric value of length 1.")
+    }
+
+    # Check if rad_scale_factor is numeric of length 1
+    if (!is.numeric(args[["rad_scale_factor"]]) || length(args[["rad_scale_factor"]]) != 1) {
+        stop("`rad_scale_factor` must be a numeric value of length 1.")
+    }
+
+    # Check if order_clones and scramble_clones are logical
+    if (!is.logical(args[["order_clones"]]) || length(args[["order_clones"]]) != 1 ||
+        !is.logical(args[["scramble_clones"]]) || length(args[["scramble_clones"]]) != 1) {
+        stop("`order_clones` and `scramble_clones` must be logical values of length 1.")
+    }
+
+    # Check if try_place is logical of length 1
+    if (!is.logical(args[["try_place"]]) || length(args[["try_place"]]) != 1) {
+        stop("`try_place` must be a logical value of length 1.")
+    }
+
+    # Check if repulse is logical of length 1
+    if (!is.logical(args[["repulse"]]) || length(args[["repulse"]]) != 1) {
+        stop("`repulse` must be a logical value of length 1.")
+    }
+
+    # Check if repulsion_threshold is numeric of length 1
+    if (!is.numeric(args[["repulsion_threshold"]]) || length(args[["repulsion_threshold"]]) != 1) {
+        stop("`repulsion_threshold` must be a numeric value of length 1.")
+    }
+
+    # Check if repulsion_strength is numeric of length 1
+    if (!is.numeric(args[["repulsion_strength"]]) || length(args[["repulsion_strength"]]) != 1) {
+        stop("`repulsion_strength` must be a numeric value of length 1.")
+    }
+
+    # Check if max_repulsion_iter is an integer of length 1
+    if (!is.integer(args[["max_repulsion_iter"]]) || length(args[["max_repulsion_iter"]]) != 1) {
+        stop("`max_repulsion_iter` must be an integer value of length 1.")
+    }
+
+    # Check if override is logical of length 1
+    if (!is.logical(args[["override"]]) || length(args[["override"]]) != 1) {
+        stop("`override` must be a logical value of length 1.")
+    }
+
+    # Check if verbose is logical of length 1
+    if (!is.logical(args[["verbose"]]) || length(args[["verbose"]]) != 1) {
+        stop("`verbose` must be a logical value of length 1.")
+    }
+
+    # regular tests
+
 	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
 		stop("`clone_scale_factor` has to be a positive real number in (0, 1]")
 	}
@@ -270,5 +353,5 @@ RunAPOTC_parameter_checker <- function(args) {
         ))
     }
 
-	# TODO more checks of the filtering conditions
+	# TODO more checks of the filtering conditions and more tests
 }
