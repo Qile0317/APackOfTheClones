@@ -118,6 +118,7 @@ print(pbmc)
 ```
 
 And as a reference, here is the corresponding UMAP plot of the seurat object
+
 ```{r, umap, echo = TRUE}
 pbmc_umap_plot <- UMAPPlot(pbmc)
 pbmc_umap_plot
@@ -208,6 +209,14 @@ cowplot::plot_grid(
 
 TODO - maybe this should be in another vignette?
 
+### Visually scaling circle sizes
+
+For each seurat cluster at index $i$, the final radii $r_{ij}$ of each physical circle at index $j$ representing clone size $s_{ij}$ is calculated with a clone size scaling factor $C \in [0, 1)$ and a radius scaling factor $R \in [0, 1)$ with the following formula:
+
+$$r_{ij} = C\cdot(\sqrt{s_{ij}} - (1 - R))$$
+
+Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
+
 ### Cluster repulsion
 
 Considerable visual overlap between clusters (due to the algorithm's attempt to fit clusters to the original UMAP coordinates) may ocurr sometimes and obstruct eachother excessively, even though the method by default tries to alleviate this with repulsion of clusters. There are four optional arguments:
@@ -245,10 +254,6 @@ legend_spacing = "auto"
 TODO
 
 More details about these arguments can be read in the function documentation.
-
-### Visually scaling circle sizes
-
-TODO
 
 ### Other modifications
 

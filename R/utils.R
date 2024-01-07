@@ -91,7 +91,7 @@ get_xr <- function(p) {
 }
 
 get_yr <- function(p) {
-    if (ggplo2::is.ggplot(p)) {
+    if (ggplot2::is.ggplot(p)) {
         return(ggplot2::ggplot_build(p)$layout$panel_scales_y[[1]]$range$range)
     }
     p[[2]]
