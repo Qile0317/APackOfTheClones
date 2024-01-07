@@ -178,4 +178,4 @@ cowplot::plot_grid(
 
 ## AdjustAPOTC
 
-TODO
+This function's parameters help modify certain attributes about APackOfTheClones runs, and has the exact same first six parameters as `APOTCPlot` for managing which run to modify. It also possesses the same four repulsion arguments in `vizAPOTC` and `RunAPOTC` if a run is to be repulsed again. See the function level documentation for the following parameters that can modify cluster locations, colors, and the adjustment of the `clone_scale_factor` and `rad_scale_factor`.

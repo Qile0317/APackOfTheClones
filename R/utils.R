@@ -113,14 +113,6 @@ get_yr <- function(p) {
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
 
-is_sce_object <- function(obj) inherits(obj, "SingleCellExperiment")
-
-is_se_object <- function(obj) inherits(obj, "SummarizedExperiment")
-
-is_seurat_or_sce_object <- function(obj) {
-    is_seurat_object(obj) || is_sce_object(obj)
-}
-
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.character(x)
@@ -279,19 +271,6 @@ to_string_rep_with_insert <- function(v, insert) {
         output <- paste(output, insert, x, insert, ",", sep = "")
     }
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
-}
-
-repr_as_string.list <- function(input, ...) {
-    list_names <- names(input)
-    named <- !is.null(list_names)
-    output <- ""
-
-    for (i in seq_along(input)) {
-        if (named && list_names[i] != "")
-            output <- paste(output, list_names[i], "=", sep = "")
-        output <- paste(output, repr_as_string(input[[i]]), ",", sep = "")
-    }
-    paste("list(", substr(output, 1, nchar(output) - 1), ")", sep = "")
 }
 
 # Seurat utils

@@ -4,11 +4,11 @@
 \name{APackOfTheClones-package}
 \alias{APackOfTheClones}
 \alias{APackOfTheClones-package}
-\title{APackOfTheClones: Visualization of T-Cell Clonal Expansion}
+\title{APackOfTheClones: Visualization of Clonal Expansion for Single Cell Immune Profiles}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Visualize T-cell clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) \doi{10.1126/sciimmunol.abg6356}.
+Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) \doi{10.1126/sciimmunol.abg6356}.
 }
 \seealso{
 Useful links:
