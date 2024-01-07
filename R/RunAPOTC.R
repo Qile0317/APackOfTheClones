@@ -365,9 +365,9 @@ check_filtering_conditions <- function(args) {
         if (argname %in% metadata_cols) next
         stop(paste(
             "colname:", argname,
-            "not found on the seurat object metadata.",
+            "not found in the seurat object metadata.",
             "did you mean this to be a subsetting named argument?",
-            "if so, did you mean to use the argument:",
+            "if not, did you mean to use the argument:",
             closest_word(argname, all_formals)
         ))
     }
