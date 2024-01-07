@@ -13,7 +13,7 @@
 
 ```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells in a `Seurat` object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling.
 
-The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of `APackOfTheClones` being used on a [public 10X genomics dataset](https://www.10xgenomics.com/resources/datasets/pbm-cs-from-bal-bc-mice-tcr-enrichment-from-amplified-c-dna-1-standard-3-0-0):
+The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of `APackOfTheClones` being used on an [example dataset for scRepertoire](https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link):
 
 <img src="man/figures/example.png" width="100%" align="center" />
 
