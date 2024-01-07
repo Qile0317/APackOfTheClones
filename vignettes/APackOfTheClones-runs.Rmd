@@ -52,7 +52,7 @@ suppressPackageStartupMessages(library(APackOfTheClones))
 
 ## Introduction
 
-As demonstrated in `vignette("APackOfTheClones-primary")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC` provides a direct way to produce the ball-packing clonal expansion visualization, though for selecr users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC`, `APOTCPlot`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
+As demonstrated in `vignette("APackOfTheClones-primary")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC` provides a direct way to produce the ball-packing clonal expansion visualization, though for select users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC`, `APOTCPlot`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
 
 <details>
 
@@ -88,15 +88,54 @@ print(pbmc)
 
 ### Overview
 
-All of `vizAPOTC`'s arguments are actually derived from `RunAPOTC` and `APOTCPlot`. Approximately, The former function takes in the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, while the latter takes in the second half, with a few additional options. `RunAPOTC` is responsible for storing data of the S4 class `ApotcData` in the seurat object under a named list in `@misc$APackOfTheClones` under some character run ID, and `APOTCPlot` allows the visualization of these data objects with some customization. 
+All of `vizAPOTC`'s arguments are actually derived from `RunAPOTC` and `APOTCPlot`. The former is responsible for storing data of the S4 class `ApotcData` in the seurat object under a named list in `@misc$APackOfTheClones` under some character run ID, and the latter allows the visualization of these data objects with some customization. `AdjustAPOTC` has many arguments for adjusting the data associated with some APackOfTheClones run stored by `RunAPOTC`, including adjusting cluster positions, colors, repulsion, etc. which can be visualized again with `APOTCPlot`.
 
 ## Managing APackOfTheClones run data
 
-The main function to store a run is `RunAPOTC`, which approximately takes in the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, 
+`RunAPOTC` has approximate the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, meaning it has all the data subsetting, circle size scaling, and cluster repulsion capabilities covered in the previous vignette. The most essential difference is the presence of the argument `run_id`, which corresponds to an id for the `ApotcData` object. If left blank, one will be automatically generated in the following format:
+
+> `reduction_base;clonecall;keyword_arguments;extra_filter`
+
+where if keyword arguments and extra_filter are underscore (`_`) characters if there was no input for the `...` and `extra_filter` parameters.
+
+```{r, eval = FALSE}
+# Here is the function ran with its default parameters
+pbmc <- RunAPOTC(combined_pbmc)
+
+#> Initializing APOTC run...
+#> * Setting `clone_scale_factor` to 0.3
+#> * id for this run: umap;CTstrict;_;_
+#>
+#> Packing clones into clusters
+#> [==================================================] 100%
+#> 
+#> repulsing all clusters | max iterations = 20
+#> [==================================================] 100%
+#>
+#> Completed successfully, time elapsed: 0.155 seconds
+#>
+```
+
+```{r, runapotc_default, include = FALSE}
+pbmc <- RunAPOTC(pbmc, verbose = FALSE)
+```
+
+From the verbal queues, one can see how the `run_id` was set. Here's it ran again but with more optional arguments and a custom `run_id`:
+
+```{r, runapotc2}
+pbmc <- RunAPOTC(
+    pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"), verbose = FALSE
+)
+```
 
 ### Utilities for Managing APackOfTheClones Runs
 
-TODO
+It is to note that the data abstraction here with a `run_id` is intentional, and users should not manually touch any of the `ApotcData` objects with the seurat object unless they are extremely familiar with the latest internal implementation. Instead, here is a collection of functions that may be useful:
+
+- `getApotcDataIds(pbmc)` gets all current `run_id`'s, if any.
+- `getLastApotcDataId(pbmc)` gets the latest `run_id`, if any.
+- `containsApotcRun(pbmc, run_id = "foo")` returns whether a `run_id` exists in the seurat object.
+- `deleteApotcData(pbmc, run_id = "foo")` deletes *all data* associated with a certain `run_id`.
 
 ## APOTCPlot
 

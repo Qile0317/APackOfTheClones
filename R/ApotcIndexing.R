@@ -326,14 +326,14 @@ getApotcDataIds <- function(seurat_obj) {
 #'
 #' @examples
 #' # first run
-# ' pbmc <- RunAPOTC(
-# '     seurat_obj = get(data("combined_pbmc")),
-# '     reduction_base = "umap",
-# '     clonecall = "strict",
-# '     verbose = FALSE
-# ' )
+#' pbmc <- RunAPOTC(
+#'     seurat_obj = get(data("combined_pbmc")),
+#'     reduction_base = "umap",
+#'     clonecall = "strict",
+#'     verbose = FALSE
+#' )
 #'
-#' getApotcDataIds(pbmc)
+#' getLastApotcDataId(pbmc)
 #' #> [1] "umap;CTstrict;_;_"
 #'
 #' # second run with a different clonecall
@@ -344,7 +344,7 @@ getApotcDataIds <- function(seurat_obj) {
 #'     verbose = FALSE
 #' )
 #'
-#' getApotcDataIds(pbmc)
+#' getLastApotcDataId(pbmc)
 #' #> [1] "umap;CTgene;_;_"
 #'
 getLastApotcDataId <- function(seurat_obj) {
