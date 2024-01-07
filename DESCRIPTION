@@ -1,10 +1,10 @@
 Package: APackOfTheClones
 Type: Package
-Title: Visualization of T-Cell Clonal Expansion
+Title: Visualization of Clonal Expansion for Single Cell Immune Profiles
 Version: 1.0.0
 Authors@R: c(person("Qile", "Yang", email = "qile.yang@berkeley.edu", role = c("cre","aut","cph")))
 Maintainer: Qile Yang <qile0317@gmail.com>
-Description: Visualize T-cell clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
+Description: Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
 BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
 Depends:
     R (>= 4.0.0)

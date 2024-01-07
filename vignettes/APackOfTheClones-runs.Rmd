@@ -139,7 +139,42 @@ It is to note that the data abstraction here with a `run_id` is intentional, and
 
 ## APOTCPlot
 
-TODO
+To visualize stored APackOfTheClones runs, `APOTCPlot` takes in a seurat object and the `run_id`. If no `run_id` is provided, it defaults to using the latest run. All other parameters are same as in the second half of `vizAPOTC`. Although it is noteworthy that if the user had always relied on auto-generated `run_id`'s then `APOTCPlot` also has these subsetting arguments:
+
+```{r, apotcplot_subset_params, eval = FALSE}
+reduction_base = NULL,
+clonecall = NULL,
+...,
+extra_filter = NULL,
+```
+
+And putting in identical arguments to generate the otiginal `ApotcData` would work too, but this approach is less recommended as its a lot more (unessecarily) verbose. Here is `APOTCPlot` in action:
+
+```{r, apotcplot}
+# Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where
+# `orig.ident` is a custom column in the example data with levels corresponding to sample ids:
+# ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). 
+
+pbmc <- RunAPOTC(
+  pbmc, run_id = "P17", orig.ident = c("P17B", "P17L"), verbose = FALSE
+)
+
+pbmc <- RunAPOTC(
+  pbmc, run_id = "P18", orig.ident = c("P18B", "P18L"), verbose = FALSE
+)
+
+pbmc <- RunAPOTC(
+  pbmc, run_id = "P19", orig.ident = c("P19B", "P19L"), verbose = FALSE
+)
+
+cowplot::plot_grid(
+  default_apotc_plot,
+  APOTCPlot(pbmc, run_id = "P17"),
+  APOTCPlot(pbmc, run_id = "P18"),
+  APOTCPlot(pbmc), # run_id omitted as sample 19 was the latest run
+  labels = c("all", "17", "18", "19")
+)
+```
 
 ## AdjustAPOTC
 
