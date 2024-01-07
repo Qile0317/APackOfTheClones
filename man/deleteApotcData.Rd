@@ -21,6 +21,13 @@ including the ApotcData and command in seurat_obj@command. The run_id would
 be no longer accessible afterwards.
 }
 \examples{
+pbmc <- RunAPOTC(
+    seurat_obj = get(data("combined_pbmc")),
+    reduction_base = "umap",
+    clonecall = "strict",
+    run_id = "run1",
+    verbose = FALSE
+)
 
 getApotcDataIds(pbmc)
 #> [1] "run1"

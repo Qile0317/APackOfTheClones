@@ -126,7 +126,31 @@ arguments to modify the data and/or parameters of the visualization. Note
 that some of the arguments may conflict with eachother.
 }
 \examples{
-pbmc <- RunAPOTC(get(data("combined_pbmc")))
-# unfinished
+# do an APackOfTheClones run
+pbmc <- RunAPOTC(get(data("combined_pbmc")), verbose = FALSE)
+
+# adjust the rad_scale_factor, and nudge cluster 1 by (1, 1)
+pbmc <- AdjustAPOTC(
+    pbmc,
+    new_rad_scale_factor = 0.9,
+    nudge_cluster = 1,
+    nudge_vector = c(1, 1),
+    verbose = FALSE
+)
+
+# plot the result
+APOTCPlot(pbmc)
+
+# perhaps multiple clusters need to be relocated and repulsed
+pbmc <- AdjustAPOTC(
+    pbmc,
+    relocate_cluster = c(5, 10),
+    relocation_coord = list(c(2, 3.5), c(0, 5)),
+    repulse = TRUE,
+    verbose = FALSE
+)
+
+# plot again to check results
+APOTCPlot(pbmc)
 
 }
