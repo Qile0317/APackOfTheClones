@@ -113,9 +113,9 @@ APOTCPlot <- function(
 	legend_text_size = 5,
 	add_legend_background = TRUE
 ) {
-
+	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
-	args$run_id <- infer_object_id_if_needed(args, varargs_list = list(...))
+	args$run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
 	APOTCPlot_error_handler(args)
 
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
@@ -224,4 +224,6 @@ APOTCPlot_error_handler <- function(args) {
 	}
 
     # TODO: Add more specific checks for other parameters
+
+	check_filtering_conditions(args)
 }

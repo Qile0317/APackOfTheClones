@@ -74,10 +74,11 @@ AdjustAPOTC <- function(
 	#interactive = FALSE,
 	verbose = TRUE
 ) {
+	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
-	AdjustAPOTC_error_handler(args = args, varargs_list = list(...))
+	AdjustAPOTC_error_handler(args)
 
-	object_id <- infer_object_id_if_needed(args, varargs_list = list(...))
+	object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
 	apotc_obj <- getApotcData(seurat_obj, object_id)
 	args <- hash::hash(as.list(environment()))
 
@@ -119,7 +120,7 @@ AdjustAPOTC <- function(
 	seurat_obj
 }
 
-AdjustAPOTC_error_handler <- function(args, varargs_list) {
+AdjustAPOTC_error_handler <- function(args) {
 	# TODO - type check
 	# TODO rest of errors
 

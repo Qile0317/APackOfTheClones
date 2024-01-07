@@ -356,6 +356,7 @@ RunAPOTC_parameter_checker <- function(args) {
     check_filtering_conditions(args)
 }
 
+# assumes varargs_list is present
 check_filtering_conditions <- function(args) {
     if (is_empty(args$varargs_list)) return()
     metadata_cols <- names(args$seurat_obj@meta.data)
