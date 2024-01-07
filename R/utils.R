@@ -72,6 +72,20 @@ strip_spaces <- function(s) gsub(" ", "", s)
 
 strip_and_lower <- function(s) strip_spaces(tolower(s))
 
+strip_unquoted_spaces <- function(input_str) {
+  parts <- strsplit(input_str, "'")[[1]]
+  for (i in seq_along(parts)) {
+    if (is_odd(i)) parts[i] <- strip_spaces(parts[[i]])
+  }
+  
+  joined_str <- Reduce(function(...) paste(..., sep = "'"), parts)
+
+  if (is_even(length(parts))) {
+    return(paste(joined_str, "'", sep = ""))
+  }
+  joined_str
+}
+
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
 #' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
 #' @noRd
@@ -133,12 +147,15 @@ bound_num <- function(num, lowerbound, upperbound) {
     min(max(num, lowerbound), upperbound)
 }
 
-add <- function(x, y) x + y
-subtract <- function(x, y) x - y
-
 is_bound_between <- function(num, lowerbound, upperbound) {
     num >= lowerbound && num <= upperbound
 }
+
+add <- function(x, y) x + y
+subtract <- function(x, y) x - y
+
+is_even <- function(x) x %% 2 == 0
+is_odd <- function(x) x %% 2 == 1
 
 # spelling related functions
 
@@ -169,35 +186,6 @@ closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
         }
     }
     closest_w
-}
-
-# data extraction / indexing / analysis utilities
-
-last_occurence_index <- function(str, char) {
-    ind <- 0
-    for (i in seq_along(str)) {
-        if (identical(str[i], char)) {
-            ind <- i
-        }
-    }
-    ind
-}
-
-find_first_non_empty <- function(l) {
-    for (item in l) {
-        if (isnt_empty(item)) {
-            return(item)
-        }
-    }
-    return(NULL)
-}
-
-extract_2d_list_row <- function(l, row_index) {
-    row_vector <- c()
-    for (i in seq_along(l)) {
-        row_vector[i] <- l[[i]][row_index]
-    }
-    row_vector
 }
 
 # list utilities

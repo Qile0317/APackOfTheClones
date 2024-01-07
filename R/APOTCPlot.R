@@ -70,12 +70,15 @@
 #' @export
 #'
 #' @examples
-#' library(Seurat)
-#' suppressPackageStartupMessages(library(APackOfTheClones))
+#' data("combined_pbmc")
 #'
 #' # 2 arbitrary APackOfTheClones runs named "run1" and "run2"
-#' combined_pbmc <- RunAPOTC(get(data("combined_pbmc")), run_id = "run1")
-#' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run2", try_place = TRUE)
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc, run_id = "run1", verbose = FALSE
+#' )
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc, run_id = "run2", try_place = TRUE, verbose = FALSE
+#' )
 #'
 #' # plotting with default arguments will plot the "run2" results as its latest
 #' APOTCPlot(combined_pbmc)
@@ -112,11 +115,10 @@ APOTCPlot <- function(
 ) {
 
 	args <- hash::hash(as.list(environment()))
+	args$run_id <- infer_object_id_if_needed(args, varargs_list = list(...))
 	APOTCPlot_error_handler(args)
 
-	apotc_obj <- getApotcData(
-		seurat_obj, infer_object_id_if_needed(args, varargs_list = list(...))
-	)
+	apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
 	result_plot <- plot_clusters(
 		clusters = get_plottable_df_with_color(apotc_obj),

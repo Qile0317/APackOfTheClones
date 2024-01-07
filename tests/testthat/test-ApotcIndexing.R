@@ -212,4 +212,30 @@ test_that("parse_to_object_id works with all args changed", {
         )
     )
 
+    expect_identical(
+        parse_to_object_id(
+            reduction_base = "pca",
+            clonecall = "CTaa",
+            varargs_list = list(
+                "seurat_clusters" = c(6, 2, 0, 2, 5),
+                "orig.id" = c(
+                    " C D  ", "X", " A    HFS", " G ", "EX", "  GS d", "X"
+                )
+            ),
+            metadata_filter = "mito.genes > 1.5 | length(CTaa) - 1 < 20"
+        ),
+
+        paste(
+            "pca",
+            "CTaa",
+            paste(
+                "orig.id=c('  GS d',' A    HFS',' C D  ',' G ','EX','X')",
+                "seurat_clusters=c(0,2,5,6)",
+                sep = ","
+            ),
+            "mito.genes>1.5|length(CTaa)-1<20",
+            sep = ";"
+        )
+    )
+
 })

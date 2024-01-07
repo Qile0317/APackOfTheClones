@@ -52,7 +52,8 @@ down the line.}
 \item{extra_filter}{character. An additional string that should be formatted
 \emph{exactly} like a statement one would pass into \link[dplyr:filter]{dplyr::filter} that does
 \emph{additional} filtering to cells in the seurat object - on top of the other
-keyword arguments - based on the metadata. This is a more flexible
+keyword arguments - based on the metadata. This means that it will be
+logically AND'ed with any keyword argument filters. This is a more flexible
 alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
@@ -116,7 +117,7 @@ Computes necessary information for an APackOfTheClones
 clonal expansion plot (\link{APOTCPlot}) and stores it in the seurat object.
 Gets sizes of unique clones and utilizes a circle-packing algorithm to
 pack circles representing individual clones in approximately the same
-dimensional  reduction (\code{reduction_base}) coordinates.
+dimensional reduction (\code{reduction_base}) coordinates.
 
 The parameter \code{extra_filter} along with an unlimited number of additional
 keyword arguments can be used to filter the cells by certain conditions

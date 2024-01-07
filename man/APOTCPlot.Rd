@@ -54,7 +54,8 @@ down the line.}
 \item{extra_filter}{character. An additional string that should be formatted
 \emph{exactly} like a statement one would pass into \link[dplyr:filter]{dplyr::filter} that does
 \emph{additional} filtering to cells in the seurat object - on top of the other
-keyword arguments - based on the metadata. This is a more flexible
+keyword arguments - based on the metadata. This means that it will be
+logically AND'ed with any keyword argument filters. This is a more flexible
 alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
@@ -145,12 +146,15 @@ If none of these parameters are inputted, the function defaults to returning
 the plot of the latest run.
 }
 \examples{
-library(Seurat)
-suppressPackageStartupMessages(library(APackOfTheClones))
+data("combined_pbmc")
 
 # 2 arbitrary APackOfTheClones runs named "run1" and "run2"
-combined_pbmc <- RunAPOTC(get(data("combined_pbmc")), run_id = "run1")
-combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run2", try_place = TRUE)
+combined_pbmc <- RunAPOTC(
+    combined_pbmc, run_id = "run1", verbose = FALSE
+)
+combined_pbmc <- RunAPOTC(
+    combined_pbmc, run_id = "run2", try_place = TRUE, verbose = FALSE
+)
 
 # plotting with default arguments will plot the "run2" results as its latest
 APOTCPlot(combined_pbmc)

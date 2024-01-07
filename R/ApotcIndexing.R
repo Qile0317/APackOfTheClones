@@ -1,16 +1,6 @@
 # script to manage the interface for accessing the apotc data
 # all functions assume arguments are correct
 
-is_valid_filter_str <- function(metadata_string) {
-    if (is.null(metadata_string)) return(FALSE)
-    if (identical(strip_spaces(metadata_string), "")) return(FALSE)
-    return(TRUE)
-}
-
-is_valid_args  <- function(varargs_list) {
-    isnt_empty(varargs_list)
-}
-
 # from the input of RunAPOTC, convert the condition to a call to be put in
 # @meta.data %>% dpylr::filter(eval(parse(text = "output of this func")))
 # assume that metadata_filter is a valid ADDITIONAL filter condition.
@@ -21,7 +11,7 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     if (!is_valid_args(varargs_list)) {
         if (is_valid_filter_str(metadata_filter)) {
-            return(strip_spaces(metadata_filter))
+            return(strip_unquoted_spaces(metadata_filter))
         }
         return("")
     }
@@ -43,7 +33,17 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
         )
     }
 
-    strip_spaces(filter_string)
+    strip_unquoted_spaces(filter_string)
+}
+
+is_valid_args  <- function(varargs_list) {
+    isnt_empty(varargs_list)
+}
+
+is_valid_filter_str <- function(metadata_string) {
+    if (is.null(metadata_string)) return(FALSE)
+    if (identical(strip_spaces(metadata_string), "")) return(FALSE)
+    return(TRUE)
 }
 
 col_cond_vec_to_filter_str <- function(condition_vector, colname) {
