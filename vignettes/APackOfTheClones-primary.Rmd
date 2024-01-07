@@ -1,7 +1,7 @@
 ---
-title: "APackOfTheClones-primary"
+title: "APackOfTheClones Essentials"
 description: >
-  A full walkthrough of the clonal expansion visualization workflow.
+  A brief walkthrough of the clonal expansion visualization workflow.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{APackOfTheClones-primary}
@@ -77,7 +77,7 @@ The premise of the package is that it provides an additional analysis tool on to
   </summary>
 
 ```{r, combineTCR, echo = TRUE}
-# load in the corresponding 6-sample TCR contigs from scRepertoires
+# load in the corresponding 6-sample TCR contigs from scRepertoire
 contig_list <- get(data("contig_list", package = "scRepertoire"))
 
 # combine the TCR contigs into clones with custom samples
@@ -206,8 +206,6 @@ cowplot::plot_grid(
 ```
 
 ## Customization of visual parameters
-
-TODO - maybe this should be in another vignette?
 
 ### Visually scaling circle sizes
 
