@@ -94,13 +94,15 @@ cowplot::plot_grid(
 ```
 
 ## Documentation
+
 Comprehensive documentation, vignettes, and a changelog is deployed at https://qile0317.github.io/APackOfTheClones/
+
+There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones-primary")` and `vignette("APackOfTheCLones-runs")`.
 
 All exported functions has function level documentation which can be called with `?function`.
 
-TODO
-
 ## Contributing
+
 Github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.
 
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
@@ -110,14 +112,17 @@ An explanation of the algorithms will eventually be made publicly available in a
 One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.
 
 ## Contact
+
 Qile Yang - qile.yang@berkeley.edu
 
 ## References
-<a id="1">[1]</a> 
+
+<a id="1">[1]</a>
 Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. O., Bachert, C., & Coquet, J. M. (2021). Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ TH2 cell population in nasal polyps. Science immunology, 6(62), eabg6356. https://doi.org/10.1126/sciimmunol.abg6356
 
-<a id="2">[2]</a> 
+<a id="2">[2]</a>
 atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
+
 Thanks for Ben Murrell (@murrelb) at the Karolinska Institute for introducing the idea, implementing julia code, debug support, and giving suggestions. Thanks to Nick Borcherding (@ncborcherding) for providing more insights,  suggestions, and promoting the package.
