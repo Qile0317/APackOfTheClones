@@ -163,6 +163,7 @@ RunAPOTC <- function(
     # compute inputs
     reduction_base <- attempt_correction(reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
+    varargs_list <- list(...)
 
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
@@ -173,11 +174,11 @@ RunAPOTC <- function(
     }
 
     metadata_filter_string <- parse_to_metadata_filter_str(
-        metadata_filter = extra_filter, varargs_list = list(...)
+        metadata_filter = extra_filter, varargs_list = varargs_list
     )
 
     obj_id <- infer_object_id_if_needed(
-        args = hash::hash(as.list(environment())), varargs_list = list(...)
+        args = hash::hash(as.list(environment())), varargs_list = varargs_list
     )
 
     RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
@@ -351,4 +352,22 @@ RunAPOTC_parameter_checker <- function(args) {
     }
 
 	# TODO more checks of the filtering conditions and more tests
+
+    check_filtering_conditions(args)
+}
+
+check_filtering_conditions <- function(args) {
+    if (is_empty(args$varargs_list)) return()
+    metadata_cols <- names(args$seurat_obj@meta.data)
+    all_formals <- get_processed_argnames(3)
+    for (argname in names(args$varargs_list)) {
+        if (argname %in% metadata_cols) next
+        stop(paste(
+            "colname:", argname,
+            "not found on the seurat object metadata.",
+            "did you mean this to be a subsetting named argument?",
+            "if so, did you mean to use the argument:",
+            closest_word(argname, all_formals)
+        ))
+    }
 }

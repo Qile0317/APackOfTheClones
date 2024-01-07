@@ -36,9 +36,7 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
     strip_unquoted_spaces(filter_string)
 }
 
-is_valid_args  <- function(varargs_list) {
-    isnt_empty(varargs_list)
-}
+is_valid_args  <- function(varargs_list) isnt_empty(varargs_list)
 
 is_valid_filter_str <- function(metadata_string) {
     if (is.null(metadata_string)) return(FALSE)

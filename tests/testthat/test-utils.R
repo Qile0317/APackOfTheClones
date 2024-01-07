@@ -82,4 +82,14 @@ test_that("construct_prefix_vector works", {
     expect_identical(
         test_results, c("NP1_CTRL", "NP2_CTRL", "NP1_STIM", "NP2_STIM")
     )
+
+    test_age <- c("Y", "O", "Y", "O")
+
+    test_results <- construct_prefix_vector(
+        list(test_age, test_samples, test_ids)
+    )
+
+    expect_identical(
+        test_results, c("Y_NP1_CTRL", "O_NP2_CTRL", "Y_NP1_STIM", "O_NP2_STIM")
+    )
 })

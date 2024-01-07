@@ -58,15 +58,11 @@ make_apotc_command <- function(call_time, assay = "RNA") {
         )
     }
 
-    argnames <- names(formals(fun = sys.function(which = sys.parent(n = 1))))
-    argnames <- process_argnames(argnames)
-    params <- get_parent_params(n = 2)
-
     # return the command object
     methods::new(
         Class = 'SeuratCommand',
         name = command_name,
-        params = params,
+        params = get_parent_params(),
         time.stamp = call_time,
         call.string = call_string,
         assay.used = assay
@@ -88,6 +84,12 @@ seurat_extractfield <- function(string, field = 1, delim = "_") {
 # function to be used within another parent function, extracting the arguments
 # to the parent function and returning it as a named list, while also allowing
 # filtering out of certain object types to save memory
+
+get_processed_argnames <- function(n = 2) {
+    process_argnames(
+        names(formals(fun = sys.function(which = sys.parent(n = n + 1))))
+    )
+}
 
 process_argnames <- function(argnames) {
     argnames <- grep(
@@ -112,12 +114,11 @@ process_argnames <- function(argnames) {
 }
 
 get_parent_params <- function(
-    n = 1,
+    n = 2,
     excluded_types = c("Seurat"),
     only_named_types = c("data.frame", "data.table", "list")
 ) {
-    argnames <- names(formals(fun = sys.function(which = sys.parent(n = n))))
-    argnames <- process_argnames(argnames)
+    argnames <- get_processed_argnames(n)
 
     params <- list()
     p.env <- parent.frame(n = n)
