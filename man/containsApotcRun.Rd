@@ -15,6 +15,8 @@ containsApotcRun(seurat_obj, run_id)
 A logical indicating whether the run exists.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 A convenience function to check for the existence of an APackOfTheClones
 run with its run id, regardless of if any run has been made
 }

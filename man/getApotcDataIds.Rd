@@ -16,6 +16,8 @@ the order they were ran in. If there are no runs on the object, it returns
 \code{NULL}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 A convenience function to get all run ids of previous RunAPOTC run IDs
 }
 \examples{

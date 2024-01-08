@@ -112,17 +112,8 @@ initializeSubsetApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
-	# subset the seurat metadata
-	seurat_obj@meta.data <- seurat_obj@meta.data %>% dplyr::filter(eval(parse(
-		text = metadata_filter_condition
-	)))
 
-	if (nrow(seurat_obj@meta.data) == 0) {
-		stop(paste(
-			"check `extra_filter`,
-			no rows in the seurat metadata match the filter condition"
-		))
-	}
+	seurat_obj <- subsetSeuratMetaData(seurat_obj, metadata_filter_condition)
 
 	apotc_obj <- initializeApotcData(
 		seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor

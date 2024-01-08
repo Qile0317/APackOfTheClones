@@ -56,7 +56,7 @@ deprecation_docstring <- function() {
 #' integrated_seurat_object <- integrate_tcr(
 #'     mini_seurat_obj, mini_clonotype_data, verbose = FALSE
 #' )
-#' 
+#'
 #' integrated_seurat_object
 #'
 #' @references
@@ -68,7 +68,8 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
 
 	lifecycle::deprecate_warn(
 		when = "1.0.0",
-		what = I("integrate_tcr")
+		what = I("integrate_tcr"),
+		with = I("combineSeuratExpression")
 	)
 
 	seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_file, verbose)
@@ -174,7 +175,11 @@ dev_integrate_tcr <- function(seurat_obj, tcr_file, verbose) {
 #'
 count_clone_sizes <- function(integrated_seurat_obj) {
 
-	lifecycle::deprecate_warn(when = "1.0.0", what = I("`count_clone_sizes`"))
+	lifecycle::deprecate_warn(
+		when = "1.0.0",
+		what = I("`count_clone_sizes`"),
+		with = I("countCloneSizes")
+	)
 
 	if (is.null(integrated_seurat_obj@meta.data[["seurat_clusters"]])) {
 		stop("No seurat clusters detected on the seurat object")

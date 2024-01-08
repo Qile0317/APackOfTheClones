@@ -188,6 +188,8 @@ containsAnyApotcData <- function(seurat_obj) {
 #' Check for the existence of an APackOfTheClones run with its run id
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' A convenience function to check for the existence of an APackOfTheClones
 #' run with its run id, regardless of if any run has been made
 #'
@@ -228,6 +230,8 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #' Delete the results of an APackOfTheClones run
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#' 
 #' A convenience function to erase all data associated with a particular run,
 #' including the ApotcData and command in seurat_obj@command. The run_id would
 #' be no longer accessible afterwards.
@@ -273,6 +277,8 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #' Get all run ids of previous RunAPOTC runs on a seurat object
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#' 
 #' A convenience function to get all run ids of previous RunAPOTC run IDs
 #'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
@@ -315,6 +321,8 @@ getApotcDataIds <- function(seurat_obj) {
 #' Get the object id of the most recent RunAPOTC run on a seurat object
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#' 
 #' A convenience function to get the object id of the most recent valid
 #' [RunAPOTC] run, to be used by [APOTCPlot] and [AdjustAPOTC]
 #'

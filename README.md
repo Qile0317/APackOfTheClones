@@ -25,7 +25,7 @@ The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murr
 install.packages("APackOfTheClones")
 ```
 
-Alternatively, to download the latest semi-stable development edition on the development (`dev`) branch, run
+Alternatively, to download the latest semi-stable development edition on the development branch, run
 
 ```R
 library(devtools)

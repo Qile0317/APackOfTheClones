@@ -273,7 +273,27 @@ to_string_rep_with_insert <- function(v, insert) {
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
 }
 
+subset_dataframe <- function(df, filter_string) {
+    df %>% dplyr::filter(eval(parse(text = filter_string)))
+}
+
 # Seurat utils
+
+subsetSeuratMetaData <- function(
+    seurat_obj, filter_string, error_param = "extra_filter"
+) {
+	seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
+
+	if (nrow(seurat_obj@meta.data) == 0) {
+		stop(paste(
+			"please check `", error_param, "`, ",
+			"no rows in the seurat metadata match the filter condition",
+            sep = ""
+		))
+	}
+
+	seurat_obj
+}
 
 #' @title
 #' Calculate seurat cluster centroids based on a Dimensional reduction

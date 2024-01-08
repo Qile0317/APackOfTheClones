@@ -16,6 +16,8 @@ order of the functions being called.}
 The modified input seurat object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 A convenience function to erase all data associated with a particular run,
 including the ApotcData and command in seurat_obj@command. The run_id would
 be no longer accessible afterwards.
