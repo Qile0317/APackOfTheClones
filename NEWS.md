@@ -1,4 +1,4 @@
-# APackOfTheClones (development version 1.0.0)
+# APackOfTheClones 1.0.0
 
 ## Additions
 
