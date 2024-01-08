@@ -23,14 +23,19 @@ head <- function(df) {
   knitr::kable(utils::head(df))
 }
 
-quiet_load_all_CRAN <- function(pkg) {
-  if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
-    invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
+quiet_load_all_CRAN <- function(...) {
+  for (pkg in list(...)) {
+    if (require(pkg, quietly = TRUE, character.only = TRUE)) next
+    invisible(install.packages(
+      pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE
+    ))
+    suppressPackageStartupMessages(invisible(
+      require(pkg, quietly = TRUE, character.only = TRUE)
+    ))
   }
-  suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
 }
 
-# load packages and data
+# load packages
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat")
 ```
 
