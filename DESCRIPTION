@@ -13,6 +13,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: false
 Suggests: 
+    cowplot,
     covr,
     knitr,
     rmarkdown,
