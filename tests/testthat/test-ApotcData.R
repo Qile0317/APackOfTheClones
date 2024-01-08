@@ -104,7 +104,6 @@ test_that("circlepackClones works for the default case", {
 	test_apotc_data <- circlepackClones(
 		non_subset_apotc_data,
 		ORDER = TRUE,
-		scramble = FALSE,
 		try_place = FALSE,
 		verbose = FALSE
 	)
@@ -142,7 +141,6 @@ test_that("circlepackClones works for the subset case", {
 	test_apotc_data <- circlepackClones(
 		test_apotc_data,
 		ORDER = TRUE,
-		scramble = FALSE,
 		try_place = FALSE,
 		verbose = FALSE
 	)

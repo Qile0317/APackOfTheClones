@@ -1114,6 +1114,6 @@
 <text x='529.14' y='556.10' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
 <text x='372.67' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='44.03px' lengthAdjust='spacingAndGlyphs'>UMAP_1</text>
 <text transform='translate(91.74,283.95) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='44.03px' lengthAdjust='spacingAndGlyphs'>UMAP_2</text>
-<text x='109.52' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='201.07px' lengthAdjust='spacingAndGlyphs'>Sizes of clones within each cluster</text>
+<text x='109.52' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='100.55px' lengthAdjust='spacingAndGlyphs'>default_apotcplot</text>
 </g>
 </svg>

@@ -2,7 +2,7 @@
 
 ## Additions
 
-- Add `vizAPOTC` to replace `clonal_expansion_plot` but it still takes in a very different set of arguments.
+- Add `vizAPOTC` to replace `clonal_expansion_plot` with some similar arguments but works completely differently with an additional set of argument requirements, to ultimately produce a similar but better visualization.
 - Add `RunAPOTC` to store multiple APackOfTheClones runs on the seurat object.
 - Add `containsApotcRun` to check for the existence of some run based on an ID.
 - Add `getApotcDataIds` to get all APackOfTheClones run IDs.
@@ -19,6 +19,7 @@
 - ***ALL v0.1.x functions are deprecated/defunct***, and the clonal expansion workflow has changed.
 - The latest version two of `scRepertoire` is now a "dependency", and the package is now structured as an extension of `scRepertoire` when it comes to integrating VDJ data, as `scRepertoire` already possesses a mature and common method to do so.
 - Package startup message has been modified to notify users about the deprecation and breaking changes.
+- All clonal expansion plots will no longer have a title for the default theme
 
 # APackOfTheClones 0.1.4 (github release)
 

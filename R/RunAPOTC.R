@@ -74,10 +74,11 @@
 #' of this decrease will be applied to all packed circles, effectively shrinking
 #' all circles on the spot, and introduce more constant spacing in between
 #' @param order_clones logical. Decides if the largest clone circles should be
-#' near cluster centroids. This is highly recommended to be set to TRUE.
-#' @param scramble_clones logical. Decides if the clone circles within each
-#' cluster should be randomly scrambled when plotted. Note that solely this
-#' argument or order_clones may be `TRUE` at once.
+#' near cluster centroids. This is highly recommended to be set to TRUE for
+#' increased intuitiveness of the visualization, as resulting plots tend to
+#' give an improved impression of the porportion of expanded clones. If
+#' `FALSE,` will randomly scramble the positions of each circle. For the sake
+#' of replicability, a radnom seed is recommended to be set with [set.seed].
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed
 #' circle to the origin in the circle packing algorithm
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from
@@ -147,7 +148,6 @@ RunAPOTC <- function(
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     order_clones = TRUE,
-    scramble_clones = FALSE,
     try_place = FALSE,
     repulse = TRUE,
     repulsion_threshold = 1,
@@ -204,7 +204,6 @@ RunAPOTC <- function(
     apotc_obj <- circlepackClones(
         apotc_obj,
         ORDER = order_clones,
-        scramble = scramble_clones,
         try_place = try_place,
         verbose = verbose
     )
@@ -249,12 +248,6 @@ RunAPOTC_parameter_checker <- function(args) {
         stop("`rad_scale_factor` must be a numeric value of length 1.")
     }
 
-    # Check if order_clones and scramble_clones are logical
-    if (!is.logical(args[["order_clones"]]) || length(args[["order_clones"]]) != 1 ||
-        !is.logical(args[["scramble_clones"]]) || length(args[["scramble_clones"]]) != 1) {
-        stop("`order_clones` and `scramble_clones` must be logical values of length 1.")
-    }
-
     # Check if try_place is logical of length 1
     if (!is_a_logical(args[["try_place"]])) {
         stop("`try_place` must be a logical value of length 1.")
@@ -280,13 +273,6 @@ RunAPOTC_parameter_checker <- function(args) {
 
     if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
 		stop("`rad_scale_factor` has to be a positive real number in (0, 1]")
-	}
-
-	if (args[["order_clones"]] == args[["scramble_clones"]]) {
-		stop(paste(
-            "`order_clones` and `scramble_clones` cannot both be",
-            args[["order_clones"]]
-        ))
 	}
 
     if (!args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {

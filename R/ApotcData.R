@@ -124,7 +124,7 @@ initializeSubsetApotcData <- function(
 }
 
 # pack the clones assuming centroids are present
-circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
+circlepackClones <- function(apotc_obj, ORDER, try_place, verbose) {
 
 	apotc_obj@clusters <- pack_into_clusterlists(
 		sizes = get_processed_clone_sizes(apotc_obj),
@@ -132,7 +132,7 @@ circlepackClones <- function(apotc_obj, ORDER, scramble, try_place, verbose) {
 		num_clusters = get_num_clusters(apotc_obj),
 		rad_decrease = get_rad_decrease(apotc_obj),
 		ORDER = ORDER,
-		scramble = scramble,
+		scramble = !ORDER,
 		try_place = try_place,
 		verbose = verbose
 	)

@@ -27,7 +27,6 @@ test_that("subsetting vizAPOTC works", {
 			retain_axis_scales = TRUE,
 			try_place = TRUE,
 			order_clones = FALSE,
-			scramble_clones = TRUE,
 			verbose = FALSE
 		)
 	)

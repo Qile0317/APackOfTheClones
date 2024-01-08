@@ -55,6 +55,6 @@
 <text x='683.87' y='556.10' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='17.13px' lengthAdjust='spacingAndGlyphs'>2.00</text>
 <text x='377.33' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='27.52px' lengthAdjust='spacingAndGlyphs'>PC_1</text>
 <text transform='translate(13.05,283.95) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='27.52px' lengthAdjust='spacingAndGlyphs'>PC_2</text>
-<text x='40.13' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='201.07px' lengthAdjust='spacingAndGlyphs'>Sizes of clones within each cluster</text>
+<text x='40.13' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='141.66px' lengthAdjust='spacingAndGlyphs'>add_default_theme_plot</text>
 </g>
 </svg>

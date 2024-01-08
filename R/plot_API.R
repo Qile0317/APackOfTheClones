@@ -64,6 +64,7 @@ plot_clusters <- function(
     ggplot2::theme(legend.position = "none")
 }
 
+# TODO not quite the same
 add_default_theme <- function(plt, reduction) {
 	label_hashmap <- hash::hash(
 		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
@@ -73,8 +74,7 @@ add_default_theme <- function(plt, reduction) {
 	plt +
 		ggplot2::theme_classic() +
 		ggplot2::xlab(paste(label, 1, sep = "_")) +
-		ggplot2::ylab(paste(label, 2, sep = "_")) +
-		ggplot2::ggtitle("Sizes of clones within each cluster")
+		ggplot2::ylab(paste(label, 2, sep = "_"))
 }
 
 get_retain_scale_dims <- function(

@@ -13,7 +13,6 @@ vizAPOTC(
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
   order_clones = TRUE,
-  scramble_clones = FALSE,
   try_place = FALSE,
   repulse = TRUE,
   repulsion_threshold = 1,
@@ -82,11 +81,11 @@ of this decrease will be applied to all packed circles, effectively shrinking
 all circles on the spot, and introduce more constant spacing in between}
 
 \item{order_clones}{logical. Decides if the largest clone circles should be
-near cluster centroids. This is highly recommended to be set to TRUE.}
-
-\item{scramble_clones}{logical. Decides if the clone circles within each
-cluster should be randomly scrambled when plotted. Note that solely this
-argument or order_clones may be \code{TRUE} at once.}
+near cluster centroids. This is highly recommended to be set to TRUE for
+increased intuitiveness of the visualization, as resulting plots tend to
+give an improved impression of the porportion of expanded clones. If
+\verb{FALSE,} will randomly scramble the positions of each circle. For the sake
+of replicability, a radnom seed is recommended to be set with \link{set.seed}.}
 
 \item{try_place}{If \code{TRUE}, always minimizes distance from a newly placed
 circle to the origin in the circle packing algorithm}

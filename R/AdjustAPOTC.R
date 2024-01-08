@@ -195,7 +195,6 @@ change_clone_scale <- function(seurat_obj, args) {
 	circlepackClones(
 		apotc_obj = args$apotc_obj,
 		ORDER = past_params$order_clones,
-		scramble = past_params$scramble_clones,
 		try_place = past_params$try_place,
 		verbose = args$verbose
 	)

@@ -13,11 +13,14 @@ test_that("everything in seurat_command works", {
 	
 	expect_equal(
 		test_cmd_obj@params,
-		list(reduction_base = "umap", clonecall = "CTstrict", clone_scale_factor = 0.300051, 
-		rad_scale_factor = 0.95, order_clones = TRUE, scramble_clones = FALSE, 
-		try_place = FALSE, repulse = TRUE, repulsion_threshold = 1, 
-		repulsion_strength = 1, max_repulsion_iter = 20L, override = TRUE, 
-		verbose = FALSE)
+		list(
+			reduction_base = "umap", clonecall = "CTstrict",
+			clone_scale_factor = 0.300051, rad_scale_factor = 0.95,
+			order_clones = TRUE, try_place = FALSE, repulse = TRUE,
+			repulsion_threshold = 1, repulsion_strength = 1,
+			max_repulsion_iter = 20L, override = TRUE,
+			verbose = FALSE
+		)
 	)
 
 	expect_identical(test_cmd_obj@name, "RunAPOTC")

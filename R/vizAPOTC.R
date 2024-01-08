@@ -38,7 +38,6 @@ vizAPOTC <- function(
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
     order_clones = TRUE,
-    scramble_clones = FALSE,
     try_place = FALSE,
     
     repulse = TRUE,
@@ -78,7 +77,6 @@ vizAPOTC <- function(
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,
         order_clones = order_clones,
-        scramble_clones = scramble_clones,
         try_place = try_place,
         repulse = repulse,
         repulsion_threshold = repulsion_threshold,

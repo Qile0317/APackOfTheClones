@@ -72,19 +72,12 @@
 #' @examples
 #' data("combined_pbmc")
 #'
-#' # 2 arbitrary APackOfTheClones runs named "run1" and "run2"
 #' combined_pbmc <- RunAPOTC(
 #'     combined_pbmc, run_id = "run1", verbose = FALSE
 #' )
-#' combined_pbmc <- RunAPOTC(
-#'     combined_pbmc, run_id = "run2", try_place = TRUE, verbose = FALSE
-#' )
 #'
-#' # plotting with default arguments will plot the "run2" results as its latest
-#' APOTCPlot(combined_pbmc)
-#'
-#' # otherwise, one should plot with the run_id argument for other runs
-#' APOTCPlot(combined_pbmc, run_id = "run2")
+#' # plotting with default arguments will plot the latest "run1"
+#' clonal_packing_plot <- APOTCPlot(combined_pbmc)
 #'
 APOTCPlot <- function(
 	seurat_obj,

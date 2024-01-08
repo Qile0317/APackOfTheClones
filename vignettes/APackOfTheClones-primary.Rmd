@@ -271,7 +271,6 @@ A collection of other utility parameters are:
 
 ```{r, other_params, echo = TRUE, eval = FALSE}
 order_clones = TRUE,
-scramble_clones = FALSE,
 try_place = FALSE,
 res = 360L,
 linetype = "blank",
