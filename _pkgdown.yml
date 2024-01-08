@@ -1,4 +1,21 @@
 url: https://qile0317.github.io/APackOfTheClones/
+
 template:
   bootstrap: 5
 
+navbar:
+  left:
+    - text: Vignettes
+      menu:
+        - text: APackOfTheClones Essentials
+          href: articles/APackOfTheClones-primary.html
+        - text: Storing and Fine-Tuning APackOfTheClones Runs
+          href: articles/APackOfTheClones-runs.html
+    - text: Reference
+      href: reference/index.html
+    - text: Changelog
+      href: news/index.html
+    - text: Archive
+      menu:
+        - text: v0.1.x
+          href: articles/web_only/Clonal_expansion_plotting.html
