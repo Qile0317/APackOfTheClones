@@ -25,30 +25,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// has_repeats
-bool has_repeats(const Rcpp::NumericVector vec1, const Rcpp::NumericVector vec2);
-RcppExport SEXP _APackOfTheClones_has_repeats(SEXP vec1SEXP, SEXP vec2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type vec1(vec1SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type vec2(vec2SEXP);
-    rcpp_result_gen = Rcpp::wrap(has_repeats(vec1, vec2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// has_common_strs
-bool has_common_strs(const std::vector<std::string>& vec1, const std::vector<std::string>& vec2);
-RcppExport SEXP _APackOfTheClones_has_common_strs(SEXP vec1SEXP, SEXP vec2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type vec1(vec1SEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type vec2(vec2SEXP);
-    rcpp_result_gen = Rcpp::wrap(has_common_strs(vec1, vec2));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcppFilterReductionCoords
 Rcpp::NumericMatrix rcppFilterReductionCoords(std::vector<std::string>& seuratBarcodes, Rcpp::NumericMatrix reductionCoords);
 RcppExport SEXP _APackOfTheClones_rcppFilterReductionCoords(SEXP seuratBarcodesSEXP, SEXP reductionCoordsSEXP) {
@@ -119,8 +95,6 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
-    {"_APackOfTheClones_has_repeats", (DL_FUNC) &_APackOfTheClones_has_repeats, 2},
-    {"_APackOfTheClones_has_common_strs", (DL_FUNC) &_APackOfTheClones_has_common_strs, 2},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},

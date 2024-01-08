@@ -5,14 +5,6 @@ cpp_circle_layout <- function(input_rad_vec, centroid, rad_decrease = 0, try_pla
     .Call(`_APackOfTheClones_cpp_circle_layout`, input_rad_vec, centroid, rad_decrease, try_place, verbose)
 }
 
-has_repeats <- function(vec1, vec2) {
-    .Call(`_APackOfTheClones_has_repeats`, vec1, vec2)
-}
-
-has_common_strs <- function(vec1, vec2) {
-    .Call(`_APackOfTheClones_has_common_strs`, vec1, vec2)
-}
-
 rcppFilterReductionCoords <- function(seuratBarcodes, reductionCoords) {
     .Call(`_APackOfTheClones_rcppFilterReductionCoords`, seuratBarcodes, reductionCoords)
 }
