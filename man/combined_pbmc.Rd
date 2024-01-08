@@ -30,7 +30,7 @@ data("combined_pbmc")
 \description{
 r lifecycle::badge("experimental")`
 
-Generated with \link[scRepertoire:combineExpression]{scRepertoire::combineExpression}, more specifically, with:
+Generated with \code{scRepertoire::combineExpression}, more specifically, with:
 
 scRepertoire::combineExpression(scRepertoire::combineTCR(get(data("contig_list", ,     package = "scRepertoire")), samples = c("P17B", "P17L", "P18B", ,     "P18L", "P19B", "P19L", "P20B", "P20L"), removeNA = FALSE, ,     removeMulti = FALSE, filterMulti = FALSE), get(data("scRep_example", ,     package = "scRepertoire")), cloneCall = "gene", proportion = TRUE)
 }
