@@ -137,11 +137,22 @@ APOTCPlot <- function(
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
 
-	# retain axis scales on the resulting plot. The function sucks tho
+	# get current plot dimensions
+	result_plot_dimensions <- get_plot_dims(result_plot)
+
+	# retain axis scales on the resulting plot.
 	if (retain_axis_scales) {
-		result_plot <- suppressMessages(invisible(
-			retain_scale(seurat_obj, get_reduction_base(apotc_obj), result_plot)
-		))
+		result_plot_dimensions <- get_retain_scale_dims(
+			seurat_obj,
+			reduction = get_reduction_base(apotc_obj),
+			ball_pack_plt = result_plot,
+			plot_dims = result_plot_dimensions
+		)
+
+		result_plot <- result_plot + ggplot2::expand_limits(
+			x = get_xr(result_plot_dimensions),
+			y = get_yr(result_plot_dimensions)
+		)
 	}
 
 	# TODO clonal link computation here
@@ -153,7 +164,7 @@ APOTCPlot <- function(
 	if (add_size_legend) {
 		result_plot <- insert_legend(
 			plt = result_plot,
-			plt_dims = get_plot_dims(result_plot),
+			plt_dims = result_plot_dimensions,
 			apotc_obj = apotc_obj,
 			sizes = legend_sizes,
 			pos = legend_position,

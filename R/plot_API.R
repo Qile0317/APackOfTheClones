@@ -77,33 +77,27 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ggtitle("Sizes of clones within each cluster")
 }
 
-# change the axis scales to fit the original plot approximately. Looks pretty bad atm.
-# A more advanced version could multiply axses by a small amount to retain ratios exactly
-retain_scale <- function(seurat_obj, reduction, ball_pack_plt, buffer = 0) {
+get_retain_scale_dims <- function(
+  seurat_obj, reduction, ball_pack_plt, plot_dims
+) {
 
-  test_reduction_plot <- Seurat::DimPlot(
-    object = seurat_obj,
-    reduction = reduction
+  reduction_dims <- get_plot_dims(
+    Seurat::DimPlot(object = seurat_obj, reduction = reduction)
   )
+  reduction_xr <- get_xr(reduction_dims)
+  reduction_yr <- get_yr(reduction_dims)
 
-  # get current ranges
-  reduction_xr <- get_xr(test_reduction_plot)
-  reduction_yr <- get_yr(test_reduction_plot)
-
-  rm("test_reduction_plot")
-
-  ball_pack_xr <- get_xr(ball_pack_plt)
-  ball_pack_yr <- get_yr(ball_pack_plt)
+  ball_pack_xr <- get_xr(plot_dims)
+  ball_pack_yr <- get_yr(plot_dims)
 
   # set new ranges
-  min_xr <- min(ball_pack_xr[1], reduction_xr[1]) - buffer
-  max_xr <- max(ball_pack_xr[2], reduction_xr[2]) + buffer
+  min_xr <- min(ball_pack_xr[1], reduction_xr[1])
+  max_xr <- max(ball_pack_xr[2], reduction_xr[2])
 
-  min_yr <- min(ball_pack_yr[1], reduction_yr[1]) - buffer
-  max_yr <- max(ball_pack_yr[2], reduction_yr[2]) + buffer
+  min_yr <- min(ball_pack_yr[1], reduction_yr[1])
+  max_yr <- max(ball_pack_yr[2], reduction_yr[2])
 
-  ball_pack_plt + ggplot2::coord_cartesian(
-    xlim = c(min_xr, max_xr),
-    ylim = c(min_yr, max_yr)
-  )
+  # return dims in same output format as get_plot_dims
+  list("xr" = c(min_xr, max_xr), "yr" = c(min_yr, max_yr))
+  
 }
