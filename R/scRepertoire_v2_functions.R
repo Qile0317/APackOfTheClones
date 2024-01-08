@@ -31,11 +31,7 @@
 		"ctstrict" = "CTstrict"
 	)
 
-	x <- tolower(x)
-
-	if (!is.null(clonecall_dictionary[[x]])) {
-		return(clonecall_dictionary[[x]])
-	}
-
+	possible_clonecall <- clonecall_dictionary[[tolower(strip_unquoted_spaces(x))]]
+	if (!is.null(possible_clonecall)) return(possible_clonecall)
 	x
 }

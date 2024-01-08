@@ -49,6 +49,6 @@ data("combined_pbmc")
 
 countCloneSizes(combined_pbmc)
 countCloneSizes(combined_pbmc, "aa")
-countCloneSizes(combined_pbmc, "nts", orig.ident = c("P17B", "P17L"))
+countCloneSizes(combined_pbmc, "nt", orig.ident = c("P17B", "P17L"))
 
 }
