@@ -311,8 +311,8 @@ move_unpositioned_legend_df <- function(
 
 # get the coordinate in the middle of the top of the legend
 get_legend_title_coord <- function(legend_df, legend_dims, spacing) {
-    c("x" = get_circle_x(legend_df) - max_rad(legend_df) + (legend_dims[1] / 2),
-      "y" = min_y(legend_df) + min_rad(legend_df) + spacing)
+    c("x" = sum(get_legend_backing_minmax_dims(legend_df)[1:2]) * 0.5,
+      "y" = min_y(legend_df) + min_rad(legend_df) + (1.5 * spacing))
 }
 
 add_legend_backing <- function(plt, plt_dims, legend_df) {
