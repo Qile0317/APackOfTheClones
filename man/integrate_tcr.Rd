@@ -22,7 +22,7 @@ Returns a new Seurat object with new elements in the metadata
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped - now depending on the scRepertoire v2 package - which allows for the processing of multi-sampled single cell data. Please see the new vignette, showing a superior way to achieve the same visualizations with more features.
+\emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped - now depending on the scRepertoire v2 package - which allows for the processing of multi-sampled single cell data. Please read the vignettes with \code{browseVignettes("APackOfTheClones")}or visit https://qile0317.github.io/APackOfTheClones/
 
 Modifies a \code{Seurat} object's metadata by taking all the columns
 of the \code{all_contig_annotations.csv}, and adding new elements to

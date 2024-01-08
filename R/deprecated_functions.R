@@ -3,8 +3,8 @@ md_deprecation_docstring <- function() {
 		'***ALL v0.1.x functions are deprecated***, and the workflow has been ',
 		'completely revamped - now depending on the scRepertoire v2 package - ',
 		'which allows for the processing of multi-sampled single cell data. ',
-		'Please see the new vignette, showing a superior way to achieve the ',
-		'same visualizations with more features. ',
+		'Please read the vignettes with `browseVignettes("APackOfTheClones")`',
+		'or visit https://qile0317.github.io/APackOfTheClones/',
 		sep = ""
 	)
 }
