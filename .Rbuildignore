@@ -10,7 +10,6 @@
 ^\.RDataTmp$
 ^doc$
 ^Meta$
-^vignettes$
 ^CRAN-SUBMISSION$
 [.]gitignore$
 ^joss$
