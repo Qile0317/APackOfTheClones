@@ -148,7 +148,7 @@ clonecall = NULL,
 extra_filter = NULL,
 ```
 
-And putting in identical arguments to generate the otiginal `ApotcData` would work too, but this approach is less recommended as its a lot more (unessecarily) verbose. Here is `APOTCPlot` in action:
+And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:
 
 ```{r, apotcplot}
 # Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where

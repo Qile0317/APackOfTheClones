@@ -2,4 +2,5 @@
 
 0 errors | 0 warnings | 1 note
 
-* The DOI in DESCRIPTION is NOT invalid when visiting it manually
+- This is a new major release of the previously archived version
+- All DOIs in the Package are valid.
