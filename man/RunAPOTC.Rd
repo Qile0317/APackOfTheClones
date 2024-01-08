@@ -28,7 +28,7 @@ RunAPOTC(
 \arguments{
 \item{seurat_obj}{Seurat object with one or more dimension reductions and
 already have been integrated with a TCR/BCR library with
-\link{combineSeuratExpression} or \link[scRepertoire:combineExpression]{scRepertoire::combineExpression}}
+\link[scRepertoire:combineExpression]{scRepertoire::combineExpression}}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or

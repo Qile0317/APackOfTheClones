@@ -34,7 +34,7 @@ devtools::install_github("Qile0317/APackOfTheClones@dev")
 
 ## Usage
 
-The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```combineSeuratExpression```, which is a wrapper for ```scRepertoire::combineExpression```.
+The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```scRepertoire::combineExpression```.
 
 To quickly produce the visualization, the ```vizAPOTC(your_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following codechunk is an example of how it can be done:
 
@@ -44,12 +44,12 @@ library(scRepertoire)
 library(APackOfTheClones)
 
 # integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"
-pbmc <- combineSeuratExpression(
-    input.data = scRepertoire::combineTCR(
-        input.data = get(data("mini_contig_list")),
+pbmc <- combineExpression(
+    input.data = combineTCR(
+        input.data = get(data("mini_contig_list", package = "scRepertoire")),
         samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L")
     ),
-    sc.data = get(data("scRep_example"))
+    sc.data = get(data("scRep_example", package = "scRepertoire"))
 )
 
 # produce the ball-packing plot with the default parameters

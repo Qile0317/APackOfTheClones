@@ -74,7 +74,7 @@ combined_contig_list <- scRepertoire::combineTCR(
 )
 
 # a seurat object named `pbmc` is loaded
-pbmc <- combineSeuratExpression(
+pbmc <- scRepertoire::combineExpression(
   input.data = combined_contig_list,
   sc.data = pbmc,
   cloneCall = "gene",

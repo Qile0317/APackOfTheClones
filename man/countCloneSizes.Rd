@@ -9,7 +9,7 @@ countCloneSizes(seurat_obj, clonecall = "strict", extra_filter = NULL, ...)
 }
 \arguments{
 \item{seurat_obj}{a seurat object combined with a VDJ library with the
-\code{scRepertoire} workflow and \link{combineSeuratExpression}.}
+\code{scRepertoire}.}
 
 \item{clonecall}{character. The column name in the seurat object metadata to
 use. See \code{scRepertoire} documentation for more information about this

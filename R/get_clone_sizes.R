@@ -8,7 +8,7 @@
 #'
 #' @inheritParams RunAPOTC
 #' @param seurat_obj a seurat object combined with a VDJ library with the
-#' `scRepertoire` workflow and [combineSeuratExpression].
+#' `scRepertoire`.
 #'
 #' @return A list of table objects, with the table at each index corresponding
 #' to each cluster index. Each table's names are the clonotype name indicated

@@ -68,8 +68,7 @@ integrate_tcr <- function(seurat_obj, tcr_file, verbose = TRUE) {
 
 	lifecycle::deprecate_warn(
 		when = "1.0.0",
-		what = I("integrate_tcr"),
-		with = I("combineSeuratExpression")
+		what = I("integrate_tcr")
 	)
 
 	seurat_obj <- dev_integrate_tcr(seurat_obj, tcr_file, verbose)

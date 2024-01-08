@@ -45,7 +45,9 @@ quiet_load_all_CRAN <- function(...) {
 
 # load packages and data
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
-# TODO use a nice looking dataset
+quiet_load("scRepertoire", CRAN = FALSE, dev_dir = "ncborcherding")
+
+# TODO use a nicer looking dataset
 ```
 
 ```{r setup}
@@ -92,9 +94,22 @@ combined_contig_list <- scRepertoire::combineTCR(
 head(combined_contig_list[[1]])
 ```
 
+combined_pbmc <- scRepertoire::combineExpression(
+  scRepertoire::combineTCR(
+    get(data("contig_list", package = "scRepertoire")),
+    samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
+    removeNA = FALSE,
+    removeMulti = FALSE,
+    filterMulti = FALSE
+  ),
+  get(data("scRep_example", package = "scRepertoire")),
+  cloneCall = "gene",
+  proportion = TRUE
+)
+
 </details>
 
-For integrating the clonal information, ```scRepertoire::combineExpression``` is the function used [to do so](https://www.borch.dev/uploads/screpertoire/articles/attaching_sc). However, for convenience and safety, an `APackOfTheClones` wrapper ```combineSeuratExpression``` is provided, which will produce a functionally equivalent object, which can *only* work on seurat objects:
+For integrating the clonal information, ```scRepertoire::combineExpression``` is the function used [to do so](https://www.borch.dev/uploads/screpertoire/articles/attaching_sc), but for `APackOfTheClones` the scRNA-seq object has to be a seurat object:
 
 ```{r, echo = FALSE}
 # remove the raw contig_list from memory
@@ -107,9 +122,9 @@ pbmc <- get(data("combined_pbmc"))
 ```{r, combining, echo = TRUE}
 # a seurat object named `pbmc` is loaded
 # a combined contig list is loaded named `combined_contig_list`
-pbmc <- combineSeuratExpression(
-  input.data = combined_contig_list,
-  sc.data = pbmc,
+pbmc <- scRepertoire::combineExpression(
+  combined_contig_list,
+  pbmc,
   cloneCall = "gene",
   proportion = TRUE
 )

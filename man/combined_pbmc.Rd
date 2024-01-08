@@ -3,16 +3,35 @@
 \docType{data}
 \name{combined_pbmc}
 \alias{combined_pbmc}
-\title{Multi-sampled T-cell seurat object with integrated TCR library}
+\title{Example Multi-sampled T-cell seurat object with integrated TCR library}
 \format{
-A seurat object
+A Seurat object with the following slots filled
+\describe{
+\item{assays}{
+\itemize{Currently only contains one assay ("RNA" - scRNA-seq expression data)
+\item{counts - Raw expression data}
+\item{data - Normalized expression data}
+\item{scale.data - Scaled expression data}
+\item{var.features - names of the current features selected as variable}
+\item{meta.features - Assay level metadata such as mean and variance}
+}}
+\item{meta.data}{Cell level metadata with a combined TCR contig list \verb{from scRepertoire}}
+\item{active.assay}{Current default assay}
+\item{active.ident}{Current default idents}
+\item{graphs}{Neighbor graphs computed, currently stores the SNN}
+\item{reductions}{Dimensional reductions: UMAP}
+\item{version}{Seurat version used to create the object}
+\item{commands}{Command history, including the one used to create this object "combineExpression"}
+}
 }
 \usage{
 data("combined_pbmc")
 }
 \description{
-Generated with \link{combineSeuratExpression}, more specifically, with:
+r lifecycle::badge("experimental")`
 
-combineSeuratExpression(scRepertoire::combineTCR(scRepertoire::mini_contig_list, ,     samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", ,         "P20B", "P20L")), scRepertoire::scRep_example)
+Generated with \link[scRepertoire:combineExpression]{scRepertoire::combineExpression}, more specifically, with:
+
+scRepertoire::combineExpression(scRepertoire::combineTCR(get(data("contig_list", ,     package = "scRepertoire")), samples = c("P17B", "P17L", "P18B", ,     "P18L", "P19B", "P19L", "P20B", "P20L"), removeNA = FALSE, ,     removeMulti = FALSE, filterMulti = FALSE), get(data("scRep_example", ,     package = "scRepertoire")), cloneCall = "gene", proportion = TRUE)
 }
 \keyword{datasets}

@@ -2,7 +2,6 @@
 
 ## Additions
 
-- Add `combineSeuratExpression` as a convenience wrapper for `scRepertoire::combineExpression` when working with VDJ and scRNA-seq data.
 - Add `vizAPOTC` to replace `clonal_expansion_plot` but it still takes in a very different set of arguments.
 - Add `RunAPOTC` to store multiple APackOfTheClones runs on the seurat object.
 - Add `containsApotcRun` to check for the existence of some run based on an ID.

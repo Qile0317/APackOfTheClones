@@ -32,7 +32,7 @@
 #'
 #' @param seurat_obj Seurat object with one or more dimension reductions and
 #' already have been integrated with a TCR/BCR library with
-#' [combineSeuratExpression] or [scRepertoire::combineExpression]
+#' [scRepertoire::combineExpression]
 #' @param reduction_base character. The seurat reduction to base the clonal
 #' expansion plotting on. Defaults to `'umap'` but can also be `'tsne'` or
 #' `'pca'`. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
