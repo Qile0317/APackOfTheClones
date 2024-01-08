@@ -23,26 +23,15 @@ head <- function(df) {
   knitr::kable(utils::head(df))
 }
 
-quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
+quiet_load_all_CRAN <- function(pkg) {
   if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
-    if (CRAN) {
-      invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
-    } else {
-      suppressWarnings(suppressMessages(
-        devtools::install_github(paste(dev_dir, pkg, sep = ""))
-      ))
-    }
+    invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
   }
   suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
 }
 
-quiet_load_all_CRAN <- function(...) {
-  pkgs <- list(...)
-  for (pkg in pkgs) {quiet_load(pkg)}
-}
-
 # load packages and data
-quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat")
 ```
 
 ```{r setup}
@@ -168,7 +157,7 @@ pbmc <- RunAPOTC(
 )
 
 cowplot::plot_grid(
-  default_apotc_plot,
+  vizAPOTC(pbmc, verbose = FALSE),
   APOTCPlot(pbmc, run_id = "P17"),
   APOTCPlot(pbmc, run_id = "P18"),
   APOTCPlot(pbmc), # run_id omitted as sample 19 was the latest run
