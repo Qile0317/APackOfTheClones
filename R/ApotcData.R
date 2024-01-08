@@ -176,18 +176,13 @@ repulseClusters <- function(
 # are modified correspondingly to the original clusters.
 setModifiedClusterlists <- function(apotc_obj, modified_clusterlists) {
 
-	original_centroids <- get_centroids(apotc_obj)
 	modified_centroids <- read_centroids(modified_clusterlists)
 
-	apotc_obj@label_coords <- operate_on_same_length_lists(
-        func = add,
-        l1 = get_label_coords(apotc_obj),
-        l2 = operate_on_same_length_lists(
-            func = subtract,
-            l1 = modified_centroids,
-            l2 = original_centroids
-        )
-    )
+	apotc_obj@label_coords <- move_coord_list_by_same_amount(
+		coord_list = get_label_coords(apotc_obj),
+		original_coord_list = get_centroids(apotc_obj),
+		new_coord_list = modified_centroids
+	)
 
 	apotc_obj@clusters <- modified_clusterlists
 	apotc_obj@centroids <- modified_centroids
