@@ -44,6 +44,7 @@ quiet_load_all_CRAN <- function(...) {
 # load packages and data
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
 # TODO use a nice looking dataset
+pbmc <- get(data("combined_pbmc"))
 ```
 
 ```{r setup}
@@ -60,27 +61,28 @@ As demonstrated in `vignette("APackOfTheClones-primary")`, after processing the 
   **As a reminder, here's how to set up the seurat object and clonotype data**
   </summary>
 
-```{r, setup_seurat, echo = TRUE}
-# load in the corresponding 6-sample TCR contigs from scRepertoire
-contig_list <- get(data("contig_list", package = "scRepertoire"))
+```{r, setup_seurat, eval = FALSE}
+library(scRepertoire)
 
-# combine the TCR contigs into clones with custom samples
-combined_contig_list <- scRepertoire::combineTCR(
-  contig_list,
-  samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
-  removeNA = FALSE, 
-  removeMulti = FALSE, 
-  filterMulti = FALSE
-)
-
-# a seurat object named `pbmc` is loaded
 pbmc <- scRepertoire::combineExpression(
-  input.data = combined_contig_list,
-  sc.data = pbmc,
+  scRepertoire::combineTCR(
+    get(data("contig_list", package = "scRepertoire")),
+    samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
+    removeNA = FALSE,
+    removeMulti = FALSE,
+    filterMulti = FALSE
+  ),
+  pbmc,
   cloneCall = "gene",
   proportion = TRUE
 )
 
+print(pbmc)
+```
+
+```{r, actual_print_pbmc, eval = TRUE, echo = TRUE, include = FALSE}
+# TODO use a nicer looking dataset
+pbmc <- get(data("combined_pbmc"))
 print(pbmc)
 ```
 

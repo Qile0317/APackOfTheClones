@@ -45,9 +45,6 @@ quiet_load_all_CRAN <- function(...) {
 
 # load packages and data
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
-quiet_load("scRepertoire", CRAN = FALSE, dev_dir = "ncborcherding")
-
-# TODO use a nicer looking dataset
 ```
 
 ```{r setup}
@@ -72,13 +69,11 @@ The premise of the package is that it provides an additional analysis tool on to
 2. [Combining Contigs into Clones](https://www.borch.dev/uploads/screpertoire/articles/combining_contigs)
 3. [Additional Processing Steps (optional)](https://www.borch.dev/uploads/screpertoire/articles/processing)
 
-<details>
+And here is a practical example on how to generate a combined seurat + VDJ object to be used in the vignette named `pbmc`, which is also identical to the built-in example dataset `combined_pbmc` which can be loaded with `data("combined_pbmc", package = "APackOfTheClones")`:
 
-  <summary>
-  **An example of contig combination**
-  </summary>
+```{r, combineTCR, eval = FALSE}
+library(scRepertoire)
 
-```{r, combineTCR, echo = TRUE}
 # load in the corresponding 6-sample TCR contigs from scRepertoire
 contig_list <- get(data("contig_list", package = "scRepertoire"))
 
@@ -90,38 +85,12 @@ combined_contig_list <- scRepertoire::combineTCR(
   removeMulti = FALSE, 
   filterMulti = FALSE
 )
-
-head(combined_contig_list[[1]])
 ```
-
-combined_pbmc <- scRepertoire::combineExpression(
-  scRepertoire::combineTCR(
-    get(data("contig_list", package = "scRepertoire")),
-    samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
-    removeNA = FALSE,
-    removeMulti = FALSE,
-    filterMulti = FALSE
-  ),
-  get(data("scRep_example", package = "scRepertoire")),
-  cloneCall = "gene",
-  proportion = TRUE
-)
-
-</details>
 
 For integrating the clonal information, ```scRepertoire::combineExpression``` is the function used [to do so](https://www.borch.dev/uploads/screpertoire/articles/attaching_sc), but for `APackOfTheClones` the scRNA-seq object has to be a seurat object:
 
-```{r, echo = FALSE}
-# remove the raw contig_list from memory
-rm("contig_list")
-
-# load the seurat object (feel free to change to the full scRep_example for CRAN)
-pbmc <- get(data("combined_pbmc"))
-```
-
-```{r, combining, echo = TRUE}
-# a seurat object named `pbmc` is loaded
-# a combined contig list is loaded named `combined_contig_list`
+```{r, combining, eval = FALSE}
+# a seurat object corresponding to combined_contig_list named `pbmc` is loaded
 pbmc <- scRepertoire::combineExpression(
   combined_contig_list,
   pbmc,
@@ -129,6 +98,12 @@ pbmc <- scRepertoire::combineExpression(
   proportion = TRUE
 )
 
+print(pbmc)
+```
+
+```{r, actual_print_pbmc, eval = TRUE, echo = TRUE, include = FALSE}
+# TODO use a nicer looking dataset
+pbmc <- get(data("combined_pbmc"))
 print(pbmc)
 ```
 
