@@ -20,7 +20,7 @@ test_that("subsetting vizAPOTC works", {
 
 	set.seed(829)
 	expect_doppelganger(
-		"scale_retained_try_place_and_scrambled_5_clusters",
+		"ret_scale_try_place_scrambled_5",
 		vizAPOTC(
 			combined_pbmc,
 			seurat_clusters = 1:5,
