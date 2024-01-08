@@ -76,9 +76,9 @@
 #' @param order_clones logical. Decides if the largest clone circles should be
 #' near cluster centroids. This is highly recommended to be set to TRUE for
 #' increased intuitiveness of the visualization, as resulting plots tend to
-#' give an improved impression of the porportion of expanded clones. If
+#' give an improved impression of the proportion of expanded clones. If
 #' `FALSE,` will randomly scramble the positions of each circle. For the sake
-#' of replicability, a radnom seed is recommended to be set with [set.seed].
+#' of being replicable, a random seed is recommended to be set with [set.seed].
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed
 #' circle to the origin in the circle packing algorithm
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from

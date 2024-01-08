@@ -43,8 +43,6 @@ quiet_load_all_CRAN <- function(...) {
 
 # load packages and data
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "devtools")
-# TODO use a nice looking dataset
-pbmc <- get(data("combined_pbmc"))
 ```
 
 ```{r setup}
@@ -102,7 +100,7 @@ where if keyword arguments and extra_filter are underscore (`_`) characters if t
 
 ```{r, eval = FALSE}
 # Here is the function ran with its default parameters
-pbmc <- RunAPOTC(combined_pbmc)
+pbmc <- RunAPOTC(pbmc)
 
 #> Initializing APOTC run...
 #> * Setting `clone_scale_factor` to 0.3
