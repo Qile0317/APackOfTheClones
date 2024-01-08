@@ -148,17 +148,21 @@ AdjustAPOTC_error_handler <- function(args) {
 	# TODO - type check
 	# TODO rest of errors
 
-	if (!should_compute(args$new_rad_scale_factor)) {
+	check_apotc_identifiers(args)
+
+	if (should_change(args$new_rad_scale_factor)) {
 		if (args$new_rad_scale_factor < 0) {
 			stop("new_rad_scale_factor must be a positive number")
 		}
 	}
 
-	if (args$repulse) {
-		if ((args$max_repulsion_iter < 1 || !is_int(args$max_repulsion_iter)) && args$adjust_repulsion) {
-			stop("max_repulsion_iter must be a positive integer")
+	if (should_change(args$new_clone_scale_factor)) {
+		if (args$new_clone_scale_factor < 0) {
+			stop("new_rad_scale_factor must be a positive number")
 		}
 	}
+
+	check_repulsion_params(args)
 
 	# if (!is.null(args$relocation_coord) && (length(args$relocate_cluster) != length(args$relocation_coord))) {
 	# return("length of relocate_cluster must be the same as the length of relocation_coord")
@@ -167,13 +171,13 @@ AdjustAPOTC_error_handler <- function(args) {
 	# return("length of nudge_cluster must be the same as the length of nudge_vector")
 	# }
 	# if ((args$relocate_cluster != -1) && (args$nudge_cluster != -1)) {
-	# 	if (has_repeats(args$relocation_cluster, args$nudge_cluster)) {
+	# 	if (!is.null(intersect(args$relocation_cluster, args$nudge_cluster))) {
 	# 		return("There are repeated elements in relocate_cluster and/or nudge_cluster")
 	# 	}
 	# }
 }
 
-# TODO it should be more efficient + safer to mathematically transform all values
+# TODO it should be more efficient + safer to mathematically transform all vals
 change_clone_scale <- function(seurat_obj, args) {
 
 	if (args$verbose) {

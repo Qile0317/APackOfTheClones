@@ -120,7 +120,7 @@ is_a_character <- function(x) {
 
 is_an_integer <- function(x) {
     if (length(x) != 1) return(FALSE)
-    is.integer(x)
+    as.numeric(x) == as.numeric(as.integer(x))
 }
 
 is_a_numeric <- function(x) {

@@ -171,21 +171,8 @@ APOTCPlot <- function(
 }
 
 APOTCPlot_error_handler <- function(args) {
-	if (!is_seurat_object(args[["seurat_obj"]])) {
-        stop("`seurat_obj` must be a Seurat object.")
-    }
-
-	if (!is.null(args$reduction_base) && !is_a_character(args$reduction_base)) {
-		stop("`reduction_base` must be a character of length 1.")
-	}
-    
-	if (!is.null(args$clonecall) && !is_a_character(args$clonecall)) {
-		stop("`clonecall` must be a character of length 1.")
-	}
-
-	if (!is.null(args$extra_filter) && !is_a_character(args$extra_filter)) {
-		stop("`extra_filter` must be a character or NULL of length 1.")
-	}
+	
+	check_apotc_identifiers(args)
 
     if (!is_an_integer(args$res)) {
         stop("`res` must be an integer value of length 1.")
