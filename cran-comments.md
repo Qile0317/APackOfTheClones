@@ -1,8 +1,9 @@
+
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 note
 
 ## Additional notes
 
-- fixed NOTE about missing vignettes folder
-- fixed NOTE about referencing scRepertoire
+- all issues from when the previous version was archived are fixed
+- tarball size is now < 5MB

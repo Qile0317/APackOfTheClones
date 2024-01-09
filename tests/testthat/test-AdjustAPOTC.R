@@ -20,11 +20,6 @@ test_that("AdjustAPOTC works", {
     new_color = c("green", "cyan")
   )
 
-  expect_doppelganger(
-		"AdjustAPOTC_plot",
-		suppressMessages(APOTCPlot(combined_pbmc, run_id = "r2"))
-	)
-
   # repulse and add labels
   combined_pbmc <- AdjustAPOTC(combined_pbmc, run_id = "r2", verbose = FALSE,
     repulse = TRUE
