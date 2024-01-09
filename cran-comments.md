@@ -5,5 +5,5 @@
 
 ## Additional notes
 
-- all issues from when the previous version was archived are fixed
+- all issues from when the archived previous version are fixed, and the package has undergone major additions, refactoring, and deprecation.
 - tarball size is now < 5MB

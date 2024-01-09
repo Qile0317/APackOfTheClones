@@ -451,7 +451,9 @@ attempt_correction <- function(seurat_obj, reduction) {
 }
 
 user_get_reduc_obj <- function(seurat_obj, reduction) {
-    if (!is_seurat_object(seurat_obj)) stop("`seurat_obj` not a seurat object!")
-    if (!is_a_character(reduction)) stop("`reduction` must be one character")
+    if (!is_seurat_object(seurat_obj))
+        stop(call. = FALSE, "`seurat_obj` not a seurat object!")
+    if (!is_a_character(reduction))
+        stop(call. = FALSE, "`reduction` must be one character")
     seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
 }

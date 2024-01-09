@@ -72,6 +72,7 @@ et
 filterMulti
 getApotcDataIds
 getLastApotcDataId
+ggforce
 ggplot
 github
 https
@@ -107,7 +108,6 @@ seurat
 tSNE
 testcases
 th
-tsne
 umap
 walkthrough
 xy

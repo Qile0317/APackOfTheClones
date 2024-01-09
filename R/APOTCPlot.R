@@ -16,7 +16,7 @@
 #' that corresponded to the run. Its heavily recommended to use the `run_id`.
 #' If none of these parameters are inputted, the function defaults to returning
 #' the plot of the latest run.
-#' 
+#'
 #' @inheritParams RunAPOTC
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
@@ -24,7 +24,7 @@
 #' @param res The number of points on the generated path per full circle. From
 #' plot viewers, if circles seem slightly too pixelated, it is recommended to
 #' first try to export the plot as an `.svg` before increasing `res` due to
-#' increased plotting times from `ggforce::geom_circle`.
+#' increased plotting times from [ggforce::geom_circle].
 #' @param linetype The type of outline each circle should have. defaults to
 #' `"blank` meaning no outline. More information is in the function
 #' documentation of `ggforce::geom_circle`.
@@ -32,8 +32,9 @@
 #' the resulting plot will have the same theme as the seurat reference reduction
 #' plot. Else, the plot will simply have a blank background.
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales
-#' of the original UMAP. However, it will only attempt to extend the axes and
-#' never shorten.
+#' of the original reduction plot. However, it will only attempt to extend the
+#' axes and never shorten. This is recommended to be set to `TRUE` especially if
+#' working with subsetted versions of the clonal data.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
 #' defaulting to "C0, C1, ...".
 #' @param label_size The text size of labels if shown. Defaults to 5.

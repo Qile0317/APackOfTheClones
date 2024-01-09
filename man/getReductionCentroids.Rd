@@ -4,14 +4,14 @@
 \alias{getReductionCentroids}
 \title{Calculate seurat cluster centroids based on a Dimensional reduction}
 \usage{
-getReductionCentroids(seurat_obj, reduction = "umap")
+getReductionCentroids(seurat_obj, reduction)
 }
 \arguments{
 \item{seurat_obj}{input seurat object with the dimensional reduction of
 choice already present, and seurat clusters computed.}
 
 \item{reduction}{character. The reduction that the centroid calculation
-should be based on. Currently, can only be "umap", "tsne", or "pca".}
+should be based on.}
 }
 \value{
 A list of the length of the number of distinct clusters in the

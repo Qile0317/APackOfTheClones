@@ -104,7 +104,7 @@ clusters repulse each other per iteration, and vice versa}
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to
 first try to export the plot as an \code{.svg} before increasing \code{res} due to
-increased plotting times from \code{ggforce::geom_circle}.}
+increased plotting times from \link[ggforce:geom_circle]{ggforce::geom_circle}.}
 
 \item{linetype}{The type of outline each circle should have. defaults to
 \verb{"blank} meaning no outline. More information is in the function
@@ -115,8 +115,9 @@ the resulting plot will have the same theme as the seurat reference reduction
 plot. Else, the plot will simply have a blank background.}
 
 \item{retain_axis_scales}{If \code{TRUE}, approximately maintains the axis scales
-of the original UMAP. However, it will only attempt to extend the axes and
-never shorten.}
+of the original reduction plot. However, it will only attempt to extend the
+axes and never shorten. This is recommended to be set to \code{TRUE} especially if
+working with subsetted versions of the clonal data.}
 
 \item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
 defaulting to "C0, C1, ...".}
