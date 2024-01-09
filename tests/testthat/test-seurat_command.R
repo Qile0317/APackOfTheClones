@@ -18,7 +18,7 @@ test_that("everything in seurat_command works", {
 			clone_scale_factor = 0.300051, rad_scale_factor = 0.95,
 			order_clones = TRUE, try_place = FALSE, repulse = TRUE,
 			repulsion_threshold = 1, repulsion_strength = 1,
-			max_repulsion_iter = 20L, override = TRUE,
+			max_repulsion_iter = 20L, override = FALSE,
 			verbose = FALSE
 		)
 	)

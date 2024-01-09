@@ -15,23 +15,25 @@ df_full_join <- function(clstr_list) {
         'r' = numeric(0)
     )
 
-    seurat_cluster_index <- 0
+    seurat_cluster_index <- 0 # zero indexed :P
     for (i in seq_along(clstr_list)) {
-        if (isnt_empty_nor_na(clstr_list[[i]])) {
-            df <- dplyr::full_join(
-                df,
-                data.frame(
-                  "label" = rep(
-                    paste("cluster", seurat_cluster_index),
-                    length(clstr_list[[i]][["x"]])
-                  ),
-                  "x" = clstr_list[[i]][["x"]],
-                  "y" = clstr_list[[i]][["y"]],
-                  "r" = clstr_list[[i]][["rad"]]
-                ),
-                by = dplyr::join_by("label", "x", "y", "r")
-            )
+        if (!isnt_empty_nor_na(clstr_list[[i]])) {
+            seurat_cluster_index <- seurat_cluster_index + 1
+            next
         }
+        df <- dplyr::full_join(
+            df,
+            data.frame(
+                "label" = rep( # TODO this could be customized or add new col
+                  paste("cluster", seurat_cluster_index),
+                  length(clstr_list[[i]][["x"]])
+                ),
+                "x" = clstr_list[[i]][["x"]],
+                "y" = clstr_list[[i]][["y"]],
+                "r" = clstr_list[[i]][["rad"]]
+            ),
+            by = dplyr::join_by("label", "x", "y", "r")
+        )
         seurat_cluster_index <- seurat_cluster_index + 1
     }
     df

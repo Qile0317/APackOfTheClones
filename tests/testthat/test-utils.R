@@ -122,8 +122,7 @@ test_that("construct_prefix_vector works", {
 
 test_that("strip_unquoted_spaces works", {
     expect_identical(strip_unquoted_spaces("foo"), "foo")
-    expect_identical(strip_unquoted_spaces(c("foo", "bar")), c("foo", "bar")
-    )
+    expect_identical(strip_unquoted_spaces(c("foo", "bar")), c("foo", "bar"))
 
     expect_identical(strip_unquoted_spaces(" foo "), "foo")
     expect_identical(
@@ -141,3 +140,13 @@ test_that("strip_unquoted_spaces works", {
         c("ff' o o '", "bbb' a r 'rrr")
     )
 })
+
+test_that("getReductionCentroids works", {
+    expect_equal(
+        getReductionCentroids(get(data("combined_pbmc")), "umap"),
+        getdata("combined_pbmc", "all_cluster_centroids"),
+        tolerance = 1e-6
+    )
+})
+
+# TODO more testcases

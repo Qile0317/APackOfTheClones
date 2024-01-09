@@ -20,14 +20,14 @@ RunAPOTC(
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
-  override = TRUE,
+  override = FALSE,
   verbose = TRUE
 )
 }
 \arguments{
 \item{seurat_obj}{Seurat object with one or more dimension reductions and
 already have been integrated with a TCR/BCR library with
-\code{scRepertoire::combineExpression}}
+\code{scRepertoire::combineExpression}.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or
@@ -62,19 +62,21 @@ involving characters, ensure to enclose with single quotes.}
 run, and will be used by other important functions like \link{APOTCPlot} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
-\verb{reduction_base;clonecall;keyword_arguments;extra_filter} where if
-keyword arguments and extra_filter are underscore characters if there was
-no input for the \code{...} and \code{extra_filter} parameters.}
+
+\verb{reduction_base;clonecall;keyword_arguments;extra_filter}
+
+where if keyword arguments and extra_filter are underscore characters if
+there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
 individual clonotypes. The argument defaults to the character \code{"auto"}, and
-if so, the most visually pleasing factor will be estimated}
+if so, the most visually pleasing factor will be estimated.}
 
 \item{rad_scale_factor}{numeric between 0 and 1. This value decreases the
 radius of the smallest clones by this scale factor. And the absolute value
 of this decrease will be applied to all packed circles, effectively shrinking
-all circles on the spot, and introduce more constant spacing in between}
+all circles on the spot, and introduce more constant spacing in between.}
 
 \item{order_clones}{logical. Decides if the largest clone circles should be
 near cluster centroids. This is highly recommended to be set to TRUE for
@@ -84,24 +86,24 @@ give an improved impression of the proportion of expanded clones. If
 of being replicable, a random seed is recommended to be set with \link{set.seed}.}
 
 \item{try_place}{If \code{TRUE}, always minimizes distance from a newly placed
-circle to the origin in the circle packing algorithm}
+circle to the origin in the circle packing algorithm.}
 
 \item{repulse}{If \code{TRUE}, will attempt to push overlapping clusters away from
-each other}
+each other.}
 
 \item{repulsion_threshold}{numeric. The radius that clonal circle clusters
-overlap is acceptable when repulsing}
+overlap is acceptable when repulsing.}
 
 \item{repulsion_strength}{numeric. The smaller the value the less the
-clusters repulse each other per iteration, and vice versa}
+clusters repulse each other per iteration, and vice versa.}
 
-\item{max_repulsion_iter}{integer. The number of repulsion iterations}
+\item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
 \item{override}{logical. If \code{TRUE}, will override any existing
-APackOfTheClones run data with the same parameters quietly}
+APackOfTheClones run data with the same \code{run_id}.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
-of the progress}
+of the progress.}
 }
 \value{
 A modified version of the input seurat object, which harbors data

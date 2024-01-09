@@ -63,9 +63,11 @@ involving characters, ensure to enclose with single quotes.}
 run, and will be used by other important functions like \link{APOTCPlot} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
-\verb{reduction_base;clonecall;keyword_arguments;extra_filter} where if
-keyword arguments and extra_filter are underscore characters if there was
-no input for the \code{...} and \code{extra_filter} parameters.}
+
+\verb{reduction_base;clonecall;keyword_arguments;extra_filter}
+
+where if keyword arguments and extra_filter are underscore characters if
+there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{new_rad_scale_factor}{a single numeric in (0, 1]. changes the
 radius scaling factor of all circles.}
@@ -74,15 +76,15 @@ radius scaling factor of all circles.}
 clone_scale_factor}
 
 \item{repulse}{If \code{TRUE}, will attempt to push overlapping clusters away from
-each other}
+each other.}
 
 \item{repulsion_threshold}{numeric. The radius that clonal circle clusters
-overlap is acceptable when repulsing}
+overlap is acceptable when repulsing.}
 
 \item{repulsion_strength}{numeric. The smaller the value the less the
-clusters repulse each other per iteration, and vice versa}
+clusters repulse each other per iteration, and vice versa.}
 
-\item{max_repulsion_iter}{integer. The number of repulsion iterations}
+\item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
 \item{relocate_cluster}{numeric of arbitrary length. Indicates which
 cluster(s) to relocate to new coordinates}
@@ -112,7 +114,7 @@ cluster(s) to change their color by.}
 new colors that selected clusters in \code{recolor_cluster} should be changed to.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
-of the progress}
+of the progress.}
 }
 \value{
 The adjusted \code{seurat_obj}

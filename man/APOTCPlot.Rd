@@ -65,9 +65,11 @@ involving characters, ensure to enclose with single quotes.}
 run, and will be used by other important functions like \link{APOTCPlot} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
-\verb{reduction_base;clonecall;keyword_arguments;extra_filter} where if
-keyword arguments and extra_filter are underscore characters if there was
-no input for the \code{...} and \code{extra_filter} parameters.}
+
+\verb{reduction_base;clonecall;keyword_arguments;extra_filter}
+
+where if keyword arguments and extra_filter are underscore characters if
+there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

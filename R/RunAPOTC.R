@@ -32,7 +32,7 @@
 #'
 #' @param seurat_obj Seurat object with one or more dimension reductions and
 #' already have been integrated with a TCR/BCR library with
-#' `scRepertoire::combineExpression`
+#' `scRepertoire::combineExpression`.
 #' @param reduction_base character. The seurat reduction to base the clonal
 #' expansion plotting on. Defaults to `'umap'` but can also be `'tsne'` or
 #' `'pca'`. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
@@ -62,17 +62,19 @@
 #' run, and will be used by other important functions like [APOTCPlot] and
 #' [AdjustAPOTC]. Defaults to `NULL`, in which case the ID will be generated
 #' in the following format:
-#' `reduction_base;clonecall;keyword_arguments;extra_filter` where if
-#' keyword arguments and extra_filter are underscore characters if there was
-#' no input for the `...` and `extra_filter` parameters.
+#'
+#' `reduction_base;clonecall;keyword_arguments;extra_filter`
+#'
+#' where if keyword arguments and extra_filter are underscore characters if
+#' there was no input for the `...` and `extra_filter` parameters.
 #' @param clone_scale_factor Dictates how much to scale each circle(between 0,1)
 #' radius when converting from clonotype counts into circles that represent
 #' individual clonotypes. The argument defaults to the character `"auto"`, and
-#' if so, the most visually pleasing factor will be estimated
+#' if so, the most visually pleasing factor will be estimated.
 #' @param rad_scale_factor numeric between 0 and 1. This value decreases the
 #' radius of the smallest clones by this scale factor. And the absolute value
 #' of this decrease will be applied to all packed circles, effectively shrinking
-#' all circles on the spot, and introduce more constant spacing in between
+#' all circles on the spot, and introduce more constant spacing in between.
 #' @param order_clones logical. Decides if the largest clone circles should be
 #' near cluster centroids. This is highly recommended to be set to TRUE for
 #' increased intuitiveness of the visualization, as resulting plots tend to
@@ -80,18 +82,18 @@
 #' `FALSE,` will randomly scramble the positions of each circle. For the sake
 #' of being replicable, a random seed is recommended to be set with [set.seed].
 #' @param try_place If `TRUE`, always minimizes distance from a newly placed
-#' circle to the origin in the circle packing algorithm
+#' circle to the origin in the circle packing algorithm.
 #' @param repulse If `TRUE`, will attempt to push overlapping clusters away from
-#' each other
+#' each other.
 #' @param repulsion_threshold numeric. The radius that clonal circle clusters
-#' overlap is acceptable when repulsing
+#' overlap is acceptable when repulsing.
 #' @param repulsion_strength numeric. The smaller the value the less the
-#' clusters repulse each other per iteration, and vice versa
-#' @param max_repulsion_iter integer. The number of repulsion iterations
+#' clusters repulse each other per iteration, and vice versa.
+#' @param max_repulsion_iter integer. The number of repulsion iterations.
 #' @param override logical. If `TRUE`, will override any existing
-#' APackOfTheClones run data with the same parameters quietly
+#' APackOfTheClones run data with the same `run_id`.
 #' @param verbose logical. Decides if visual cues are displayed to the R console
-#' of the progress
+#' of the progress.
 #'
 #' @details
 #' All APackOfTheClones run data is stored in the Seurat object under
@@ -154,7 +156,7 @@ RunAPOTC <- function(
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
 
-    override = TRUE,
+    override = FALSE,
     verbose = TRUE
 ) {
     call_time <- Sys.time()

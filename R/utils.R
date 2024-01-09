@@ -173,7 +173,12 @@ strip_unquoted_spaces <- function(input_str) {
   input_str
 }
 
-user_attempt_correction <- function(s, strset, stop_msg_start) {
+user_attempt_correction <- function(
+    s,
+    strset,
+    stop_msg_start,
+    modifiers = list(tolower, trimws, strip_unquoted_spaces, strip_spaces)
+) {
 
     # word modifiers for increase similarity - order matters!
     modifiers <- list(
@@ -186,7 +191,7 @@ user_attempt_correction <- function(s, strset, stop_msg_start) {
 
     get_only_similar_word_or_null <- function(modifier) {
         match_indicies <- which(modifier(s) == modifier(strset))
-        if (length(match_indicies) != 1) return(NULL) 
+        if (length(match_indicies) != 1) return(NULL)
         message(paste(
             "* assuming `", s, "` corresponds to `",
             strset[match_indicies], "`", sep = ""
@@ -341,7 +346,7 @@ subsetSeuratMetaData <- function(
 	seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
 
 	if (nrow(seurat_obj@meta.data) == 0) {
-		stop(paste(
+		stop(call. = FALSE, paste(
 			"please check `", error_param, "`, ",
 			"no rows in the seurat metadata match the filter condition",
             sep = ""
@@ -349,41 +354,6 @@ subsetSeuratMetaData <- function(
 	}
 
 	seurat_obj
-}
-
-#' @title
-#' Calculate seurat cluster centroids based on a Dimensional reduction
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' Utility function to calculate the physical xy coordinates of each seurat
-#' cluster based on a dimensional reduction already present in the object.
-#' The results are returned in a list with the length of the number of distinct
-#' seurat clusters based on the seurat_obj `meta.data`.
-#'
-#' @param seurat_obj input seurat object with the dimensional reduction of
-#' choice already present, and seurat clusters computed.
-#' @param reduction character. The reduction that the centroid calculation
-#' should be based on.
-#'
-#' @return A list of the length of the number of distinct clusters in the
-#' seurat object metadata, where each element of the list is a numeric vector
-#' of length 2, with the numbers corresponding to the x and y coordinate
-#' respectively of the seurat cluster with the corresponding index.
-#'
-#' @export
-#'
-#' @examples
-#' data("combined_pbmc")
-#' getReductionCentroids(combined_pbmc, reduction = "umap")
-#'
-getReductionCentroids <- function(seurat_obj, reduction) {
-  get_cluster_centroids(
-    seurat_obj = seurat_obj,
-    reduction = user_get_reduc_obj(seurat_obj, reduction),
-    passed_in_reduc_obj = TRUE
-  )
 }
 
 # Returns the number of valid barcodes that are not NA's
@@ -448,6 +418,41 @@ attempt_correction <- function(seurat_obj, reduction) {
       strset = get_curr_reduc_names(seurat_obj),
       stop_msg_start = "Invalid reduction"
     )
+}
+
+#' @title
+#' Calculate seurat cluster centroids based on a Dimensional reduction
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Utility function to calculate the physical xy coordinates of each seurat
+#' cluster based on a dimensional reduction already present in the object.
+#' The results are returned in a list with the length of the number of distinct
+#' seurat clusters based on the seurat_obj `meta.data`.
+#'
+#' @param seurat_obj input seurat object with the dimensional reduction of
+#' choice already present, and seurat clusters computed.
+#' @param reduction character. The reduction that the centroid calculation
+#' should be based on.
+#'
+#' @return A list of the length of the number of distinct clusters in the
+#' seurat object metadata, where each element of the list is a numeric vector
+#' of length 2, with the numbers corresponding to the x and y coordinate
+#' respectively of the seurat cluster with the corresponding index.
+#'
+#' @export
+#'
+#' @examples
+#' data("combined_pbmc")
+#' getReductionCentroids(combined_pbmc, reduction = "umap")
+#'
+getReductionCentroids <- function(seurat_obj, reduction) {
+  get_cluster_centroids(
+    seurat_obj = seurat_obj,
+    reduction = user_get_reduc_obj(seurat_obj, reduction),
+    passed_in_reduc_obj = TRUE
+  )
 }
 
 user_get_reduc_obj <- function(seurat_obj, reduction) {
