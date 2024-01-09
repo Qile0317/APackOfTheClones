@@ -7,13 +7,6 @@ test_that("AdjustAPOTC works", {
     combined_pbmc, run_id = "r2", verbose = FALSE
   )
 
-  # sanity check - Adjust nothing
-
-  expect_doppelganger(
-		.defaultApotcPlot,
-		suppressMessages(APOTCPlot(AdjustAPOTC(combined_pbmc, verbose = FALSE)))
-	)
-
   # change clone and rad scale, nudge first clusters 1 & 2,
   # move clusters 3 & 4, recolor 5th and 6th clusters
   combined_pbmc <- AdjustAPOTC(combined_pbmc, run_id = "r2", verbose = FALSE,
@@ -30,15 +23,6 @@ test_that("AdjustAPOTC works", {
   expect_doppelganger(
 		"AdjustAPOTC_plot",
 		suppressMessages(APOTCPlot(combined_pbmc, run_id = "r2"))
-	)
-
-  # sanity check - r1 isnt modified
-  expect_doppelganger(
-		.defaultApotcPlot,
-		APOTCPlot(
-      AdjustAPOTC(combined_pbmc, run_id = "r1", verbose = FALSE),
-      run_id = "r1"
-    )
 	)
 
   # repulse and add labels

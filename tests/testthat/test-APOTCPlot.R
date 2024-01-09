@@ -1,13 +1,4 @@
-test_that("APOTCPlot works", {
-	data("combined_pbmc")
-	expect_doppelganger(
-		"default_apotcplot",
-		APOTCPlot(
-			RunAPOTC(combined_pbmc,  verbose = FALSE),
-			run_id = "umap;CTstrict;_;_"
-		)
-	)
-})
+# default args tested in test-noscript-defaultApotcPlot.R
 
 test_that("add_default_theme works", {
 	plt <- ggplot2::ggplot(data.frame("x" = c(1, 2), "y" = c(3, 4))) +

@@ -68,23 +68,7 @@ should_change <- function(obj) !is.null(obj)
 
 should_compute <- function(x) is.null(x)
 
-strip_spaces <- function(s) gsub(" ", "", s)
-
-strip_and_lower <- function(s) strip_spaces(tolower(s))
-
-strip_unquoted_spaces <- function(input_str) {
-  parts <- strsplit(input_str, "'")[[1]]
-  for (i in seq_along(parts)) {
-    if (is_odd(i)) parts[i] <- strip_spaces(parts[[i]])
-  }
-  
-  joined_str <- Reduce(function(...) paste(..., sep = "'"), parts)
-
-  if (is_even(length(parts))) {
-    return(paste(joined_str, "'", sep = ""))
-  }
-  joined_str
-}
+# plotting related utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
 #' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
@@ -149,27 +133,99 @@ subtract <- function(x, y) x - y
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
 
-# spelling related functions
+get_unique_pairs_up_to <- function(x) {
+    if (x <= 1) return(list())
 
-user_attempt_correction <- function(s, strset, stop_msg_start) {
-    if (any(strip_and_lower(s) == strip_and_lower(strset))) {
-        return(s)
+    all_unique_pairs <- init_list(choose(x, x - 2))
+    index <- 1
+    for (i in 1:(x - 1)) {
+        for (j in (i + 1):x) {
+            all_unique_pairs[[index]] <- c(i, j)
+            index <- index + 1
+        }
     }
-    stop(paste(
-        stop_msg_start,
-        ": '", s, "', did you mean: ",
-        closest_word(s, strset),
-        sep = ""
-    ))
+
+    all_unique_pairs
 }
 
-closest_word <- function(s, strset = c("umap", "tsne", "pca")) {
+# spelling related functions
+
+strip_spaces <- function(s) gsub(" ", "", s)
+strip_and_lower <- function(s) strip_spaces(tolower(s))
+
+strip_unquoted_spaces <- function(input_str) {
+  all_parts <- strsplit(input_str, "'")
+
+  for (i in seq_along(input_str)) {
+    parts <- all_parts[[i]]
+
+    for (j in seq_along(parts)) {
+        if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
+    }
+    
+    input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
+
+    if (is_even(length(parts))) {
+        input_str[i] <- paste(input_str[i], "'", sep = "")
+    }
+  }
+  
+  input_str
+}
+
+user_attempt_correction <- function(s, strset, stop_msg_start) {
+
+    # word modifiers for increase similarity - order matters!
+    modifiers <- list(
+        tolower, trimws, strip_unquoted_spaces, strip_spaces
+    )
+
+    # check if the string is already present in strset and if yes return
+    match_indicies <- which(s == strset)
+    if (length(match_indicies) == 1) return(s)
+
+    get_only_similar_word_or_null <- function(modifier) {
+        match_indicies <- which(modifier(s) == modifier(strset))
+        if (length(match_indicies) != 1) return(NULL) 
+        message(paste(
+            "* assuming `", s, "` corresponds to `",
+            strset[match_indicies], "`", sep = ""
+        ))
+        strset[match_indicies]
+    }
+
+    for (modifier in append(identity, modifiers)) {
+        potential_unique_similar_word <- get_only_similar_word_or_null(modifier)
+        if (!is.null(potential_unique_similar_word)) {
+            return(potential_unique_similar_word)
+        }
+    }
+
+    for (ij in get_unique_pairs_up_to(length(modifiers))) {
+        potential_unique_similar_word <- get_only_similar_word_or_null(
+            modifier = function(x) modifiers[[ij[1]]](modifiers[[ij[2]]](x))
+        )
+        if (!is.null(potential_unique_similar_word)) {
+            return(potential_unique_similar_word)
+        }
+    }
+    
+    stop(
+        stop_msg_start, ": '", s, "', did you mean: ", closest_word(s, strset),
+        call. = FALSE
+    )
+}
+
+closest_word <- function(s, strset) {
     strset <- unique(strset)
+    if (length(strset) == 1) return(strset)
+
     strset_lowercase <- tolower(strset)
     s <- tolower(s)
 
     closest_w <- strset_lowercase[1]
     closest_dist <- utils::adist(s, closest_w)
+
     for(i in 2:length(strset_lowercase)) {
         curr_dist <- utils::adist(s, strset_lowercase[i])
         if (curr_dist < closest_dist) {
@@ -309,7 +365,7 @@ subsetSeuratMetaData <- function(
 #' @param seurat_obj input seurat object with the dimensional reduction of
 #' choice already present, and seurat clusters computed.
 #' @param reduction character. The reduction that the centroid calculation
-#' should be based on. Currently, can only be "umap", "tsne", or "pca".
+#' should be based on.
 #'
 #' @return A list of the length of the number of distinct clusters in the
 #' seurat object metadata, where each element of the list is a numeric vector
@@ -322,7 +378,7 @@ subsetSeuratMetaData <- function(
 #' data("combined_pbmc")
 #' getReductionCentroids(combined_pbmc, reduction = "umap")
 #'
-getReductionCentroids <- function(seurat_obj, reduction = "umap") {
+getReductionCentroids <- function(seurat_obj, reduction) {
   get_cluster_centroids(
     seurat_obj = seurat_obj,
     reduction = user_get_reduc_obj(seurat_obj, reduction),
@@ -361,36 +417,41 @@ get_num_total_clusters <- function(seurat_obj) {
 
 # seurat reduction related functions
 
+any_reduction_exists <- function(seurat_obj) {
+    reduction_names <- get_curr_reduc_names(seurat_obj)
+    !(is.null(reduction_names) || identical(reduction_names, character(0)))
+}
+
+get_curr_reduc_names <- function(seurat_obj) {
+    names(seurat_obj@reductions)
+}
+
 get_2d_embedding <- function(seurat_obj, reduction) {
   seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2]
 }
 
-attempt_correction <- function(s) {
+attempt_correction <- function(seurat_obj, reduction) {
 
-    s <- strip_and_lower(s)
-    s <- ifelse(test = identical(s, "t-sne"), yes = "tsne", no = s)
+    if (!any_reduction_exists(seurat_obj)) {
+        stop("No dimensional reductions detected")
+    }
+
+    reduction <- ifelse(
+        test = identical(strip_and_lower(reduction), "t-sne") &&
+            !any("t-sne" == strip_and_lower(get_curr_reduc_names(seurat_obj))),
+        yes = "tsne",
+        no = reduction
+    )
 
     user_attempt_correction(
-      s,
-      strset = c("umap", "tsne", "pca"),
+      reduction,
+      strset = get_curr_reduc_names(seurat_obj),
       stop_msg_start = "Invalid reduction"
     )
 }
 
-is_reduction_name <- function(reduction) {
-  any(reduction == c("umap", "tsne", "pca"))
-}
-
 user_get_reduc_obj <- function(seurat_obj, reduction) {
-  if (!is_seurat_object(seurat_obj)) {
-    stop("not a seurat object!")
-  }
-
-  reduction <- attempt_correction(reduction)
-
-  if (!is_reduction_name(reduction)) {
-    stop(paste("A", reduction, "has not been ran on the seurat object"))
-  }
-
-  seurat_obj@reductions[[reduction]]
+    if (!is_seurat_object(seurat_obj)) stop("`seurat_obj` not a seurat object!")
+    if (!is_a_character(reduction)) stop("`reduction` must be one character")
+    seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
 }

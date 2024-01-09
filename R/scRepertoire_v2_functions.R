@@ -5,9 +5,15 @@
     x <- .convertClonecall(x)
     if(check.df) {
       if(inherits(df, "list") & !any(colnames(df[[1]]) %in% x)) {
-        stop("Check the clonal variabe (cloneCall) being used in the function, it does not appear in the data provided.")
+        stop(
+			"Check the clonal variabe (cloneCall) being used in the function, it does not appear in the data provided.",
+			call. = FALSE
+		)
       } else if (inherits(df, "data.frame") & !any(colnames(df) %in% x)) {
-        stop("Check the clonal variabe (cloneCall) being used in the function, it does not appear in the data provided.")
+        stop(
+			"Check the clonal variabe (cloneCall) being used in the function, it does not appear in the data provided.",
+			call. = FALSE
+		)
       }
     }
     return(x)

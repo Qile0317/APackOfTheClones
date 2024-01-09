@@ -179,36 +179,44 @@ APOTCPlot_error_handler <- function(args) {
 	check_apotc_identifiers(args)
 
     if (!is_an_integer(args$res)) {
-        stop("`res` must be an integer value of length 1.")
+        stop(call. = FALSE, "`res` must be an integer value of length 1.")
     }
 
     if (!is_a_character(args$linetype)) {
-        stop("`linetype` must be a character of length 1.")
+        stop(call. = FALSE, "`linetype` must be a character of length 1.")
     }
 
     if (!is_a_logical(args$use_default_theme)) {
-        stop("`use_default_theme` must be a logical value of length 1.")
+        stop(call. = FALSE,
+			"`use_default_theme` must be a logical value of length 1."
+		)
     }
 
     if (!is_a_logical(args$retain_axis_scales)) {
-        stop("`retain_axis_scales` must be a logical value of length 1.")
+        stop(call. = FALSE,
+			"`retain_axis_scales` must be a logical value of length 1."
+		)
     }
 
     if (!is_a_logical(args$show_labels)) {
-        stop("`show_labels` must be a logical value of length 1.")
+        stop(call. = FALSE,
+			"`show_labels` must be a logical value of length 1."
+		)
     }
 
     if (!is_a_numeric(args$label_size)) {
-        stop("`label_size` must be a numeric value of length 1.")
+        stop(call. = FALSE, "`label_size` must be a numeric value of length 1.")
     }
 
     if (!is_a_logical(args$add_size_legend)) {
-        stop("`add_size_legend` must be a logical value of length 1.")
+        stop(call. = FALSE,
+			"`add_size_legend` must be a logical value of length 1."
+		)
     }
 
 	# check object_id validity
 	if (!containsApotcRun(args$seurat_obj, args$run_id)) {
-		stop(paste(
+		stop(call. = FALSE, paste(
 			"APackOfTheClones object with id", args$run_id,
 			"does not exist in the seurat object"
 		))

@@ -62,16 +62,42 @@ test_that("get_xr and get_yr works", {
     # TODO more tests
 })
 
-test_that("attempt_correction works", {
-    expect_identical("umap", attempt_correction("Umap"))
-    expect_identical("tsne", attempt_correction("t-SNE"))
-    expect_identical("pca", attempt_correction("PCA"))
-})
+test_that("attempt_correction works", { suppressMessages({
+    data("combined_pbmc")
+
+    combined_pbmc@reductions[["pca"]] <- 0
+    expect_identical("umap", attempt_correction(combined_pbmc, "Umap"))
+    expect_identical("pca", attempt_correction(combined_pbmc, "PCA"))
+
+    combined_pbmc@reductions[["tsne"]] <- 0
+    expect_identical("tsne", attempt_correction(combined_pbmc, "t-SNE"))
+
+    combined_pbmc@reductions[["fooBarReduction"]] <- 0
+    combined_pbmc@reductions[["Trex.umap"]] <- 0
+    expect_identical(
+        "fooBarReduction", attempt_correction(combined_pbmc, "foobarreduction")
+    )
+    expect_identical(
+        "Trex.umap", attempt_correction(combined_pbmc, " trex. umap")
+    )
+
+    combined_pbmc@reductions[["Foo 'bar' baz"]] <- 0
+    combined_pbmc@reductions[["Foo ' b  a r ' baz"]] <- 0
+    expect_identical(
+        "Foo 'bar' baz", attempt_correction(combined_pbmc, "foo'bar'baz")
+    )
+    expect_identical(
+        "Foo ' b  a r ' baz",
+        attempt_correction(combined_pbmc, "foo' b  a r 'baz")
+    )
+
+    # TODO more tests
+})})
 
 test_that("closest_word works", {
-    expect_identical(closest_word(" umsp"), "umap")
-    expect_identical(closest_word("t snq"), "tsne")
-    expect_identical(closest_word("aca "), "pca")
+    expect_identical(closest_word(" umsp", c("umap", "tsne", "pca")), "umap")
+    expect_identical(closest_word("t snq", c("umap", "tsne", "pca")), "tsne")
+    expect_identical(closest_word("aca ", c("umap", "tsne", "pca")), "pca")
 })
 
 test_that("construct_prefix_vector works", {
@@ -91,5 +117,27 @@ test_that("construct_prefix_vector works", {
 
     expect_identical(
         test_results, c("Y_NP1_CTRL", "O_NP2_CTRL", "Y_NP1_STIM", "O_NP2_STIM")
+    )
+})
+
+test_that("strip_unquoted_spaces works", {
+    expect_identical(strip_unquoted_spaces("foo"), "foo")
+    expect_identical(strip_unquoted_spaces(c("foo", "bar")), c("foo", "bar")
+    )
+
+    expect_identical(strip_unquoted_spaces(" foo "), "foo")
+    expect_identical(
+        strip_unquoted_spaces(c(" foo ", " bar ")), c("foo", "bar")
+    )
+
+    expect_identical(strip_unquoted_spaces(" f oo "), "foo")
+    expect_identical(
+        strip_unquoted_spaces(c(" f oo ", " b ar ")), c("foo", "bar")
+    )
+
+    expect_identical(strip_unquoted_spaces(" f f ' o o ' "), "ff' o o '")
+    expect_identical(
+        strip_unquoted_spaces(c(" f f ' o o ' ", " bb b ' a r ' rr r ")),
+        c("ff' o o '", "bbb' a r 'rrr")
     )
 })

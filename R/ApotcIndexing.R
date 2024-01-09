@@ -110,7 +110,9 @@ infer_object_id_if_needed <- function(args, varargs_list) {
     }
 
     parse_to_object_id(
-        reduction_base = attempt_correction(args$reduction_base),
+        reduction_base = attempt_correction(
+            args$seurat_obj, args$reduction_base
+        ),
         clonecall = .theCall(args$seurat_obj@meta.data, args$clonecall),
         varargs_list = varargs_list,
         metadata_filter = args$extra_filter
@@ -231,7 +233,7 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' 
+#'
 #' A convenience function to erase all data associated with a particular run,
 #' including the ApotcData and command in seurat_obj@command. The run_id would
 #' be no longer accessible afterwards.
@@ -265,8 +267,9 @@ deleteApotcData <- function(seurat_obj, run_id) {
 
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
     if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
-    if (!containsApotcRun(seurat_obj, run_id))
+    if (!containsApotcRun(seurat_obj, run_id)) {
         stop(paste("no run with id:", run_id, "is present"))
+    }
 
     seurat_obj <- setApotcData(seurat_obj, run_id, NULL)
     seurat_obj@commands[[get_command_name("RunAPOTC", run_id)]] <- NULL
@@ -278,7 +281,7 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' 
+#'
 #' A convenience function to get all run ids of previous RunAPOTC run IDs
 #'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in

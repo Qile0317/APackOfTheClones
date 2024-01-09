@@ -152,13 +152,13 @@ AdjustAPOTC_error_handler <- function(args) {
 
 	if (should_change(args$new_rad_scale_factor)) {
 		if (args$new_rad_scale_factor < 0) {
-			stop("new_rad_scale_factor must be a positive number")
+			stop(call. = FALSE, "new_rad_scale_factor must be a positive number")
 		}
 	}
 
 	if (should_change(args$new_clone_scale_factor)) {
 		if (args$new_clone_scale_factor < 0) {
-			stop("new_rad_scale_factor must be a positive number")
+			stop(call. = FALSE, "new_rad_scale_factor must be a positive number")
 		}
 	}
 

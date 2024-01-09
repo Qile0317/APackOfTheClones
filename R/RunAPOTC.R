@@ -161,7 +161,7 @@ RunAPOTC <- function(
     if (verbose) message("Initializing APOTC run...")
 
     # compute inputs
-    reduction_base <- attempt_correction(reduction_base)
+    reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
     varargs_list <- list(...)
 
@@ -240,43 +240,51 @@ RunAPOTC_parameter_checker <- function(args) {
 
     # Check if clone_scale_factor is numeric of length 1
     if (!is_a_numeric(args[["clone_scale_factor"]])) {
-        stop("`clone_scale_factor` must be a numeric value of length 1.")
+        stop(call. = FALSE,
+            "`clone_scale_factor` must be a numeric value of length 1."
+        )
     }
 
     # Check if rad_scale_factor is numeric of length 1
     if (!is_a_numeric(args[["rad_scale_factor"]])) {
-        stop("`rad_scale_factor` must be a numeric value of length 1.")
+        stop(call. = FALSE,
+            "`rad_scale_factor` must be a numeric value of length 1."
+        )
     }
 
     # Check if try_place is logical of length 1
     if (!is_a_logical(args[["try_place"]])) {
-        stop("`try_place` must be a logical value of length 1.")
+        stop(call. = FALSE, "`try_place` must be a logical value of length 1.")
     }
 
     check_repulsion_params(args)
 
     # Check if override is logical of length 1
     if (!is_a_logical(args[["override"]])) {
-        stop("`override` must be a logical value of length 1.")
+        stop(call. = FALSE, "`override` must be a logical value of length 1.")
     }
 
     # Check if verbose is logical of length 1
     if (!is_a_logical(args[["verbose"]])) {
-        stop("`verbose` must be a logical value of length 1.")
+        stop(call. = FALSE, "`verbose` must be a logical value of length 1.")
     }
 
     # regular tests
 
 	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
-		stop("`clone_scale_factor` has to be a positive real number in (0, 1]")
+		stop(call. = FALSE,
+            "`clone_scale_factor` has to be a positive real number in (0, 1]"
+        )
 	}
 
     if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
-		stop("`rad_scale_factor` has to be a positive real number in (0, 1]")
+		stop(call. = FALSE,
+            "`rad_scale_factor` has to be a positive real number in (0, 1]"
+        )
 	}
 
     if (!args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {
-        stop(paste(
+        stop(call. = FALSE, paste(
             "An APackOfTheClones run with the the parameters", args[["obj_id"]],
             "appears to already have been ran. If this is a mistake,",
             "set the `override` argument to `TRUE` and re-run."
@@ -290,24 +298,26 @@ RunAPOTC_parameter_checker <- function(args) {
 
 check_apotc_identifiers <- function(args) {
     if (!is_seurat_object(args[["seurat_obj"]])) {
-        stop("`seurat_obj` must be a Seurat object.")
+        stop(call. = FALSE, "`seurat_obj` must be a Seurat object.")
     }
 
 	if (!is.null(args$reduction_base) && !is_a_character(args$reduction_base)) {
-		stop("`reduction_base` must be a character of length 1.")
+		stop(call. = FALSE, "`reduction_base` must be a character of length 1.")
 	}
     
 	if (!is.null(args$clonecall) && !is_a_character(args$clonecall)) {
-		stop("`clonecall` must be a character of length 1.")
+		stop(call. = FALSE, "`clonecall` must be a character of length 1.")
 	}
 
 	if (!is.null(args$extra_filter) && !is_a_character(args$extra_filter)) {
-		stop("`extra_filter` must be a character or NULL of length 1.")
+		stop(call. = FALSE, "`extra_filter` must be a character or NULL of length 1.")
 	}
 
     if (!is.null(args[["extra_filter"]])) {
         if (!is_a_character(args[["extra_filter"]])) {
-            stop("`extra_filter` must be a character or NULL of length 1.")
+            stop(call. = FALSE,
+                "`extra_filter` must be a character or NULL of length 1."
+            )
         }
     } 
 }
@@ -315,33 +325,33 @@ check_apotc_identifiers <- function(args) {
 check_repulsion_params <- function(args) {
     # Check if repulse is logical of length 1
     if (!is_a_logical(args[["repulse"]])) {
-        stop("`repulse` must be a logical value of length 1.")
+        stop(call. = FALSE, "`repulse` must be a logical value of length 1.")
     }
 
     if (args$repulse) return()
 
     # Check if repulsion_threshold is numeric of length 1
     if (!is_a_numeric(args[["repulsion_threshold"]])) {
-        stop("`repulsion_threshold` must be a numeric value of length 1.")
+        stop(call. = FALSE, "`repulsion_threshold` must be a numeric value of length 1.")
     }
     if (args[["repulsion_threshold"]] <= 0) {
-        stop("`repulsion_threshold` has to be a positive number")
+        stop(call. = FALSE, "`repulsion_threshold` has to be a positive number")
     }
 
     # Check if repulsion_strength is numeric of length 1
     if (!is_a_numeric(args[["repulsion_strength"]])) {
-        stop("`repulsion_strength` must be a numeric value of length 1.")
+        stop(call. = FALSE, "`repulsion_strength` must be a numeric value of length 1.")
     }
     if (args[["repulsion_strength"]] <= 0) {
-        stop("`repulsion_strength` has to be a positive number")
+        stop(call. = FALSE, "`repulsion_strength` has to be a positive number")
     }
 
     # Check if max_repulsion_iter is an integer of length 1
     if (!is_an_integer(args[["max_repulsion_iter"]])) {
-        stop("`max_repulsion_iter` must be an integer value of length 1.")
+        stop(call. = FALSE, "`max_repulsion_iter` must be an integer value of length 1.")
     }
     if (args[["max_repulsion_iter"]] <= 0) {
-        stop("`max_repulsion_iter` has to be a positive number")
+        stop(call. = FALSE, "`max_repulsion_iter` has to be a positive number")
     }
 }
 
@@ -352,7 +362,7 @@ check_filtering_conditions <- function(args) {
     all_formals <- get_processed_argnames(3)
     for (argname in names(args$varargs_list)) {
         if (argname %in% metadata_cols) next
-        stop(paste(
+        stop(call. = FALSE, paste(
             "colname:", argname,
             "not found in the seurat object metadata.",
             "did you mean this to be a subsetting named argument?",
