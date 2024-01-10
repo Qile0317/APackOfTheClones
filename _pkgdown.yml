@@ -18,7 +18,7 @@ redirects:
   - ["articles/web_only/Clonal_expansion_plotting.html", "articles/archive/v0-main.html"]
 
 development:
-  mode: development
+  mode: devel
   destination: dev
   version_label: info
 
