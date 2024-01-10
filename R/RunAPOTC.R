@@ -34,21 +34,24 @@
 #' already have been integrated with a TCR/BCR library with
 #' `scRepertoire::combineExpression`.
 #' @param reduction_base character. The seurat reduction to base the clonal
-#' expansion plotting on. Defaults to `'umap'` but can also be `'tsne'` or
-#' `'pca'`. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
+#' expansion plotting on. Defaults to `'umap'` but can be any reduction present
+#' within the reductions slot of the input seurat object, including custom ones.
+#' If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
 #' However, generally APackOfTheClones is used for displaying UMAP and
 #' occasionally t-SNE versions to intuitively highlight clonal expansion.
 #' @param clonecall character. The column name in the seurat object metadata to
 #' use. See `scRepertoire` documentation for more information about this
 #' parameter that is central to both packages.
-#' @param ... additional keyword arguments indicating the rows corresponding to
-#' elements in the seurat object metadata that should be filtered by.
-#' For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
-#' those in seurat clusters 1, 9, and 10. Or, if there is some column named
-#' "sample", then sample = c("A", "B") will conduct a run only on those
-#' corresponding cells. A useful application for this is to run the function
-#' many times, once for each sample, and plot them all together with [APOTCPlot]
-#' down the line.
+#' @param ... additional "subsetting" keyword arguments indicating the rows
+#' corresponding to elements in the seurat object metadata that should be
+#' filtered by. E.g., `seurat_clusters = c(1, 9, 10)` will filter the cells to
+#' those in the `seurat_clusters` column with any of the values 1, 9, and 10.
+#' Unfortunately, column names in the seurat object metadata cannot
+#' conflict with the keyword arguments. ***MAJOR NOTE*** if any subsetting
+#' keyword arguments are a *prefix* of any preceding argument names (e.g. a
+#' column named `reduction` is a prefix of the `reduction_base` argument)
+#' R will interpret it as the same argument unless *both* arguments
+#' are named. Additionally, this means any subsequent arguments *must* be named.
 #' @param extra_filter character. An additional string that should be formatted
 #' *exactly* like a statement one would pass into [dplyr::filter] that does
 #' *additional* filtering to cells in the seurat object - on top of the other
@@ -138,7 +141,7 @@
 #'     run_id = "sample17",
 #'     extra_filter = "substr(orig.ident, 2, 3) == '17'",
 #'     override = TRUE,
-#'    verbose = FALSE
+#'     verbose = FALSE
 #' )
 #'
 RunAPOTC <- function(
@@ -153,6 +156,7 @@ RunAPOTC <- function(
     rad_scale_factor = 0.95,
     order_clones = TRUE,
     try_place = FALSE,
+
     repulse = TRUE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
@@ -161,14 +165,16 @@ RunAPOTC <- function(
     override = FALSE,
     verbose = TRUE
 ) {
+    # setup and check inputs
     call_time <- Sys.time()
+    varargs_list <- list(...)
+    RunAPOTC_partial_arg_checker(hash::hash(as.list(environment())))
     if (verbose) message("Initializing APOTC run...")
 
     # compute inputs
     reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-    varargs_list <- list(...)
-
+    
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
         if (verbose) message(paste(
@@ -189,8 +195,9 @@ RunAPOTC <- function(
 
     if (verbose) {
         message(paste("* id for this run:", obj_id))
-        if (override && containsApotcRun(seurat_obj, obj_id))
+        if (override && containsApotcRun(seurat_obj, obj_id)) {
             message("* overriding results of the previous run")
+        }
     }
 
     # run the packing algos
@@ -238,12 +245,16 @@ RunAPOTC <- function(
     seurat_obj
 }
 
-RunAPOTC_parameter_checker <- function(args) {
+RunAPOTC_partial_arg_checker <- function(args) {
 
     check_apotc_identifiers(args)
+    check_filtering_conditions(args)
 
     # Check if clone_scale_factor is numeric of length 1
-    if (!is_a_numeric(args[["clone_scale_factor"]])) {
+    if (
+        !is_a_numeric(args$clone_scale_factor)
+            && !should_estimate(args$clone_scale_factor)
+    ) {
         stop(call. = FALSE,
             "`clone_scale_factor` must be a numeric value of length 1."
         )
@@ -273,34 +284,10 @@ RunAPOTC_parameter_checker <- function(args) {
         stop(call. = FALSE, "`verbose` must be a logical value of length 1.")
     }
 
-    # regular tests
-
-	if (args[["clone_scale_factor"]] <= 0 || args[["clone_scale_factor"]] > 1) {
-		stop(call. = FALSE,
-            "`clone_scale_factor` has to be a positive real number in (0, 1]"
-        )
-	}
-
-    if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
-		stop(call. = FALSE,
-            "`rad_scale_factor` has to be a positive real number in (0, 1]"
-        )
-	}
-
-    if (!args[["override"]] && containsApotcRun(args[["seurat_obj"]], args[["obj_id"]])) {
-        stop(call. = FALSE, paste(
-            "An APackOfTheClones run with the the parameters", args[["obj_id"]],
-            "appears to already have been ran. If this is a mistake,",
-            "set the `override` argument to `TRUE` and re-run."
-        ))
-    }
-
-	# TODO more checks
-
-    check_filtering_conditions(args)
 }
 
 check_apotc_identifiers <- function(args) {
+
     if (!is_seurat_object(args[["seurat_obj"]])) {
         stop(call. = FALSE, "`seurat_obj` must be a Seurat object.")
     }
@@ -317,13 +304,24 @@ check_apotc_identifiers <- function(args) {
 		stop(call. = FALSE, "`extra_filter` must be a character or NULL of length 1.")
 	}
 
-    if (!is.null(args[["extra_filter"]])) {
-        if (!is_a_character(args[["extra_filter"]])) {
-            stop(call. = FALSE,
-                "`extra_filter` must be a character or NULL of length 1."
-            )
-        }
-    } 
+}
+
+check_filtering_conditions <- function(args, frame_level = 2) {
+
+    if (is_empty(args$varargs_list)) return()
+
+    metadata_cols <- names(args$seurat_obj@meta.data)
+    all_formals <- get_processed_argnames(frame_level)
+
+    for (argname in names(args$varargs_list)) {
+        if (argname %in% metadata_cols) next
+        stop(call. = FALSE,
+            "should `", argname, "` be a function argument? ",
+            "If so, did you mean `", closest_word(argname, all_formals), "`? ",
+            "Otherwise, should `", argname, "` be a subsetting argument? ",
+            "If so, did you mean `", closest_word(argname, metadata_cols), "`?"
+        )
+    }
 }
 
 check_repulsion_params <- function(args) {
@@ -336,7 +334,9 @@ check_repulsion_params <- function(args) {
 
     # Check if repulsion_threshold is numeric of length 1
     if (!is_a_numeric(args[["repulsion_threshold"]])) {
-        stop(call. = FALSE, "`repulsion_threshold` must be a numeric value of length 1.")
+        stop(call. = FALSE,
+            "`repulsion_threshold` must be a numeric value of length 1."
+        )
     }
     if (args[["repulsion_threshold"]] <= 0) {
         stop(call. = FALSE, "`repulsion_threshold` has to be a positive number")
@@ -344,7 +344,9 @@ check_repulsion_params <- function(args) {
 
     # Check if repulsion_strength is numeric of length 1
     if (!is_a_numeric(args[["repulsion_strength"]])) {
-        stop(call. = FALSE, "`repulsion_strength` must be a numeric value of length 1.")
+        stop(call. = FALSE,
+            "`repulsion_strength` must be a numeric value of length 1."
+        )
     }
     if (args[["repulsion_strength"]] <= 0) {
         stop(call. = FALSE, "`repulsion_strength` has to be a positive number")
@@ -352,26 +354,35 @@ check_repulsion_params <- function(args) {
 
     # Check if max_repulsion_iter is an integer of length 1
     if (!is_an_integer(args[["max_repulsion_iter"]])) {
-        stop(call. = FALSE, "`max_repulsion_iter` must be an integer value of length 1.")
+        stop(call. = FALSE,
+            "`max_repulsion_iter` must be an integer value of length 1."
+        )
     }
     if (args[["max_repulsion_iter"]] <= 0) {
         stop(call. = FALSE, "`max_repulsion_iter` has to be a positive number")
     }
 }
 
-# assumes varargs_list is present
-check_filtering_conditions <- function(args) {
-    if (is_empty(args$varargs_list)) return()
-    metadata_cols <- names(args$seurat_obj@meta.data)
-    all_formals <- get_processed_argnames(3)
-    for (argname in names(args$varargs_list)) {
-        if (argname %in% metadata_cols) next
+RunAPOTC_parameter_checker <- function(args) {
+    if (args[["clone_scale_factor"]] <= 0) {
+		stop(call. = FALSE,
+            "`clone_scale_factor` has to be a positive real number"
+        )
+	}
+
+    if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
+		stop(call. = FALSE,
+            "`rad_scale_factor` has to be a positive real number in (0, 1]"
+        )
+	}
+
+    if (!args$override && containsApotcRun(args$seurat_obj, args$obj_id)) {
         stop(call. = FALSE, paste(
-            "colname:", argname,
-            "not found in the seurat object metadata.",
-            "did you mean this to be a subsetting named argument?",
-            "if not, did you mean to use the argument:",
-            closest_word(argname, all_formals)
+            "An APackOfTheClones run with the the parameters", args$obj_id,
+            "appears to already have been ran. If this is intended,",
+            "set the `override` argument to `TRUE` and re-run."
         ))
     }
+
+	# TODO more checks
 }

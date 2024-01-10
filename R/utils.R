@@ -216,7 +216,8 @@ user_attempt_correction <- function(
     }
     
     stop(
-        stop_msg_start, ": '", s, "', did you mean: ", closest_word(s, strset),
+        stop_msg_start, " `", s, "`, did you mean: `",
+        closest_word(s, strset), "`?",
         call. = FALSE
     )
 }

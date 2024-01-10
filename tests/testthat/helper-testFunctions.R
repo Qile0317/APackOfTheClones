@@ -8,5 +8,10 @@ sourcedata <- function(dir, name) {
 	source(paste("testdata/", dir, "/", name, ".R", sep = ""))
 }
 
-# hacky helper for quietly testing
+# hacky trick for testing with no messages in the terminal
+
 quietly <- function(e) suppressMessages(capture.output(e))
+
+quietly_test_that <- function(desc, code) {
+	test_that(desc, {quietly(code)})
+}

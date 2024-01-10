@@ -42,8 +42,9 @@ already have been integrated with a TCR/BCR library with
 \code{scRepertoire::combineExpression}.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
-expansion plotting on. Defaults to \code{'umap'} but can also be \code{'tsne'} or
-\code{'pca'}. If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
+expansion plotting on. Defaults to \code{'umap'} but can be any reduction present
+within the reductions slot of the input seurat object, including custom ones.
+If `'pca'``, the cluster coordinates will be based on PC1 and PC2.
 However, generally APackOfTheClones is used for displaying UMAP and
 occasionally t-SNE versions to intuitively highlight clonal expansion.}
 
@@ -51,14 +52,16 @@ occasionally t-SNE versions to intuitively highlight clonal expansion.}
 use. See \code{scRepertoire} documentation for more information about this
 parameter that is central to both packages.}
 
-\item{...}{additional keyword arguments indicating the rows corresponding to
-elements in the seurat object metadata that should be filtered by.
-For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
-those in seurat clusters 1, 9, and 10. Or, if there is some column named
-"sample", then sample = c("A", "B") will conduct a run only on those
-corresponding cells. A useful application for this is to run the function
-many times, once for each sample, and plot them all together with \link{APOTCPlot}
-down the line.}
+\item{...}{additional "subsetting" keyword arguments indicating the rows
+corresponding to elements in the seurat object metadata that should be
+filtered by. E.g., \code{seurat_clusters = c(1, 9, 10)} will filter the cells to
+those in the \code{seurat_clusters} column with any of the values 1, 9, and 10.
+Unfortunately, column names in the seurat object metadata cannot
+conflict with the keyword arguments. \emph{\strong{MAJOR NOTE}} if any subsetting
+keyword arguments are a \emph{prefix} of any preceding argument names (e.g. a
+column named \code{reduction} is a prefix of the \code{reduction_base} argument)
+R will interpret it as the same argument unless \emph{both} arguments
+are named. Additionally, this means any subsequent arguments \emph{must} be named.}
 
 \item{extra_filter}{character. An additional string that should be formatted
 \emph{exactly} like a statement one would pass into \link[dplyr:filter]{dplyr::filter} that does

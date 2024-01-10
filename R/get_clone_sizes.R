@@ -30,10 +30,10 @@ countCloneSizes <- function(
   if (!is_seurat_object(seurat_obj))
     stop("`seurat_obj` must be a Seurat object.")
   if (!is_a_character(clonecall))
-		stop("`clonecall` must be a character of length 1.")
+	  stop("`clonecall` must be a character of length 1.")
   if (!is.null(extra_filter) && !is_a_character(extra_filter))
 		stop("`extra_filter` must be a character of length 1.")
-  check_filtering_conditions(as.list(environment()))
+  check_filtering_conditions(as.list(environment()), frame_level = 1)
 
   clonecall <- .theCall(seurat_obj@meta.data, clonecall)
   filter_string <- parse_to_metadata_filter_str(

@@ -25,14 +25,16 @@ one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
 
-\item{...}{additional keyword arguments indicating the rows corresponding to
-elements in the seurat object metadata that should be filtered by.
-For example, seurat_clusters = c(1, 9, 10) will filter the cells to only
-those in seurat clusters 1, 9, and 10. Or, if there is some column named
-"sample", then sample = c("A", "B") will conduct a run only on those
-corresponding cells. A useful application for this is to run the function
-many times, once for each sample, and plot them all together with \link{APOTCPlot}
-down the line.}
+\item{...}{additional "subsetting" keyword arguments indicating the rows
+corresponding to elements in the seurat object metadata that should be
+filtered by. E.g., \code{seurat_clusters = c(1, 9, 10)} will filter the cells to
+those in the \code{seurat_clusters} column with any of the values 1, 9, and 10.
+Unfortunately, column names in the seurat object metadata cannot
+conflict with the keyword arguments. \emph{\strong{MAJOR NOTE}} if any subsetting
+keyword arguments are a \emph{prefix} of any preceding argument names (e.g. a
+column named \code{reduction} is a prefix of the \code{reduction_base} argument)
+R will interpret it as the same argument unless \emph{both} arguments
+are named. Additionally, this means any subsequent arguments \emph{must} be named.}
 }
 \value{
 A list of table objects, with the table at each index corresponding
