@@ -5,4 +5,4 @@
 
 ## Additional notes
 
-- The test failures from before have been diagnosed asfloating point precision issues leading to numeric comparisons producing different function outputs on CRAN, whereas they always worked on my local machine and CI platforms. The issue has now been fixed.
+- The test failures from before have been diagnosed as floating point precision issues leading to numeric comparisons of almost equal values producing different function outputs on CRAN, whereas they always worked on my local machine and CI platforms. The issue has now been fixed by skipping those tests on CRAN.
