@@ -174,7 +174,6 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 (\link{APOTCPlot}).
 }
 \examples{
-library(APackOfTheClones)
 data("combined_pbmc")
 
 # plot with default parameters

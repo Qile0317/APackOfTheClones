@@ -2,20 +2,40 @@ url: https://qile0317.github.io/APackOfTheClones/
 
 template:
   bootstrap: 5
+  includes:
+    in_header: |
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id={G-TSDH5XEN3S}"#' ></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '{G-TSDH5XEN3S}');
+      </script>
+
+redirects:
+  - ["articles/web_only/Clonal_expansion_plotting.html", "articles/archive/v0-main.html"]
+
+development:
+  mode: development
+  destination: dev
+  version_label: info
 
 navbar:
-  left:
-    - text: Vignettes
-      menu:
-        - text: APackOfTheClones Essentials
-          href: articles/APackOfTheClones-primary.html
-        - text: Storing and Fine-Tuning APackOfTheClones Runs
-          href: articles/APackOfTheClones-runs.html
-    - text: Reference
-      href: reference/index.html
-    - text: Changelog
-      href: news/index.html
-    - text: Archive
-      menu:
-        - text: v0.1.x
-          href: articles/web_only/Clonal_expansion_plotting.html
+  components:
+    left:
+      - text: Vignettes
+        menu:
+          - text: APackOfTheClones Essentials
+            href: articles/APackOfTheClones-primary.html
+          - text: Storing and Fine-Tuning APackOfTheClones Runs
+            href: articles/APackOfTheClones-runs.html
+      - text: Reference
+        href: reference/index.html
+      - text: Changelog
+        href: news/index.html
+      - text: Archive
+        menu:
+          - text: v0.1.x
+            href: articles/archive/v0-main.html

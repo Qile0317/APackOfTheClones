@@ -3,19 +3,18 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
-[![CRAN status](https://www.r-pkg.org/badges/last-release/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
-[![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
+[![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 ![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: end -->
 
-```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells in a `Seurat` object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling.
+```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
 
 The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of `APackOfTheClones` being used on an [example dataset for scRepertoire](https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link):
 
-<img src="man/figures/example.png" width="100%" align="center" />
+<img src="man/figures/example.png" width="100%" align="center" alt="An example APackOfTheClones plot" />
 
 ## Installation
 
@@ -25,7 +24,7 @@ The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murr
 install.packages("APackOfTheClones")
 ```
 
-Alternatively, to download the latest semi-stable development edition on the development branch, run
+Alternatively, to download the latest semi-stable development edition, run
 
 ```R
 library(devtools)
@@ -36,11 +35,11 @@ devtools::install_github("Qile0317/APackOfTheClones@dev")
 
 The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```scRepertoire::combineExpression```.
 
-To quickly produce the visualization, the ```vizAPOTC(your_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following codechunk is an example of how it can be done:
+To quickly produce the visualization, the ```vizAPOTC(your_combined_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following codechunk is an example of how it can be done:
 
 ```R
 library(Seurat)
-library(scRepertoire)
+library(scRepertoire) # ensure v2 is installed: devtools::install_github("ncborcherding/scRepertoire")
 library(APackOfTheClones)
 
 # integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"
@@ -95,7 +94,7 @@ cowplot::plot_grid(
 
 ## Documentation
 
-Comprehensive documentation, vignettes, and a changelog is deployed at https://qile0317.github.io/APackOfTheClones/
+Comprehensive documentation, vignettes, and a changelog is deployed at <https://qile0317.github.io/APackOfTheClones/>
 
 There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones-primary")` and `vignette("APackOfTheClones-runs")`.
 
@@ -119,9 +118,6 @@ Qile Yang - qile.yang@berkeley.edu
 
 <a id="1">[1]</a>
 Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. O., Bachert, C., & Coquet, J. M. (2021). Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ TH2 cell population in nasal polyps. Science immunology, 6(62), eabg6356. https://doi.org/10.1126/sciimmunol.abg6356
-
-<a id="2">[2]</a>
-atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. https://www.biostars.org/p/384640/
 
 ## Acknowledgements
 

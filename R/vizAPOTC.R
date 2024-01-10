@@ -17,7 +17,6 @@
 #' @export
 #'
 #' @examples
-#' library(APackOfTheClones)
 #' data("combined_pbmc")
 #'
 #' # plot with default parameters
@@ -27,7 +26,7 @@
 #' vizAPOTC(
 #'     combined_pbmc, try_place = TRUE, show_labels = TRUE, verbose = FALSE
 #' )
-#' 
+#'
 vizAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",

@@ -121,23 +121,25 @@
 #' @examples
 #' data("combined_pbmc")
 #'
-# ' # this is the recommended approach to use a custom run_id with default params
-# ' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "default")
-# '
-# ' # here's a seperate run with some filters to the meta data, where
-# ' # `orig.ident` is a custom column in the example data. Notice that it is not
-# ' # a `RunAPOTC` parameter but a user keyword argument
-# ' combined_pbmc <- RunAPOTC(
-# '     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L")
-# ' )
-# '
-# ' # the exact same thing can be achieved with the `extra_filter` parameter
-# ' combined_pbmc <- RunAPOTC(
-# '     combined_pbmc,
-# '     run_id = "sample17",
-# '     extra_filter = "substr(orig.ident, 2, 3) == '17'",
-# '     override = TRUE
-# ' )
+#' # this is the recommended approach to use a custom run_id with default params
+#' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "default", verbose = FALSE)
+#'
+#' # here's a seperate run with some filters to the meta data, where
+#' # `orig.ident` is a custom column in the example data. Notice that it is not
+#' # a `RunAPOTC` parameter but a user keyword argument
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"),
+#'     verbose = FALSE
+#' )
+#'
+#' # the exact same thing can be achieved with the `extra_filter` parameter
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc,
+#'     run_id = "sample17",
+#'     extra_filter = "substr(orig.ident, 2, 3) == '17'",
+#'     override = TRUE,
+#'    verbose = FALSE
+#' )
 #'
 RunAPOTC <- function(
     seurat_obj,
