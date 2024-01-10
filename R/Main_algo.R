@@ -1,5 +1,4 @@
 # vectorized circle_layout - outputs list of clusterlists
-# now with new progress bar, only noting progress of total clones
 pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_decrease = 0,
     ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE

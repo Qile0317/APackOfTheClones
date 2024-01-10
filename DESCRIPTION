@@ -20,8 +20,7 @@ Suggests:
     sf,
     spelling,
     testthat (>= 3.0.0),
-    vdiffr,
-    xml2
+    vdiffr
 Config/testthat/edition: 3
 Imports:
     data.table,
@@ -38,7 +37,6 @@ Imports:
 RoxygenNote: 7.2.3
 URL: https://qile0317.github.io/APackOfTheClones/
 LinkingTo: 
-    Rcpp,
-    testthat
+    Rcpp
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
