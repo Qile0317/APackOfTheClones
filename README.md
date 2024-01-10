@@ -3,11 +3,11 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
-[![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-![MIT license](https://img.shields.io/badge/license-MIT-green.svg)
+[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/unstable/LICENSE.md)
 <!-- badges: end -->
 
 ```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
