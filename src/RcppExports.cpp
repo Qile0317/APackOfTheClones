@@ -91,8 +91,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests(SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
@@ -100,7 +98,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},
     {"_APackOfTheClones_do_cluster_intersect", (DL_FUNC) &_APackOfTheClones_do_cluster_intersect, 5},
     {"_APackOfTheClones_calculate_transformation_vectors", (DL_FUNC) &_APackOfTheClones_calculate_transformation_vectors, 3},
-    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
