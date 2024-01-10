@@ -96,7 +96,7 @@ cowplot::plot_grid(
 
 Comprehensive documentation, vignettes, and a changelog is deployed at <https://qile0317.github.io/APackOfTheClones/>
 
-There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones-primary")` and `vignette("APackOfTheClones-runs")`.
+There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones")` and `vignette("APackOfTheClones-runs")`.
 
 All exported functions has function level documentation which can be called with `?function`.
 

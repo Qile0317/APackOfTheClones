@@ -12,7 +12,7 @@
 - Add `AdjustAPOTC` to modify certain attributes of prior APackOfTheClones runs.
 - Add `countCloneSizes` as a convenience function to count clonotype sizes based on the clonecall and allows subsetting of the seurat metadata
 - Add `getReductionCentroids` as a convenience function to get the physical centroids of each cell in some reduction in a seurat object.
-- Added two new vignettes are on the `pkgdown` website and indexed, and should be viewed in order of `vignette("APackOfTheClones-primary")` and `vignette("APackOfTheClones-runs")`.
+- Added two new vignettes are on the `pkgdown` website and indexed, and should be viewed in order of `vignette("APackOfTheClones")` and `vignette("APackOfTheClones-runs")`.
 
 ## Changes
 

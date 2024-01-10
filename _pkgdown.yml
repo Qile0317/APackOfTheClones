@@ -25,10 +25,12 @@ development:
 navbar:
   components:
     left:
+      - text: Getting Started
+        href: articles/APackOfTheClones.html
       - text: Vignettes
         menu:
           - text: APackOfTheClones Essentials
-            href: articles/APackOfTheClones-primary.html
+            href: articles/APackOfTheClones.html
           - text: Storing and Fine-Tuning APackOfTheClones Runs
             href: articles/APackOfTheClones-runs.html
       - text: Reference

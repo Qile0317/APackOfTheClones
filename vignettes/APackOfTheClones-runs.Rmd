@@ -44,7 +44,7 @@ suppressPackageStartupMessages(library(APackOfTheClones))
 
 ## Introduction
 
-As demonstrated in `vignette("APackOfTheClones-primary")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC` provides a direct way to produce the ball-packing clonal expansion visualization, though for select users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC`, `APOTCPlot`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
+As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC` provides a direct way to produce the ball-packing clonal expansion visualization, though for select users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC`, `APOTCPlot`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
 
 <details>
 
