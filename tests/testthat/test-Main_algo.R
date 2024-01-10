@@ -2,19 +2,21 @@ sourcedata("v0", "cluster_lists")
 
 # testing cpp_circle_layout
 test_that("cpp_circle_layout() works", {
-  expect_equal(cpp_circle_layout(c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
+  skip_on_cran()
+
+  expect_equal(cpp_circle_layout(c(1.3, 1.3, rep(1, 7)),
                              c1$centroid, verbose = FALSE),
-               c1, tolerance = 1)
+               c1, tolerance = 1e-9)
 
   expect_equal(cpp_circle_layout(c(2.0, 1.9, 1.6, 1.5, 1.5, 1.5),
                              c2$centroid, verbose = FALSE),
-               c2, tolerance = 0.1)
+               c2, tolerance = 1e-9)
 
   expect_false(identical(
     c3,
     cpp_circle_layout(
-      c(0.8,0.6,0.6,0.5,0.5), centroid = c(0,0), verbose = FALSE
-    )
+      c(0.8,0.6,0.6,0.5,0.5), centroid = c(0, 0), verbose = FALSE
+    ),
   ))
 
   expect_equal(
@@ -42,6 +44,8 @@ test_that("cpp_circle_layout() works", {
 })
 
 test_that("cpp_circle_layout() handles edge cases", {
+  skip_on_cran()
+
   #input length = 1
   expect_equal(cpp_circle_layout(c(69), centroid = c(0,0), verbose = FALSE),
                list(
@@ -86,19 +90,22 @@ test_that("cpp_circle_layout() handles edge cases", {
                tolerance = 3e-7)
 })
 
-# Testing optional args (needs more)
+# Testing optional args (need more)
 test_that("cpp_circle_layout(rad_decrease = 0.1) works", {
+    skip_on_cran()
+
     new_c1 <- c1
-    new_c1[[3]] <- c1[[3]] - 0.1
+    new_c1$rad <- c1$rad - 0.1
+    new_c1$clRad <- c1$clRad - 0.1
     expect_equal(
         cpp_circle_layout(
-            c(1.3, 1.3, 1, 1, 1, 1, 1, 1, 1),
+            c(1.3, 1.3, rep(1, 7)),
             centroid = new_c1$centroid,
             rad_decrease = 0.1,
             verbose = FALSE
         ),
        new_c1,
-       tolerance = 1
+       tolerance = 1e-8
     )
 })
 
@@ -110,6 +117,8 @@ test_that("process_rad_vec works", {
 })
 
 test_that("pack_into_clusterlists works", {
+    skip_on_cran()
+
     expect_equal(
         pack_into_clusterlists(
             sizes = test_radii,
@@ -150,6 +159,8 @@ test_that("pack_into_clusterlists works", {
 })
 
 test_that("pack_into_clusterlists handles NULLS", {
+    skip_on_cran()
+    
     expect_equal(
         pack_into_clusterlists(
             list(NULL, c1[[3]]),

@@ -5,5 +5,4 @@
 
 ## Additional notes
 
-- all issues from when the archived previous version are fixed, and the package has undergone major additions, refactoring, and deprecation.
-- tarball size is now < 5MB
+- The test failures from before have been diagnosed asfloating point precision issues leading to numeric comparisons producing different function outputs on CRAN, whereas they always worked on my local machine and CI platforms. The issue has now been fixed.

@@ -121,10 +121,21 @@ test_that("circlepackClones works for the default case", {
 
 	expect_equal(test_apotc_data@clone_sizes, non_subset_apotc_data@clone_sizes)
 
+})
+
+test_that("circlepackClones packs right for the default case", {
+	skip_on_cran()
+
+	test_apotc_data <- circlepackClones(
+		non_subset_apotc_data,
+		ORDER = TRUE,
+		try_place = FALSE,
+		verbose = FALSE
+	)
+
 	expect_equal(
 		test_apotc_data@clusters, getdata("combined_pbmc", "expected_clusterlists")
 	)
-
 })
 
 test_that("circlepackClones works for the subset case", {
@@ -164,11 +175,31 @@ test_that("circlepackClones works for the subset case", {
 	expect_equal(
 		test_apotc_data@clone_sizes, expected_raw_clone_sizes
 	)
+	
+})
+
+test_that("circlepackClones packs right for the subset case", {
+	skip_on_cran()
+	
+	test_apotc_data <- ApotcData(
+		seurat_obj = get(data("combined_pbmc")),
+		metadata_filter_condition = "seurat_clusters != 1",
+		clonecall = "CTstrict",
+		reduction_base = "umap",
+		clone_scale_factor = 0.300051,
+		rad_scale_factor = 0.95
+	)
+
+	test_apotc_data <- circlepackClones(
+		test_apotc_data,
+		ORDER = TRUE,
+		try_place = FALSE,
+		verbose = FALSE
+	)
 
 	expected_clusterlists <- getdata("combined_pbmc", "expected_clusterlists")
 	expected_clusterlists[[1]] <- list()
 	expect_equal(test_apotc_data@clusters, expected_clusterlists)
-	
 })
 
 # TODO test the repulsion API

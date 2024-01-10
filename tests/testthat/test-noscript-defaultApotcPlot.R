@@ -1,5 +1,6 @@
 test_that("the default plot for all methods", { quietly({
   data("combined_pbmc")
+  .defaultApotcPlot <- "default_apotcplot"
 
   expect_doppelganger(.defaultApotcPlot, vizAPOTC(combined_pbmc))
 

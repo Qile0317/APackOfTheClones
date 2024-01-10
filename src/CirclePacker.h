@@ -343,7 +343,8 @@ public:
         return out;
     }
 
-    // returns the R list from a packed vector of circles for at least 3 circles
+    // returns the R clusterlist from a packed vector of circles for at least 3 circles
+    // calculates cluster radius assuming a uniform circle, using the longest x dist
     Rcpp::List process_into_clusterlist(
         Rcpp::NumericVector& centroid,
         double rad_decrease
