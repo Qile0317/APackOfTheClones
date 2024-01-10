@@ -4,7 +4,7 @@ description: >
   A brief walkthrough of the clonal expansion visualization workflow.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{APackOfTheClones-primary}
+  %\VignetteIndexEntry{APackOfTheClones Essentials}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 
 knitr::opts_chunk$set(echo = FALSE)
-options(rmarkdown.html_vignette.check_title = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
 # utility functions

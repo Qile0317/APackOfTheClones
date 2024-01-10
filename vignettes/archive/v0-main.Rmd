@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 description: >
   A full walkthrough of the clonal expansion visualization workflow.
 vignette: >
-  %\VignetteIndexEntry{v0-main}
+  %\VignetteIndexEntry{ARCHIVED: A walkthrough of APackOfTheClones v0.1.x}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 knitr::opts_chunk$set(echo = FALSE)
-options(rmarkdown.html_vignette.check_title = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
 # function to install and load packages quietly

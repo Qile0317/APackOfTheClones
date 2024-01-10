@@ -32,9 +32,9 @@ public:
 
     bool operator==(CircleNode& other) {
         return (x == other.x)
-        && (y == other.y)
-        && (rad == other.rad)
-        && (prv == other.prv)
-        && (nxt == other.nxt);
+            && (y == other.y)
+            && (rad == other.rad)
+            && (prv == other.prv)
+            && (nxt == other.nxt);
     }
 };
