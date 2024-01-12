@@ -52,12 +52,19 @@ As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat &
   **As a reminder, here's how to set up the seurat object and clonotype data**
   </summary>
 
-```{r, setup_seurat, eval = FALSE}
+```{r, load_data, eval = TRUE, echo = FALSE, include = FALSE}
+# TODO use a nicer looking dataset
+pbmc <- get(data("combined_pbmc"))
+contig_list <- get(data("contig_list", package = "scRepertoire"))
+```
+
+```{r, setup_seurat, echo = TRUE, eval = FALSE}
 library(scRepertoire)
 
+# A seurat object named `pbmc` is loaded with a corresponding `contig_list`
 pbmc <- scRepertoire::combineExpression(
   scRepertoire::combineTCR(
-    get(data("contig_list", package = "scRepertoire")),
+    contig_list,
     samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
     removeNA = FALSE,
     removeMulti = FALSE,
@@ -67,13 +74,9 @@ pbmc <- scRepertoire::combineExpression(
   cloneCall = "gene",
   proportion = TRUE
 )
-
-print(pbmc)
 ```
 
-```{r, actual_print_pbmc, eval = TRUE, echo = TRUE, include = FALSE}
-# TODO use a nicer looking dataset
-pbmc <- get(data("combined_pbmc"))
+```{r, actual_print_pbmc, eval = TRUE, echo = TRUE}
 print(pbmc)
 ```
 
@@ -91,7 +94,7 @@ All of `vizAPOTC`'s arguments are actually derived from `RunAPOTC` and `APOTCPlo
 
 where if keyword arguments and extra_filter are underscore (`_`) characters if there was no input for the `...` and `extra_filter` parameters.
 
-```{r, eval = FALSE}
+```{r, echo = TRUE, eval = FALSE}
 # Here is the function ran with its default parameters
 pbmc <- RunAPOTC(pbmc)
 
@@ -115,7 +118,7 @@ pbmc <- RunAPOTC(pbmc, verbose = FALSE)
 
 From the verbal queues, one can see how the `run_id` was set. Here's it ran again but with more optional arguments and a custom `run_id`:
 
-```{r, runapotc2}
+```{r, runapotc2, echo = TRUE}
 pbmc <- RunAPOTC(
     pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"), verbose = FALSE
 )
@@ -143,7 +146,7 @@ extra_filter = NULL,
 
 And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:
 
-```{r, apotcplot}
+```{r, apotcplot, echo = TRUE}
 # Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where
 # `orig.ident` is a custom column in the example data with levels corresponding to sample ids:
 # ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). 

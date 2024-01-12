@@ -38,6 +38,8 @@ quiet_load_all_CRAN <- function(...) {
 
 # load packages
 quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat")
+
+# TODO improve entire vignette
 ```
 
 ```{r setup}
@@ -156,19 +158,25 @@ extra_filter = NULL,
 
 `...` represents an arbitrary number of additional keyword arguments indicating the rows corresponding to elements in the seurat object metadata that should be filtered by. For example, seurat_clusters = c(1, 9, 10) will filter the cells to only those in seurat clusters 1, 9, and 10. `extra_filter` is another additional way to subset the data and should be formatted *exactly* like a statement one would pass into `dplyr::filter` that does *additional* filtering to cells in the seurat object.
 
-Here is an example of the data subsetting, where only samples in the example seurat object that correspond to sample 17, 18, and 19 are plotted, alongside the original plot to see the difference.
+Here is an example of the data subsetting, where only samples in the example seurat object that correspond to sample 17, 18, and 19 are plotted, alongside the original plot to see the difference. Optionally, it may sometimes be helpful to set one of the visual parameters `retain_axis_scales` to `TRUE`, extending the output plot's dimensions if needed to approximately match the corresponding reduction plot's dimensions:
 
-```{r, subsetting, echo = TRUE}
+```{r, subsetting, echo = TRUE, fig.dim = c(6, 6)}
 # `orig.ident` is a custom column in the example data with levels corresponding to sample ids:
 # ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). Here, it is subsetted
 # by the keyword argument approach
 subset_sample_17_plot <- vizAPOTC(
-  pbmc, orig.ident = c("P17B", "P17L"), verbose = FALSE
+  pbmc,
+  orig.ident = c("P17B", "P17L"),
+  retain_axis_scales = TRUE,
+  verbose = FALSE
 )
 
 # here, it is subsetted with `extra_filter` for sample 18 with dplyr syntax:
 subset_sample_18_plot <- vizAPOTC(
-  pbmc, extra_filter = "substr(orig.ident, 1, 3) == 'P18'", verbose = FALSE
+  pbmc,
+  extra_filter = "substr(orig.ident, 1, 3) == 'P18'",
+  retain_axis_scales = TRUE,
+  verbose = FALSE
 )
 
 # here, sample 19 is subsetted with both arguments to show that they work in conjunction
@@ -176,6 +184,7 @@ subset_sample_19_plot <- vizAPOTC(
   pbmc,
   orig.ident = "P19B",
   extra_filter = "orig.ident == 'P19L' | orig.ident == 'P19B'",
+  retain_axis_scales = TRUE,
   verbose = FALSE
 )
 
@@ -251,7 +260,15 @@ label_size = 5,
 The most important of which are 1. `show_labels` which overlays the seurat cluster on the plot in the format `"Cx"` in the center of each relevant cluster. (see `vignette("APackOfTheClones-runs")` on how one can modify them) 2. `use_default_theme` which will produce a plot that's thematically very similar to the dimensional reduction plot, with axis labels and numeric ticks on each axis. This may be helpful for visually indicating certain plot parameters. However, for publications [such as this one](https://doi.org/10.1126/sciimmunol.abg6356), as the numeric ticks in APackOfTheClones have no actual biologically relevant meaning aside from approximately matching clusters, it may be beneficial to set this argument to `FALSE` which will produce a plot with just the circles:
 
 ```{r, void_labelled_plot, echo = TRUE}
-vizAPOTC(pbmc, show_labels = TRUE, use_default_theme = FALSE, verbose = FALSE)
+vizAPOTC(
+  pbmc,
+  show_labels = TRUE,
+  label_size = 3,
+  legend_text_size = 3.5,
+  add_legend_background = FALSE,
+  use_default_theme = FALSE,
+  verbose = FALSE
+)
 ```
 
 ## Conclusion

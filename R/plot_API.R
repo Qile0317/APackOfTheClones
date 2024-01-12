@@ -79,6 +79,7 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ylab(paste(label, 2, sep = "_"))
 }
 
+# TODO make better - should probably scale instead
 get_retain_scale_dims <- function(
   seurat_obj, reduction, ball_pack_plt, plot_dims
 ) {
