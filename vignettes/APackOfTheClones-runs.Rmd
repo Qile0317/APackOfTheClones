@@ -55,7 +55,6 @@ As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat &
 ```{r, load_data, eval = TRUE, echo = FALSE, include = FALSE}
 # TODO use a nicer looking dataset
 pbmc <- get(data("combined_pbmc"))
-contig_list <- get(data("contig_list", package = "scRepertoire"))
 ```
 
 ```{r, setup_seurat, echo = TRUE, eval = FALSE}
