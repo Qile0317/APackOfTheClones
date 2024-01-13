@@ -338,7 +338,7 @@ check_repulsion_params <- function(args) {
             "`repulsion_threshold` must be a numeric value of length 1."
         )
     }
-    if (args[["repulsion_threshold"]] <= 0) {
+    if (args[["repulsion_threshold"]] < 0) {
         stop(call. = FALSE, "`repulsion_threshold` has to be a positive number")
     }
 

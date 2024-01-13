@@ -1,3 +1,9 @@
+# APackOfTheClones (Development version)
+
+## Additions
+
+- Added parameters in `AdjustAPOTC` to work with labels and their locations
+
 # APackOfTheClones 1.0.0
 
 ## Additions

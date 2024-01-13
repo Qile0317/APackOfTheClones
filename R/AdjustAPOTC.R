@@ -38,7 +38,28 @@
 #' cluster(s) to change their color by.
 #' @param new_color character of arbitrary length. Indicates the corresponding
 #' new colors that selected clusters in `recolor_cluster` should be changed to.
-#'
+#' @param rename_label Numeric or character. Indicates the index or name of
+#' label(s) to be renamed.
+#' @param new_label Character. Indicates the corresponding new label(s) that
+#' selected label(s) in `rename_label` should be changed to.
+#' @param relocate_label Numeric or character. Indicates the index or name of
+#' label(s) to be relocated.
+#' @param label_relocation_coord Numeric of length two or a list of numerics of
+#' length two of length of `relocate_label`. If it's a list, indicates each
+#' coordinate that the labels in `relocate_label` should move to. If it's just
+#' a numeric, then will relocate all labels in `relocate_label` to the input,
+#' which is likely not desired behavior, so this should only be convenience
+#' syntax if `relocate_label` has length 1.
+#' @param nudge_label Numeric or character. Indicates the index or name of
+#' label(s) to be "nudged"/translated.
+#' @param label_nudge_vector Numeric of length two or a list of numerics of
+#' length two of length of `nudge_label`. If it's a list, indicates each
+#' translation vector (in other words, x-y coordinates) that the labels in
+#' `nudge_label` should be translated by. If it's just a numeric, then will
+#' translate all labels in `nudge_label` by the input - which mostly is
+#' syntactic sugar for translating a single label if the input of
+#' `nudge_label` is of length 1.
+#' 
 #' @return The adjusted `seurat_obj`
 #' @export
 #'
@@ -86,16 +107,22 @@ AdjustAPOTC <- function(
 	repulsion_strength = 1,
 	max_repulsion_iter = 10L,
 
-	relocate_cluster = NULL, # can also be a vector
-	relocation_coord = NULL, # vector or list of vectors
-
-	nudge_cluster = NULL, # same as above
+	relocate_cluster = NULL,
+	relocation_coord = NULL,
+	nudge_cluster = NULL,
 	nudge_vector = NULL,
-
-	recolor_cluster = NULL, #same as above
+	recolor_cluster = NULL,
 	new_color = NULL,
 
-	#interactive = FALSE,
+	rename_label = NULL,
+	new_label = NULL,
+	relocate_label = NULL,
+	label_relocation_coord = NULL,
+	nudge_label = NULL,
+	label_nudge_vector = NULL,
+
+	# # upcoming
+	# interactive = FALSE,
 	verbose = TRUE
 ) {
 	varargs_list <- list(...)
@@ -138,10 +165,24 @@ AdjustAPOTC <- function(
 			apotc_obj, repulsion_threshold, repulsion_strength,
 			max_repulsion_iter, verbose
 		)
+		if (verbose) message()
 	}
 
-	seurat_obj <- setApotcData(seurat_obj, object_id, apotc_obj)
-	seurat_obj
+	if (should_change(rename_label)) {
+		apotc_obj <- rename_labels(apotc_obj, rename_label, new_label)
+	}
+
+	if (should_change(relocate_label)) {
+		apotc_obj <- relocate_labels(
+			apotc_obj, relocate_label, label_relocation_coord
+		)
+	}
+
+	if (should_change(nudge_label)) {
+		apotc_obj <- nudge_labels(apotc_obj, nudge_label, label_nudge_vector)
+	}
+
+	setApotcData(seurat_obj, object_id, apotc_obj)
 }
 
 AdjustAPOTC_error_handler <- function(args) {
@@ -163,7 +204,6 @@ AdjustAPOTC_error_handler <- function(args) {
 	}
 
 	check_repulsion_params(args)
-
 	# if (!is.null(args$relocation_coord) && (length(args$relocate_cluster) != length(args$relocation_coord))) {
 	# return("length of relocate_cluster must be the same as the length of relocation_coord")
 	# }
@@ -224,8 +264,6 @@ recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
 	apotc_obj
 }
 
-#FIXME (again :/)
-
 relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 
 	if (is.numeric(relocation_coord)) {
@@ -262,7 +300,56 @@ nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 	)
 }
 
-# TODO label movement
+# label modification stuff - maybe should be in seperate function(s)?
 
-# need functions for readjusting the apotc reduction for better visuals
-# also possible to boot up a shiny window in the future?
+rename_labels <- function(apotc_obj, rename_label, new_label) {
+	rename_label <- process_label_input(apotc_obj, rename_label)
+	for (i in seq_along(rename_label)) {
+		apotc_obj@labels[rename_label[i]] <- new_label[i]
+	}
+	apotc_obj
+}
+
+process_label_input <- function(apotc_obj, labels) {
+	if (is.numeric(labels)) return(labels)
+	if (is.character(labels)) {
+		all_labels <- get_labels(apotc_obj)
+		labels <- sapply(
+			labels, function(x) which(x == all_labels)
+		)
+	}
+	labels
+}
+
+relocate_labels <- function(apotc_obj, relocate_label, label_relocation_coord) {
+	operate_on_label_locations(
+		apotc_obj, relocate_label, label_relocation_coord, function(a, b) b
+	)
+}
+
+nudge_labels <- function(apotc_obj, nudge_label, label_nudge_vector) {
+	operate_on_label_locations(
+		apotc_obj, nudge_label, label_nudge_vector, add
+	)
+}
+
+operate_on_label_locations <- function(apotc_obj, labels, two_d_vectors, func) {
+
+	labels <- process_label_input(apotc_obj, labels)
+
+	if (is.numeric(two_d_vectors)) {
+		two_d_vectors <- init_list(
+			length(labels), two_d_vectors
+		)
+	}
+
+	for (i in seq_along(labels)) {
+		index <- labels[i]
+		apotc_obj@label_coords[[index]] <- func(
+			apotc_obj@label_coords[[index]],
+			two_d_vectors[[i]]
+		)
+	}
+
+	apotc_obj
+}

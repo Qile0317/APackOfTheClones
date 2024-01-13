@@ -24,6 +24,12 @@ AdjustAPOTC(
   nudge_vector = NULL,
   recolor_cluster = NULL,
   new_color = NULL,
+  rename_label = NULL,
+  new_label = NULL,
+  relocate_label = NULL,
+  label_relocation_coord = NULL,
+  nudge_label = NULL,
+  label_nudge_vector = NULL,
   verbose = TRUE
 )
 }
@@ -115,6 +121,33 @@ cluster(s) to change their color by.}
 
 \item{new_color}{character of arbitrary length. Indicates the corresponding
 new colors that selected clusters in \code{recolor_cluster} should be changed to.}
+
+\item{rename_label}{Numeric or character. Indicates the index or name of
+label(s) to be renamed.}
+
+\item{new_label}{Character. Indicates the corresponding new label(s) that
+selected label(s) in \code{rename_label} should be changed to.}
+
+\item{relocate_label}{Numeric or character. Indicates the index or name of
+label(s) to be relocated.}
+
+\item{label_relocation_coord}{Numeric of length two or a list of numerics of
+length two of length of \code{relocate_label}. If it's a list, indicates each
+coordinate that the labels in \code{relocate_label} should move to. If it's just
+a numeric, then will relocate all labels in \code{relocate_label} to the input,
+which is likely not desired behavior, so this should only be convenience
+syntax if \code{relocate_label} has length 1.}
+
+\item{nudge_label}{Numeric or character. Indicates the index or name of
+label(s) to be "nudged"/translated.}
+
+\item{label_nudge_vector}{Numeric of length two or a list of numerics of
+length two of length of \code{nudge_label}. If it's a list, indicates each
+translation vector (in other words, x-y coordinates) that the labels in
+\code{nudge_label} should be translated by. If it's just a numeric, then will
+translate all labels in \code{nudge_label} by the input - which mostly is
+syntactic sugar for translating a single label if the input of
+\code{nudge_label} is of length 1.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress.}
