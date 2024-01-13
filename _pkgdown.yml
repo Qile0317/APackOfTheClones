@@ -18,21 +18,18 @@ redirects:
   - ["articles/web_only/Clonal_expansion_plotting.html", "articles/archive/v0-main.html"]
 
 navbar:
+  structure:
+    left:  [intro, vignettes, reference, news, archive]
   components:
-    left:
-      - text: Getting Started
+    vignettes:
+      text: Vignettes
+      menu:
+      - text: APackOfTheClones Essentials
         href: articles/APackOfTheClones.html
-      - text: Vignettes
-        menu:
-          - text: APackOfTheClones Essentials
-            href: articles/APackOfTheClones.html
-          - text: Storing and Fine-Tuning APackOfTheClones Runs
-            href: articles/APackOfTheClones-runs.html
-      - text: Reference
-        href: reference/index.html
-      - text: Changelog
-        href: news/index.html
-      - text: Archive
-        menu:
-          - text: v0.1.x
-            href: articles/archive/v0-main.html
+      - text: Storing and Fine-Tuning APackOfTheClones Runs
+        href: articles/APackOfTheClones-runs.html
+    archive:
+      text: Archive
+      menu:
+        - text: v0.1.x
+          href: articles/archive/v0-main.html

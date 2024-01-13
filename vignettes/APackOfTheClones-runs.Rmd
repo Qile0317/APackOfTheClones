@@ -146,7 +146,7 @@ extra_filter = NULL,
 And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:
 
 ```{r, apotcplot, echo = TRUE}
-# Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where
+# Here, plots for samples 17 - 20 as seen in the previous vignette are made, where
 # `orig.ident` is a custom column in the example data with levels corresponding to sample ids:
 # ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). 
 
@@ -162,12 +162,16 @@ pbmc <- RunAPOTC(
   pbmc, run_id = "P19", orig.ident = c("P19B", "P19L"), verbose = FALSE
 )
 
+pbmc <- RunAPOTC(
+  pbmc, run_id = "P20", orig.ident = c("P20B", "P20L"), verbose = FALSE
+)
+
 cowplot::plot_grid(
-  vizAPOTC(pbmc, verbose = FALSE),
-  APOTCPlot(pbmc, run_id = "P17"),
-  APOTCPlot(pbmc, run_id = "P18"),
-  APOTCPlot(pbmc), # run_id omitted as sample 19 was the latest run
-  labels = c("all", "17", "18", "19")
+  APOTCPlot(pbmc, run_id = "P17", retain_axis_scales = TRUE, add_size_legend = FALSE),
+  APOTCPlot(pbmc, run_id = "P18", retain_axis_scales = TRUE, add_size_legend = FALSE),
+  APOTCPlot(pbmc, run_id = "P19", retain_axis_scales = TRUE, add_size_legend = FALSE),
+  APOTCPlot(pbmc, retain_axis_scales = TRUE, add_size_legend = FALSE), # defaults to latest
+  labels = c("17", "18", "19", "20)
 )
 ```
 
