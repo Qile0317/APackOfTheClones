@@ -391,7 +391,7 @@ get_curr_reduc_names <- function(seurat_obj) {
 }
 
 get_2d_embedding <- function(seurat_obj, reduction) {
-  seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2]
+    SeuratObject::Embeddings(object = seurat_obj, reduction = reduction)[, 1:2]
 }
 
 attempt_correction <- function(seurat_obj, reduction) {
