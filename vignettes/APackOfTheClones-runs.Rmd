@@ -171,7 +171,7 @@ cowplot::plot_grid(
   APOTCPlot(pbmc, run_id = "P18", retain_axis_scales = TRUE, add_size_legend = FALSE),
   APOTCPlot(pbmc, run_id = "P19", retain_axis_scales = TRUE, add_size_legend = FALSE),
   APOTCPlot(pbmc, retain_axis_scales = TRUE, add_size_legend = FALSE), # defaults to latest
-  labels = c("17", "18", "19", "20)
+  labels = c("17", "18", "19", "20")
 )
 ```
 
