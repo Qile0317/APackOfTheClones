@@ -10,10 +10,16 @@
     <loc>https://qile0317.github.io/APackOfTheClones/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/articles/index.html</loc>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html</loc>
   </url>
   <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/articles/web_only/Clonal_expansion_plotting.html</loc>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/archive/v0-main.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/index.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/authors.html</loc>
@@ -25,13 +31,43 @@
     <loc>https://qile0317.github.io/APackOfTheClones/news/index.html</loc>
   </url>
   <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/APOTCPlot.html</loc>
+  </url>
+  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/APackOfTheClones-package.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/AdjustAPOTC.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/RunAPOTC.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/clonal_expansion_plot.html</loc>
   </url>
   <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/combined_pbmc.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/containsApotcRun.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/countCloneSizes.html</loc>
+  </url>
+  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/count_clone_sizes.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/deleteApotcData.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/getApotcDataIds.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/getLastApotcDataId.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/getReductionCentroids.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/index.html</loc>
@@ -44,5 +80,8 @@
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/mini_seurat_obj.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/vizAPOTC.html</loc>
   </url>
 </urlset>

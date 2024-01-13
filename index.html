@@ -5,8 +5,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Visualize T-cell clonal expansion via circle-packing. APackOfTheClones can integrate single-cell RNA sequencing and T-cell receptor libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
-<title>Visualization of T-Cell Clonal Expansion • APackOfTheClones</title>
+<meta name="description" content="Visualize clonal expansion via circle-packing. APackOfTheClones extends scRepertoire to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
+<title>Visualization of Clonal Expansion for Single Cell Immune Profiles • APackOfTheClones</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -14,16 +14,22 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Visualization of T-Cell Clonal Expansion">
-<meta property="og:description" content="Visualize T-cell clonal expansion via circle-packing. APackOfTheClones can integrate single-cell RNA sequencing and T-cell receptor libraries from the 10X genomics Single Cell Immune Profiling and Cell Ranger pipeline, to produce a simple, publication-ready visualization of the clonal expansion. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Visualization of Clonal Expansion for Single Cell Immune Profiles">
+<meta property="og:description" content="Visualize clonal expansion via circle-packing. APackOfTheClones extends scRepertoire to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
 <meta property="og:image" content="https://qile0317.github.io/APackOfTheClones/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=%7BG-TSDH5XEN3S%7D"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{G-TSDH5XEN3S}');
+</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,12 +49,16 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/APackOfTheClones.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/web_only/Clonal_expansion_plotting.html">Clonal expansion plotting tutorial</a>
+    <a class="dropdown-item" href="articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="articles/archive/v0-main.html">ARCHIVED: A walkthrough of APackOfTheClones v0.1.x</a>
   </div>
 </li>
 <li class="nav-item">
@@ -80,67 +90,92 @@
 </div>
 <!-- badges: start -->
 
-<p><code>APackOfTheClones</code> is an R package to produce “ball-packing” visualizations of the clonal expansion of T-cells in a <code>Seurat</code> object, based on its T-cell-receptor (TCR) library generated from the Cell Ranger output of 10X single-cell immune profiling.</p>
-<p>The concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original UMAP reduction and color. Below is an example of <code>APackOfTheClones</code> being used on a <a href="https://www.10xgenomics.com/resources/datasets/pbm-cs-from-bal-bc-mice-tcr-enrichment-from-amplified-c-dna-1-standard-3-0-0" class="external-link">public 10X genomics dataset</a>:</p>
-<p><img src="reference/figures/example.png" width="100%" align="center"></p>
+<p><code>APackOfTheClones</code> is an R package that extends the bioconductor <code>scRepertoire</code> package to produce easily customizable “ball-packing” visualizations of the clonal expansion of T-cells/B-cells in a <code>Seurat</code> object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics’ single-cell immune profiling).</p>
+<p>The baseline concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of <code>APackOfTheClones</code> being used on an <a href="https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link" class="external-link">example dataset for scRepertoire</a>:</p>
+<p><img src="reference/figures/example.png" width="100%" align="center" alt="An example APackOfTheClones plot"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p><code>APackOfTheClones</code> is registered on CRAN. To install the latest stable release, simply run the following</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"APackOfTheClones"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, to download the latest development edition on the development (<code>dev</code>) branch, run</p>
+<p>Alternatively, to download the latest semi-stable development edition, run</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@dev"</span><span class="op">)</span></span></code></pre></div>
-<p>(Note: the package is about to undergo massive breaking changes in a subsequent CRAN release v1.0.0)</p>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The main ball packing function <code>clonal_expansion_plot</code> in the package takes two main arguments: - a Seurat object with a UMAP reduction - a TCR library dataframe, from <code>all_contig_annotations.csv</code> generated by Cell Ranger</p>
-<p>And integrates the TCR library into the seurat object metadata(creates a new temporary seurat object). It then will produce a <em>ggplot</em> of clusters of circles at roughly the same UMAP coordinates, where the circle size represents the clone size. An example to do so is shown below.</p>
+<p>The package extends the functionality of <code>scRepertoire</code> <strong><em>v2</em></strong> by working with a seurat object’s corresponding T/B cell receptor library. To do this, read the <a href="borch.dev/uploads/screpertoire">scRepertoire vignette</a>. Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with <code>scRepertoire::combineTCR</code> / <code>scRepertoire::combineBCR</code> first. Then, it should be integrated into the corresponding seurat object either with <code>scRepertoire::combineExpression</code>.</p>
+<p>To quickly produce the visualization, the <code>vizAPOTC(your_combined_seurat_object)</code> should give a reasonable visualization. There is an example seurat object included in the package which can be used with <code>data("combined_pbmc")</code>. The following codechunk is an example of how it can be done:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span> <span class="co"># ensure v2 is installed: devtools::install_github("ncborcherding/scRepertoire")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/APackOfTheClones/">APackOfTheClones</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># run sc-RNAseq pipeline to produce a seurat_object</span></span>
+<span><span class="co"># integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">combineExpression</span><span class="op">(</span></span>
+<span>    input.data <span class="op">=</span> <span class="fu">combineTCR</span><span class="op">(</span></span>
+<span>        input.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mini_contig_list"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    sc.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"scRep_example"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">seurat_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">seurat_object</span><span class="op">)</span></span>
-<span><span class="va">TCR_dataframe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"file_location/all_contig_annotations.csv"</span><span class="op">)</span></span>
+<span><span class="co"># produce the ball-packing plot with the default parameters</span></span>
+<span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># produce the ball-packing plot</span></span>
-<span><span class="va">ball_pack_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">seurat_object</span>, <span class="va">TCR_dataframe</span><span class="op">)</span></span>
-<span><span class="va">ball_pack_plot</span></span></code></pre></div>
-<p>Run <code><a href="reference/clonal_expansion_plot.html">?clonal_expansion_plot</a></code> for more details and customization of the resulting plot with optional arguments, and error handling. It is also highly recommended to save the plot as an svg for use in publications.</p>
-<p>In addition, <code>integrate_tcr</code> can just integrate the TCR V(D)J library into a seurat object metadata for further analyses:</p>
+<span><span class="co"># there are many parameters to adjust, but most importantly, one can filter for</span></span>
+<span><span class="co"># subsets of the seurat object easily with keyword arguments corresponding to</span></span>
+<span><span class="co"># columns in the meta.data dataframe in the seurat object. Here, we filter for</span></span>
+<span><span class="co"># only the clones of the sample "P17" in a column named "orig.ident" that are only</span></span>
+<span><span class="co"># in seurat clusters 1, 3, and 4.</span></span>
+<span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, seurat_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code>RunAPOTC</code> and <code>AdjustAPOTC</code>, then visualized with <code>APOTCPlot</code>, like so:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">TCR_dataframe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"file_location/all_contig_annotations.csv"</span><span class="op">)</span></span>
-<span><span class="va">integrated_seurat_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/integrate_tcr.html">integrate_tcr</a></span><span class="op">(</span><span class="va">seurat_object</span>, <span class="va">TCR_dataframe</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># using the same seurat object as before, run and store associated data,</span></span>
+<span><span class="co"># identifying it with a run id.</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># or simply modify the current seurat object</span></span>
-<span><span class="va">seurat_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/integrate_tcr.html">integrate_tcr</a></span><span class="op">(</span><span class="va">seurat_object</span>, <span class="va">TCR_dataframe</span><span class="op">)</span></span>
+<span><span class="co"># plot the corresponding data with the run_id. If not provided, will use the latest run.</span></span>
+<span><span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># The integrated seurat object can even be just passed to the clonal expansion plot without the TCR dataframe</span></span>
-<span><span class="va">ball_pack_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clonal_expansion_plot.html">clonal_expansion_plot</a></span><span class="op">(</span><span class="va">seurat_object</span><span class="op">)</span></span>
-<span><span class="va">ball_pack_plot</span></span></code></pre></div>
-<p>The function also takes care of multiple rows of data for the same cell barcode. Run <code><a href="reference/integrate_tcr.html">?integrate_tcr</a></code> for more details.</p>
+<span><span class="co"># adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was</span></span>
+<span><span class="co"># left empty for no particular reason, but it will use "default_run_1" since its the latest</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    new_clone_scale_factor <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>    relocate_cluster <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    relocation_coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># one can also do another run with different parameters and a different id.</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"run2"</span>, try_place <span class="op">=</span> <span class="cn">TRUE</span>, repulse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot both runs side by side</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span>, <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"run2"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <p>Comprehensive documentation, vignettes, and a changelog is deployed at <a href="https://qile0317.github.io/APackOfTheClones/" class="uri">https://qile0317.github.io/APackOfTheClones/</a></p>
+<p>There are also two vignettes within the package locally that should be read in order, and can be called with <code><a href="articles/APackOfTheClones.html">vignette("APackOfTheClones")</a></code> and <code><a href="articles/APackOfTheClones-runs.html">vignette("APackOfTheClones-runs")</a></code>.</p>
 <p>All exported functions has function level documentation which can be called with <code>?function</code>.</p>
-<p>Currently, there is only one introductory vignette named <code>"Clonal_expansion_plotting"</code> which is a walkthrough on the clonal expansion visualization workflow. The vignette is ONLINE-ONLY and can be viewed at <a href="https://qile0317.github.io/APackOfTheClones/articles/" class="uri">https://qile0317.github.io/APackOfTheClones/articles/</a></p>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p><code>APackOfTheClones</code> is currently incomplete, and more features, tests, bugfixes, and documentation are to come.</p>
-<p>There also are plans to refactor quite a bit of the codebase to increase inter-operability with both <code>Seurat</code> and <code>scRepertoire</code>.</p>
-<p>However, github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.</p>
+<p>Github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.</p>
 <p>An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.</p>
+</div>
+<div class="section level2">
+<h2 id="upcoming-features">Upcoming features<a class="anchor" aria-label="anchor" href="#upcoming-features"></a>
+</h2>
+<p>One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
@@ -151,7 +186,6 @@
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p><a id="1">[1]</a> Ma, J., Tibbitt, C. A., Georén, S. K., Christian, M., Murrell, B., Cardell, L. O., Bachert, C., &amp; Coquet, J. M. (2021). Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ TH2 cell population in nasal polyps. Science immunology, 6(62), eabg6356. <a href="https://doi.org/10.1126/sciimmunol.abg6356" class="external-link uri">https://doi.org/10.1126/sciimmunol.abg6356</a></p>
-<p><a id="2">[2]</a> atakanekiz (2019) Tutorial:Integrating VDJ sequencing data with Seurat. <a href="https://www.biostars.org/p/384640/" class="external-link uri">https://www.biostars.org/p/384640/</a></p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
@@ -196,11 +230,11 @@
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=APackOfTheClones" class="external-link"><img src="https://www.r-pkg.org/badges/version/APackOfTheClones" alt="CRAN status"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/APackOfTheClones" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen" alt="Downloads"></a></li>
-<li><a href="https://CRAN.R-project.org/package=APackOfTheClones" class="external-link"><img src="https://www.r-pkg.org/badges/last-release/APackOfTheClones" alt="CRAN status"></a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main" class="external-link"><img src="https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/Qile0317/APackOfTheClones/blob/unstable/LICENSE.md" class="external-link"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license"></a></li>
 </ul>
 </div>
 
