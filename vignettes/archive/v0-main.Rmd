@@ -1,10 +1,10 @@
 ---
-title: "ARCHIVED: A walkthrough of APackOfTheClones v0.1.x"
+title: "Clonal expansion plotting tutorial"
 output: rmarkdown::html_vignette
 description: >
   A full walkthrough of the clonal expansion visualization workflow.
 vignette: >
-  %\VignetteIndexEntry{ARCHIVED: A walkthrough of APackOfTheClones v0.1.x}
+  %\VignetteIndexEntry{Clonal_expansion_plotting}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
@@ -16,43 +16,41 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 knitr::opts_chunk$set(echo = FALSE)
+options(rmarkdown.html_vignette.check_title = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
-# function to install and load packages
-load_package <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
+# function to install and load packages quietly
+quiet_load <- function(pkg, CRAN = TRUE, dev_dir = "Qile0317/") {
   if (!require(pkg, quietly = TRUE, character.only = TRUE)) {
     if (CRAN) {
-      install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE)
-    } else {
-      devtools::install_github(paste(dev_dir, pkg, sep = ""))
+      invisible(install.packages(pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE))
+    }else {
+      suppressWarnings(suppressMessages(
+        devtools::install_github(paste(dev_dir, pkg, sep = ""))
+      ))
     }
   }
-  require(pkg, character.only = TRUE)
+  suppressPackageStartupMessages(invisible(require(pkg, character.only = TRUE)))
 }
-
-load_cran_packages <- function(...) {
-  for (pkg in list(...)) load_package(pkg)
-}
-
-# load pkgs
-load_cran_packages("ggplot2", "cowplot", "Seurat", "devtools")
-
-# load the legacy APackOfTheClones version from github
-devtools::install_github("Qile0317/APackOfTheClones@v0")
-library(APackOfTheClones)
-
-# load data
-load_package("SCIPData", CRAN = FALSE)
-data("pbmc", package = "SCIPData")
-data("tcr_dataframe", package = "SCIPData")
 
 # redefine "head" to output a nicer dataframe
 view_head <- function(df) {
   knitr::kable(head(df))
 }
+
+# load misc packages
+quiet_load("ggplot2")
+quiet_load("cowplot")
+quiet_load("Seurat")
+
+# load packages and data
+quiet_load("devtools") # ugh, had to add devtools to import
+quiet_load("SCIPData", CRAN = FALSE)
+if(!exists("pbmc")) {data("pbmc")}
+if(!exists("tcr_dataframe")) {data("tcr_dataframe")}
 ```
 
-# Introduction
+# An introductory walkthrough of APackOfTheClones v0.1.x
 
 Single-cell RNA sequencing (scRNA-seq) and T cell receptor (TCR) sequencing are popular techniques for studying immune cell function and disease. The combined use of such data can provide insights into clonal expansion. `APackOfTheClones` provides a simple, publication-ready method to intuitively visualize clonal expansion between different cell clusters with `ggplot2`, and can be easily slotted into any analysis pipeline.
 
@@ -66,7 +64,7 @@ Before anything else can be done, we need a `Seurat` object of the single cell e
 
 ```{r, init_pbmc, echo = TRUE, collapse = FALSE}
 library(Seurat)
-suppressPackageStartupMessages(library(APackOfTheClones))
+library(APackOfTheClones)
 
 # Here, a Seurat object has already been loaded named `pbmc`
 print(pbmc)
@@ -210,8 +208,7 @@ If you are still unhappy with the spacing of the plot, see the following ways to
 * `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
 
 ## Adjusting and customizing size legend
-
-The plot we've generated here has a size legend on the top left, but we see that it is partially outside of the plot. Unfortunately the algorithm for placing the legend is far from perfect in version 0 so the user will have to do a little extra work.
+The plot we've generated here has a size legend on the top left, but we see that it is partially outside of the plot. Unfortunately the algorithm for placing the legend is far from perfect in the current release (v0.1.3) so the user will have to do a little extra work.
 
 There are the following six parameters to adjust the legend:
 ```{r, legend_params, echo = TRUE, eval = FALSE}
@@ -236,7 +233,6 @@ pbmc_expansion_plot <- clonal_expansion_plot(
 )
 pbmc_expansion_plot
 ```
-
 We can even change the circle (clone) sizes displayed in the legend by changing the vector `legend_sizes`:
 
 ```{r, adj_legend_sizes, echo = TRUE}
@@ -279,7 +275,6 @@ pbmc_expansion_plot
 ## Other possible modifications
 
 There are a few other arguments this vignette did not cover which can be read in the function documentation. However, to end off, one more important argument to consider is `use_default_theme = TRUE`. It makes the plot have the same axis labels and general theme as the original UMAP plot. If this isn't to your liking or you want to customize the plot your own way (since `clonal_expansion_plot` generates a `ggplot` object!), simply set it to `FALSE` and you'll have a very minimally themed plot:
-
 ```{r, blankplt, echo = TRUE}
 clonal_expansion_plot(
   pbmc,
@@ -297,7 +292,7 @@ clonal_expansion_plot(
 Additionally, if you really want the plot to reflect the original UMAP plot, you could try using `ggplot2`'s `xlim` and `ylim` functions.
 
 # Final product
-That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready.
+That's about it for the most basic functionalities of the clonal expansion visualization function. Remember to save the plot first as an `.svg` file for maximal resolution, and it should be publication ready. 
 
 For fun, here's a side-by-side comparison of the UMAP plot and the clonal expansion plot:
 ```{r, final, echo = TRUE}
