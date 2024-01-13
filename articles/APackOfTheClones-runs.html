@@ -51,18 +51,24 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/APackOfTheClones.html">Get started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <a class="dropdown-item" href="../articles/APackOfTheClones.html">APackOfTheClones Essentials</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">ARCHIVED: A walkthrough of APackOfTheClones v0.1.x</a>
   </div>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-archive">
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -113,11 +119,11 @@ before this one.</p>
 <details><summary><strong>As a reminder, here’s how to set up the seurat object and
 clonotype data</strong>
 </summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncborcherding.github.io/scRepertoire/" class="external-link">scRepertoire</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># A seurat object named `pbmc` is loaded with a corresponding `contig_list`</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineExpression</span><span class="op">(</span></span>
-<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineTCR</span><span class="op">(</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">combineExpression</a></span><span class="op">(</span></span>
+<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineTCR.html" class="external-link">combineTCR</a></span><span class="op">(</span></span>
 <span>    <span class="va">contig_list</span>,</span>
 <span>    samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>,</span>
 <span>    removeNA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -230,7 +236,7 @@ always relied on auto-generated <code>run_id</code>’s then
 recommended as its a lot more (unnecessarily) verbose. Here is
 <code>APOTCPlot</code> in action:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where</span></span>
+<code class="sourceCode R"><span><span class="co"># Here, plots for samples 17 - 20 as seen in the previous vignette are made, where</span></span>
 <span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
 <span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). </span></span>
 <span></span>
@@ -246,14 +252,18 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 <span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P19"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P19B"</span>, <span class="st">"P19L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P18"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>, <span class="co"># run_id omitted as sample 19 was the latest run</span></span>
-<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P20"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P19</span></span></code></pre></div>
+<span></span>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P18"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P19"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># defaults to latest</span></span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span>, <span class="st">"20"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/apotcplot-1.png" width="700"></p>
 </div>
 <div class="section level2">
