@@ -17,11 +17,6 @@ template:
 redirects:
   - ["articles/web_only/Clonal_expansion_plotting.html", "articles/archive/v0-main.html"]
 
-development:
-  mode: devel
-  destination: dev
-  version_label: info
-
 navbar:
   components:
     left:
