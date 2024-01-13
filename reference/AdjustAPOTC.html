@@ -107,6 +107,12 @@ that some of the arguments may conflict with eachother.</p>
 <span>  nudge_vector <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  recolor_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  new_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rename_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  new_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  relocate_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label_relocation_coord <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nudge_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label_nudge_vector <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -233,6 +239,45 @@ cluster(s) to change their color by.</p></dd>
 <dt>new_color</dt>
 <dd><p>character of arbitrary length. Indicates the corresponding
 new colors that selected clusters in <code>recolor_cluster</code> should be changed to.</p></dd>
+
+
+<dt>rename_label</dt>
+<dd><p>Numeric or character. Indicates the index or name of
+label(s) to be renamed.</p></dd>
+
+
+<dt>new_label</dt>
+<dd><p>Character. Indicates the corresponding new label(s) that
+selected label(s) in <code>rename_label</code> should be changed to.</p></dd>
+
+
+<dt>relocate_label</dt>
+<dd><p>Numeric or character. Indicates the index or name of
+label(s) to be relocated.</p></dd>
+
+
+<dt>label_relocation_coord</dt>
+<dd><p>Numeric of length two or a list of numerics of
+length two of length of <code>relocate_label</code>. If it's a list, indicates each
+coordinate that the labels in <code>relocate_label</code> should move to. If it's just
+a numeric, then will relocate all labels in <code>relocate_label</code> to the input,
+which is likely not desired behavior, so this should only be convenience
+syntax if <code>relocate_label</code> has length 1.</p></dd>
+
+
+<dt>nudge_label</dt>
+<dd><p>Numeric or character. Indicates the index or name of
+label(s) to be "nudged"/translated.</p></dd>
+
+
+<dt>label_nudge_vector</dt>
+<dd><p>Numeric of length two or a list of numerics of
+length two of length of <code>nudge_label</code>. If it's a list, indicates each
+translation vector (in other words, x-y coordinates) that the labels in
+<code>nudge_label</code> should be translated by. If it's just a numeric, then will
+translate all labels in <code>nudge_label</code> by the input - which mostly is
+syntactic sugar for translating a single label if the input of
+<code>nudge_label</code> is of length 1.</p></dd>
 
 
 <dt>verbose</dt>
