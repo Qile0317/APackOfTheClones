@@ -119,11 +119,11 @@ before this one.</p>
 <details><summary><strong>As a reminder, here’s how to set up the seurat object and
 clonotype data</strong>
 </summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncborcherding.github.io/scRepertoire/" class="external-link">scRepertoire</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># A seurat object named `pbmc` is loaded with a corresponding `contig_list`</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineExpression</span><span class="op">(</span></span>
-<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineTCR</span><span class="op">(</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">combineExpression</a></span><span class="op">(</span></span>
+<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineTCR.html" class="external-link">combineTCR</a></span><span class="op">(</span></span>
 <span>    <span class="va">contig_list</span>,</span>
 <span>    samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>,</span>
 <span>    removeNA <span class="op">=</span> <span class="cn">FALSE</span>,</span>

@@ -158,7 +158,7 @@ is also identical to the built-in example dataset
 <code>combined_pbmc</code> which can be loaded with
 <code>data("combined_pbmc", package = "APackOfTheClones")</code>:</p>
 <p>For integrating the clonal information,
-<code>scRepertoire::combineExpression</code> is the function used <a href="https://www.borch.dev/uploads/screpertoire/articles/attaching_sc" class="external-link">to
+<code><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">scRepertoire::combineExpression</a></code> is the function used <a href="https://www.borch.dev/uploads/screpertoire/articles/attaching_sc" class="external-link">to
 do so</a>, but for <code>APackOfTheClones</code> the scRNA-seq object
 has to be a seurat object:</p>
 <p>And as a reference, here is the corresponding UMAP plot of the seurat
@@ -235,7 +235,7 @@ clonal data is present, since <a href="https://doi.org/10.3389/fimmu.2023.112396
 clone for B-cells isn’t as clear as it is for TCRs</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="working-with-a-data-subset">Working with a data subset<a class="anchor" aria-label="anchor" href="#working-with-a-data-subset"></a>
+<h2 id="working-with-a-data-subset">Working With a Data Subset<a class="anchor" aria-label="anchor" href="#working-with-a-data-subset"></a>
 </h2>
 <p>A novel feature of version 1 is the ease of running APackOfTheClones
 for subsets of the full dataset, which may be useful in cases like the
@@ -297,12 +297,25 @@ corresponding reduction plot’s dimensions:</p>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="APackOfTheClones_files/figure-html/subsetting-1.png" width="576"></p>
+<div class="section level3">
+<h3 id="a-note-on-subsetted-data">A Note on Subsetted Data<a class="anchor" aria-label="anchor" href="#a-note-on-subsetted-data"></a>
+</h3>
+<p>The parameters are barely more than syntactic sugar to subset the
+seurat metadata and dimensional reduction coordinates, and serves as a
+convenience to the user if they want to quickly generate insights.
+Generally, if the analysis of data subsets (such as certain samples, or
+condition, etc.) is crucial to a publication, one would likely already
+be working with fully subsetted seurat object, and APackOfTheClones
+functions directly on those. See the <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link">corresponding
+<code>Seurat</code> <code>vignette("essential_commands")</code></a> for
+details.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="customization-of-visual-parameters">Customization of visual parameters<a class="anchor" aria-label="anchor" href="#customization-of-visual-parameters"></a>
+<h2 id="customization-of-visual-parameters">Customization of Visual Parameters<a class="anchor" aria-label="anchor" href="#customization-of-visual-parameters"></a>
 </h2>
 <div class="section level3">
-<h3 id="visually-scaling-circle-sizes">Visually scaling circle sizes<a class="anchor" aria-label="anchor" href="#visually-scaling-circle-sizes"></a>
+<h3 id="visually-scaling-circle-sizes">Visually Scaling Circle Sizes<a class="anchor" aria-label="anchor" href="#visually-scaling-circle-sizes"></a>
 </h3>
 <p>For each seurat cluster at index <span class="math inline">\(i\)</span>, the final radii <span class="math inline">\(r_{ij}\)</span> of each physical circle at index
 <span class="math inline">\(j\)</span> representing clone size <span class="math inline">\(s_{ij}\)</span> is calculated with a clone size
@@ -322,7 +335,7 @@ computes. The corresponding arguments are
 <code>vizAPOTC</code>.</p>
 </div>
 <div class="section level3">
-<h3 id="cluster-repulsion">Cluster repulsion<a class="anchor" aria-label="anchor" href="#cluster-repulsion"></a>
+<h3 id="cluster-repulsion">Cluster Repulsion<a class="anchor" aria-label="anchor" href="#cluster-repulsion"></a>
 </h3>
 <p>Considerable visual overlap between clusters (due to the algorithm’s
 attempt to fit clusters to the original UMAP coordinates) may occur and
@@ -370,7 +383,7 @@ workflow in its current form due to a constant need to fine-tune, see
 the vignette <code>APackOfTheClones-runs</code>.)</p>
 </div>
 <div class="section level3">
-<h3 id="managing-the-clone-size-legend">Managing the clone size legend<a class="anchor" aria-label="anchor" href="#managing-the-clone-size-legend"></a>
+<h3 id="managing-the-clone-size-legend">Managing the Clone Size Legend<a class="anchor" aria-label="anchor" href="#managing-the-clone-size-legend"></a>
 </h3>
 <p>There are the following six parameters to adjust the legend:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
@@ -396,7 +409,7 @@ to the legend. The other parameters are less relevant and more details
 about these arguments can be read in the function documentation.</p>
 </div>
 <div class="section level3">
-<h3 id="other-modifications">Other modifications<a class="anchor" aria-label="anchor" href="#other-modifications"></a>
+<h3 id="other-modifications">Other Modifications<a class="anchor" aria-label="anchor" href="#other-modifications"></a>
 </h3>
 <p>A collection of other utility parameters are:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>order_clones <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
