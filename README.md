@@ -36,6 +36,12 @@ Alternatively, to download the latest semi-stable development edition, try
 devtools::install_github("Qile0317/APackOfTheClones")
 ```
 
+A static legacy version is also available both on CRAN archives and on a git branch (`v0`), to install, try
+
+```R
+devtools::install_github("Qile0317/APackOfTheClones@v0")
+```
+
 ## Usage
 
 The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```scRepertoire::combineExpression```.

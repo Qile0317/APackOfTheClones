@@ -330,7 +330,7 @@ check_repulsion_params <- function(args) {
         stop(call. = FALSE, "`repulse` must be a logical value of length 1.")
     }
 
-    if (args$repulse) return()
+    if (!args$repulse) return()
 
     # Check if repulsion_threshold is numeric of length 1
     if (!is_a_numeric(args[["repulsion_threshold"]])) {

@@ -5,13 +5,13 @@ template:
   includes:
     in_header: |
       <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id={G-TSDH5XEN3S}"#' ></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSDH5XEN3S"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '{G-TSDH5XEN3S}');
+        gtag('config', 'G-TSDH5XEN3S');
       </script>
 
 redirects:

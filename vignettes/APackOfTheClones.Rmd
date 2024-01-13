@@ -203,19 +203,19 @@ cowplot::plot_grid(
 )
 ```
 
-### A Note on Subsetted Data
+### A Note on Subsetting Data
 
-The parameters are barely more than syntactic sugar to subset the seurat metadata and dimensional reduction coordinates, and serves as a convenience to the user if they want to quickly generate insights. Generally, if the analysis of data subsets (such as certain samples, or condition, etc.) is crucial to a publication, one would likely already be working with fully subsetted seurat object, and APackOfTheClones functions directly on those. See the [corresponding `Seurat` `vignette("essential_commands")`](https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging) for details.
+The subsetting parameters are barely more than syntactic sugar to subset the seurat metadata and dimensional reduction coordinates, and serves as a convenience to the user if they want to quickly generate insights. Generally, if the analysis of data subsets (such as certain samples, or condition, etc.) is crucial to a publication, one would likely already be working with fully subsetted seurat object, and APackOfTheClones functions directly on those. See the corresponding Seurat [`vignette("essential_commands")`](https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging) for details.
 
 ## Customization of Visual Parameters
 
 ### Visually Scaling Circle Sizes
 
-For each seurat cluster at index $i$, the final radii $r_{ij}$ of each physical circle at index $j$ representing clone size $s_{ij}$ is calculated with a clone size scaling factor $C \in [0, 1)$ and a radius scaling factor $R \in [0, 1)$ with the following formula:
+For each seurat cluster at index $i$, the final radii $r_{ij}$ of each physical circle at index $j$ representing clone size $s_{ij}$ is calculated with a clone size scaling factor $C \in (0, \infty)$ and a radius scaling factor $R \in (0, 1]$ with the following formula:
 
 $$r_{ij} = C\cdot(\sqrt{s_{ij}} - (1 - R))$$
 
-Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
+Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
 
 ### Cluster Repulsion
 
