@@ -28,7 +28,7 @@ A Seurat object with the following slots filled
 data("combined_pbmc")
 }
 \description{
-r lifecycle::badge("experimental")`
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Generated with \code{scRepertoire::combineExpression}, more specifically, with:
 

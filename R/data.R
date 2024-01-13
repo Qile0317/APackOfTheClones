@@ -27,12 +27,12 @@
 #'   \item{commands}{Command history}
 #' }
 #'
-#' @seealso [mini_clonotype_data()]
+#' @seealso [mini_clonotype_data]
 "mini_seurat_obj"
 
 #' @title
 #' Artificially generated T cell receptor library
-#' 
+#'
 #' @keywords internal
 #'
 #' @description
@@ -57,15 +57,15 @@
 #' @details Note that the clonotypes in the `raw_clonotype_id` column
 #' actually do not contain all of clonotype`1`...clonotype`n`
 #'
-#' @seealso [mini_seurat_obj()]
+#' @seealso [mini_seurat_obj]
 "mini_clonotype_data"
 
 #' @title
 #' Example Multi-sampled T-cell seurat object with integrated TCR library
 #'
 #' @description
-#' r lifecycle::badge("experimental")`
-#' 
+#' `r lifecycle::badge("experimental")`
+#'
 #' Generated with `scRepertoire::combineExpression`, more specifically, with:
 #'
 #' `r get(data(combined_pbmc))@commands[["combineExpression"]]@call.string`

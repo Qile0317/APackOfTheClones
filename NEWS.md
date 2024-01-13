@@ -4,6 +4,10 @@
 
 - Added parameters in `AdjustAPOTC` to work with labels and their locations
 
+## Changes
+
+- cleaned up and improved some documentation and vignettes
+
 # APackOfTheClones 1.0.0
 
 ## Additions
