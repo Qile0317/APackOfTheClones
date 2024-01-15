@@ -42,6 +42,10 @@ create_empty_table <- function() {
     )
 }
 
+create_valueless_vector_hash <- function(key, vector_type) {
+    hash::hash(key, init_list(length(key), vector_type(0)))
+}
+
 is_empty <- function(inp) identical(inp, list())
 isnt_empty <- function(inp) !identical(inp, list())
 
@@ -239,10 +243,8 @@ closest_word <- function(s, strset) {
 
 init_list <- function(num_elements, init_val = NULL) {
     l <- vector("list", num_elements)
-    for (i in 1:num_elements) {
-        l[[i]] <- init_val
-    }
-    l
+    if (is.null(init_val)) return(l)
+    lapply(l, function(x) init_val)
 }
 
 getlast <- function(x) UseMethod("getlast")

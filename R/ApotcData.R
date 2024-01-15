@@ -217,7 +217,11 @@ get_centroids <- function(apotc_obj) {
 }
 
 get_raw_clone_sizes <- function(apotc_obj) {
-	apotc_obj@clone_sizes
+	apotc_obj@clone_sizes # apparently its a list of lists, and each list's only element is the table... bruh...
+}
+
+get_clonotypes <- function(apotc_obj) {
+	unique(unlist(lapply(get_raw_clone_sizes(apotc_obj), names)))
 }
 
 get_processed_clone_sizes <- function(apotc_obj) {
@@ -227,7 +231,7 @@ get_processed_clone_sizes <- function(apotc_obj) {
   for (i in seq_len(get_num_clusters(apotc_obj))) {
     if (!is_empty_table(raw_tabled_clone_sizes[[i]])) {
       processed_sizes[[i]] <- apotc_obj@clone_scale_factor *
-        sqrt(as.numeric(raw_tabled_clone_sizes[[i]][[1]]))
+        sqrt(raw_tabled_clone_sizes[[i]])
     }
   }
   processed_sizes

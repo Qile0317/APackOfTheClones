@@ -40,7 +40,7 @@ countCloneSizes <- function(
     metadata_filter = extra_filter, varargs_list = list(...)
   )
 
-  if (is_valid_filter_str(filter_string)) {
+  if (is_valid_filter_str(filter_string)) { # TODO probably use seurat's built-in version :P, also probably shoudl allow for symbolic filtering.
     seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
   }
 
@@ -51,8 +51,10 @@ countCloneSizes <- function(
   )
 }
 
+# TODO create S4 generic to allow getting it from run_id, as an Apotc Getter
+
 # count the raw clone from the integrated seurat object from the METADATA
-# TODO should make another function with a user wrapper AND as a getter
+# newly fixed in 1.1.0
 count_raw_clone_sizes <- function(
   seurat_obj, num_clusters, clonecall
 ) {
@@ -77,7 +79,7 @@ count_raw_clone_sizes <- function(
     if (i != cluster_indicies[index]) {
       next
     }
-    clone_sizes[[i]] <- freq_df[[2]][index]
+    clone_sizes[[i]] <- freq_df[[2]][index][[1]]
     index <- index + 1
   }
 
