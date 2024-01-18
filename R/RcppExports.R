@@ -5,8 +5,8 @@ rcppRemoveUniqueClonesHelper <- function(clonotypes, clusters) {
     .Call(`_APackOfTheClones_rcppRemoveUniqueClonesHelper`, clonotypes, clusters)
 }
 
-rcppConstructLineLinkDf <- function(clusterLists, rawCloneSizes, sharedClonotypeClusters) {
-    .Call(`_APackOfTheClones_rcppConstructLineLinkDf`, clusterLists, rawCloneSizes, sharedClonotypeClusters)
+rcppConstructLineLinkDf <- function(clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing) {
+    .Call(`_APackOfTheClones_rcppConstructLineLinkDf`, clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing)
 }
 
 cpp_circle_layout <- function(input_rad_vec, centroid, rad_decrease = 0, try_place = FALSE, verbose = TRUE) {

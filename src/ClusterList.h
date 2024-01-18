@@ -6,7 +6,8 @@
 #include "Circle.h"
 
 class ClusterList {
-private:
+private: // variables
+
     std::vector<Circle> circles;
     std::pair<double, double> centroid;
     double clRad;
@@ -16,7 +17,8 @@ private:
     std::unordered_map<std::string, int> clonotypeIndex;
     bool isEmpty;
 
-public:
+public: // constructors
+
     ClusterList(const Rcpp::List rClusterList) {
         if (rClusterList.size() == 0) {
             isEmpty = true;
@@ -47,6 +49,7 @@ public:
     }
 
 private:
+
     std::pair<double, double> getRCentroid(Rcpp::List rClusterList) {
         Rcpp::NumericVector centroidVector = rClusterList["centroid"];
         return std::make_pair(centroidVector[0], centroidVector[1]);

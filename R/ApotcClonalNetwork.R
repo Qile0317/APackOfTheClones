@@ -25,19 +25,23 @@
 # internal master function for overlaying the clonal links based on mode: start with lines only.
 
 overlay_shared_clone_links <- function(
-    apotc_obj, result_plot, link_mode,
-    link_type,
-    extra_spacing, link_color_mode, link_alpha, link_width
+    apotc_obj, result_plot,
+    link_mode = "line", link_type = "default",
+    extra_spacing = "auto", link_color_mode, link_alpha, link_width
 ) {
     shared_clones <- get_shared_clones(apotc_obj)
 
     if (link_type == "line") {
-        link_dataframe <- compute_line_link_df(apotc_obj, shared_clones, link_mode)
+        link_dataframe <- compute_line_link_df(
+            apotc_obj, shared_clones, link_mode
+        )
     } else {
         stop(call. = FALSE, "no other link types are implemented yet")
     }
 
-    link_dataframe
+    link_dataframe <- adjust_link_spacing(
+        link_dataframe, extra_spacing
+    )
 
     # TODO overlay_links(hash::hash(as.list(environment())))
 }
@@ -46,20 +50,22 @@ overlay_shared_clone_links <- function(
 # output: a named list where each name is a clonotype, each element is a
 # numeric indicating which seurat cluster(s) its in. If exclude_unique_clones,
 # will filter out any clonotype with only length one.
-get_shared_clones <- function(apotc_obj, exclude_unique_clones = TRUE) {
+get_shared_clones <- function(
+    apotc_obj, zero_indexed = TRUE, exclude_unique_clones = TRUE
+) {
 
     clonotype_map <- create_valueless_vector_hash(
         get_clonotypes(apotc_obj), numeric
     )
-
-    num_unique_clonotypes <- length(clonotype_map)
 
     clustered_clonotypes <- lapply(get_raw_clone_sizes(apotc_obj), names)
 
     for (i in seq_along(clustered_clonotypes)) {
         if (is.null(clustered_clonotypes[[i]])) next
         for (clonotype in clustered_clonotypes[[i]]) {
-            clonotype_map[[clonotype]] <- append(clonotype_map[[clonotype]], i)
+            clonotype_map[[clonotype]] <- append(
+                clonotype_map[[clonotype]], i - zero_indexed
+            )
         }
     }
 
@@ -78,8 +84,11 @@ remove_unique_clones <- function(shared_clonotypes) {
     unique_clone_list
 }
 
-# TODO everything below is unfinished
-
+# for link_mode = "line",
+# outputs a dataframe with columns x1, x2, y1, y2, r1, r2
+# the x and y correspond to line segments that originate and end at origins.
+# the r corresponds to the radius of the circle.
+# so will not be visually very appealing on its own.
 compute_line_link_df <- function(apotc_obj, shared_clones, link_mode) {
     if (link_mode == "default") {
         return(rcppConstructLineLinkDf(
@@ -92,6 +101,38 @@ compute_line_link_df <- function(apotc_obj, shared_clones, link_mode) {
     }
 }
 
+adjust_link_spacing <- function(line_link_dataframe, extra_spacing, link_type) {
+    switch(link_type,
+        "line" = return(
+            adjust_line_link_spacing(line_link_dataframe, extra_spacing)
+        ) #, other modes not supported yet
+    )
+}
+
+adjust_line_link_spacing <- function(link_dataframe, extra_spacing) {
+    if (should_estimate(extra_spacing)) extra_spacing <- 0 # to change
+
+    for (i in seq_len(nrow(link_dataframe))) {
+        line_unit_vector <- get_unit_vector(
+            x1 = link_dataframe[i, 1],
+            x2 = link_dataframe[i, 2],
+            y1 = link_dataframe[i, 3],
+            y2 = link_dataframe[i, 4]
+        )
+
+        link_dataframe[i, 1] <- link_dataframe[i, 1]
+            + (link_dataframe[i, 5] * line_unit_vector[1])
+        link_dataframe[i, 2] <- link_dataframe[i, 2]
+            - (link_dataframe[i, 6] * line_unit_vector[1])
+        link_dataframe[i, 3] <- link_dataframe[i, ]
+            + (link_dataframe[i, 5] * line_unit_vector[1])
+    }
+
+    link_dataframe
+}
+
+# TODO
+
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
     # TODO
     # - default - all the same color
@@ -103,8 +144,8 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 
 overlay_links <- function(args) {
     switch(args$link_type,
-        "line" = return(overlay_line_links(args)),
-        stop(call. = FALSE, "no other modes are implemented")
+        "line" = return(overlay_line_links(args))
+        # should not get to any other case, this is just here for future extensions
     )
 }
 

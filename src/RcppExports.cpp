@@ -23,15 +23,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppConstructLineLinkDf
-Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, Rcpp::List sharedClonotypeClusters);
-RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonotypeClustersSEXP) {
+Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, Rcpp::List sharedClonotypeClusters, double extraSpacing);
+RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonotypeClustersSEXP, SEXP extraSpacingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type clusterLists(clusterListsSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type rawCloneSizes(rawCloneSizesSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sharedClonotypeClusters(sharedClonotypeClustersSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClonotypeClusters));
+    Rcpp::traits::input_parameter< double >::type extraSpacing(extraSpacingSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -118,7 +119,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
-    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 3},
+    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 4},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},

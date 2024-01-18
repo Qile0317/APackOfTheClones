@@ -153,6 +153,15 @@ get_unique_pairs_up_to <- function(x) {
     all_unique_pairs
 }
 
+euclidean_distance <- function(x1, x2, y1, y2) {
+    sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
+}
+
+get_unit_vector <- function(x1, x2, y1, y2) {
+    magnitude <- euclidean_distance(x1, x2, y1, y2)
+    c((x2 - x1) / magnitude, (y2 - y1) / magnitude)
+}
+
 # spelling related functions
 
 strip_spaces <- function(s) gsub(" ", "", s)

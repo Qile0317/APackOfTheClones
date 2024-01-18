@@ -8,15 +8,19 @@ public:
     Circle() : xval(0), yval(0), rval(0) {}
     Circle(double x, double y, double r) : xval(x), yval(y), rval(r) {}
     
-    int x() {
+    double x() {
         return xval;
     }
 
-    int y() {
+    double y() {
         return yval;
     }
 
-    int rad() {
+    double rad() {
         return rval;
+    }
+
+    bool isLeftOf(Circle other) {
+        return xval < other.xval;
     }
 };
