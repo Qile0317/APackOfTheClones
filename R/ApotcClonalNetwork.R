@@ -80,25 +80,14 @@ remove_unique_clones <- function(shared_clonotypes) {
 
 compute_line_link_df <- function(apotc_obj, shared_clones, link_mode) {
     if (link_mode == "default") {
-        line_link_df <- init_dataframe(
-            c("x1", "x2", "y1", "y2", "r1", "r2"),
-            nrow = length(unlist(shared_clones))
-        )
-
-        # for clonotypeclusters in shared clones
-        #   for cluster index in clonotypeclusters
-        #       clones[index].findindex(clone) #this is the link approach, need to make orderedsetted ver
-        #       do again for other clones
-        #       add x
-
-
+        return(rcppConstructLineLinkDf(
+            clusterLists = get_clusterlists(apotc_obj),
+            rawCloneSizes = get_raw_clone_sizes(apotc_obj),
+            sharedClones = shared_clones
+        ))
     } else {
         stop(call. = FALSE, "no other link modes are implemented yet")
     }
-}
-
-compute_line_link_df_row <- function(apotc_obj, shared_clones, i) {
-    
 }
 
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
@@ -108,7 +97,7 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 }
 
 # internal dispatch function to get a dataframe of line connections
-# should have exportable version with identifiers so user can get it and do their own thing
+# TODO should have exportable version with identifiers so user can get it and do their own thing
 
 overlay_links <- function(args) {
     switch(args$link_type,

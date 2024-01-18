@@ -10,14 +10,29 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// lol
-void lol(Rcpp::NumericVector v);
-RcppExport SEXP _APackOfTheClones_lol(SEXP vSEXP) {
+// rcppRemoveUniqueClonesHelper
+Rcpp::List rcppRemoveUniqueClonesHelper(std::vector<std::string> clonotypes, std::vector<std::vector<int>> clusters);
+RcppExport SEXP _APackOfTheClones_rcppRemoveUniqueClonesHelper(SEXP clonotypesSEXP, SEXP clustersSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type v(vSEXP);
-    lol(v);
-    return R_NilValue;
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type clonotypes(clonotypesSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::vector<int>> >::type clusters(clustersSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppRemoveUniqueClonesHelper(clonotypes, clusters));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppConstructLineLinkDf
+Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, std::vector<std::vector<int>> sharedClones);
+RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type clusterLists(clusterListsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type rawCloneSizes(rawCloneSizesSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::vector<int>> >::type sharedClones(sharedClonesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClones));
+    return rcpp_result_gen;
 END_RCPP
 }
 // cpp_circle_layout
@@ -102,7 +117,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_APackOfTheClones_lol", (DL_FUNC) &_APackOfTheClones_lol, 1},
+    {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
+    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 3},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},

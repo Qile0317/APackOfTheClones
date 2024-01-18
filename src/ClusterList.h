@@ -10,14 +10,14 @@ private:
     std::vector<Circle> circles;
     std::pair<double, double> centroid;
     double clRad;
-    int numClones
+    int numClones;
 
     // important
     std::unordered_map<std::string, int> clonotypeIndex;
     bool isEmpty;
 
 public:
-    ClusterList(Rcpp::List rClusterList) {
+    ClusterList(const Rcpp::List rClusterList) {
         if (rClusterList.size() == 0) {
             isEmpty = true;
             return;
@@ -25,14 +25,14 @@ public:
 
         isEmpty = false;
         clRad = rClusterList["clRad"];
-        centroid = std::make_pair(rClusterList["centroid"][0], rClusterList["centroid"][1]);
+        centroid = getRCentroid(rClusterList);
 
-        // unsure if compiler will optimize the accesses
-        int numClones = rClusterList["x"].size();
+        // get x,y,r and make into circles
+        NumericVector x = rClusterList["x"], y = rClusterList["y"], r = rClusterList["rad"];
+        numClones = x.size();
+
         for (int i = 0; i < numClones; i++) {
-            circles.push_back(
-                Circle(rClusterList["x"][i], rClusterList["y"][i], rClusterList["rad"][i])
-            );
+            circles.push_back(Circle(x[i], y[i], r[i]));
         }
 
         std::vector<std::string> clonotypes = rClusterList["clonotype"];
@@ -41,7 +41,15 @@ public:
         }
     }
 
-    bool isEmpty() {
+private:
+    std::pair<double, double> getRCentroid(Rcpp::List rClusterList) {
+        NumericVector centroidVector = rClusterList["centroid"];
+        return std::make_pair(centroidVector[0], centroidVector[1]);
+    }
+
+public:
+
+    bool isEmptyClusterList() {
         return isEmpty;
     }
 

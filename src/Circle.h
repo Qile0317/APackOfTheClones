@@ -1,19 +1,21 @@
+#pragma once
+
 class Circle {
 private:
-    double x, y, r;
+    double xval, yval, rval;
 
 public:
-    Circle(double x, double y, double r) : x(x), y(y), r(r) {}
+    Circle(double x, double y, double r) : xval(x), yval(y), rval(r) {}
     
     int x() {
-        return x;
+        return xval;
     }
 
     int y() {
-        return y;
+        return yval;
     }
 
     int rad() {
-        return r;
+        return rval;
     }
 };
