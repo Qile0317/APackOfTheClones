@@ -31,7 +31,7 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
     ))
 }
 
-# readability functions
+# data convenience constructors
 
 create_empty_table <- function() {
     structure(
@@ -45,6 +45,14 @@ create_empty_table <- function() {
 create_valueless_vector_hash <- function(key, vector_type) {
     hash::hash(key, init_list(length(key), vector_type(0)))
 }
+
+init_dataframe <- function(column_names, nrow, init_val = NA) {
+  df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
+  colnames(df) <- column_names
+  df
+}
+
+# readability functions
 
 is_empty <- function(inp) identical(inp, list())
 isnt_empty <- function(inp) !identical(inp, list())

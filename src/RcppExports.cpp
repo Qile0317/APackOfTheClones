@@ -10,6 +10,16 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// lol
+void lol(Rcpp::NumericVector v);
+RcppExport SEXP _APackOfTheClones_lol(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type v(vSEXP);
+    lol(v);
+    return R_NilValue;
+END_RCPP
+}
 // cpp_circle_layout
 Rcpp::List cpp_circle_layout(std::vector<double> input_rad_vec, Rcpp::NumericVector centroid, double rad_decrease, bool try_place, bool verbose);
 RcppExport SEXP _APackOfTheClones_cpp_circle_layout(SEXP input_rad_vecSEXP, SEXP centroidSEXP, SEXP rad_decreaseSEXP, SEXP try_placeSEXP, SEXP verboseSEXP) {
@@ -92,6 +102,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_APackOfTheClones_lol", (DL_FUNC) &_APackOfTheClones_lol, 1},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
