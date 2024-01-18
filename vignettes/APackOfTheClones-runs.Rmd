@@ -87,7 +87,7 @@ All of `vizAPOTC`'s arguments are actually derived from `RunAPOTC` and `APOTCPlo
 
 ## Managing APackOfTheClones run data
 
-`RunAPOTC` has approximate the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, meaning it has all the data subsetting, circle size scaling, and cluster repulsion capabilities covered in the previous vignette. The most essential difference is the presence of the argument `run_id`, which corresponds to an id for the `ApotcData` object. If left blank, one will be automatically generated in the following format:
+`RunAPOTC` has approximate the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, meaning it has all the data subsetting, circle size scaling, and cluster repulsion capabilities covered in the previous vignette. The most essential difference is the presence of the argument `run_id`, which corresponds to an id for the `ApotcData` object associated with some run. If left blank, one will be automatically generated in the following format:
 
 > `reduction_base;clonecall;keyword_arguments;extra_filter`
 
@@ -177,4 +177,22 @@ cowplot::plot_grid(
 
 ## AdjustAPOTC
 
-This function's parameters help modify certain attributes about APackOfTheClones runs, and has the exact same first six parameters as `APOTCPlot` for managing which run to modify. It also possesses the same four repulsion arguments in `vizAPOTC` and `RunAPOTC` if a run is to be repulsed again. See the function level documentation for the following parameters that can modify cluster locations, colors, and the adjustment of the `clone_scale_factor` and `rad_scale_factor`.
+This function's parameters help modify certain attributes about APackOfTheClones runs, and has the exact same first six parameters as `APOTCPlot` for managing which run to modify. It also possesses the same four repulsion arguments in `vizAPOTC` and `RunAPOTC` if a run is to be repulsed again. See the function level documentation for the following parameters that can modify cluster locations, colors, and the adjustment of the `clone_scale_factor` and `rad_scale_factor`:
+
+```{r, echo = TRUE, eval = FALSE}
+new_rad_scale_factor = NULL,
+new_clone_scale_factor = NULL,
+relocate_cluster = NULL,
+relocation_coord = NULL,
+nudge_cluster = NULL,
+nudge_vector = NULL,
+recolor_cluster = NULL,
+new_color = NULL,
+rename_label = NULL,
+new_label = NULL,
+relocate_label = NULL,
+label_relocation_coord = NULL,
+nudge_label = NULL,
+label_nudge_vector = NULL,
+verbose = TRUE
+```

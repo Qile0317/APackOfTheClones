@@ -66,7 +66,7 @@ The premise of the package is that it provides an additional analysis tool on to
 
 And here is a practical example on how to generate a combined seurat + VDJ object to be used in the vignette named `pbmc`, which is also identical to the built-in example dataset `combined_pbmc` which can be loaded with `data("combined_pbmc", package = "APackOfTheClones")`:
 
-```{r, combineTCR, eval = FALSE}
+```{r, combineTCR, eval = FALSE, include = TRUE}
 library(scRepertoire)
 
 # load in the corresponding 6-sample TCR contigs from scRepertoire
@@ -84,7 +84,7 @@ combined_contig_list <- scRepertoire::combineTCR(
 
 For integrating the clonal information, ```scRepertoire::combineExpression``` is the function used [to do so](https://www.borch.dev/uploads/screpertoire/articles/attaching_sc), but for `APackOfTheClones` the scRNA-seq object has to be a seurat object:
 
-```{r, combining, eval = FALSE}
+```{r, combining, eval = FALSE, include = TRUE}
 # a seurat object corresponding to combined_contig_list named `pbmc` is loaded
 pbmc <- scRepertoire::combineExpression(
   combined_contig_list,
