@@ -18,6 +18,7 @@ vizAPOTC(
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
+  show_shared_clones = FALSE,
   res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
@@ -103,6 +104,9 @@ overlap is acceptable when repulsing.}
 clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
+
+\item{show_shared_clones}{\code{lifecycle::badge("experimental")} If \code{TRUE}, will
+overlay straight lines between each clone that is common between clusters.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

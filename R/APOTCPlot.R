@@ -21,6 +21,8 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
+#' @param show_shared_clones `lifecycle::badge("experimental")` If `TRUE`, will
+#' overlay straight lines between each clone that is common between clusters.
 #' @param res The number of points on the generated path per full circle. From
 #' plot viewers, if circles seem slightly too pixelated, it is recommended to
 #' first try to export the plot as an `.svg` before increasing `res` due to
@@ -88,6 +90,8 @@ APOTCPlot <- function(
 	extra_filter = NULL,
 	run_id = NULL,
 
+	show_shared_clones = FALSE,
+
 	res = 360L,
 	linetype = "blank",
 	use_default_theme = TRUE,
@@ -149,7 +153,13 @@ APOTCPlot <- function(
 		)
 	}
 
-	# TODO clonal link computation here
+	if (show_shared_clones) {
+		result_plot <- overlay_shared_clone_links(
+			apotc_obj = apotc_obj,
+			result_plot = result_plot
+			# TODO other params in the future
+		)
+	}
 
 	if (show_labels) {
 		result_plot <- insert_labels(result_plot, apotc_obj, label_size)

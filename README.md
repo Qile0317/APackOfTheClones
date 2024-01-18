@@ -120,7 +120,7 @@ An explanation of the algorithms will eventually be made publicly available in a
 
 ## Upcoming features
 
-One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.
+One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot. Currently, a basic experimental implementation has been completed, by introducing a new logical argument in `vizAPOTC` and `APOTCPlot` named `show_shared_clones`.
 
 ## Contact
 

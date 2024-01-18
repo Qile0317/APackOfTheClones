@@ -11,6 +11,7 @@ APOTCPlot(
   ...,
   extra_filter = NULL,
   run_id = NULL,
+  show_shared_clones = FALSE,
   res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
@@ -73,6 +74,9 @@ in the following format:
 
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
+
+\item{show_shared_clones}{\code{lifecycle::badge("experimental")} If \code{TRUE}, will
+overlay straight lines between each clone that is common between clusters.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

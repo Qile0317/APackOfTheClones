@@ -44,6 +44,8 @@ vizAPOTC <- function(
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
 
+    show_shared_clones = FALSE,
+
     res = 360L,
     linetype = "blank",
     use_default_theme = TRUE,
@@ -90,6 +92,8 @@ vizAPOTC <- function(
     APOTCPlot(
         seurat_obj,
         run_id = "vizAPOTC",
+
+        show_shared_clones = show_shared_clones,
 
         res = res,
         linetype = linetype,
