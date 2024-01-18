@@ -39,9 +39,11 @@ overlay_shared_clone_links <- function(
         stop(call. = FALSE, "no other link types are implemented yet")
     }
 
-    link_dataframe
+    link_dataframe <- add_link_colors(
+        apotc_obj, link_dataframe, link_color_mode
+    )
 
-    # TODO overlay_links(hash::hash(as.list(environment())))
+    overlay_links(hash::hash(as.list(environment())))
 }
 
 # input: an ApotcData object
@@ -90,7 +92,7 @@ remove_unique_clones <- function(shared_clonotypes) {
 compute_line_link_df <- function(
     apotc_obj, shared_clones, extra_spacing, link_mode
 ) {
-    if (should_estimate(extra_spacing)) extra_spacing <- 0 # to change
+    if (should_estimate(extra_spacing)) extra_spacing <- -get_rad_decrease(apotc_obj)
 
     if (link_mode == "default") {
         return(rcppConstructLineLinkDf(
@@ -107,9 +109,20 @@ compute_line_link_df <- function(
 # TODO
 
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
-    # TODO
-    # - default - all the same color
-    # - alt approach with lines: average color of two clones
+    switch(link_color_mode,
+        "blend" = stop("not implemented yet"), # TODO
+        return(add_plain_link_colors(link_dataframe, link_color_mode))
+    )
+}
+
+add_blend_link_colors <- function(apotc_obj, link_dataframe) {
+    colors <- get_cluster_colors(apotc_obj)
+    # TODO modify to add cluster indicies to allow color blending
+}
+
+add_plain_link_colors <- function(link_dataframe, link_color) {
+    link_dataframe$color <- rep(link_color, nrow(link_dataframe))
+    link_dataframe
 }
 
 # internal dispatch function to get a dataframe of line connections

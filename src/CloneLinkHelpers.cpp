@@ -37,6 +37,7 @@ private:
     int numClusteredClonotypes;
 
     std::vector<double> x1, x2, y1, y2;
+    // TODO std::vector<int> cluster1, cluster2;
 
 public:
     static Rcpp::DataFrame constructFrom(

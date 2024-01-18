@@ -31,7 +31,7 @@ public:
 
     // Overload -
     TwoDVector operator-(const TwoDVector& other) const {
-        double dx = other.getX() - getX(), dy = other.getY() - getY();
+        double dx = getX() - other.getX(), dy = getY() - other.getY();
         return TwoDVector(std::sqrt(sqr(dx) + sqr(dy)), std::atan2(dy, dx));
     }
 
@@ -131,7 +131,7 @@ public:
     void shortenLeftByCircleRadius(double val) {
         decreaseMagnitude(val);
 
-        TwoDVector temp (originCoordinate);
+        TwoDVector temp (lineVector);
         temp.setMagnitude(val);
         translate(temp);
     }
