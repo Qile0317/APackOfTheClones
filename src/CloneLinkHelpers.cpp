@@ -26,23 +26,13 @@ Rcpp::List rcppRemoveUniqueClonesHelper(
     return Rcpp::List::create(filteredClonotypes, filteredClusters);
 }
 
-// [[Rcpp::export]]
-Rcpp::DataFrame rcppConstructLineLinkDf(
-    Rcpp::List clusterLists,
-    Rcpp::List rawCloneSizes,
-    std::vector<std::vector<int>> sharedClones
-) {
-    return LineLinkDataFrameFactory::constructFrom(
-        clusterLists, rawCloneSizes, sharedClones
-    )
-}
-
+// helper class for rcppConstructLineLinkDf
 class LineLinkDataFrameFactory {
 private:
     std::vector<ClusterList> clusterListVector;
     int numClusters;
 
-    std::vector<&std::unordered_map<std::string, int>> clusteredClonotypeIndex;
+    std::vector<std::unordered_map<std::string, int>> clusteredClonotypeIndex;
     int numClusteredClonotypes;
 
     std::vector<double> x1, x2, y1, y2, r1, r2;
@@ -52,20 +42,22 @@ public:
     static Rcpp::DataFrame constructFrom(
         Rcpp::List clusterLists,
         Rcpp::List rawCloneSizes,
-        std::vector<std::vector<int>> sharedClones
+        Rcpp::List sharedClonotypeClusters
     ) {
-        LineLinkDataFrameFactory factory ();
-        return factory.createOutputDataFrame();
+        LineLinkDataFrameFactory llDfFactory (
+            clusterLists, rawCloneSizes, sharedClonotypeClusters
+        );
+        return llDfFactory.createOutputDataFrame();
     }
 
 private:
     LineLinkDataFrameFactory(
         Rcpp::List clusterLists,
         Rcpp::List rawCloneSizes,
-        Rcpp::List sharedClonotypeClusters,
+        Rcpp::List sharedClonotypeClusters
     ) {
-        clusterListVector = createCppclusterListVector(clusterLists);
-        clusteredClonotypeIndex = writeClusteredClonotypeIndex(rawCloneSizes);
+        clusterListVector = createCppClusterListVector(clusterLists);
+        clusteredClonotypeIndex = createClusteredClonotypeIndex(rawCloneSizes);
 
         std::vector<std::string> clonotypes (sharedClonotypeClusters.names());
         std::vector<std::vector<int>> clusterIndicies = Rcpp::as<std::vector<std::vector<int>>>(
@@ -73,11 +65,14 @@ private:
         );
 
         for (int i = 0; i < (int) clonotypes.size(); i++) {
+
+            int currNumSharedClusters = clusterIndicies[i].size();
             std::vector<Circle> currCircles (currNumSharedClusters);
-            for (int j = 0; j < (int) clonotypes[i].size(); j++) {
+
+            for (int j = 0; j < currNumSharedClusters; j++) {
                 currCircles.push_back(
-                    clusterListVector[clusterIndicies[j]].getClonotypeCircle(clonotypes[i])
-                )
+                    clusterListVector[clusterIndicies[i][j]].getClonotypeCircle(clonotypes[i]) // shouldn't be empty
+                );
             }
             addSharedCircleLinkInfo(currCircles);
         }
@@ -105,18 +100,14 @@ private:
         );
 
         for (int i = 0; i < numClusters; i++) {
-
             Rcpp::NumericVector currentClonotypeTable = rawCloneSizes[i];
-
-            if (currentClonotypeTable.size() == 0) {
-                continue;
-            };
+            if (currentClonotypeTable.size() == 0) {continue;};
 
             addElementsToHashMap(
                 outputIndex[i],
-                Rcpp::as<std::vector<std::string>>(v.names()),
-                Rcpp::as<std::vector<int>>(v)
-            )
+                Rcpp::as<std::vector<std::string>>(currentClonotypeTable.names()),
+                Rcpp::as<std::vector<int>>(currentClonotypeTable)
+            );
         }
 
         return outputIndex;
@@ -125,7 +116,7 @@ private:
     static void addElementsToHashMap(
         std::unordered_map<std::string, int>& hashMap,
         std::vector<std::string> keys,
-        std::vector<std::int> values
+        std::vector<int> values
     ) {
         for (int i = 0; i < (int) keys.size(); i++) {
             hashMap.emplace(keys[i], values[i]);
@@ -133,7 +124,7 @@ private:
     }
 
     // this is dependent on if the user wants to show every link
-    void addSharedCircleLinkInfo(std::vector<Circle> circles) {
+    void addSharedCircleLinkInfo(std::vector<Circle>& circles) {
         for (int i = 0; i < (int) circles.size() - 1; i++) {
             for (int j = i + 1; j < (int) circles.size(); j++) {
                 addTwoSharedCircleLinkInfo(circles[i], circles[j]);
@@ -159,6 +150,17 @@ private:
             Rcpp::Named("y2") = y2,
             Rcpp::Named("r1") = r1,
             Rcpp::Named("r2") = r2
-        )
+        );
     }
 };
+
+// [[Rcpp::export]]
+Rcpp::DataFrame rcppConstructLineLinkDf(
+    Rcpp::List clusterLists,
+    Rcpp::List rawCloneSizes,
+    Rcpp::List sharedClonotypeClusters
+) {
+    return LineLinkDataFrameFactory::constructFrom(
+        clusterLists, rawCloneSizes, sharedClonotypeClusters
+    );
+}

@@ -28,22 +28,27 @@ public:
         centroid = getRCentroid(rClusterList);
 
         // get x,y,r and make into circles
-        NumericVector x = rClusterList["x"], y = rClusterList["y"], r = rClusterList["rad"];
+        Rcpp::NumericVector x = rClusterList["x"], y = rClusterList["y"], r = rClusterList["rad"];
         numClones = x.size();
 
         for (int i = 0; i < numClones; i++) {
             circles.push_back(Circle(x[i], y[i], r[i]));
         }
 
+        clonotypeIndex = std::unordered_map<std::string, int>();
         std::vector<std::string> clonotypes = rClusterList["clonotype"];
         for (int i = 0; i < numClones; i++) {
-            clonotypeIndex[Rcpp::as<std::string>(clonotypes[i])] = i;
+            clonotypeIndex.emplace(clonotypes[i], i);
         }
+    }
+
+    ClusterList() {
+        isEmpty = true;
     }
 
 private:
     std::pair<double, double> getRCentroid(Rcpp::List rClusterList) {
-        NumericVector centroidVector = rClusterList["centroid"];
+        Rcpp::NumericVector centroidVector = rClusterList["centroid"];
         return std::make_pair(centroidVector[0], centroidVector[1]);
     }
 
@@ -54,23 +59,6 @@ public:
     }
 
     Circle getClonotypeCircle(std::string clonotype) {
-        return getCircleAt([clonotypeIndex[clonotype]]);
-    }
-
-    Circle getCircleAt(int index) {
-        return circles[index];
-    }
-
-    // getters
-    double getEstimatedClusterRad() {
-        return clRad;
-    }
-
-    std::pair<double, double> getCentroid() {
-        return centroid;
-    }
-
-    int getNumClones() {
-        return numClones;
+        return circles[clonotypeIndex[clonotype]];
     }
 };

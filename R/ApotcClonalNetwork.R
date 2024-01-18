@@ -37,7 +37,9 @@ overlay_shared_clone_links <- function(
         stop(call. = FALSE, "no other link types are implemented yet")
     }
 
-    overlay_links(hash::hash(as.list(environment())))
+    link_dataframe
+
+    # TODO overlay_links(hash::hash(as.list(environment())))
 }
 
 # input: an ApotcData object
@@ -83,7 +85,7 @@ compute_line_link_df <- function(apotc_obj, shared_clones, link_mode) {
         return(rcppConstructLineLinkDf(
             clusterLists = get_clusterlists(apotc_obj),
             rawCloneSizes = get_raw_clone_sizes(apotc_obj),
-            sharedClones = shared_clones
+            sharedClonotypeClusters = shared_clones
         ))
     } else {
         stop(call. = FALSE, "no other link modes are implemented yet")

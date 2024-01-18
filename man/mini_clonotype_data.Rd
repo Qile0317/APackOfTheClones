@@ -30,6 +30,6 @@ Note that the clonotypes in the \code{raw_clonotype_id} column
 actually do not contain all of clonotype\code{1}...clonotype\code{n}
 }
 \seealso{
-\code{\link[=mini_seurat_obj]{mini_seurat_obj()}}
+\link{mini_seurat_obj}
 }
 \keyword{internal}

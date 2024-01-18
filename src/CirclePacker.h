@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <vector>
-#include "../src/CircleNode.h"
+#include "CircleNode.h"
 #include "ProgressBar.h"
 
 // general readability helpers
