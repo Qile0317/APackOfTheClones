@@ -26,22 +26,20 @@
 
 overlay_shared_clone_links <- function(
     apotc_obj, result_plot,
-    link_mode = "line", link_type = "default",
-    extra_spacing = "auto", link_color_mode, link_alpha, link_width
+    link_mode = "default", link_type = "line", extra_spacing = "auto",
+    link_color_mode = "black", link_alpha = 1, link_width = "auto"
 ) {
     shared_clones <- get_shared_clones(apotc_obj)
 
-    if (link_type == "line") {
+    if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
-            apotc_obj, shared_clones, link_mode
+            apotc_obj, shared_clones, extra_spacing, link_mode
         )
     } else {
         stop(call. = FALSE, "no other link types are implemented yet")
     }
 
-    link_dataframe <- adjust_link_spacing(
-        link_dataframe, extra_spacing
-    )
+    link_dataframe
 
     # TODO overlay_links(hash::hash(as.list(environment())))
 }
@@ -89,46 +87,21 @@ remove_unique_clones <- function(shared_clonotypes) {
 # the x and y correspond to line segments that originate and end at origins.
 # the r corresponds to the radius of the circle.
 # so will not be visually very appealing on its own.
-compute_line_link_df <- function(apotc_obj, shared_clones, link_mode) {
+compute_line_link_df <- function(
+    apotc_obj, shared_clones, extra_spacing, link_mode
+) {
+    if (should_estimate(extra_spacing)) extra_spacing <- 0 # to change
+
     if (link_mode == "default") {
         return(rcppConstructLineLinkDf(
             clusterLists = get_clusterlists(apotc_obj),
             rawCloneSizes = get_raw_clone_sizes(apotc_obj),
-            sharedClonotypeClusters = shared_clones
+            sharedClonotypeClusters = shared_clones,
+            extraSpacing = extra_spacing
         ))
     } else {
         stop(call. = FALSE, "no other link modes are implemented yet")
     }
-}
-
-adjust_link_spacing <- function(line_link_dataframe, extra_spacing, link_type) {
-    switch(link_type,
-        "line" = return(
-            adjust_line_link_spacing(line_link_dataframe, extra_spacing)
-        ) #, other modes not supported yet
-    )
-}
-
-adjust_line_link_spacing <- function(link_dataframe, extra_spacing) {
-    if (should_estimate(extra_spacing)) extra_spacing <- 0 # to change
-
-    for (i in seq_len(nrow(link_dataframe))) {
-        line_unit_vector <- get_unit_vector(
-            x1 = link_dataframe[i, 1],
-            x2 = link_dataframe[i, 2],
-            y1 = link_dataframe[i, 3],
-            y2 = link_dataframe[i, 4]
-        )
-
-        link_dataframe[i, 1] <- link_dataframe[i, 1]
-            + (link_dataframe[i, 5] * line_unit_vector[1])
-        link_dataframe[i, 2] <- link_dataframe[i, 2]
-            - (link_dataframe[i, 6] * line_unit_vector[1])
-        link_dataframe[i, 3] <- link_dataframe[i, ]
-            + (link_dataframe[i, 5] * line_unit_vector[1])
-    }
-
-    link_dataframe
 }
 
 # TODO
