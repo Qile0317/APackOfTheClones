@@ -1,7 +1,9 @@
 overlay_shared_clone_links <- function(
     apotc_obj, result_plot,
-    link_mode = "default", link_type = "line", extra_spacing = "auto",
-    link_color_mode = "blend", link_alpha = 1, link_width = "auto"
+    link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
+    link_color_mode = "blend", link_alpha = 1,
+    link_width = "auto", #FIXME dont show on side
+    link_mode = "default", extra_spacing = "auto" # not very relevant
 ) {
     shared_clones <- get_shared_clones(apotc_obj)
 
@@ -139,7 +141,7 @@ overlay_line_links <- function(args) {
         data = args$link_dataframe,
         mapping = ggplot2::aes(
             x = x1, y = y1, xend = x2, yend = y2,
-            colour = color, linewidth = lineWidth,
+            colour = color, linewidth = lineWidth, # FIXME dont show on legend
         ), alpha = args$link_dataframe$lineAlpha[1] # hack fix
     ) + ggplot2::scale_color_identity()
 }

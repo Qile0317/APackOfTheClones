@@ -2,12 +2,13 @@
 
 ## Additions
 
-- Added parameters in `AdjustAPOTC` to work with labels and their locations
+- Added arguments in `AdjustAPOTC` to work with labels and their locations
+- Added arguments in `APOTCPlot` and the corresponding `vizAPOTC` to compute and plot "links" between clonotypes that are "shared" i.e. common within multiple clusters. Currently, only supports plotting straight lines.
 
 ## Changes
 
 - Fixed the output of `countCloneSizes` to truly be a list of "table" objects, whereas before, for the clusters with valid clones, each element was instead a list with the first and only element being the tabled clone sizes. This is technically a breaking change but the output before was bugged so the major version was not incremented.
-- cleaned up and improved some documentation and vignettes
+- cleaned up and improved some documentation and vignette texts
 
 # APackOfTheClones 1.0.0
 

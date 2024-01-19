@@ -127,14 +127,10 @@ APOTCPlot <- function(
 	args$run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
 	APOTCPlot_error_handler(args)
 
+	# get the apotc object and initialize the plot
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
-
-	result_plot <- plot_clusters(
-		clusters = get_plottable_df_with_color(apotc_obj),
-		n = res,
-		linetype = linetype#,
-		#alpha=alpha
-	)
+	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype)
+	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj, res, linetype)
 
 	#set theme
 	if (use_default_theme) {
@@ -145,9 +141,6 @@ APOTCPlot <- function(
 	} else {
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
-
-	# get current plot dimensions
-	result_plot_dimensions <- get_plot_dims(result_plot)
 
 	# retain axis scales on the resulting plot.
 	if (retain_axis_scales) {
@@ -197,6 +190,22 @@ APOTCPlot <- function(
 	}
 	
 	result_plot
+}
+
+get_apotc_plot_dims <- function(apotc_obj, res, linetype) {
+	get_plot_dims(
+		plot_clusters(
+			subset_to_only_edge_circles(get_plottable_df_with_color(
+				apotc_obj
+			)),
+			res,
+			linetype
+		)
+	)
+}
+
+subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
+	apotc_plot_dataframe[unique(rcppGetEdgeCircleIndicies(apotc_plot_dataframe)), ]
 }
 
 APOTCPlot_error_handler <- function(args) {

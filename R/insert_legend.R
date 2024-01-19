@@ -1,6 +1,8 @@
 # script to make a custom circle size legend overlay
 
-# FIXME somethings wrong when i do vizAPOTC(sce), 46 appears twice but one of circles are smaller
+# there is an edgecase where the circle in the legend is too big and it
+# covers some/all the digits of the label, since the algorithms are written
+# assuming labels are a point.
 
 insert_legend <- function(
     plt,
@@ -18,6 +20,7 @@ insert_legend <- function(
 ) {
 
     # setup relevant variables
+
     rad_decrease <- get_rad_decrease(apotc_obj)
     sizes <- get_processed_legend_sizes(apotc_obj, sizes)
     pos <- correct_legend_coord_if_str(pos)
@@ -45,11 +48,10 @@ insert_legend <- function(
         )
     }
 
-    label_coord <- get_legend_title_coord(legend_df, legend_dims, spacing)
-
     # plotting
 
     # add the legend label on top
+    label_coord <- get_legend_title_coord(legend_df, legend_dims, spacing)
     plt <- plt + ggplot2::annotate(
         "text", x = label_coord[1], y = label_coord[2],
         label = legend_label, size = legend_textsize
@@ -67,7 +69,7 @@ insert_legend <- function(
         "text", x = legend_df[, "label_x"], y = legend_df[, "y"],
         label = legend_df[, "labels"], size = legend_textsize
     )
-
+44
     # add the circles and return
     plt + ggforce::geom_circle(
         data = legend_df,

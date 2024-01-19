@@ -204,6 +204,8 @@ cowplot::plot_grid(
 
 The subsetting parameters are barely more than syntactic sugar to subset the seurat metadata and dimensional reduction coordinates, and serves as a convenience to the user if they want to quickly generate insights. Generally, if the analysis of data subsets (such as certain samples, or condition, etc.) is crucial to a publication, one would likely already be working with fully subsetted seurat object, and APackOfTheClones functions can be directly applied in those cases. See the corresponding Seurat [`vignette("essential_commands")`](https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging) for details.
 
+<!-- TODO clone link stuff -->
+
 ## Customization of Visual Parameters
 
 ### Visually Scaling Circle Sizes

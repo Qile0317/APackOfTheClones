@@ -1,3 +1,11 @@
+create_initial_apotc_plot <- function(apotc_obj, res, linetype) {
+    plot_clusters(
+        clusters = get_plottable_df_with_color(apotc_obj),
+        n = res,
+        linetype = linetype
+    )
+}
+
 get_plottable_df_with_color <- function(apotc_data) {
     extract_and_add_colors(
       apotc_obj = apotc_data,
