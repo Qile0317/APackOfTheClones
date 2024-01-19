@@ -14,7 +14,7 @@ gen_cluster_color_hashmap <- function(num_clusters) {
   color_vec <- gg_color_hue(num_clusters)
   output <- hash::hash()
   for (i in 1:num_clusters) {
-    cluster_str <- paste("cluster", as.character(i-1))
+    cluster_str <- paste("cluster", as.character(i - 1))
     output[cluster_str] <- color_vec[i]
   }
   output
@@ -58,3 +58,18 @@ extract_and_add_colors <- function(apotc_obj, plot_df) {
 # in the future should probably make a fake ggplot cluster legend on the right
 # side by inserting scatterplt points? (like in the seurat UMPA plot) But also,
 # the problem is that it becomes inconsistent with the clone size legend :/
+
+#' @noRd
+#' @source https://stackoverflow.com/questions/649454/what-is-the-best-way-to-average-two-colors-that-define-a-linear-gradient#:~:text=NewColor%20%3D%20sqrt((R1%5E2%2BR2%5E2)/2)%2Csqrt((G1%5E2%2BG2%5E2)/2)%2Csqrt((B1%5E2%2BB2%5E2)/2)
+get_average_hex <- function(hex1, hex2) {
+  grDevices::rgb(
+    t((col2rgb(hex1) + col2rgb(hex2)) / 2), maxColorValue = 255
+  )
+}
+
+# for if hexes were square rooted first, typically from image files
+get_average_image_hex_color <- function(hex1, hex2) {
+  grDevices::rgb(
+    t(sqrt(((col2rgb(hex1)^2) + (col2rgb(hex2)^2)) / 2)), maxColorValue = 255
+  )
+}

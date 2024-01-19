@@ -23,6 +23,14 @@
 #' data and has had a valid run of [RunAPOTC].
 #' @param show_shared_clones `lifecycle::badge("experimental")` If `TRUE`, will
 #' overlay straight lines between each clone that is common between clusters.
+#' @param clone_link_width numeric. The width of the lines that connect shared
+#' clones. Defaults to `"auto"` which will estimate a reasonable value depending
+#' on circle sizes.
+#' @param clone_link_color character. The color of the lines that connect shared
+#' clones. Defaults to `"blend"` which will use the average colors of the two
+#' connected clones.
+#' @param clone_link_alpha numeric. The alpha of the lines that connect shared
+#' clones.
 #' @param res The number of points on the generated path per full circle. From
 #' plot viewers, if circles seem slightly too pixelated, it is recommended to
 #' first try to export the plot as an `.svg` before increasing `res` due to
@@ -91,6 +99,9 @@ APOTCPlot <- function(
 	run_id = NULL,
 
 	show_shared_clones = FALSE,
+	clone_link_width = "auto",
+	clone_link_color = "blend",
+	clone_link_alpha = 0.5,
 
 	res = 360L,
 	linetype = "blank",
@@ -156,7 +167,10 @@ APOTCPlot <- function(
 	if (show_shared_clones) {
 		result_plot <- overlay_shared_clone_links(
 			apotc_obj = apotc_obj,
-			result_plot = result_plot
+			result_plot = result_plot,
+			link_color_mode = clone_link_color,
+			link_width = clone_link_width,
+			link_alpha = clone_link_alpha
 			# TODO other params in the future
 		)
 	}

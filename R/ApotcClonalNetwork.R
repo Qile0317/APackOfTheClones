@@ -1,33 +1,7 @@
-# input: apotc obj, clonal comparison function which defaults to equals.
-
-# internal output1: 
-
-# export-able output: a named list, each name is a clonotype, each value is which clonotype
-
-# procedure:
-# the easiest approach, taking advantage of sizes, since information is abstracted away -
-# use a seed/any procedure to select clone sizes that match.
-
-# intermediate flawed internal output (use Rcpp hashmap): list(clonotype=list(c1=s1,c2=s2,c3=s3))
-# one alternative is each corresponding clone is linked exactly - each circle in the df_full_join should have the clone itself
-# a simpler approach is to use any seed and link based on clonesize
-# a final approach is to manually link and maybe re-adjust ordering of circles oneself.
-
-# intermediate internal output dataframe of [x1 x2 y1 y2 r1 r2] - for future possibilities
-
-# internal output for plotting LINES: [x1 x2 y1 y2] (subtract the radii and a rad decrease)
-# - future: plot ribbons
-
-# user API (S4 generic):
-# should be an extra option in APOTCPlot `show_shared_clones`, `share_clone_line_spacing`, future:`shared_clone_linetype`
-
-
-# internal master function for overlaying the clonal links based on mode: start with lines only.
-
 overlay_shared_clone_links <- function(
     apotc_obj, result_plot,
     link_mode = "default", link_type = "line", extra_spacing = "auto",
-    link_color_mode = "black", link_alpha = 1, link_width = "auto"
+    link_color_mode = "blend", link_alpha = 1, link_width = "auto"
 ) {
     shared_clones <- get_shared_clones(apotc_obj)
 
@@ -42,6 +16,12 @@ overlay_shared_clone_links <- function(
     link_dataframe <- add_link_colors(
         apotc_obj, link_dataframe, link_color_mode
     )
+
+    link_dataframe <- add_link_widths(
+        apotc_obj, link_type, link_dataframe, link_width
+    )
+
+    link_dataframe <- add_link_alphas(link_dataframe, link_alpha)
 
     overlay_links(hash::hash(as.list(environment())))
 }
@@ -78,7 +58,9 @@ get_shared_clones <- function(
 # indicating the seurat_cluster(s) they are in. If the numericvector is of length
 # 1, remove the element. This is done in Rcpp to achieve true linear runtime.
 remove_unique_clones <- function(shared_clonotypes) {
-    results <- rcppRemoveUniqueClonesHelper(names(shared_clonotypes), shared_clonotypes)
+    results <- rcppRemoveUniqueClonesHelper(
+        names(shared_clonotypes), shared_clonotypes
+    )
     unique_clone_list <- results[[2]]
     names(unique_clone_list) <- results[[1]]
     unique_clone_list
@@ -92,14 +74,16 @@ remove_unique_clones <- function(shared_clonotypes) {
 compute_line_link_df <- function(
     apotc_obj, shared_clones, extra_spacing, link_mode
 ) {
-    if (should_estimate(extra_spacing)) extra_spacing <- -get_rad_decrease(apotc_obj)
+    if (should_estimate(extra_spacing)) {
+        extra_spacing <- 0 # TODO make better in future
+    }
 
     if (link_mode == "default") {
         return(rcppConstructLineLinkDf(
             clusterLists = get_clusterlists(apotc_obj),
             rawCloneSizes = get_raw_clone_sizes(apotc_obj),
             sharedClonotypeClusters = shared_clones,
-            extraSpacing = extra_spacing
+            extraSpacing = extra_spacing - get_rad_decrease(apotc_obj)
         ))
     } else {
         stop(call. = FALSE, "no other link modes are implemented yet")
@@ -110,18 +94,33 @@ compute_line_link_df <- function(
 
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
     switch(link_color_mode,
-        "blend" = stop("not implemented yet"), # TODO
+        "blend" = return(add_blend_link_colors(apotc_obj, link_dataframe)),
         return(add_plain_link_colors(link_dataframe, link_color_mode))
     )
 }
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
-    # TODO modify to add cluster indicies to allow color blending
+    link_dataframe %>% dplyr::mutate(
+        color = get_average_hex(colors[c1], colors[c2])
+    )
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {
     link_dataframe$color <- rep(link_color, nrow(link_dataframe))
+    link_dataframe
+}
+
+add_link_widths <- function(apotc_obj, link_type, link_dataframe, link_width) {
+    if (should_estimate(link_width)) {
+        link_width <- 0.5 # TODO make better in future
+    }
+    link_dataframe$lineWidth <- rep(link_width, nrow(link_dataframe))
+    link_dataframe
+}
+
+add_link_alphas <- function(link_dataframe, link_alpha) {
+    link_dataframe$lineAlpha <- rep(link_alpha, nrow(link_dataframe))
     link_dataframe
 }
 
@@ -139,7 +138,8 @@ overlay_line_links <- function(args) {
     args$result_plot + ggplot2::geom_segment(
         data = args$link_dataframe,
         mapping = ggplot2::aes(
-            x = x1, y = y1, xend = x2, yend = y2 # TODO other params
-        )
-    )
+            x = x1, y = y1, xend = x2, yend = y2,
+            colour = color, linewidth = lineWidth,
+        ), alpha = args$link_dataframe$lineAlpha[1] # hack fix
+    ) + ggplot2::scale_color_identity()
 }

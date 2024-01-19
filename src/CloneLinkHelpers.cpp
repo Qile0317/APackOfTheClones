@@ -37,7 +37,7 @@ private:
     int numClusteredClonotypes;
 
     std::vector<double> x1, x2, y1, y2;
-    // TODO std::vector<int> cluster1, cluster2;
+    std::vector<int> cluster1, cluster2;
 
 public:
     static Rcpp::DataFrame constructFrom(
@@ -71,13 +71,15 @@ private:
 
             int currNumSharedClusters = clusterIndicies[i].size();
             std::vector<Circle> currCircles (currNumSharedClusters);
+            std::vector<int> currOneIndexedClusterIndicies (currNumSharedClusters);
 
             for (int j = 0; j < currNumSharedClusters; j++) {
                 ClusterList& currSharedCluster = clusterListVector[clusterIndicies[i][j]];
                 currCircles[j] = currSharedCluster.getClonotypeCircle(clonotypes[i]);
+                currOneIndexedClusterIndicies[j] = clusterIndicies[i][j];
             }
 
-            addSharedCircleLinkInfo(currCircles, extraSpacing);
+            addSharedCircleLinkInfo(currCircles, currOneIndexedClusterIndicies, extraSpacing);
         }
     }
 
@@ -127,10 +129,19 @@ private:
     }
 
     // this is dependent on if the user wants to show every link
-    void addSharedCircleLinkInfo(std::vector<Circle>& circles, double extraSpacing) {
-        for (int i = 0; i < (int) circles.size() - 1; i++) {
-            for (int j = i + 1; j < (int) circles.size(); j++) {
+    void addSharedCircleLinkInfo(
+        std::vector<Circle>& circles,
+        std::vector<int>& currOneIndexedClusterIndicies,
+        double extraSpacing
+    ) {
+        int numCircles = circles.size();
+        for (int i = 0; i < numCircles - 1; i++) {
+            for (int j = i + 1; j < numCircles; j++) {
                 addTwoSharedCircleLinkInfo(circles[i], circles[j], extraSpacing);
+
+                // push the indicies : not guaranteed atm to be in correct order
+                cluster1.push_back(currOneIndexedClusterIndicies[i] + 1);
+                cluster2.push_back(currOneIndexedClusterIndicies[j] + 1);
             }
         }
     }
@@ -146,6 +157,7 @@ private:
 
         x2.push_back(linkLine.getRightX());
         y2.push_back(linkLine.getRightY());
+
     }
 
     Rcpp::DataFrame createOutputDataFrame() {
@@ -153,7 +165,9 @@ private:
             Rcpp::Named("x1") = x1,
             Rcpp::Named("x2") = x2,
             Rcpp::Named("y1") = y1,
-            Rcpp::Named("y2") = y2
+            Rcpp::Named("y2") = y2,
+            Rcpp::Named("c1") = cluster1,
+            Rcpp::Named("c2") = cluster2
         );
     }
 };

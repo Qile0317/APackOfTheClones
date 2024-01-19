@@ -19,6 +19,9 @@ vizAPOTC(
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
   show_shared_clones = FALSE,
+  clone_link_width = "auto",
+  clone_link_color = "blend",
+  clone_link_alpha = 0.5,
   res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
@@ -107,6 +110,17 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{show_shared_clones}{\code{lifecycle::badge("experimental")} If \code{TRUE}, will
 overlay straight lines between each clone that is common between clusters.}
+
+\item{clone_link_width}{numeric. The width of the lines that connect shared
+clones. Defaults to \code{"auto"} which will estimate a reasonable value depending
+on circle sizes.}
+
+\item{clone_link_color}{character. The color of the lines that connect shared
+clones. Defaults to \code{"blend"} which will use the average colors of the two
+connected clones.}
+
+\item{clone_link_alpha}{numeric. The alpha of the lines that connect shared
+clones.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

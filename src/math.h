@@ -131,9 +131,9 @@ public:
     void shortenLeftByCircleRadius(double val) {
         decreaseMagnitude(val);
 
-        TwoDVector temp (lineVector);
-        temp.setMagnitude(val);
-        translate(temp);
+        TwoDVector translationVector (lineVector);
+        translationVector.setMagnitude(val);
+        translate(translationVector);
     }
 
     void shortenRightByCircleRadius(double val) {

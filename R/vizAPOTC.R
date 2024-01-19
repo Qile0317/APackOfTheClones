@@ -45,6 +45,9 @@ vizAPOTC <- function(
     max_repulsion_iter = 20L,
 
     show_shared_clones = FALSE,
+    clone_link_width = "auto",
+	clone_link_color = "blend",
+	clone_link_alpha = 0.5,
 
     res = 360L,
     linetype = "blank",
@@ -94,6 +97,9 @@ vizAPOTC <- function(
         run_id = "vizAPOTC",
 
         show_shared_clones = show_shared_clones,
+        clone_link_width = clone_link_width,
+        clone_link_color = clone_link_color, # or just any color
+        clone_link_alpha = clone_link_alpha,
 
         res = res,
         linetype = linetype,
