@@ -157,13 +157,35 @@ Processing Steps (optional)</a></li>
 is also identical to the built-in example dataset
 <code>combined_pbmc</code> which can be loaded with
 <code>data("combined_pbmc", package = "APackOfTheClones")</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load in the corresponding 6-sample TCR contigs from scRepertoire</span></span>
+<span><span class="va">contig_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"contig_list"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine the TCR contigs into clones with custom samples</span></span>
+<span><span class="va">combined_contig_list</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineTCR</span><span class="op">(</span></span>
+<span>  <span class="va">contig_list</span>,</span>
+<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>,</span>
+<span>  removeNA <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  removeMulti <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  filterMulti <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>For integrating the clonal information,
 <code>scRepertoire::combineExpression</code> is the function used <a href="https://www.borch.dev/uploads/screpertoire/articles/attaching_sc" class="external-link">to
 do so</a>, but for <code>APackOfTheClones</code> the scRNA-seq object
 has to be a seurat object:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># a seurat object corresponding to combined_contig_list named `pbmc` is loaded</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineExpression</span><span class="op">(</span></span>
+<span>  <span class="va">combined_contig_list</span>,</span>
+<span>  <span class="va">pbmc</span>,</span>
+<span>  cloneCall <span class="op">=</span> <span class="st">"gene"</span>,</span>
+<span>  proportion <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>And as a reference, here is the corresponding UMAP plot of the seurat
 object</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -180,7 +202,7 @@ main convenience function of the package to directly produce the ball
 packing clonal expansion plot. It takes in a main argument of a combined
 seurat object (with a long list of optional arguments which will be
 covered in later sections), and outputs a ggplot object:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">default_apotc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">default_apotc_plot</span></span></code></pre></div>
 <p><img src="APackOfTheClones_files/figure-html/initial_vizapotc-1.png" width="700"></p>
@@ -212,8 +234,8 @@ fine-tune the visualization until publication-ready.</p>
 representations<a class="anchor" aria-label="anchor" href="#working-with-different-reduction-bases-and-clonal-representations"></a>
 </h2>
 <p>The arguments to do so are:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>reduction_base <span class="ot">=</span> <span class="st">"umap"</span>,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>clonecall <span class="ot">=</span> <span class="st">"strict"</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reduction_base <span class="ot">=</span> <span class="st">"umap"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>clonecall <span class="ot">=</span> <span class="st">"strict"</span></span></code></pre></div>
 <p><code>reduction_base</code> indicates what each seurat cluster’s
 centroid locations should be based upon, so UMAP, T-SNE, or PCA
 (provided the reduction has been ran on the object).
@@ -241,8 +263,8 @@ clone for B-cells isn’t as clear as it is for TCRs</a>.</p>
 for subsets of the full dataset, which may be useful in cases like the
 need for clonal expansion plotting for only certain samples or
 conditions. There are two arguments to do so:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>...,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>extra_filter <span class="ot">=</span> <span class="cn">NULL</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>...,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>extra_filter <span class="ot">=</span> <span class="cn">NULL</span></span></code></pre></div>
 <p><code>...</code> represents an arbitrary number of additional keyword
 arguments indicating the rows corresponding to elements in the seurat
 object metadata that should be filtered by. For example, seurat_clusters
@@ -258,7 +280,7 @@ it may sometimes be helpful to set one of the visual parameters
 <code>retain_axis_scales</code> to <code>TRUE</code>, extending the
 output plot’s dimensions if needed to approximately match the
 corresponding reduction plot’s dimensions:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
 <span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). Here, it is subsetted</span></span>
 <span><span class="co"># by the keyword argument approach</span></span>
@@ -306,8 +328,8 @@ serves as a convenience to the user if they want to quickly generate
 insights. Generally, if the analysis of data subsets (such as certain
 samples, or condition, etc.) is crucial to a publication, one would
 likely already be working with fully subsetted seurat object, and
-APackOfTheClones functions directly on those. See the corresponding
-Seurat <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link"><code>vignette("essential_commands")</code></a>
+APackOfTheClones functions can be directly applied in those cases. See
+the corresponding Seurat <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link"><code>vignette("essential_commands")</code></a>
 for details.</p>
 </div>
 </div>
@@ -338,13 +360,13 @@ corresponding arguments are <code>clone_scale_factor</code> and
 </h3>
 <p>Considerable visual overlap between clusters (due to the algorithm’s
 attempt to fit clusters to the original UMAP coordinates) may occur and
-obstruct eachother excessively, even though the method by default tries
-to alleviate this with repulsion of clusters. There are four optional
-arguments:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+obstruct eachother excessively. APackOfTheClones by default tries to
+alleviate this by repulsing overlapping clusters away from eachother.
+There are four optional arguments:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 <ul>
 <li>
 <code>repulsion_threshold</code> indicates the amount of
@@ -354,9 +376,11 @@ that overlap by about 1 unit are considered by the repulsion algorithm
 to not be overlapping. Increasing this number will increase the amount
 of overlap between clusters, and decreasing this number will do the
 opposite, while decreasing it to negative values will incur additional
-spacing between clusters. However, using negative spacing may cause the
-plot to look very spaced out. Keep reading to see alternatives to doing
-so.</li>
+spacing between clusters. Note that as of the current version, two
+clusterss are considered overlapping by comparing their approximated
+radii, which is computed from the right-most x coordinate. This isn’t a
+very accurate approximation for smaller clusters with non-circular
+borders.</li>
 <li>
 <code>repulsion_strength</code> relates to how much the clusters
 should repel each other. The repulsion algorithm works in iterations,
@@ -385,15 +409,15 @@ the vignette <code>APackOfTheClones-runs</code>.)</p>
 <h3 id="managing-the-clone-size-legend">Managing the Clone Size Legend<a class="anchor" aria-label="anchor" href="#managing-the-clone-size-legend"></a>
 </h3>
 <p>There are the following six parameters to adjust the legend:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">0.2</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>legend_label <span class="ot">=</span> <span class="st">"Clone sizes"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>legend_text_size <span class="ot">=</span> <span class="dv">5</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>add_legend_background <span class="ot">=</span> <span class="cn">TRUE</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">0.2</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>legend_label <span class="ot">=</span> <span class="st">"Clone sizes"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>legend_text_size <span class="ot">=</span> <span class="dv">5</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>add_legend_background <span class="ot">=</span> <span class="cn">TRUE</span>,</span></code></pre></div>
 <p><code>legend_sizes</code> are autogenerated, with at least sizes for
 clone size 1 and max(clone sizes). The user can also input whichever
 sizes they wish as a numeric vector. The <code>legend_position</code> on
@@ -411,14 +435,14 @@ about these arguments can be read in the function documentation.</p>
 <h3 id="other-modifications">Other Modifications<a class="anchor" aria-label="anchor" href="#other-modifications"></a>
 </h3>
 <p>A collection of other utility parameters are:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>order_clones <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>try_place <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> 360L,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>linetype <span class="ot">=</span> <span class="st">"blank"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>use_default_theme <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>retain_axis_scales <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>show_labels <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>label_size <span class="ot">=</span> <span class="dv">5</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>order_clones <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>try_place <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> 360L,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>linetype <span class="ot">=</span> <span class="st">"blank"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>use_default_theme <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>retain_axis_scales <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>show_labels <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>label_size <span class="ot">=</span> <span class="dv">5</span>,</span></code></pre></div>
 <p>The most important of which are 1. <code>show_labels</code> which
 overlays the seurat cluster on the plot in the format <code>"Cx"</code>
 in the center of each relevant cluster. (see
@@ -431,9 +455,10 @@ as the numeric ticks in APackOfTheClones have no actual biologically
 relevant meaning aside from approximately matching clusters, it may be
 beneficial to set this argument to <code>FALSE</code> which will produce
 a plot with just the circles:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>
+<span>  repulsion_threshold <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span>  show_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  label_size <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  legend_text_size <span class="op">=</span> <span class="fl">3.5</span>,</span>
