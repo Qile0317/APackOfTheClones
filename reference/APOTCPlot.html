@@ -117,6 +117,9 @@ the plot of the latest run.</p>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_shared_clones <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  clone_link_color <span class="op">=</span> <span class="st">"blend"</span>,</span>
+<span>  clone_link_alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  res <span class="op">=</span> <span class="fl">360L</span>,</span>
 <span>  linetype <span class="op">=</span> <span class="st">"blank"</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -195,6 +198,23 @@ there was no input for the <code>...</code> and <code>extra_filter</code> parame
 <dt>show_shared_clones</dt>
 <dd><p><code>lifecycle::badge("experimental")</code> If <code>TRUE</code>, will
 overlay straight lines between each clone that is common between clusters.</p></dd>
+
+
+<dt>clone_link_width</dt>
+<dd><p>numeric. The width of the lines that connect shared
+clones. Defaults to <code>"auto"</code> which will estimate a reasonable value depending
+on circle sizes.</p></dd>
+
+
+<dt>clone_link_color</dt>
+<dd><p>character. The color of the lines that connect shared
+clones. Defaults to <code>"blend"</code> which will use the average colors of the two
+connected clones.</p></dd>
+
+
+<dt>clone_link_alpha</dt>
+<dd><p>numeric. The alpha of the lines that connect shared
+clones.</p></dd>
 
 
 <dt>res</dt>
