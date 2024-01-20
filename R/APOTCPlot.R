@@ -120,7 +120,9 @@ APOTCPlot <- function(
 	legend_spacing = "auto",
 	legend_label = "Clone sizes",
 	legend_text_size = 5,
-	add_legend_background = TRUE
+	add_legend_background = TRUE,
+
+	verbose = TRUE
 ) {
 	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
@@ -163,7 +165,8 @@ APOTCPlot <- function(
 			result_plot = result_plot,
 			link_color_mode = clone_link_color,
 			link_width = clone_link_width,
-			link_alpha = clone_link_alpha
+			link_alpha = clone_link_alpha,
+			verbose = verbose
 			# TODO other params in the future
 		)
 	}
@@ -189,6 +192,7 @@ APOTCPlot <- function(
 		)
 	}
 	
+	if (verbose) message("* generated ggplot object")
 	result_plot
 }
 

@@ -1,8 +1,10 @@
 overlay_shared_clone_links <- function(
     apotc_obj, result_plot,
     link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
-    link_color_mode = "blend", link_alpha = 1,
-    link_width = "auto", #FIXME dont show on side
+    link_color_mode = "blend",
+    link_alpha = 1,
+    link_width = "auto",
+    verbose = TRUE,
     link_mode = "default", extra_spacing = "auto" # not very relevant
 ) {
     shared_clones <- get_shared_clones(apotc_obj)
@@ -19,11 +21,9 @@ overlay_shared_clone_links <- function(
         apotc_obj, link_dataframe, link_color_mode
     )
 
-    link_dataframe <- add_link_widths(
-        apotc_obj, link_type, link_dataframe, link_width
-    )
-
-    link_dataframe <- add_link_alphas(link_dataframe, link_alpha)
+    # compute width and alpha (TODO make better formulas and figure out how to vectorize)
+    link_alpha <- process_link_alpha(apotc_obj, link_alpha, verbose)
+    link_width <- process_link_width(apotc_obj, link_width, verbose)
 
     overlay_links(hash::hash(as.list(environment())))
 }
@@ -113,17 +113,32 @@ add_plain_link_colors <- function(link_dataframe, link_color) {
     link_dataframe
 }
 
-add_link_widths <- function(apotc_obj, link_type, link_dataframe, link_width) {
-    if (should_estimate(link_width)) {
-        link_width <- 0.5 # TODO make better in future
+process_link_alpha <- function(apotc_obj, link_alpha, verbose) {
+    if (should_estimate(link_alpha)) {
+        link_alpha <- estimate_link_alpha(apotc_obj)
+        if (verbose) message(
+            "* setting `clone_link_alpha` to ", round(link_alpha, digits = 3)
+        )
     }
-    link_dataframe$lineWidth <- rep(link_width, nrow(link_dataframe))
-    link_dataframe
+    link_alpha
 }
 
-add_link_alphas <- function(link_dataframe, link_alpha) {
-    link_dataframe$lineAlpha <- rep(link_alpha, nrow(link_dataframe))
-    link_dataframe
+estimate_link_alpha <- function(apotc_obj) {
+    0.75 # TODO make better in the future
+}
+
+process_link_width <- function(apotc_obj, link_width, verbose) {
+    if (should_estimate(link_width)) {
+        link_width <- estimate_link_width(apotc_obj)
+        if (verbose) message(
+            "* setting `clone_link_width` to ", round(link_width, digits = 3)
+        )
+    }
+    link_width
+}
+
+estimate_link_width <- function(apotc_obj) {
+    (3 * get_clone_scale_factor(apotc_obj)) # - (2 * get_rad_decrease(apotc_obj))
 }
 
 # internal dispatch function to get a dataframe of line connections
@@ -141,7 +156,9 @@ overlay_line_links <- function(args) {
         data = args$link_dataframe,
         mapping = ggplot2::aes(
             x = x1, y = y1, xend = x2, yend = y2,
-            colour = color, linewidth = lineWidth, # FIXME dont show on legend
-        ), alpha = args$link_dataframe$lineAlpha[1] # hack fix
+            colour = color
+        ),
+        alpha = args$link_alpha,
+        linewidth = args$link_width
     ) + ggplot2::scale_color_identity()
 }

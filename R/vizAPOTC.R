@@ -90,7 +90,7 @@ vizAPOTC <- function(
         verbose = verbose
     )
 
-    if (verbose) message("Plotting...\n")
+    if (verbose) message("Plotting...")
 
     APOTCPlot(
         seurat_obj,
@@ -117,6 +117,8 @@ vizAPOTC <- function(
         legend_spacing = legend_spacing,
         legend_label = legend_label,
         legend_text_size = legend_text_size,
-        add_legend_background = add_legend_background
+        add_legend_background = add_legend_background,
+
+        verbose = verbose
     )
 }
