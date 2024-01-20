@@ -1,31 +1,73 @@
-overlay_shared_clone_links <- function(
-    apotc_obj, result_plot,
-    link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
-    link_color_mode = "blend",
-    link_alpha = 1,
-    link_width = "auto",
-    verbose = TRUE,
-    link_mode = "default", extra_spacing = "auto" # not very relevant
+#' @title Compute a list of clonotypes that are shared between seurat clusters
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' This function is a convenience function for users to get a list of clonotypes
+#' which are shared between seurat clusters. If `run_id` is inputted, then the
+#' function will attempt to get the shared clonotypes from the corresponding
+#' APackOfTheClones run generated from [RunAPOTC]. Otherwise, it will use the
+#' filtering / subsetting parameters to generate the shared clones by
+#' internally running [RunAPOTC] with the same parameters and returning the
+#' shared clones.
+#'
+#' @inheritParams RunAPOTC
+#' @param exclude_unique_clones logical. Deafults to `TRUE`, and filters out any
+#' clonotype that is only present in one cluster.
+#'
+#' @return a named list where each name is a clonotype, each element is a
+#' numeric indicating which seurat cluster(s) its in, in no particular order.
+#' @export
+#'
+#' @examples
+#' data("combined_pbmc")
+#'
+#' getSharedClones(combined_pbmc)
+#'
+#' getSharedClones(
+#'     combined_pbmc,
+#'     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
+#'     clonecall = "aa",
+#'     exclude_unique_clones = FALSE
+#' )
+#'
+#' # doing a run and then getting the clones works too
+#' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run1", verbose = FALSE)
+#' getSharedClones(combined_pbmc, run_id = "run1")
+#'
+getSharedClones <- function(
+    seurat_obj,
+    reduction_base = "umap",
+    clonecall = "strict",
+    ...,
+    extra_filter = NULL,
+    run_id = NULL,
+    exclude_unique_clones = TRUE
+    # TODO export format
 ) {
-    shared_clones <- get_shared_clones(apotc_obj)
+    # handle inputs
+    varargs_list <- list(...)
+	args <- hash::hash(as.list(environment()))
+    getSharedClones_error_handler(args)
 
-    if (identical(link_type, "line")) {
-        link_dataframe <- compute_line_link_df(
-            apotc_obj, shared_clones, extra_spacing, link_mode
-        )
-    } else {
-        stop(call. = FALSE, "no other link types are implemented yet")
-    }
+    # get the apotcdata
+	run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+    apotc_obj <- getApotcDataIfExistsElseCreate(seurat_obj, run_id)
 
-    link_dataframe <- add_link_colors(
-        apotc_obj, link_dataframe, link_color_mode
+    get_shared_clones(
+        apotc_obj,
+        zero_indexed = FALSE,
+        exclude_unique_clones = exclude_unique_clones
     )
+}
 
-    # compute width and alpha (TODO make better formulas and figure out how to vectorize)
-    link_alpha <- process_link_alpha(apotc_obj, link_alpha, verbose)
-    link_width <- process_link_width(apotc_obj, link_width, verbose)
-
-    overlay_links(hash::hash(as.list(environment())))
+getSharedClones_error_handler <- function(args) {
+    check_apotc_identifiers(args)
+    if (!is_a_logical(args$exclude_unique_clones)) {
+        stop(call. = FALSE,
+            "exclude_unique_clones must be a logical of length 1"
+        )
+    }
 }
 
 # input: an ApotcData object
@@ -54,6 +96,36 @@ get_shared_clones <- function(
     shared_clonotypes <- as.list(clonotype_map)
     if (!exclude_unique_clones) return(shared_clonotypes)
     remove_unique_clones(shared_clonotypes)
+}
+
+overlay_shared_clone_links <- function(
+    apotc_obj, result_plot,
+    link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
+    link_color_mode = "blend",
+    link_alpha = 1,
+    link_width = "auto",
+    verbose = TRUE,
+    link_mode = "default", extra_spacing = "auto" # not very relevant
+) {
+    shared_clones <- get_shared_clones(apotc_obj)
+
+    if (identical(link_type, "line")) {
+        link_dataframe <- compute_line_link_df(
+            apotc_obj, shared_clones, extra_spacing, link_mode
+        )
+    } else {
+        stop(call. = FALSE, "no other link types are implemented yet")
+    }
+
+    link_dataframe <- add_link_colors(
+        apotc_obj, link_dataframe, link_color_mode
+    )
+
+    # compute width and alpha (TODO make better formulas and figure out how to vectorize)
+    link_alpha <- process_link_alpha(apotc_obj, link_alpha, verbose)
+    link_width <- process_link_width(apotc_obj, link_width, verbose)
+
+    overlay_links(hash::hash(as.list(environment())))
 }
 
 # takes in a named list of clonotypes as names, the elements are numeric vectors
@@ -91,8 +163,6 @@ compute_line_link_df <- function(
         stop(call. = FALSE, "no other link modes are implemented yet")
     }
 }
-
-# TODO
 
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
     switch(link_color_mode,

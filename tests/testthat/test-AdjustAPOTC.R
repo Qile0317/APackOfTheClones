@@ -27,7 +27,13 @@ test_that("AdjustAPOTC works", {
 
   expect_doppelganger(
 		"AdjustAPOTC_plot_repulsed_with_label",
-    APOTCPlot(combined_pbmc, run_id = "r2", show_labels = TRUE, label_size = 7)
+    APOTCPlot(
+      combined_pbmc,
+      run_id = "r2",
+      show_labels = TRUE,
+      label_size = 7,
+      verbose = FALSE
+    )
 	)
 
 })

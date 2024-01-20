@@ -2,7 +2,9 @@
 
 ## Additions
 
+- Added `getSharedClones` to compute information about clonotypes that are present in multiple seurat clusters and return it to the user.
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
+- Added argument `verbose` in `APOTCPlot` to display some additional visual cues.
 - Added argument `alpha` in `APOTCPlot` and `vizAPOTC` to change the alpha (transparency) of each circle.
 - Added arguments in `APOTCPlot` and the corresponding `vizAPOTC` to compute and plot "links" between clonotypes that are "shared" i.e. common within multiple clusters. Currently, only supports plotting straight lines.
 
