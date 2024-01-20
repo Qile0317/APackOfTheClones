@@ -347,8 +347,12 @@ to_string_rep_with_insert <- function(v, insert) {
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
 }
 
+as_expression <- function(...) {
+    parse(text = paste0(unlist(list(...)), collapse = ""))
+}
+
 subset_dataframe <- function(df, filter_string) {
-    df %>% dplyr::filter(eval(parse(text = filter_string)))
+    df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
 # Seurat utils

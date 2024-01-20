@@ -103,9 +103,12 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
-    link_dataframe %>% dplyr::mutate(
-        color = get_average_hex(colors[c1], colors[c2])
-    )
+    # extremeley cursed hack fix to pass R CMD check:
+    eval(as_expression(
+        "link_dataframe %>% dplyr::mutate(",
+            "color = get_average_hex(colors[c1], colors[c2])",
+        ")"
+    ))
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {
@@ -154,9 +157,9 @@ overlay_links <- function(args) {
 overlay_line_links <- function(args) {
     args$result_plot + ggplot2::geom_segment(
         data = args$link_dataframe,
-        mapping = ggplot2::aes(
-            x = x1, y = y1, xend = x2, yend = y2,
-            colour = color
+        mapping = apotc_aes_string(
+            x = "x1", y = "y1", xend = "x2", yend = "y2",
+            colour = "color"
         ),
         alpha = args$link_alpha,
         linewidth = args$link_width

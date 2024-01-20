@@ -77,7 +77,6 @@ vizAPOTC <- function(
         ...,
         extra_filter = extra_filter,
         run_id = "vizAPOTC",
-
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,
         order_clones = order_clones,
@@ -95,20 +94,16 @@ vizAPOTC <- function(
     APOTCPlot(
         seurat_obj,
         run_id = "vizAPOTC",
-
         show_shared_clones = show_shared_clones,
         clone_link_width = clone_link_width,
-        clone_link_color = clone_link_color, # or just any color
+        clone_link_color = clone_link_color, 
         clone_link_alpha = clone_link_alpha,
-
         res = res,
         linetype = linetype,
         use_default_theme = use_default_theme,
         retain_axis_scales = retain_axis_scales,
-        
         show_labels = show_labels,
         label_size = label_size,
-
         add_size_legend = add_size_legend,
         legend_sizes = legend_sizes,
         legend_position = legend_position,
@@ -118,7 +113,6 @@ vizAPOTC <- function(
         legend_label = legend_label,
         legend_text_size = legend_text_size,
         add_legend_background = add_legend_background,
-
         verbose = verbose
     )
 }

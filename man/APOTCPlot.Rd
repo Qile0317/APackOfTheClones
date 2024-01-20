@@ -29,7 +29,8 @@ APOTCPlot(
   legend_spacing = "auto",
   legend_label = "Clone sizes",
   legend_text_size = 5,
-  add_legend_background = TRUE
+  add_legend_background = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -147,6 +148,9 @@ the legend}
 
 \item{add_legend_background}{logical. If \code{TRUE}, will add a border around the
 legend and fill the background to be white, overlaying anything else.}
+
+\item{verbose}{logical. Decides if visual cues are displayed to the R console
+of the progress.}
 }
 \value{
 A ggplot object of the APackOfTheClones clonal expansion plot of the
