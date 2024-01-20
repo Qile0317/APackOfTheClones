@@ -14,17 +14,21 @@ std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame) {
     Rcpp::NumericVector r = apotcPlotDataFrame["r"];
 
     for (int i = 0; i < (int) x.size(); i++) {
+        
         double xi = x[i], yi = y[i], ri = r[i];
 
         if (xi - ri < x[xmin] - r[xmin]) {
             xmin = i;
         }
+
         if (xi + ri > x[xmax] + r[xmax]) {
             xmax = i;
         }
+
         if (yi - ri < y[ymin] - r[ymin]) {
             ymin = i;
         }
+
         if (yi + ri > y[ymax] + r[ymax]) {
             ymax = i;
         }

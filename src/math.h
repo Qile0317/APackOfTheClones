@@ -51,10 +51,6 @@ public:
         return magnitude * std::sin(direction);
     }
 
-    TwoDVector unitVector() const {
-        return TwoDVector(1, direction);
-    }
-
     void setMagnitude(double val) {
         magnitude = val;
     }

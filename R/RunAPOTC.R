@@ -148,7 +148,7 @@ RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
-    ...,
+    ..., # TODO make this into an argument allowing taking ion somethign like ggplot2::aes
     extra_filter = NULL,
     run_id = NULL,
 

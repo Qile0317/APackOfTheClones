@@ -26,6 +26,7 @@ vizAPOTC(
   linetype = "blank",
   use_default_theme = TRUE,
   retain_axis_scales = FALSE,
+  alpha = 1,
   show_labels = FALSE,
   label_size = 5,
   add_size_legend = TRUE,
@@ -139,6 +140,8 @@ plot. Else, the plot will simply have a blank background.}
 of the original reduction plot. However, it will only attempt to extend the
 axes and never shorten. This is recommended to be set to \code{TRUE} especially if
 working with subsetted versions of the clonal data.}
+
+\item{alpha}{numeric. The alpha of the circles in (0, 1]. Defaults to 1.}
 
 \item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
 defaulting to "C0, C1, ...".}

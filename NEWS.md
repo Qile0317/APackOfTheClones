@@ -3,6 +3,7 @@
 ## Additions
 
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
+- Added argument `alpha` in `APOTCPlot` and `vizAPOTC` to change the alpha (transparency) of each circle.
 - Added arguments in `APOTCPlot` and the corresponding `vizAPOTC` to compute and plot "links" between clonotypes that are "shared" i.e. common within multiple clusters. Currently, only supports plotting straight lines.
 
 ## Changes

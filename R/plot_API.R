@@ -1,8 +1,9 @@
-create_initial_apotc_plot <- function(apotc_obj, res, linetype) {
+create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
     plot_clusters(
         clusters = get_plottable_df_with_color(apotc_obj),
         n = res,
-        linetype = linetype
+        linetype = linetype,
+        alpha = alpha
     )
 }
 
@@ -54,8 +55,8 @@ df_full_join <- function(clstr_list) {
 plot_clusters <- function(
   clusters,
   n = 360,
-  linetype = "blank"#,
-  #alpha = 1
+  linetype = "blank",
+  alpha = 1
 ) {
   ggplot2::ggplot(data = clusters) +
     ggforce::geom_circle(
@@ -63,11 +64,11 @@ plot_clusters <- function(
         x0 = "x",
         y0 = "y",
         r = "r",
-        fill = "color"#,
-        #alpha = as.character(alpha)
+        fill = "color"
       ),
       n = n,
-      linetype = linetype
+      linetype = linetype,
+      alpha = alpha
     ) +
     ggplot2::scale_fill_identity() +
     ggplot2::coord_fixed() +

@@ -45,6 +45,7 @@
 #' of the original reduction plot. However, it will only attempt to extend the
 #' axes and never shorten. This is recommended to be set to `TRUE` especially if
 #' working with subsetted versions of the clonal data.
+#' @param alpha numeric. The alpha of the circles in (0, 1]. Defaults to 1.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
 #' defaulting to "C0, C1, ...".
 #' @param label_size The text size of labels if shown. Defaults to 5.
@@ -99,6 +100,9 @@ APOTCPlot <- function(
 	run_id = NULL,
 
 	show_shared_clones = FALSE,
+	# shared_clone_mapping = NULL,
+	# shared_clone_filter = NULL,
+
 	clone_link_width = "auto",
 	clone_link_color = "blend",
 	clone_link_alpha = 0.5,
@@ -107,11 +111,12 @@ APOTCPlot <- function(
 	linetype = "blank",
 	use_default_theme = TRUE,
 	retain_axis_scales = FALSE,
-	#alpha = 1,
+	alpha = 1,
 
 	show_labels = FALSE,
 	label_size = 5,
 
+	# TODO could put these all into one aes argument
 	add_size_legend = TRUE,
 	legend_sizes = "auto",
 	legend_position = "auto",
@@ -124,6 +129,7 @@ APOTCPlot <- function(
 
 	verbose = TRUE
 ) {
+	# handle varargs and the run_id
 	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
 	args$run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
@@ -131,7 +137,7 @@ APOTCPlot <- function(
 
 	# get the apotc object and initialize the plot
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
-	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype)
+	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
 	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj, res, linetype)
 
 	#set theme
@@ -194,6 +200,17 @@ APOTCPlot <- function(
 	
 	if (verbose) message("* generated ggplot object")
 	result_plot
+}
+
+# to-be exported user aes function for shared clones
+scAes <- function(...) {
+	# do some checking of a listed version of the parameters
+	apotc_aes(...)
+}
+
+scFilter <- function(...) {
+	# do some checking of a listed version of the parameters
+	apotc_aes(...)
 }
 
 get_apotc_plot_dims <- function(apotc_obj, res, linetype) {
