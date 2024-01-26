@@ -202,27 +202,14 @@ APOTCPlot <- function(
 	result_plot
 }
 
-# to-be exported user aes function for shared clones
-scAes <- function(...) {
-	# do some checking of a listed version of the parameters
-	apotc_aes(...)
-}
-
-scFilter <- function(...) {
-	# do some checking of a listed version of the parameters
-	apotc_aes(...)
-}
-
 get_apotc_plot_dims <- function(apotc_obj, res, linetype) {
-	get_plot_dims(
-		plot_clusters(
-			subset_to_only_edge_circles(get_plottable_df_with_color(
-				apotc_obj
-			)),
-			res,
-			linetype
-		)
-	)
+	get_plot_dims(plot_clusters(
+		subset_to_only_edge_circles(get_plottable_df_with_color(
+			apotc_obj
+		)),
+		res,
+		linetype
+	))
 }
 
 subset_to_only_edge_circles <- function(apotc_plot_dataframe) {

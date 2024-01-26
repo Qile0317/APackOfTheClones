@@ -123,6 +123,10 @@ pbmc <- RunAPOTC(
 )
 ```
 
+### Important Note
+
+In a lot of real world applications, the user may only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
+
 ### Utilities for Managing APackOfTheClones Runs
 
 It is to note that the data abstraction here with a `run_id` is intentional, and users should not manually touch any of the `ApotcData` objects with the seurat object unless they are extremely familiar with the latest internal implementation. Instead, here is a collection of functions that may be useful:

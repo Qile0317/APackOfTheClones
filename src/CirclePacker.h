@@ -1,28 +1,53 @@
 #include <Rcpp.h>
 #include <vector>
-#include "CircleNode.h"
+#include "math.h"
 #include "ProgressBar.h"
 
-// general readability helpers
+ // A node in a linked-list of fixed size. Each node's data is a circle.
+class CircleNode {
+public:
+    double x;
+    double y;
+    double rad;
+    int prv;
+    int nxt;
 
-inline double sqr(double a) {
-    return a * a;
-}
+    CircleNode() {
+        x = 0;
+        y = 0;
+        rad = 0;
+        prv = -1;
+        nxt = -1;
+    }
 
-inline double centre_dist(CircleNode& c) {
-    return sqrt(sqr(c.x) + sqr(c.y));
-}
+    CircleNode(double rad_val) {
+        x = 0;
+        y = 0;
+        rad = rad_val;
+        prv = -1;
+        nxt = -1;
+    }
 
-inline std::pair<int, int> sentinel_pair() {
-    return std::make_pair(-1, -1);
-}
+    CircleNode(double x_val, double y_val, double rad_val) {
+        x = x_val;
+        y = y_val;
+        rad = rad_val;
+        prv = -1;
+        nxt = -1;
+    }
 
-bool is_clear(std::pair<int, int>& p) {
-    return (p.first == -1) && (p.second == -1);
-}
+    bool operator==(CircleNode& other) {
+        return (x == other.x)
+            && (y == other.y)
+            && (rad == other.rad)
+            && (prv == other.prv)
+            && (nxt == other.nxt);
+    }
+};
 
 class CirclePacker {
-public:
+private: 
+    // class variables
     std::vector<CircleNode> data;
     int num_nodes;
     bool try_place;
@@ -60,7 +85,7 @@ public:
         data = final_circle_nodes;
     }
 
-    // main circle packing method, all helpers below.
+public: // main circle packing method, all helpers below.
     static Rcpp::List pack(
         std::vector<double> input_rad_vec,
         Rcpp::NumericVector centroid,
@@ -87,6 +112,7 @@ public:
         return packer.process_into_clusterlist(centroid, rad_decrease);
     }
 
+private:
     void progress_bar(int x, int max) {
         if (verbose) {
             ProgressBar::show(x, max);
@@ -399,6 +425,20 @@ public:
             progress_bar(j, num_nodes);
         }
 
+    }
+
+    // general readability helpers
+
+    inline double centre_dist(CircleNode& c) {
+        return sqrt(sqr(c.x) + sqr(c.y));
+    }
+
+    inline std::pair<int, int> sentinel_pair() {
+        return std::make_pair(-1, -1);
+    }
+
+    bool is_clear(std::pair<int, int>& p) {
+        return (p.first == -1) && (p.second == -1);
     }
 
 };

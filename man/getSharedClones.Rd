@@ -11,7 +11,9 @@ getSharedClones(
   ...,
   extra_filter = NULL,
   run_id = NULL,
-  exclude_unique_clones = TRUE
+  clonesize_range = c(1L, Inf),
+  only_cluster = NULL,
+  exclude_cluster = NULL
 )
 }
 \arguments{
@@ -61,8 +63,18 @@ in the following format:
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
 
-\item{exclude_unique_clones}{logical. Deafults to \code{TRUE}, and filters out any
-clonotype that is only present in one cluster.}
+\item{clonesize_range}{integer vector of length 2. Sets the range of clone
+sizes to keep when counting sharede clones. The first element is the lower
+bound (inclusive), and the second element is the upper bound (inclusive).
+Defaults to \code{c(1L, Inf)}.}
+
+\item{only_cluster}{integer vector indicating which clusters to keep when
+counting shared clones. Note that this cannot conflict with
+\code{exclude_cluster}.}
+
+\item{exclude_cluster}{integer vector indicating which clusters to exclude
+when counting shared clones. Note that this cannot conflict with
+\code{only_cluster}.}
 }
 \value{
 a named list where each name is a clonotype, each element is a
@@ -87,8 +99,7 @@ getSharedClones(combined_pbmc)
 getSharedClones(
     combined_pbmc,
     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
-    clonecall = "aa",
-    exclude_unique_clones = FALSE
+    clonecall = "aa"
 )
 
 # doing a run and then getting the clones works too

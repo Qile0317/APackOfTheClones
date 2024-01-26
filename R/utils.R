@@ -73,6 +73,14 @@ should_change <- function(obj) !is.null(obj)
 
 should_compute <- function(x) is.null(x)
 
+as_expression <- function(...) {
+    parse(text = paste0(unlist(list(...)), collapse = ""))
+}
+
+subset_dataframe <- function(df, filter_string) {
+    df %>% dplyr::filter(eval(as_expression(filter_string)))
+}
+
 # plotting related utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
@@ -100,6 +108,8 @@ get_yr <- function(p) {
     p[[2]]
 }
 
+# type checking utils
+
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
 
 is_a_character <- function(x) {
@@ -107,9 +117,9 @@ is_a_character <- function(x) {
     is.character(x)
 }
 
-is_an_integer <- function(x) {
+is_a_logical <- function(x) {
     if (length(x) != 1) return(FALSE)
-    as.numeric(x) == as.numeric(as.integer(x))
+    is.logical(x)
 }
 
 is_a_numeric <- function(x) {
@@ -117,9 +127,19 @@ is_a_numeric <- function(x) {
     is.numeric(x)
 }
 
-is_a_logical <- function(x) {
-    if (length(x) != 1) return(FALSE)
-    is.logical(x)
+is_integer <- function(x) {
+    as.numeric(x) == as.numeric(as.integer(x))
+}
+
+is_an_integer <- function(x) {
+    if (identical(x, Inf) || identical(x, -Inf)) return(TRUE)
+    if (!is_a_numeric(x)) return(FALSE)
+    is_integer(x)
+}
+
+is_integer_pair <- function(x) {
+    if (length(x) != 2) return(FALSE)
+    is_an_integer(x[1]) && is_an_integer(x[2])
 }
 
 # math utils
@@ -345,14 +365,6 @@ to_string_rep_with_insert <- function(v, insert) {
         output <- paste(output, insert, x, insert, ",", sep = "")
     }
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
-}
-
-as_expression <- function(...) {
-    parse(text = paste0(unlist(list(...)), collapse = ""))
-}
-
-subset_dataframe <- function(df, filter_string) {
-    df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
 # Seurat utils

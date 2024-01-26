@@ -27,6 +27,28 @@ Rcpp::List rcppRemoveUniqueClonesHelper(
     return Rcpp::List::create(filteredClonotypes, filteredClusters);
 }
 
+// FIXME helper for filtering shared clones by cluster
+// [[Rcpp::export]]
+std::vector<std::vector<int>> rcppFilterSharedClonesByClusterHelper(
+    std::vector<std::vector<int>> sharedClusters,
+    std::vector<bool> includeCluster
+) {
+    std::vector<std::vector<int>> filteredSharedClusters;
+
+    for (std::vector<int> sharedClusterGroup : sharedClusters) {
+        bool wereNoMatching = true;
+        for (int clusterIndex : sharedClusterGroup) {
+            if (!includeCluster[clusterIndex]) {continue;}
+            filteredSharedClusters.push_back(sharedClusterGroup);
+            wereNoMatching = false;
+            break;
+        }
+        if (wereNoMatching) {filteredSharedClusters.push_back(std::vector<int>());}
+    }
+
+    return filteredSharedClusters;
+}
+
 // helper class for rcppConstructLineLinkDf
 class LineLinkDataFrameFactory {
 private:

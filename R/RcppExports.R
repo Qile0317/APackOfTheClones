@@ -9,6 +9,10 @@ rcppRemoveUniqueClonesHelper <- function(clonotypes, clusters) {
     .Call(`_APackOfTheClones_rcppRemoveUniqueClonesHelper`, clonotypes, clusters)
 }
 
+rcppFilterSharedClonesByClusterHelper <- function(sharedClusters, includeCluster) {
+    .Call(`_APackOfTheClones_rcppFilterSharedClonesByClusterHelper`, sharedClusters, includeCluster)
+}
+
 rcppConstructLineLinkDf <- function(clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing) {
     .Call(`_APackOfTheClones_rcppConstructLineLinkDf`, clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing)
 }

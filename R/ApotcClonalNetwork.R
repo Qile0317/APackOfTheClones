@@ -1,3 +1,6 @@
+# TODO matrix/heatmap visualization for number of shared clones
+# TODO somehow take into account sizes of shared clones
+
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
@@ -12,8 +15,16 @@
 #' shared clones.
 #'
 #' @inheritParams RunAPOTC
-#' @param exclude_unique_clones logical. Deafults to `TRUE`, and filters out any
-#' clonotype that is only present in one cluster.
+#' @param clonesize_range integer vector of length 2. Sets the range of clone
+#' sizes to keep when counting sharede clones. The first element is the lower
+#' bound (inclusive), and the second element is the upper bound (inclusive).
+#' Defaults to `c(1L, Inf)`.
+#' @param only_cluster integer vector indicating which clusters to keep when
+#' counting shared clones. Note that this cannot conflict with
+#' `exclude_cluster`.
+#' @param exclude_cluster integer vector indicating which clusters to exclude
+#' when counting shared clones. Note that this cannot conflict with
+#' `only_cluster`.
 #'
 #' @return a named list where each name is a clonotype, each element is a
 #' numeric indicating which seurat cluster(s) its in, in no particular order.
@@ -27,8 +38,7 @@
 #' getSharedClones(
 #'     combined_pbmc,
 #'     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
-#'     clonecall = "aa",
-#'     exclude_unique_clones = FALSE
+#'     clonecall = "aa"
 #' )
 #'
 #' # doing a run and then getting the clones works too
@@ -37,12 +47,16 @@
 #'
 getSharedClones <- function(
     seurat_obj,
+
     reduction_base = "umap",
     clonecall = "strict",
     ...,
     extra_filter = NULL,
     run_id = NULL,
-    exclude_unique_clones = TRUE
+
+    clonesize_range = c(1L, Inf),
+    only_cluster = NULL,
+    exclude_cluster = NULL # FIXME change filtering in Rcpp
     # TODO export format
 ) {
     # handle inputs
@@ -57,47 +71,136 @@ getSharedClones <- function(
     get_shared_clones(
         apotc_obj,
         zero_indexed = FALSE,
-        exclude_unique_clones = exclude_unique_clones
+        exclude_unique_clones = TRUE,
+        clone_size_lowerbound = clonesize_range[1],
+        clone_size_upperbound = clonesize_range[2],
+        included_cluster = create_cluster_truth_vector(
+            only_cluster, exclude_cluster, get_num_clusters(apotc_obj)
+        )
     )
 }
 
 getSharedClones_error_handler <- function(args) {
+
     check_apotc_identifiers(args)
-    if (!is_a_logical(args$exclude_unique_clones)) {
+
+    if (!is_integer_pair(args$clonesize_range)) {
         stop(call. = FALSE,
-            "exclude_unique_clones must be a logical of length 1"
+            "`clone_size_range` must be an integer-ish vector of length 2"
         )
     }
+
+    if (!is.null(args$only_cluster) && !is.null(args$exclude_cluster)) {
+        stop(call. = FALSE,
+            "either both or neither of `only_cluster` and `exclude_cluster` ",
+            "must be inputted"
+        )
+    }
+
+    if (!is.null(args$only_cluster)) {
+        if (!all(is_integer(args$only_cluster))) {
+            stop(call. = FALSE,
+                "`only_cluster` must be an integer vector"
+            )
+        }
+    }
+
+    if (!is.null(args$exclude_cluster)) {
+        if (!all(is_integer(args$exclude_cluster))) {
+            stop(call. = FALSE,
+                "`exclude_cluster` must be an integer vector"
+            )
+        }
+    }
+}
+
+create_cluster_truth_vector <- function(
+    only_cluster, exclude_cluster, num_clusters
+) {
+    if (is.null(only_cluster) && is.null(exclude_cluster)) {
+        return(rep(TRUE, num_clusters))
+    }
+
+    if (!is.null(exclude_cluster)) {
+        truth_indicies <- exclude_cluster
+    } else {
+        truth_indicies <- only_cluster
+    }
+    truth_val <- ifelse(!is.null(exclude_cluster), TRUE, FALSE)
+
+    truth_vec <- rep(truth_val, num_clusters)
+    truth_vec[as.integer(truth_indicies)] <- (!truth_val)
+    truth_vec
 }
 
 # input: an ApotcData object
 # output: a named list where each name is a clonotype, each element is a
 # numeric indicating which seurat cluster(s) its in. If exclude_unique_clones,
 # will filter out any clonotype with only length one.
+# TODO - allow filtering based on original clone size
 get_shared_clones <- function(
-    apotc_obj, zero_indexed = TRUE, exclude_unique_clones = TRUE
+    apotc_obj,
+    zero_indexed,
+    exclude_unique_clones,
+    clone_size_lowerbound,
+    clone_size_upperbound,
+    included_cluster
 ) {
 
     clonotype_map <- create_valueless_vector_hash(
         get_clonotypes(apotc_obj), numeric
     )
 
+    clustered_clone_sizes <- lapply(
+        get_raw_clone_sizes(apotc_obj),
+        function(x) {
+            if (!is_empty_table(x)) return(hash::hash(x))
+            hash::hash()
+        }
+    )
+
     clustered_clonotypes <- lapply(get_raw_clone_sizes(apotc_obj), names)
 
     for (i in seq_along(clustered_clonotypes)) {
+
         if (is.null(clustered_clonotypes[[i]])) next
+
         for (clonotype in clustered_clonotypes[[i]]) {
+
+            if (!is_bound_between(
+                clustered_clone_sizes[[i]][[clonotype]],
+                clone_size_lowerbound,
+                clone_size_upperbound
+            )) next
+
             clonotype_map[[clonotype]] <- append(
                 clonotype_map[[clonotype]], i - zero_indexed
             )
+
         }
     }
 
     shared_clonotypes <- as.list(clonotype_map)
-    if (!exclude_unique_clones) return(shared_clonotypes)
-    remove_unique_clones(shared_clonotypes)
+    if (exclude_unique_clones) {
+        shared_clonotypes <- remove_unique_clones(shared_clonotypes)
+    }
+
+    if (all(included_cluster)) return(shared_clonotypes)
+    filter_shared_clones_cluster(
+        shared_clonotypes, included_cluster
+    )
 }
 
+filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
+    filtered_shared_clonotypes <- rcppFilterSharedClonesByClusterHelper(
+        shared_clonotypes, included_cluster
+    )
+    names(filtered_shared_clonotypes) <- names(shared_clonotypes)
+    filtered_shared_clonotypes
+}
+
+# overlay clone links on an APackOfTheClones plot
+# TODO - do some matrix visualization too, maybe us eheatmap for clone sizes
 overlay_shared_clone_links <- function(
     apotc_obj, result_plot,
     link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
@@ -211,7 +314,7 @@ process_link_width <- function(apotc_obj, link_width, verbose) {
 }
 
 estimate_link_width <- function(apotc_obj) {
-    (3 * get_clone_scale_factor(apotc_obj)) # - (2 * get_rad_decrease(apotc_obj))
+    3 * get_clone_scale_factor(apotc_obj) #TODO improve
 }
 
 # internal dispatch function to get a dataframe of line connections

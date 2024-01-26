@@ -20,7 +20,7 @@ public:
         return rval;
     }
 
-    bool isLeftOf(Circle other) {
+    bool hasOriginMoreLeftThan(Circle& other) {
         return xval < other.xval;
     }
 };

@@ -110,7 +110,7 @@ public:
         Circle& c1, Circle& c2, double extraSpacing
     ) {
         Circle& leftCircle = c1, rightCircle = c2;
-        if (c2.isLeftOf(c1)) {
+        if (c2.hasOriginMoreLeftThan(c1)) {
             std::swap(leftCircle, rightCircle);
         }
 
@@ -151,7 +151,7 @@ public:
         Circle& c1, Circle& c2, double extraSpacing
     ) {
         Circle& leftCircle = c1, rightCircle = c2;
-        if (c2.isLeftOf(c1)) {
+        if (c2.hasOriginMoreLeftThan(c1)) {
             std::swap(leftCircle, rightCircle);
         }
 
