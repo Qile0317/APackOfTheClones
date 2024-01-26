@@ -101,7 +101,9 @@ shared clones.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  exclude_unique_clones <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  clonesize_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  only_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude_cluster <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -163,9 +165,23 @@ in the following format:</p>
 there was no input for the <code>...</code> and <code>extra_filter</code> parameters.</p></dd>
 
 
-<dt>exclude_unique_clones</dt>
-<dd><p>logical. Deafults to <code>TRUE</code>, and filters out any
-clonotype that is only present in one cluster.</p></dd>
+<dt>clonesize_range</dt>
+<dd><p>integer vector of length 2. Sets the range of clone
+sizes to keep when counting sharede clones. The first element is the lower
+bound (inclusive), and the second element is the upper bound (inclusive).
+Defaults to <code>c(1L, Inf)</code>.</p></dd>
+
+
+<dt>only_cluster</dt>
+<dd><p>integer vector indicating which clusters to keep when
+counting shared clones. Note that this cannot conflict with
+<code>exclude_cluster</code>.</p></dd>
+
+
+<dt>exclude_cluster</dt>
+<dd><p>integer vector indicating which clusters to exclude
+when counting shared clones. Note that this cannot conflict with
+<code>only_cluster</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -212,140 +228,16 @@ numeric indicating which seurat cluster(s) its in, in no particular order.</p>
 <span class="r-in"><span><span class="fu">getSharedClones</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">combined_pbmc</span>,</span></span>
 <span class="r-in"><span>    orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P18B"</span><span class="op">)</span>, <span class="co"># this is a named subsetting parameter</span></span></span>
-<span class="r-in"><span>    clonecall <span class="op">=</span> <span class="st">"aa"</span>,</span></span>
-<span class="r-in"><span>    exclude_unique_clones <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>    clonecall <span class="op">=</span> <span class="st">"aa"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CALSDRVGGSYIPTF_CASSFRTLASGSAANEQFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $CVVSDNTGGFKTIF_CASSVRRERANTGELFF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAASISNYGQNFVF_CASSLGGNTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVKGNTPLVF_CASSLAGINEQFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAENPYGNNRLAF_CASSLQGASNEKLFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $NA_CAAGQGVMNTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVRAGAAGNKLTF_CSARELSNYGYTF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAMSPSFQKLVF;CAASARNNNARLMF_CASSLRGGNTEAFF;CASSSTSGSTGELFF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CALYSSASKIIF_CASSRGLAGGGETQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CLVGDNLNTGFQKLVF_CASSPRPGNTGNQPQHF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVEAQTGANNLFF_CASSPRAGTPNTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $NA_CASSLGQGVRETQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CVVNSPTGFQKLVF_CASSSRQDSTDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CALIVGRANFGNEKLTF;CAVSDDNQGGKLIF_CASSSLAGSDTQYF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $NA_CASSQDRTGLDYEQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVEDTNAGKSTF_CASSQGRDQPQHF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAARAPGTASKLTF;CAGAPASGNTPLVF_CASSPGPGEGYTF;CASSLRAATNTGELFF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVRGEGFQKLVF_CASSSRTSGGSYEQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $CVVSDFGNEKLTF_CASSLGSGGTGNEQFF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAYRSAQAGGTSYGKLTF_CAISEQGKGELFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAASQLDGGTSYGKLTF_CASSQAYRGKKLFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVQANDSWGKLQF_CASTLVEGGDEQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAASGEGGSEKLVF_CASSLEQGRGYTF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $CAVTFHYNTDKLIF_CASSQDRTGLDYEQYF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVSNTGNQFYF_CASSEPGIDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CATLETSGSRLTF_CASSLNVGGRTAF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAASIGYSSASKIIF_CSARPSGSTDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAESMGYSSASKIIF_CSALREGTTDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAASISSGTYKYIF_CATSVVAGRNEQYF;CASKQPGTGGGNTIYF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAENINQAGTALIF;CVVKSWGKLQF_CASSLEGQDYNSPLHF;CASSPTQAPSGNTIYF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CALTLLPIIQGAQKLVF_CASRQGLGTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAFMTKTSGSRLTF_CSPQGAAKGTDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAVNPDSNYQLIW;CAVITERDNQGGKLIF_CAWDAGQRNEQYF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CVVNVPGGRSQGNLIF_CASSVGSASSYEQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $NA_CASSLSLSDGRHGYTF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $NA_CASSVRRERANTGELFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAGDSSYKLIF_CASSGTSGELLDTGELFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`CAASIQAGTALIF;CATVSTGGFKTIF_CSARGGAGADYEQYF;CSASLPEIFNYGYTF`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CALNFGNEKLTF_CASSHTDRPLTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVEDQVTGGFKTIF_CAAGQGVMNTEAFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVRTNRDDKIIF_CASSLGGAGTDTQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAGRGGSEKLVF_CASSMTSSYNEQFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAVSDSNTGFQKLVF_CSAPGTGIFMVDYTF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAASRGGANSKLTF_CASSQGGPSNTGELFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># doing a run and then getting the clones works too</span></span></span>
