@@ -23,12 +23,17 @@
 #' data and has had a valid run of [RunAPOTC].
 #' @param show_shared_clones `lifecycle::badge("experimental")` If `TRUE`, will
 #' overlay straight lines between each clone that is common between clusters.
+#' @param linked_clonesize_range numeric vector of length 2. Indicates the
+#' minimum and maximum clonesize of at least one clone of a shared clonotype.
+#' Defaults to `c(2, Inf)` which means
+#' only clonotypes of size 2 that are shared between will be connected.
 #' @param clone_link_width numeric. The width of the lines that connect shared
 #' clones. Defaults to `"auto"` which will estimate a reasonable value depending
 #' on circle sizes.
 #' @param clone_link_color character. The color of the lines that connect shared
 #' clones. Defaults to `"blend"` which will use the average colors of the two
-#' connected clones.
+#' connected clones. Else, any hex color or valid color string input will work,
+#' and the corresponding color will be applied on all links.
 #' @param clone_link_alpha numeric. The alpha of the lines that connect shared
 #' clones.
 #' @param res The number of points on the generated path per full circle. From
@@ -102,7 +107,7 @@ APOTCPlot <- function(
 	show_shared_clones = FALSE,
 	# shared_clone_mapping = NULL,
 	# shared_clone_filter = NULL,
-
+	linked_clonesize_range = c(2L, Inf),
 	clone_link_width = "auto",
 	clone_link_color = "blend",
 	clone_link_alpha = 0.5,
@@ -169,6 +174,7 @@ APOTCPlot <- function(
 		result_plot <- overlay_shared_clone_links(
 			apotc_obj = apotc_obj,
 			result_plot = result_plot,
+			clonesize_range = linked_clonesize_range,
 			link_color_mode = clone_link_color,
 			link_width = clone_link_width,
 			link_alpha = clone_link_alpha,

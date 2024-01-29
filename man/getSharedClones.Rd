@@ -64,7 +64,7 @@ where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{clonesize_range}{integer vector of length 2. Sets the range of clone
-sizes to keep when counting sharede clones. The first element is the lower
+sizes to keep when counting shared clones. The first element is the lower
 bound (inclusive), and the second element is the upper bound (inclusive).
 Defaults to \code{c(1L, Inf)}.}
 

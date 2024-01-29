@@ -16,7 +16,7 @@
 #'
 #' @inheritParams RunAPOTC
 #' @param clonesize_range integer vector of length 2. Sets the range of clone
-#' sizes to keep when counting sharede clones. The first element is the lower
+#' sizes to keep when counting shared clones. The first element is the lower
 #' bound (inclusive), and the second element is the upper bound (inclusive).
 #' Defaults to `c(1L, Inf)`.
 #' @param only_cluster integer vector indicating which clusters to keep when
@@ -140,11 +140,11 @@ create_cluster_truth_vector <- function(
 # TODO - allow filtering based on original clone size
 get_shared_clones <- function(
     apotc_obj,
-    zero_indexed,
-    exclude_unique_clones,
-    clone_size_lowerbound,
-    clone_size_upperbound,
-    included_cluster
+    zero_indexed = FALSE,
+    exclude_unique_clones = TRUE,
+    clone_size_lowerbound = 1L,
+    clone_size_upperbound = Inf,
+    included_cluster = TRUE
 ) {
 
     clonotype_map <- create_valueless_vector_hash(
@@ -167,7 +167,7 @@ get_shared_clones <- function(
 
         for (clonotype in clustered_clonotypes[[i]]) {
 
-            if (!is_bound_between(
+            if (!is_bound_between( # FIXME this isnt a good filter tbh
                 clustered_clone_sizes[[i]][[clonotype]],
                 clone_size_lowerbound,
                 clone_size_upperbound
@@ -185,6 +185,8 @@ get_shared_clones <- function(
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)
     }
 
+    # TODO filter by lower and upper clone size
+
     if (all(included_cluster)) return(shared_clonotypes)
     filter_shared_clones_cluster(
         shared_clonotypes, included_cluster
@@ -200,9 +202,11 @@ filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
 }
 
 # overlay clone links on an APackOfTheClones plot
-# TODO - do some matrix visualization too, maybe us eheatmap for clone sizes
+# TODO - do some matrix visualization too, maybe use heatmap for clone sizes
 overlay_shared_clone_links <- function(
-    apotc_obj, result_plot,
+    apotc_obj,
+    result_plot,
+    clonesize_range,
     link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
     link_color_mode = "blend",
     link_alpha = 1,
@@ -210,7 +214,11 @@ overlay_shared_clone_links <- function(
     verbose = TRUE,
     link_mode = "default", extra_spacing = "auto" # not very relevant
 ) {
-    shared_clones <- get_shared_clones(apotc_obj)
+    shared_clones <- get_shared_clones(
+        apotc_obj,
+        clone_size_lowerbound = clonesize_range[1],
+        clone_size_upperbound = clonesize_range[2]
+    )
 
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
