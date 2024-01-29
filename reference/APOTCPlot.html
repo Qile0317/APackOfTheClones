@@ -117,6 +117,7 @@ the plot of the latest run.</p>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_shared_clones <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  linked_clonesize_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  clone_link_color <span class="op">=</span> <span class="st">"blend"</span>,</span>
 <span>  clone_link_alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -202,6 +203,13 @@ there was no input for the <code>...</code> and <code>extra_filter</code> parame
 overlay straight lines between each clone that is common between clusters.</p></dd>
 
 
+<dt>linked_clonesize_range</dt>
+<dd><p>numeric vector of length 2. Indicates the
+minimum and maximum clonesize of at least one clone of a shared clonotype.
+Defaults to <code>c(2, Inf)</code> which means
+only clonotypes of size 2 that are shared between will be connected.</p></dd>
+
+
 <dt>clone_link_width</dt>
 <dd><p>numeric. The width of the lines that connect shared
 clones. Defaults to <code>"auto"</code> which will estimate a reasonable value depending
@@ -211,7 +219,8 @@ on circle sizes.</p></dd>
 <dt>clone_link_color</dt>
 <dd><p>character. The color of the lines that connect shared
 clones. Defaults to <code>"blend"</code> which will use the average colors of the two
-connected clones.</p></dd>
+connected clones. Else, any hex color or valid color string input will work,
+and the corresponding color will be applied on all links.</p></dd>
 
 
 <dt>clone_link_alpha</dt>
