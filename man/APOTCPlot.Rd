@@ -12,6 +12,7 @@ APOTCPlot(
   extra_filter = NULL,
   run_id = NULL,
   show_shared_clones = FALSE,
+  only_link_cluster = NULL,
   linked_clonesize_range = c(2L, Inf),
   clone_link_width = "auto",
   clone_link_color = "blend",
@@ -32,6 +33,7 @@ APOTCPlot(
   legend_label = "Clone sizes",
   legend_text_size = 5,
   add_legend_background = TRUE,
+  add_legend_centerspace = 0,
   verbose = TRUE
 )
 }
@@ -158,6 +160,11 @@ the legend}
 
 \item{add_legend_background}{logical. If \code{TRUE}, will add a border around the
 legend and fill the background to be white, overlaying anything else.}
+
+\item{add_legend_centerspace}{numeric. An additional amount of distance
+changed between the circle sizes on the left side of the legend and the
+numbers on the right. Useful to set to around 0.5 (or more / less) when there
+are particularly large clone sizes that may cover the numbers.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress.}

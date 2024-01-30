@@ -13,7 +13,7 @@ getSharedClones(
   run_id = NULL,
   clonesize_range = c(1L, Inf),
   only_cluster = NULL,
-  exclude_cluster = NULL
+  only_between = NULL
 )
 }
 \arguments{

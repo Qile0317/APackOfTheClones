@@ -78,6 +78,10 @@
 #' the legend
 #' @param add_legend_background logical. If `TRUE`, will add a border around the
 #' legend and fill the background to be white, overlaying anything else.
+#' @param add_legend_centerspace numeric. An additional amount of distance
+#' changed between the circle sizes on the left side of the legend and the
+#' numbers on the right. Useful to set to around 0.5 (or more / less) when there
+#' are particularly large clone sizes that may cover the numbers. 
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object
@@ -104,10 +108,11 @@ APOTCPlot <- function(
 	extra_filter = NULL,
 	run_id = NULL,
 
-	show_shared_clones = FALSE,
+	show_shared_clones = FALSE, # TODO an alternative vizualization not based on apotcplots. e.g. those used to visualize connectedness of graphs
+	only_link_cluster = NULL, # FIXME
 	# shared_clone_mapping = NULL,
 	# shared_clone_filter = NULL,
-	linked_clonesize_range = c(2L, Inf),
+	linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)
 	clone_link_width = "auto",
 	clone_link_color = "blend",
 	clone_link_alpha = 0.5,
@@ -131,6 +136,7 @@ APOTCPlot <- function(
 	legend_label = "Clone sizes",
 	legend_text_size = 5,
 	add_legend_background = TRUE,
+	add_legend_centerspace = 0,
 
 	verbose = TRUE
 ) {
@@ -174,6 +180,7 @@ APOTCPlot <- function(
 		result_plot <- overlay_shared_clone_links(
 			apotc_obj = apotc_obj,
 			result_plot = result_plot,
+			only_cluster = only_link_cluster,
 			clonesize_range = linked_clonesize_range,
 			link_color_mode = clone_link_color,
 			link_width = clone_link_width,
@@ -195,6 +202,7 @@ APOTCPlot <- function(
 			sizes = legend_sizes,
 			pos = legend_position,
 			buffer = legend_buffer,
+			additional_middle_spacing = add_legend_centerspace,
 			color = legend_color,
 			n = res,
 			spacing = legend_spacing,

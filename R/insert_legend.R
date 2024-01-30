@@ -11,6 +11,7 @@ insert_legend <- function(
     sizes,
     pos,
     buffer,
+    additional_middle_spacing,
     color = "#808080",
     n = 360,
     spacing = "auto",
@@ -33,7 +34,8 @@ insert_legend <- function(
         spacing = spacing,
         circ_scale_factor = apotc_obj@clone_scale_factor,
         rad_decrease = rad_decrease,
-        color = color
+        color = color,
+        additional_middle_spacing = additional_middle_spacing
     )
 
     legend_dims <- get_legend_dims(unpositioned_legend_df)
@@ -196,12 +198,14 @@ num_circles_covered_by_legend <- function(apotc_obj, minmax_dims) {
 }
 
 gen_unpositioned_legend_df <- function(
-    legend_sizes, spacing, circ_scale_factor, rad_decrease, color
+    legend_sizes, spacing, circ_scale_factor, rad_decrease, color,
+    additional_middle_spacing
 ) {
     radii <- (sqrt(legend_sizes) * circ_scale_factor) - rad_decrease
     num_radii <- length(radii)
     label_x <- spacing + 1 - rad_decrease +
-        (sqrt(radii[num_radii]) * circ_scale_factor)
+        (sqrt(radii[num_radii]) * circ_scale_factor) +
+        additional_middle_spacing
 
     data.frame(
         "circle_x" = rep(0, num_radii),

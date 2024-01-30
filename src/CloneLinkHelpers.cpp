@@ -27,26 +27,26 @@ Rcpp::List rcppRemoveUniqueClonesHelper(
     return Rcpp::List::create(filteredClonotypes, filteredClusters);
 }
 
-// FIXME helper for filtering shared clones by cluster
+// function to filter shared clones. outputs list(filtered_names, filtered_clusters)
 // [[Rcpp::export]]
-std::vector<std::vector<int>> rcppFilterSharedClonesByClusterHelper(
-    std::vector<std::vector<int>> sharedClusters,
+Rcpp::List rcppFilterSharedClonesByClusterHelper(
+    std::vector<std::vector<int>> sharedClusters, // one-indexed!
+    std::vector<std::string> clonotypes,
     std::vector<bool> includeCluster
 ) {
     std::vector<std::vector<int>> filteredSharedClusters;
+    std::vector<std::string> filteredclonotypes;
 
-    for (std::vector<int> sharedClusterGroup : sharedClusters) {
-        bool wereNoMatching = true;
-        for (int clusterIndex : sharedClusterGroup) {
-            if (!includeCluster[clusterIndex]) {continue;}
-            filteredSharedClusters.push_back(sharedClusterGroup);
-            wereNoMatching = false;
+    for (int i = 0; i < (int) sharedClusters.size(); i++) {
+        for (int clusterIndex : sharedClusters[i]) {
+            if (!includeCluster[clusterIndex - 1]) {continue;}
+            filteredSharedClusters.push_back(sharedClusters[i]);
+            filteredclonotypes.push_back(clonotypes[i]);
             break;
         }
-        if (wereNoMatching) {filteredSharedClusters.push_back(std::vector<int>());}
     }
 
-    return filteredSharedClusters;
+    return Rcpp::List::create(filteredclonotypes, filteredSharedClusters);
 }
 
 // helper class for rcppConstructLineLinkDf
@@ -159,6 +159,7 @@ private:
         int numCircles = circles.size();
         for (int i = 0; i < numCircles - 1; i++) {
             for (int j = i + 1; j < numCircles; j++) {
+                // TODO for filtered ver, only add info if one of circles is from an origin cluster.
                 addTwoSharedCircleLinkInfo(circles[i], circles[j], extraSpacing);
 
                 // push the indicies : not guaranteed atm to be in correct order

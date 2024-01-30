@@ -45,6 +45,7 @@ vizAPOTC <- function(
     max_repulsion_iter = 20L,
 
     show_shared_clones = FALSE,
+    only_link_cluster = NULL,
     linked_clonesize_range = c(2L, Inf),
     clone_link_width = "auto",
 	clone_link_color = "blend",
@@ -68,6 +69,7 @@ vizAPOTC <- function(
     legend_label = "Clone sizes",
     legend_text_size = 5,
     add_legend_background = TRUE,
+    add_legend_centerspace = 0,
 
     verbose = TRUE
 ) {
@@ -96,6 +98,7 @@ vizAPOTC <- function(
         seurat_obj,
         run_id = "vizAPOTC",
         show_shared_clones = show_shared_clones,
+        only_link_cluster = only_link_cluster,
         linked_clonesize_range = linked_clonesize_range,
         clone_link_width = clone_link_width,
         clone_link_color = clone_link_color,
@@ -116,6 +119,7 @@ vizAPOTC <- function(
         legend_label = legend_label,
         legend_text_size = legend_text_size,
         add_legend_background = add_legend_background,
+        add_legend_centerspace = add_legend_centerspace,
         verbose = verbose
     )
 }

@@ -56,7 +56,8 @@ getSharedClones <- function(
 
     clonesize_range = c(1L, Inf),
     only_cluster = NULL,
-    exclude_cluster = NULL # FIXME change filtering in Rcpp
+    only_between = NULL
+    #exclude_cluster = NULL # FIXME change filtering in Rcpp
     # TODO export format
 ) {
     # handle inputs
@@ -75,7 +76,7 @@ getSharedClones <- function(
         clone_size_lowerbound = clonesize_range[1],
         clone_size_upperbound = clonesize_range[2],
         included_cluster = create_cluster_truth_vector(
-            only_cluster, exclude_cluster, get_num_clusters(apotc_obj)
+            only_cluster, exclude_cluster = NULL, get_num_clusters(apotc_obj)
         )
     )
 }
@@ -185,20 +186,18 @@ get_shared_clones <- function(
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)
     }
 
-    # TODO filter by lower and upper clone size
+    # TODO filter by clone size
 
     if (all(included_cluster)) return(shared_clonotypes)
-    filter_shared_clones_cluster(
-        shared_clonotypes, included_cluster
-    )
+    filter_shared_clones_cluster(shared_clonotypes, included_cluster)
 }
 
 filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
-    filtered_shared_clonotypes <- rcppFilterSharedClonesByClusterHelper(
-        shared_clonotypes, included_cluster
+    results <- rcppFilterSharedClonesByClusterHelper(
+        shared_clonotypes, names(shared_clonotypes), included_cluster
     )
-    names(filtered_shared_clonotypes) <- names(shared_clonotypes)
-    filtered_shared_clonotypes
+    names(results[[2]]) <- results[[1]]
+    results[[2]]
 }
 
 # overlay clone links on an APackOfTheClones plot
@@ -206,6 +205,7 @@ filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
 overlay_shared_clone_links <- function(
     apotc_obj,
     result_plot,
+    only_cluster,
     clonesize_range,
     link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
     link_color_mode = "blend",
@@ -217,7 +217,10 @@ overlay_shared_clone_links <- function(
     shared_clones <- get_shared_clones(
         apotc_obj,
         clone_size_lowerbound = clonesize_range[1],
-        clone_size_upperbound = clonesize_range[2]
+        clone_size_upperbound = clonesize_range[2],
+        create_cluster_truth_vector(
+            only_cluster, exclude_cluster = NULL, get_num_clusters(apotc_obj)
+        )
     )
 
     if (identical(link_type, "line")) {

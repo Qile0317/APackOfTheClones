@@ -34,14 +34,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppFilterSharedClonesByClusterHelper
-std::vector<std::vector<int>> rcppFilterSharedClonesByClusterHelper(std::vector<std::vector<int>> sharedClusters, std::vector<bool> includeCluster);
-RcppExport SEXP _APackOfTheClones_rcppFilterSharedClonesByClusterHelper(SEXP sharedClustersSEXP, SEXP includeClusterSEXP) {
+Rcpp::List rcppFilterSharedClonesByClusterHelper(std::vector<std::vector<int>> sharedClusters, std::vector<std::string> clonotypes, std::vector<bool> includeCluster);
+RcppExport SEXP _APackOfTheClones_rcppFilterSharedClonesByClusterHelper(SEXP sharedClustersSEXP, SEXP clonotypesSEXP, SEXP includeClusterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<std::vector<int>> >::type sharedClusters(sharedClustersSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type clonotypes(clonotypesSEXP);
     Rcpp::traits::input_parameter< std::vector<bool> >::type includeCluster(includeClusterSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppFilterSharedClonesByClusterHelper(sharedClusters, includeCluster));
+    rcpp_result_gen = Rcpp::wrap(rcppFilterSharedClonesByClusterHelper(sharedClusters, clonotypes, includeCluster));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -143,7 +144,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_rcppGetEdgeCircleIndicies", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleIndicies, 1},
     {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
-    {"_APackOfTheClones_rcppFilterSharedClonesByClusterHelper", (DL_FUNC) &_APackOfTheClones_rcppFilterSharedClonesByClusterHelper, 2},
+    {"_APackOfTheClones_rcppFilterSharedClonesByClusterHelper", (DL_FUNC) &_APackOfTheClones_rcppFilterSharedClonesByClusterHelper, 3},
     {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 4},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
