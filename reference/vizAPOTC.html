@@ -103,6 +103,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  repulsion_strength <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  max_repulsion_iter <span class="op">=</span> <span class="fl">20L</span>,</span>
 <span>  show_shared_clones <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  only_link_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  linked_clonesize_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  clone_link_color <span class="op">=</span> <span class="st">"blend"</span>,</span>
@@ -123,6 +124,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  legend_label <span class="op">=</span> <span class="st">"Clone sizes"</span>,</span>
 <span>  legend_text_size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  add_legend_background <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_legend_centerspace <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -340,6 +342,13 @@ the legend</p></dd>
 <dt>add_legend_background</dt>
 <dd><p>logical. If <code>TRUE</code>, will add a border around the
 legend and fill the background to be white, overlaying anything else.</p></dd>
+
+
+<dt>add_legend_centerspace</dt>
+<dd><p>numeric. An additional amount of distance
+changed between the circle sizes on the left side of the legend and the
+numbers on the right. Useful to set to around 0.5 (or more / less) when there
+are particularly large clone sizes that may cover the numbers.</p></dd>
 
 
 <dt>verbose</dt>
