@@ -188,6 +188,8 @@ get_shared_clones <- function(
 
     # TODO filter by clone size
 
+    if (is_empty(shared_clonotypes)) return(list())
+
     if (all(included_cluster)) return(shared_clonotypes)
     filter_shared_clones_cluster(shared_clonotypes, included_cluster)
 }
@@ -212,7 +214,7 @@ overlay_shared_clone_links <- function(
     link_alpha = 1,
     link_width = "auto",
     verbose = TRUE,
-    link_mode = "default", extra_spacing = "auto" # not very relevant
+    link_mode = "default", extra_spacing = "auto" # not very relevant atm
 ) {
     shared_clones <- get_shared_clones(
         apotc_obj,
@@ -222,6 +224,13 @@ overlay_shared_clone_links <- function(
             only_cluster, exclude_cluster = NULL, get_num_clusters(apotc_obj)
         )
     )
+    print(shared_clones)
+    if (is_empty(shared_clones)) {
+        if (verbose) message(
+            "* no shared clonotypes with current filtering parameters"
+        )
+        return(result_plot)
+    }
 
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
@@ -339,13 +348,15 @@ overlay_links <- function(args) {
 }
 
 overlay_line_links <- function(args) {
-    args$result_plot + ggplot2::geom_segment(
-        data = args$link_dataframe,
-        mapping = apotc_aes_string(
-            x = "x1", y = "y1", xend = "x2", yend = "y2",
-            colour = "color"
-        ),
-        alpha = args$link_alpha,
-        linewidth = args$link_width
-    ) + ggplot2::scale_color_identity()
+    args$result_plot +
+        ggplot2::geom_segment(
+            data = args$link_dataframe,
+            mapping = apotc_aes_string(
+                x = "x1", y = "y1", xend = "x2", yend = "y2",
+                colour = "color"
+            ),
+            alpha = args$link_alpha,
+            linewidth = args$link_width
+        ) +
+        ggplot2::scale_color_identity()
 }

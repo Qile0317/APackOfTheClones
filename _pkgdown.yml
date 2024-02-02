@@ -19,8 +19,11 @@ redirects:
 
 navbar:
   structure:
-    left:  [intro, vignettes, reference, news, archive]
+    left:  [install, intro, vignettes, reference, news, archive]
   components:
+    install:
+      text: Install
+      href: articles/APackOfTheClones-install.html
     vignettes:
       text: Vignettes
       menu:

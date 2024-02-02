@@ -54,8 +54,8 @@ init_dataframe <- function(column_names, nrow, init_val = NA) {
 
 # readability functions
 
-is_empty <- function(inp) identical(inp, list())
-isnt_empty <- function(inp) !identical(inp, list())
+is_empty <- function(inp) is.list(inp) && length(inp) == 0
+isnt_empty <- function(inp) !is_empty(inp)
 
 isnt_na <- function(inp) !any(is.na(inp))
 

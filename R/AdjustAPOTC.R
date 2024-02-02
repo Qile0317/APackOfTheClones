@@ -59,7 +59,7 @@
 #' translate all labels in `nudge_label` by the input - which mostly is
 #' syntactic sugar for translating a single label if the input of
 #' `nudge_label` is of length 1.
-#' 
+#'
 #' @return The adjusted `seurat_obj`
 #' @export
 #'
@@ -114,7 +114,7 @@ AdjustAPOTC <- function(
 	recolor_cluster = NULL,
 	new_color = NULL,
 
-	rename_label = NULL,
+	rename_label = NULL, # TODO add functionality to change all at once or modify all at once
 	new_label = NULL,
 	relocate_label = NULL,
 	label_relocation_coord = NULL,
