@@ -12,8 +12,7 @@ getSharedClones(
   extra_filter = NULL,
   run_id = NULL,
   clonesize_range = c(1L, Inf),
-  only_cluster = NULL,
-  only_between = NULL
+  only_cluster = NULL
 )
 }
 \arguments{
@@ -71,10 +70,6 @@ Defaults to \code{c(1L, Inf)}.}
 \item{only_cluster}{integer vector indicating which clusters to keep when
 counting shared clones. Note that this cannot conflict with
 \code{exclude_cluster}.}
-
-\item{exclude_cluster}{integer vector indicating which clusters to exclude
-when counting shared clones. Note that this cannot conflict with
-\code{only_cluster}.}
 }
 \value{
 a named list where each name is a clonotype, each element is a

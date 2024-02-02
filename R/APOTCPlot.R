@@ -109,7 +109,7 @@ APOTCPlot <- function(
 	run_id = NULL,
 
 	show_shared_clones = FALSE, # TODO an alternative vizualization not based on apotcplots. e.g. those used to visualize connectedness of graphs
-	only_link_cluster = NULL, # FIXME
+	#only_link_cluster = NULL, # TODO
 	# shared_clone_mapping = NULL,
 	# shared_clone_filter = NULL,
 	linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)

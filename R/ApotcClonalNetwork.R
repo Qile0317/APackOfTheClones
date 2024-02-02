@@ -22,9 +22,6 @@
 #' @param only_cluster integer vector indicating which clusters to keep when
 #' counting shared clones. Note that this cannot conflict with
 #' `exclude_cluster`.
-#' @param exclude_cluster integer vector indicating which clusters to exclude
-#' when counting shared clones. Note that this cannot conflict with
-#' `only_cluster`.
 #'
 #' @return a named list where each name is a clonotype, each element is a
 #' numeric indicating which seurat cluster(s) its in, in no particular order.
@@ -55,8 +52,8 @@ getSharedClones <- function(
     run_id = NULL,
 
     clonesize_range = c(1L, Inf),
-    only_cluster = NULL,
-    only_between = NULL
+    only_cluster = NULL#,
+    # only_between = NULL #TODO
     #exclude_cluster = NULL # FIXME change filtering in Rcpp
     # TODO export format
 ) {
