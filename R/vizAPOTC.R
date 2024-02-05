@@ -102,7 +102,7 @@ vizAPOTC <- function(
         seurat_obj,
         run_id = "vizAPOTC",
         show_shared_clones = show_shared_clones,
-        only_link_cluster = only_link_cluster,
+        #only_link_cluster = only_link_cluster,
         linked_clonesize_range = linked_clonesize_range,
         clone_link_width = clone_link_width,
         clone_link_color = clone_link_color,
