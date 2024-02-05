@@ -21,8 +21,8 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
-#' @param show_shared_clones `lifecycle::badge("experimental")` If `TRUE`, will
-#' overlay straight lines between each clone that is common between clusters.
+#' @param show_shared_clones `r lifecycle::badge("experimental")` If `TRUE`,
+#' overlays straight lines between each clone that is common between clusters.
 #' @param linked_clonesize_range numeric vector of length 2. Indicates the
 #' minimum and maximum clonesize of at least one clone of a shared clonotype.
 #' Defaults to `c(2, Inf)` which means
@@ -81,14 +81,13 @@
 #' @param add_legend_centerspace numeric. An additional amount of distance
 #' changed between the circle sizes on the left side of the legend and the
 #' numbers on the right. Useful to set to around 0.5 (or more / less) when there
-#' are particularly large clone sizes that may cover the numbers. 
+#' are particularly large clone sizes that may cover the numbers.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object
+#' @export
 #'
 #' @seealso [AdjustAPOTC]
-#'
-#' @export
 #'
 #' @examples
 #' data("combined_pbmc")

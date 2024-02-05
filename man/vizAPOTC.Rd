@@ -19,7 +19,6 @@ vizAPOTC(
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
   show_shared_clones = FALSE,
-  only_link_cluster = NULL,
   linked_clonesize_range = c(2L, Inf),
   clone_link_width = "auto",
   clone_link_color = "blend",
@@ -45,9 +44,8 @@ vizAPOTC(
 )
 }
 \arguments{
-\item{seurat_obj}{Seurat object with one or more dimension reductions and
-already have been integrated with a TCR/BCR library with
-\code{scRepertoire::combineExpression}.}
+\item{seurat_obj}{A seurat object that has been integrated with clonotype
+data.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can be any reduction present
@@ -112,8 +110,8 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
-\item{show_shared_clones}{\code{lifecycle::badge("experimental")} If \code{TRUE}, will
-overlay straight lines between each clone that is common between clusters.}
+\item{show_shared_clones}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} If \code{TRUE},
+overlays straight lines between each clone that is common between clusters.}
 
 \item{linked_clonesize_range}{numeric vector of length 2. Indicates the
 minimum and maximum clonesize of at least one clone of a shared clonotype.
@@ -205,7 +203,7 @@ seurat object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This function combines the functionality of both \code{RunAPOTC} and \code{APOTCPlot}.
+This function combines the functionality of both \link{RunAPOTC} and \link{APOTCPlot}.
 Given a Seurat object, it first runs the APackOfTheClones method (\link{RunAPOTC})
 to compute clonal expansion information, and then generates a customizable
 ggplot2 object of the clonal expansion plot with a circle size legend
@@ -222,4 +220,7 @@ vizAPOTC(
     combined_pbmc, try_place = TRUE, show_labels = TRUE, verbose = FALSE
 )
 
+}
+\seealso{
+\link{AdjustAPOTC}
 }

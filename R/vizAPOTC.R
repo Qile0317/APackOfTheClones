@@ -4,7 +4,7 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' This function combines the functionality of both `RunAPOTC` and `APOTCPlot`.
+#' This function combines the functionality of both [RunAPOTC] and [APOTCPlot].
 #' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC])
 #' to compute clonal expansion information, and then generates a customizable
 #' ggplot2 object of the clonal expansion plot with a circle size legend
@@ -12,9 +12,13 @@
 #'
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
+#' @param seurat_obj A seurat object that has been integrated with clonotype
+#' data.
 #'
 #' @inherit APOTCPlot return
 #' @export
+#'
+#' @seealso [AdjustAPOTC]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -45,7 +49,7 @@ vizAPOTC <- function(
     max_repulsion_iter = 20L,
 
     show_shared_clones = FALSE,
-    only_link_cluster = NULL, # TODO
+    #only_link_cluster = NULL, # TODO
     linked_clonesize_range = c(2L, Inf), # TODO
     clone_link_width = "auto",
 	clone_link_color = "blend",
