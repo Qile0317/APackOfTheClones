@@ -41,7 +41,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,6 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-    <a class="dropdown-item" href="../articles/APackOfTheClones.html">APackOfTheClones Essentials</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
   </div>
 </li>
@@ -161,13 +160,13 @@ is also identical to the built-in example dataset
 <code>combined_pbmc</code> which can be loaded with
 <code>data("combined_pbmc", package = "APackOfTheClones")</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncborcherding.github.io/scRepertoire/" class="external-link">scRepertoire</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load in the corresponding 6-sample TCR contigs from scRepertoire</span></span>
 <span><span class="va">contig_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"contig_list"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># combine the TCR contigs into clones with custom samples</span></span>
-<span><span class="va">combined_contig_list</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineTCR.html" class="external-link">combineTCR</a></span><span class="op">(</span></span>
+<span><span class="va">combined_contig_list</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineTCR</span><span class="op">(</span></span>
 <span>  <span class="va">contig_list</span>,</span>
 <span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>,</span>
 <span>  removeNA <span class="op">=</span> <span class="cn">FALSE</span>, </span>
@@ -175,12 +174,12 @@ is also identical to the built-in example dataset
 <span>  filterMulti <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>For integrating the clonal information,
-<code><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">scRepertoire::combineExpression</a></code> is the function used <a href="https://www.borch.dev/uploads/screpertoire/articles/attaching_sc" class="external-link">to
+<code>scRepertoire::combineExpression</code> is the function used <a href="https://www.borch.dev/uploads/screpertoire/articles/attaching_sc" class="external-link">to
 do so</a>, but for <code>APackOfTheClones</code> the scRNA-seq object
 has to be a seurat object:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># a seurat object corresponding to combined_contig_list named `pbmc` is loaded</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">combineExpression</a></span><span class="op">(</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineExpression</span><span class="op">(</span></span>
 <span>  <span class="va">combined_contig_list</span>,</span>
 <span>  <span class="va">pbmc</span>,</span>
 <span>  cloneCall <span class="op">=</span> <span class="st">"gene"</span>,</span>
@@ -334,7 +333,6 @@ likely already be working with fully subsetted seurat object, and
 APackOfTheClones functions can be directly applied in those cases. See
 the corresponding Seurat <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link"><code>vignette("essential_commands")</code></a>
 for details.</p>
-<!-- TODO clone link stuff -->
 </div>
 </div>
 <div class="section level2">

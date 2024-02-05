@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,6 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-    <a class="dropdown-item" href="../articles/APackOfTheClones.html">APackOfTheClones Essentials</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
   </div>
 </li>
@@ -122,11 +121,11 @@ before this one.</p>
 <details><summary><strong>As a reminder, here’s how to set up the seurat object and
 clonotype data</strong>
 </summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncborcherding.github.io/scRepertoire/" class="external-link">scRepertoire</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># A seurat object named `pbmc` is loaded with a corresponding `contig_list`</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">combineExpression</a></span><span class="op">(</span></span>
-<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu"><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineTCR.html" class="external-link">combineTCR</a></span><span class="op">(</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineExpression</span><span class="op">(</span></span>
+<span>  <span class="fu">scRepertoire</span><span class="fu">::</span><span class="fu">combineTCR</span><span class="op">(</span></span>
 <span>    <span class="va">contig_list</span>,</span>
 <span>    samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>,</span>
 <span>    removeNA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -201,17 +200,6 @@ set. Here’s it ran again but with more optional arguments and a custom
 <span>    <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"sample17"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="important-note">Important Note<a class="anchor" aria-label="anchor" href="#important-note"></a>
-</h3>
-<p>In a lot of real world applications, the user may only really need to
-ever work with visualizations from one run and mainly want to just
-adjust its parameters or the aesthetics of the plot. In these cases,
-feel free to completely ignore any of the parameters related to
-<code>run_id</code> or any other filtering parameter, as all functions
-default to using the latest run if no identifying parameters are passed
-in.</p>
-</div>
-<div class="section level3">
 <h3 id="utilities-for-managing-apackoftheclones-runs">Utilities for Managing APackOfTheClones Runs<a class="anchor" aria-label="anchor" href="#utilities-for-managing-apackoftheclones-runs"></a>
 </h3>
 <p>It is to note that the data abstraction here with a
@@ -277,11 +265,7 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 <span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># defaults to latest</span></span>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span>, <span class="st">"20"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; * generated ggplot object</span></span>
-<span><span class="co">#&gt; * generated ggplot object</span></span>
-<span><span class="co">#&gt; * generated ggplot object</span></span>
-<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span>
-<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/apotcplot-1.png" width="700"></p>
 </div>
 <div class="section level2">
