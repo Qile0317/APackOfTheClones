@@ -30,7 +30,8 @@ data("combined_pbmc")
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Generated with \code{scRepertoire::combineExpression}, more specifically, with:
+Generated with \code{scRepertoire::combineExpression}. To construct this object
+from scratch, try:
 
 scRepertoire::combineExpression(scRepertoire::combineTCR(get(data("contig_list", ,     package = "scRepertoire")), samples = c("P17B", "P17L", "P18B", ,     "P18L", "P19B", "P19L", "P20B", "P20L"), removeNA = FALSE, ,     removeMulti = FALSE, filterMulti = FALSE), get(data("scRep_example", ,     package = "scRepertoire")), cloneCall = "gene", proportion = TRUE)
 }

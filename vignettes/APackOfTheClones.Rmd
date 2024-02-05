@@ -120,12 +120,12 @@ default_apotc_plot
 
 ### Key characteristics of the plot
 
-* One should notice the immediate correspondence of circular clusters to umap clusters, and be able to derive some immediate insights about which clusters have expanded.
-* The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
-* The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
-* On the plot, there is a somewhat imperfect visual legend of the relative clone sizes
-* Some clusters have considerable visual overlap
-* The returned plot is a fully customizable `ggplot` object
+- One should notice the immediate correspondence of circular clusters to umap clusters, and be able to derive some immediate insights about which clusters have expanded.
+- The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
+- The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
+- On the plot, there is a somewhat imperfect visual legend of the relative clone sizes
+- Some clusters have considerable visual overlap
+- The returned plot is a fully customizable `ggplot` object
 
 The resulting clonal expansion plot may not be visually satisfactory on the first run without customizations from optional arguments. These arguments and other `ggplot` tricks will be covered to fine-tune the visualization until publication-ready.
 
@@ -227,9 +227,9 @@ repulsion_strength = 1,
 max_repulsion_iter = 10
 ```
 
-* `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusterss are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders. 
-* `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
-* `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
+- `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusterss are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders. 
+- `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
+- `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
 
 For more details on them, read the "Arguments" section in the function documentation. Briefly, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form due to a constant need to fine-tune, see the vignette `APackOfTheClones-runs`.)
 
@@ -289,5 +289,5 @@ For users that need to fine-tune plot parameters and/or save the data within the
 
 For inspiration of how it could practically look like in a real paper context, see the following papers where the original julia implementation of APackOfTheClones was successfully used:
 
-* [Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ $T_{H}2$ cell population in nasal polyps](https://doi.org/10.1126/sciimmunol.abg6356)
-* [Recombinant multimeric dog allergen prevents airway hyperresponsiveness in a model of asthma marked by vigorous $T_{H}2$ and $T_{H}17$ cell responses](https://doi.org/10.1111/all.15399)
+- [Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ $T_{H}2$ cell population in nasal polyps](https://doi.org/10.1126/sciimmunol.abg6356)
+- [Recombinant multimeric dog allergen prevents airway hyperresponsiveness in a model of asthma marked by vigorous $T_{H}2$ and $T_{H}17$ cell responses](https://doi.org/10.1111/all.15399)

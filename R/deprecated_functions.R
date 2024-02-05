@@ -147,7 +147,7 @@ dev_integrate_tcr <- function(seurat_obj, tcr_file, verbose) {
 #'
 #' @param integrated_seurat_obj Seurat object that has been integrated with a
 #' T-cell receptor library with the deprecated function
-#' \code{\link{integrate_tcr}}. More specifically, in the metadata, there must
+#' [integrate_tcr()]. More specifically, in the metadata, there must
 #' at least be the elements `seurat_clusters` and `raw_clonotype_id`
 #'
 #' @return A list of `table` objects, where each element is tabled

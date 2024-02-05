@@ -1,5 +1,8 @@
 url: https://qile0317.github.io/APackOfTheClones/
 
+development:
+  mode: auto
+
 template:
   bootstrap: 5
   includes:
@@ -27,8 +30,8 @@ navbar:
     vignettes:
       text: Vignettes
       menu:
-      - text: APackOfTheClones Essentials
-        href: articles/APackOfTheClones.html
+      # - text: APackOfTheClones Essentials
+      #   href: articles/APackOfTheClones.html
       - text: Storing and Fine-Tuning APackOfTheClones Runs
         href: articles/APackOfTheClones-runs.html
     archive:

@@ -22,24 +22,29 @@ To install APackOfTheClones, R version 4.0.0 is required. The free IDE Rstudio i
 
 ## Dependencies
 
-APackOfTheClones extends the BioConductor scRepertoire v2 package, which itself is an extension of the Seurat package. See their respective installation guides for details. Users of APackOfTheClones should also be familiar with both packages. Briefly, the following should work for most devices:
+APackOfTheClones extends the BioConductor scRepertoire v2 package, which itself is an extension of the Seurat package. See their respective installation guides for details, although users of APackOfTheClones are expected to be familiar with Seurat and most should have used scRepertoire to integrate the clonotype data into a seurat object. Briefly, the following should work for most devices:
 
 ```R
+# install BiocManager for scRepertoire installation
 if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 library(BiocManager)
+
+# install scRepertoire from Bioconductor
 BiocManager::install("scRepertoire")
+
+# install Seurat from CRAN
 install.packages("Seurat")
 ```
 
 ## Installation of Latest CRAN release
 
-`APackOfTheClones` is registered on CRAN. To install the latest stable release, simply run the following
+`APackOfTheClones` is registered on CRAN. To install the latest stable release, try
 
 ```R
 install.packages("APackOfTheClones")
 ```
 
-If there are any issues with the CRAN installation (for example, the package had been archived on CRAN for a brief period previously), try
+If there are any issues with the CRAN installation, try
 
 ```R
 # ensure the devtools package is installed via install.packages("devtools")

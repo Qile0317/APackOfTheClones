@@ -10,7 +10,7 @@ count_clone_sizes(integrated_seurat_obj)
 \arguments{
 \item{integrated_seurat_obj}{Seurat object that has been integrated with a
 T-cell receptor library with the deprecated function
-\code{\link{integrate_tcr}}. More specifically, in the metadata, there must
+\code{\link[=integrate_tcr]{integrate_tcr()}}. More specifically, in the metadata, there must
 at least be the elements \code{seurat_clusters} and \code{raw_clonotype_id}}
 }
 \value{
