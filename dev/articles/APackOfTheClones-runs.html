@@ -24,12 +24,12 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=%7BG-TSDH5XEN3S%7D"></script><script>
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-TSDH5XEN3S"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{G-TSDH5XEN3S}');
+  gtag('config', 'G-TSDH5XEN3S');
 </script>
 </head>
 <body>
@@ -40,7 +40,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-info me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,20 +50,28 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="../articles/APackOfTheClones-install.html">Install</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/APackOfTheClones.html">Get started</a>
+</li>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">ARCHIVED: A walkthrough of APackOfTheClones v0.1.x</a>
-  </div>
-</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-archive">
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -161,8 +169,8 @@ meaning it has all the data subsetting, circle size scaling, and cluster
 repulsion capabilities covered in the previous vignette. The most
 essential difference is the presence of the argument
 <code>run_id</code>, which corresponds to an id for the
-<code>ApotcData</code> object. If left blank, one will be automatically
-generated in the following format:</p>
+<code>ApotcData</code> object associated with some run. If left blank,
+one will be automatically generated in the following format:</p>
 <blockquote>
 <p><code>reduction_base;clonecall;keyword_arguments;extra_filter</code></p>
 </blockquote>
@@ -192,6 +200,17 @@ set. Here’s it ran again but with more optional arguments and a custom
 <code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
 <span>    <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"sample17"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="important-note">Important Note<a class="anchor" aria-label="anchor" href="#important-note"></a>
+</h3>
+<p>In a lot of real world applications, the user may only really need to
+ever work with visualizations from one run and mainly want to just
+adjust its parameters or the aesthetics of the plot. In these cases,
+feel free to completely ignore any of the parameters related to
+<code>run_id</code> or any other filtering parameter, as all functions
+default to using the latest run if no identifying parameters are passed
+in.</p>
+</div>
 <div class="section level3">
 <h3 id="utilities-for-managing-apackoftheclones-runs">Utilities for Managing APackOfTheClones Runs<a class="anchor" aria-label="anchor" href="#utilities-for-managing-apackoftheclones-runs"></a>
 </h3>
@@ -231,7 +250,7 @@ always relied on auto-generated <code>run_id</code>’s then
 recommended as its a lot more (unnecessarily) verbose. Here is
 <code>APOTCPlot</code> in action:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Here, plots for samples 17, 18, and 19 as seen in the previous vignette are made, where</span></span>
+<code class="sourceCode R"><span><span class="co"># Here, plots for samples 17 - 20 as seen in the previous vignette are made, where</span></span>
 <span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
 <span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). </span></span>
 <span></span>
@@ -247,14 +266,22 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 <span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P19"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P19B"</span>, <span class="st">"P19L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P18"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>, <span class="co"># run_id omitted as sample 19 was the latest run</span></span>
-<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
+<span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P20"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P19</span></span></code></pre></div>
+<span></span>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P18"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P19"</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># defaults to latest</span></span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span>, <span class="st">"20"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/apotcplot-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -267,7 +294,22 @@ possesses the same four repulsion arguments in <code>vizAPOTC</code> and
 <code>RunAPOTC</code> if a run is to be repulsed again. See the function
 level documentation for the following parameters that can modify cluster
 locations, colors, and the adjustment of the
-<code>clone_scale_factor</code> and <code>rad_scale_factor</code>.</p>
+<code>clone_scale_factor</code> and <code>rad_scale_factor</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>new_rad_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>new_clone_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>relocate_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>relocation_coord <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>nudge_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>recolor_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>new_color <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>rename_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>new_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>relocate_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>label_relocation_coord <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>nudge_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>label_nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>verbose <span class="ot">=</span> <span class="cn">TRUE</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -24,12 +24,12 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=%7BG-TSDH5XEN3S%7D"></script><script>
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-TSDH5XEN3S"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{G-TSDH5XEN3S}');
+  gtag('config', 'G-TSDH5XEN3S');
 </script>
 </head>
 <body>
@@ -40,7 +40,7 @@
     
     <a class="navbar-brand me-2" href="index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-info me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,20 +50,28 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/APackOfTheClones-install.html">Install</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="articles/APackOfTheClones.html">Get started</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <a class="dropdown-item" href="articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
-    <a class="dropdown-item" href="articles/archive/v0-main.html">ARCHIVED: A walkthrough of APackOfTheClones v0.1.x</a>
-  </div>
-</li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-archive">
+    <a class="dropdown-item" href="articles/archive/v0-main.html">v0.1.x</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -92,7 +100,7 @@
 <!-- badges: start -->
 
 <p><code>APackOfTheClones</code> is an R package that extends the bioconductor <code>scRepertoire</code> package to produce easily customizable “ball-packing” visualizations of the clonal expansion of T-cells/B-cells in a <code>Seurat</code> object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics’ single-cell immune profiling).</p>
-<p>The baseline concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of <code>APackOfTheClones</code> being used on an <a href="https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link" class="external-link">example dataset for scRepertoire</a>:</p>
+<p>The baseline concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of <code>APackOfTheClones</code> being used on an <a href="https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link" class="external-link">example seurat object for scRepertoire</a> with its corresponding VDJ library:</p>
 <p><img src="reference/figures/example.png" width="100%" align="center" alt="An example APackOfTheClones plot"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -100,17 +108,22 @@
 <p><code>APackOfTheClones</code> is registered on CRAN. To install the latest stable release, simply run the following</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"APackOfTheClones"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, to download the latest semi-stable development edition, run</p>
+<p>If there are any issues with the CRAN installation (for example, the package has been archived on CRAN for a brief period), try</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@dev"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@cran"</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, to download the latest semi-stable development edition, try</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones"</span><span class="op">)</span></span></code></pre></div>
+<p>A static legacy version is also available both on CRAN archives and on a git branch (<code>v0</code>), to install, try</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@v0"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The package extends the functionality of <code>scRepertoire</code> <strong><em>v2</em></strong> by working with a seurat object’s corresponding T/B cell receptor library. To do this, read the <a href="borch.dev/uploads/screpertoire">scRepertoire vignette</a>. Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with <code><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineTCR.html" class="external-link">scRepertoire::combineTCR</a></code> / <code><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineBCR.html" class="external-link">scRepertoire::combineBCR</a></code> first. Then, it should be integrated into the corresponding seurat object either with <code><a href="https://www.borch.dev/uploads/scRepertoire/reference/combineExpression.html" class="external-link">scRepertoire::combineExpression</a></code>.</p>
 <p>To quickly produce the visualization, the <code>vizAPOTC(your_combined_seurat_object)</code> should give a reasonable visualization. There is an example seurat object included in the package which can be used with <code>data("combined_pbmc")</code>. The following codechunk is an example of how it can be done:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncborcherding.github.io/scRepertoire/" class="external-link">scRepertoire</a></span><span class="op">)</span> <span class="co"># ensure v2 is installed: devtools::install_github("ncborcherding/scRepertoire")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/APackOfTheClones/">APackOfTheClones</a></span><span class="op">)</span></span>
@@ -134,7 +147,7 @@
 <span><span class="co"># in seurat clusters 1, 3, and 4.</span></span>
 <span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, seurat_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code>RunAPOTC</code> and <code>AdjustAPOTC</code>, then visualized with <code>APOTCPlot</code>, like so:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># using the same seurat object as before, run and store associated data,</span></span>
 <span><span class="co"># identifying it with a run id.</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
@@ -176,7 +189,7 @@
 <div class="section level2">
 <h2 id="upcoming-features">Upcoming features<a class="anchor" aria-label="anchor" href="#upcoming-features"></a>
 </h2>
-<p>One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.</p>
+<p>One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot. Currently, a basic experimental implementation has been completed, by introducing a new logical argument in <code>vizAPOTC</code> and <code>APOTCPlot</code> named <code>show_shared_clones</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
@@ -234,6 +247,7 @@
 <li><a href="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main" class="external-link"><img src="https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation"></a></li>
+<li><a href="https://qile0317.github.io/APackOfTheClones/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Developmental Documentation"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/blob/unstable/LICENSE.md" class="external-link"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license"></a></li>
 </ul>

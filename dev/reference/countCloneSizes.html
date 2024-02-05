@@ -6,12 +6,12 @@ object combined with a VDJ library — countCloneSizes"><meta property="og:descr
 Get clonotype frequencies from a seurat object's meta.data slot."><meta property="og:image" content="https://qile0317.github.io/APackOfTheClones/logo.png"><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=%7BG-TSDH5XEN3S%7D"></script><script>
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-TSDH5XEN3S"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{G-TSDH5XEN3S}');
+  gtag('config', 'G-TSDH5XEN3S');
 </script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
@@ -20,7 +20,7 @@ Get clonotype frequencies from a seurat object's meta.data slot."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-info me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,20 +29,28 @@ Get clonotype frequencies from a seurat object's meta.data slot."><meta property
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/APackOfTheClones-install.html">Install</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/APackOfTheClones.html">Get started</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+  </div>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">ARCHIVED: A walkthrough of APackOfTheClones v0.1.x</a>
-  </div>
-</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-archive">
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -129,7 +137,6 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">countCloneSizes</span><span class="op">(</span><span class="va">combined_pbmc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                 NA;NA_TRBV12-3.None.TRBJ2-4.TRBC2;TGTGCCAGCAGTTTCCTTGGGACAGTCCGCAAAAACATTCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                  1 </span>
@@ -282,9 +289,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                            TRAV9-2.TRAJ42.TRAC;TGTGCTCTCCTCAGTTACGGAGGAAGCCAAGGAAATCTCATCTTT_TRBV5-4.None.TRBJ1-5.TRBC1;TGTGCCAGCAGCTTGGAAGGGGGCAATCAGCCCCAGCATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                         NA;NA_TRBV11-2.None.TRBJ2-7.TRBC2;TGTGCCAGCAGCTTCGGATCTAGCGGGGGGTACTACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                          1 </span>
@@ -377,9 +382,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                       TRAV8-6.TRAJ8.TRAC;TGTGCTGTGAGTGTAGGGACAGGCTTTCAGAAACTTGTATTT_TRBV12-4.None.TRBJ1-5.TRBC1;TGTGCCAGCAGGGCACAGGGGTCCCATCAGCCCCAGCATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                          1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                   NA;NA_TRBV28.None.TRBJ2-6.TRBC2;TGTGCCAGCAGAGCGGGACAGGGGAGAGGGGCCAACGTCCTGACTTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                  1 </span>
@@ -462,9 +465,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                      TRAV9-2.TRAJ39.TRAC;TGTGCTCTGAGTGACGGGCCTCTGGTGGCAGGCAACATGCTCACCTTT_TRBV6-5.None.TRBJ2-1.TRBC2;TGTGCCAGCAGCCTCGGACAGGGGATATACAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                          NA;NA_TRBV12-4.None.TRBJ2-7.TRBC2;TGTGCCAGCAGCCGGTTGAGGACAGGGGCCCTATACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                           1 </span>
@@ -519,9 +520,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                              TRAV9-2.TRAJ52.TRAC;TGTGCTCTGACCTTCTCCAATGCTGGTGGTACTAGCTATGGAAAGCTGACATTT_TRBV9.None.TRBJ1-1.TRBC1;TGTGCCAGCAGCGTAGCAGGGATAAACACTGAAGCTTTCTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                           1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                NA;NA_TRBV27.None.TRBJ2-1.TRBC2;TGTGCCAGCAGCCCCACAGTAGCGGGGGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                      1 </span>
@@ -588,9 +587,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                               TRAV9-2.TRAJ29.TRAC;TGTGCTCTGAGGTCCAATTCAGGAAACACACCTCTTGTCTTT_TRBV29-1.None.TRBJ1-3.TRBC1;TGCAGCGTCGATGGTGGCTATTTGTCTGGAAACACCATATATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                      1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                    NA;NA_TRBV24-1.None.TRBJ1-2.TRBC1;TGTGCCACCAGTGACCAGACGACAGGACCGAACAACTATGGCTACACCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                        1 </span>
@@ -651,9 +648,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                 TRAV8-6.TRAJ13.TRAC;TGTGCTGTGAGTGATACTGGGGGTTACCAGAAAGTTACCTTT_TRBV20-1.None.TRBJ1-2.TRBC1;TGCAGTGCTAGAGATGGGACAGCTTTTAACTATGGCTACACCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                        1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                           NA;NA_TRBV19.None.TRBJ2-3.TRBC2;TGTGCCACATCTGCCCGACTAGCGGGAGGCCCGTCACAAACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                             1 </span>
@@ -710,9 +705,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                         TRAV9-2.TRAJ6.TRAC;TGTGCTCTGAGTGATCGGGTGGGAGGAAGCTACATACCTACATTT_TRBV5-6.None.TRBJ2-1.TRBC2;TGTGCCAGCAGCTTCAGAACCCTGGCTAGCGGCTCGGCGGCCAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                             1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                   NA;NA_TRBV20-1.None.TRBJ2-1.TRBC2;TGCAGTGTCCAGAGACTAGCGGGAAAAGCTGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                              1 </span>
@@ -753,9 +746,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                              TRAV8-6.TRAJ29.TRAC;TGTGCTGTGAGTGAAGCCGACGGAAACACACCTCTTGTCTTT_TRBV5-4.None.TRBJ2-1.TRBC2;TGTGCCAGCAGCGGGGGACTACACAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                               NA;NA_TRBV7-9.None.TRBJ2-3.TRBC2;TGTGCCAGCAGCTTAATGGGTGGACTAGCGGGGGCCTACACAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                        1 </span>
@@ -778,9 +769,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                        TRAV9-2.TRAJ48.TRAC;TGTGCCCTTAACTTTGGAAATGAGAAATTAACCTTT_TRBV4-1.None.TRBJ1-1.TRBC1;TGCGCCAGCAGCCACACGGACAGGCCGCTCACTGAAGCTTTCTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                        1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                           NA;NA_TRBV18.None.TRBJ2-3.TRBC2;TGTGCCAGCTCACCATCTGCAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                              1 </span>
@@ -821,9 +810,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                       TRAV8-6.TRAJ30.TRAC;TGTGCTGCCTTCATGAACAGAGATGACAAGATCATCTTT_TRBV10-3.None.TRBJ2-2.TRBC2;TGTGCCATCAGTTCTACCGGGACAGGGGAAACCGGGGAGCTGTTTTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[11]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[11]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                           TRAV12-1.TRAJ21.TRAC;TGTGTGGTGAACAGCGACAACTTCAACAAATTTTACTTT_TRBV5-1.None.TRBJ2-1.TRBC2;TGCGCCAGCAGCTTGGCCGTTGGGATGCAGGTCGATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                  1 </span>
@@ -834,16 +821,12 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                            TRAV8-6.TRAJ57.TRAC;TGTGCTGTGAGTGAAACGGGCGGATCTGAAAAGCTGGTCTTT_TRBV6-1.None.TRBJ2-7.TRBC2;TGTGCCAGCAGAGGACGGGAAGTTCTATCCTACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[12]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[12]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TRAV8-4.TRAJ39.TRAC;TGTGCTGTGAGTGAAAATAATGCAGGCAACATGCTCACCTTT_TRBV27.None.TRBJ1-2.TRBC1;TRBV18.None.TRBJ2-3.TRBC2;TGTGCCAGCACGGACAGGGGCTTTAACGGCTACACCTTC;TGTGCCAGCTCACCACCGTCGGCAGGAGGTGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                        1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[13]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[13]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                     NA;NA_TRBV6-1.None.TRBJ2-1.TRBC2;TGTGCCAGCAGTGAAGGCGGAGGTTGGGATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                               1 </span>
@@ -868,9 +851,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                        TRAV6.TRAJ8.TRAC;TGTGCTTCAGGCTTTCAGAAACTTGTATTT_TRBV6-6.None.TRBJ1-5.TRBC1;TGTGCCAGCAGTTTCTCGACAGGGGAGGATCAGCCCCAGCATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                               1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[14]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[14]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                       NA;NA_TRBV11-2.None.TRBJ2-2.TRBC2;TGTGCCAGCAGCTACATGGGGGGGGTCACCGGGGAGCTGTTTTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                     1 </span>
@@ -881,9 +862,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                   TRAV8-4.TRAJ3.TRAC;TGTGCTGTGAGTGCGTGGAGCAGTGCTTCCAAGATAATCTTT_NA;NA </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                     1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[15]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[15]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                    NA;NA_TRBV20-1.None.TRBJ2-1.TRBC2;TGCAGTGCTAGAATTCCCCCGACTAGCGGGGAATACAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                        1 </span>
@@ -898,9 +877,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span> TRAV8-2.TRAJ8.TRAC;TGTGTTGTGAGTTCTATGAACACAGGCTTTCAGAAACTTGTATTT_TRBV27.None.TRBJ2-6.TRBC2;TGTGCCAGCAGGCCCCCGTCCTCTGGGGCCAACGTCCTGACTTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                        1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[16]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[16]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                         NA;NA_TRBV18.None.TRBJ2-5.TRBC2;TGTGCCAGCTCACCAACGAGACAAGAGACCCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                               1 </span>
@@ -909,13 +886,11 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>             TRAV16.TRAJ48.TRAC;TGTGCTCTAAACACCTTTGGAAATGAGAAATTAACCTTT_TRBV7-2.None.TRBJ2-3.TRBC2;TGTGCCAGCAGCTTAAGACTAGCGGGGGGAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                               1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[17]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt; table of extent 0 &gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">countCloneSizes</span><span class="op">(</span><span class="va">combined_pbmc</span>, <span class="st">"aa"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                       CAAATGAAGNKLTF_CASSPTSGAADTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    1 </span>
@@ -1068,9 +1043,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                  NA_CASSYSPTGARNTIYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             CAAGGGATNKLIF;CALSDRSGKLIF_CASRSGANYEQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    1 </span>
@@ -1163,9 +1136,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                     NA_CATSEGGDTEAFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                CAAAGSQGNLIF_CASSVGTPNYGYTF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                          1 </span>
@@ -1248,9 +1219,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                      NA_CAWTSDLRLAGLYNEQFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                          1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       CAASNAGYALNF_CASSGDHHEQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               1 </span>
@@ -1305,9 +1274,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            NA_CSARDRGRGGNNQPQHF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                  CAASLDGQKLLF_CSARESGVYQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                          1 </span>
@@ -1374,9 +1341,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                        NA_CASSQDRTGLDYEQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                          1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 CAAKAGGYNKLIF_NA </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                1 </span>
@@ -1437,9 +1402,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                             NA_CATSDQTTGPNNYGYTF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  CAASANVRAAGNKLTF;CAVTPRGNNRLAF_CASSGGGGKIYEQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               1 </span>
@@ -1496,9 +1459,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            NA_CATSARLAGGPSQTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CAARAPGTASKLTF;CAGAPASGNTPLVF_CASSPGPGEGYTF;CASSLRAATNTGELFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                            1 </span>
@@ -1539,9 +1500,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                            NA_CSVQRLAGKAEQFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                            1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  CAASDRDDKIIF_CASSLTGGLGADTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              1 </span>
@@ -1564,9 +1523,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         NA_CASSLMGGLAGAYTDTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      CAAFMNRDDKIIF_CAISSTGTGETGELFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                   1 </span>
@@ -1607,9 +1564,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                 NA_CASSSQRQDLNTEAFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                   1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[11]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[11]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CAASRYGQNFVF;CAVNINGGGNKLTF_CASTSLLAGVYEQYF;CASSYSRGGGPQETQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                             1 </span>
@@ -1620,16 +1575,12 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                CVVNSDNFNKFYF_CASSLAVGMQVDEQFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                             1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[12]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[12]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CAVSENNAGNMLTF_CASTDRGFNGYTF;CASSPPSAGGDTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                            1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[13]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[13]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                CAASETSYDKVIF_CASSSGEKGYTF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                         1 </span>
@@ -1654,18 +1605,14 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         NA_CASSEGGGWDEQFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                         1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[14]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[14]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             CAVSAWSSASKIIF_NA CIVRGVIYNQGGKLIF_CASRQGLGELFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             1                             1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          NA_CASSPNGGHSAKNIQYF            NA_CASSYMGGVTGELFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             1                             1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[15]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[15]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           CAVFWVGNSGGSNYKLTF_NA CVVSSMNTGFQKLVF_CASRPPSSGANVLTF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               1                               1 </span>
@@ -1674,22 +1621,18 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>             NA_CASSPRGTGDPFGYTF            NA_CSARIPPTSGEYNEQFF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               1                               1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[16]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[16]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CALNTFGNEKLTF_CASSLRLAGGDTQYF CVVSEGYNTDKLIF_CASSLALISGGSTDTQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                 1                                 1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  NA_CASSPTRQETQYF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                 1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[17]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt; table of extent 0 &gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">countCloneSizes</span><span class="op">(</span><span class="va">combined_pbmc</span>, <span class="st">"nt"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                     NA_TGCGCCAGCAGCTTGGGTCAGGGTGTGCGAGAGACCCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                    1 </span>
@@ -1706,18 +1649,14 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCTGTGCAGGCCGGATATGCTGGTGGTACTAGCTATGGAAAGCTGACATTT_TGTGCCAGCAGACTAACCGGTACAAGGGGCGGGGAGCTGTTTTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                    1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          TGTGCCCCCAGAGCAGGAGGAAGCTACATACCTACATTT_TGTGCCAGCAGCTTACCCCGGACGGGCGACACTGAAGCTTTCTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCCGTGAACCCGAATTCAGGAAACACACCTCTTGTCTTT_TGTGCCAGCAGCCAAGGACAGTCCTCCCAACTTGCAGAGACCCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                              NA_TGTGCCAGCAGAGCGGGACAGGGGAGAGGGGCCAACGTCCTGACTTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                1 </span>
@@ -1744,9 +1683,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                         TGTGTGGTGAGCGACTTTGGAAATGAGAAATTAACCTTT_TGTGCCAGCAGTTTAGGGTCGGGGGGGACGGGGAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                         NA_TGCAGTGCTAGGGACAGGGGGCGTGGGGGTAACAATCAGCCCCAGCATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              1 </span>
@@ -1769,9 +1706,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGTGGTCTCCGATAATACTGGAGGCTTCAAAACTATCTTT_TGTGCCAGCAGCGTAAGGAGGGAAAGGGCGAACACCGGGGAGCTGTTTTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                             10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                            NA_TGCGCCAGCAGCCAAGACCGGACGGGACTAGACTACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              1 </span>
@@ -1780,9 +1715,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>       TGTGTGGTGAGCGACTTTGGAAATGAGAAATTAACCTTT_TGTGCCAGCAGTTTAGGGTCGGGGGGGACGGGGAATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGCCTCGTGGGTGACAACCTGAACACAGGCTTTCAGAAACTTGTATTT_TGTGCCAGCAGCCCCCGACCGGGAAACACGGGCAATCAGCCCCAGCATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                    1 </span>
@@ -1793,9 +1726,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>             TGTGCTGTGAGTGATACTGGGGGTTACCAGAAAGTTACCTTT_TGCAGTGCTAGAGATGGGACAGCTTTTAACTATGGCTACACCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                    1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCAATGAGAGAGCCCTTTTCTGGTGGCTACAATAAGCTGATTTTT;TGTGCTGCTAACTCTGGGGCTGGGAGTTACCAACTCACTTTC_TGTGCCAGCAGTTTAACGGCCGGGTGGATGGATGAGCAGTTCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                         1 </span>
@@ -1806,9 +1737,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                     TGTGCTGTGCAGGCGAGTGGGAACAACAGACTCGCTTTT_TGTGCCAGCAGCCCTAGCTCCCGTAGCTCCTACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                         1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                               NA_TGCAGTGCTAGAGTCGAAGCGCAAGAGACCCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                        1 </span>
@@ -1831,9 +1760,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           TGTGCTTATAGGAGCGCGCAGGCTGGTGGTACTAGCTATGGAAAGCTGACATTT_TGTGCCATCAGTGAACAGGGGAAAGGGGAGCTGTTTTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                        1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                NA_TGTGCCAGCAGCTTAATGGGTGGACTAGCGGGGGCCTACACAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           1 </span>
@@ -1842,9 +1769,7 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCTGTGACCTTCCATTATAACACCGACAAGCTCATCTTT_TGCGCCAGCAGCCAAGACCGGACGGGACTAGACTACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                      NA_TGTGCCAGCAGCCCTTTGGGGGAGGTAGAAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                     1 </span>
@@ -1867,35 +1792,28 @@ by <code>clonecall</code> after filtering, while the values are the actual clone
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    TGTGTTGTGACCTCCACAGGCTTTCAGAAACTTGTATTT_TGCGCCAGCAGCCAAGAGGCAGGGGCAGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                     1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[11]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt; table of extent 0 &gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[12]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[12]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCTGTGAGTGAAAATAATGCAGGCAACATGCTCACCTTT_TGTGCCAGCACGGACAGGGGCTTTAACGGCTACACCTTC;TGTGCCAGCTCACCACCGTCGGCAGGAGGTGATACGCAGTATTTT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[13]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[13]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       TGTGCAGCAAGTGAAACCTCCTACGACAAGGTGATATTT_TGTGCCAGCTCATCAGGGGAAAAAGGCTACACCTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCCCCGCACACAGGCTTTCAGAAACTTGTATTT_TGTGCCAGCAGCTTAGGATCGGGGGACAGATACGAGCAGTACTTC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[14]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt; table of extent 0 &gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[15]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[15]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TGTGCTGTGTTCTGGGTGGGGAATAGTGGAGGTAGCAACTATAAACTGACATTT_NA </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                         1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[16]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt; table of extent 0 &gt;</span>
