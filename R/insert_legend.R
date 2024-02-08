@@ -26,6 +26,7 @@
 #'
 #' # remove the legend
 #' apotc_plot <- removeLegend(apotc_plot)
+#' apotc_plot
 #'
 removeLegend <- function(apotc_ggplot) {
     if (!isApotcGGPlot(apotc_ggplot))
@@ -73,7 +74,7 @@ removeLegend <- function(apotc_ggplot) {
 #'     legend_sizes = c(1,3,7,10),
 #'     legend_label = "odd clone sizes"
 #' )
-#' 
+#'
 overlayLegend <- function(
     apotc_ggplot,
     legend_sizes = "auto",
@@ -85,6 +86,7 @@ overlayLegend <- function(
 	legend_text_size = 5,
 	add_legend_background = TRUE,
 	add_legend_centerspace = 0,
+    linetype = "blank",
     res = 360L
     # TODO handle linetype?
 ) {
@@ -110,7 +112,8 @@ overlayLegend <- function(
         spacing = legend_spacing,
         legend_label = legend_label,
         legend_textsize = legend_text_size,
-        do_add_legend_border = add_legend_background
+        do_add_legend_border = add_legend_background,
+        linetype = linetype
     )
 
     if (already_had_legend) {
@@ -132,9 +135,11 @@ overlayLegend_error_handler <- function(args) {
 
 check_legend_params <- function(args) {
     if (!(all(is_positive_integer(args$legend_sizes))) && !is_a_character(args$legend_sizes)) {
-        stop(call. = FALSE, "`legend_sizes` must be positive integer(s) or specific single characters. Read function level documentation for more details")
+        stop(call. = FALSE,
+            "`legend_sizes` must be positive integer(s) or specific single characters. Read function level documentation for more details"
+        )
     }
-    
+
     if (!(
         should_estimate(args$legend_position) ||
             is_numeric_pair(args$legend_position)
@@ -232,7 +237,8 @@ insert_legend <- function(
     spacing = "auto",
     legend_label = "Clone sizes",
     legend_textsize = 5,
-    do_add_legend_border = FALSE
+    do_add_legend_border = FALSE,
+    linetype = "blank"
 ) {
 
     # setup relevant variables
@@ -296,7 +302,7 @@ insert_legend <- function(
             r = "rad",
             fill = "color"
         ),
-        linetype = "blank",
+        linetype = linetype,
         n = n
     )) %>% name_latest_legend_layer()
 }

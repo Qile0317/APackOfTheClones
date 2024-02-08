@@ -15,6 +15,7 @@ overlayLegend(
   legend_text_size = 5,
   add_legend_background = TRUE,
   add_legend_centerspace = 0,
+  linetype = "blank",
   res = 360L
 )
 }
@@ -55,6 +56,10 @@ legend and fill the background to be white, overlaying anything else.}
 changed between the circle sizes on the left side of the legend and the
 numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.}
+
+\item{linetype}{The type of outline each circle should have. defaults to
+\verb{"blank} meaning no outline. More information is in the function
+documentation of \code{ggforce::geom_circle}.}
 
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to

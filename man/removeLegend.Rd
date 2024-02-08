@@ -32,6 +32,7 @@ apotc_plot <- vizAPOTC(
 
 # remove the legend
 apotc_plot <- removeLegend(apotc_plot)
+apotc_plot
 
 }
 \seealso{

@@ -208,7 +208,8 @@ APOTCPlot <- function(
 			spacing = legend_spacing,
 			legend_label = legend_label,
 			legend_textsize = legend_text_size,
-			do_add_legend_border = add_legend_background
+			do_add_legend_border = add_legend_background,
+			linetype = linetype
 		)
 	}
 
