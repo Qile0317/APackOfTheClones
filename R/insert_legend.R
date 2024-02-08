@@ -93,8 +93,7 @@ overlayLegend <- function(
 
     overlayLegend_error_handler(hash::hash(as.list(environment())))
 
-    already_had_legend <- has_legend(apotc_ggplot)
-    if (already_had_legend) {
+    if (has_legend(apotc_ggplot)) {
         layers_after_legend <- get_layers_after_legend(apotc_ggplot)
         apotc_ggplot <- remove_legend_and_layers_after(apotc_ggplot)
     }
@@ -116,10 +115,7 @@ overlayLegend <- function(
         linetype = linetype
     )
 
-    if (already_had_legend) {
-        apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
-    }
-
+    apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
     apotc_ggplot
 }
 
@@ -134,50 +130,49 @@ overlayLegend_error_handler <- function(args) {
 }
 
 check_legend_params <- function(args) {
-    if (!(all(is_positive_integer(args$legend_sizes))) && !is_a_character(args$legend_sizes)) {
-        stop(call. = FALSE,
-            "`legend_sizes` must be positive integer(s) or specific single characters. Read function level documentation for more details"
-        )
+    if (!(all(is_positive_integer(args$legend_sizes)) || should_estimate(args$legend_sizes))) {
+        stop(call. = FALSE, "`legend_sizes` must be positive integer(s)")
     }
 
     if (!(
-        should_estimate(args$legend_position) ||
+        is_a_character(args$legend_position) ||
             is_numeric_pair(args$legend_position)
     )) {
         stop(call. = FALSE,
-            "`legend_position` must be a numeric pair."
+            "`legend_position` must be a numeric pair or specific characters. ",
+            "See function level documentation for details on this argument."
         )
     }
-    
+
     if (!is_a_numeric(args$legend_buffer)) {
         stop(call. = FALSE, "`legend_buffer` must be a numeric.")
     }
-    
+
     if (!is_a_character(args$legend_color)) {
         stop(call. = FALSE, "`legend_color` must be a character.")
     }
-    
+
     if (!(
         is_a_numeric(args$legend_spacing) ||
             should_estimate(args$legend_spacing)
     )) {
         stop(call. = FALSE, "`legend_spacing` must be a numeric.")
     }
-    
+
     if (!is_a_character(args$legend_label)) {
         stop(call. = FALSE, "`legend_label` must be a character.")
     }
-    
+
     if (!(is_a_positive_numeric(args$legend_text_size))) {
         stop(call. = FALSE,
             "`legend_text_size` must be a positive numeric value."
         )
     }
-    
+
     if (!is_a_logical(args$add_legend_background)) {
         stop(call. = FALSE, "`add_legend_background` must be a logical value.")
     }
-    
+
     if (!is_a_numeric(args$add_legend_centerspace)) {
         stop(call. = FALSE, "`add_legend_centerspace` must be a numeric value.")
     }
@@ -200,7 +195,7 @@ has_layers_after_legend <- function(apotc_ggplot) {
 }
 
 get_layers_after_legend <- function(apotc_ggplot) {
-    if (has_layers_after_legend(apotc_ggplot)) return(NULL)
+    if (!has_layers_after_legend(apotc_ggplot)) return(NULL)
     layers <- apotc_ggplot$layers
     layers[(get_last_legend_layer_index(apotc_ggplot) + 1):length(layers)]
 }
