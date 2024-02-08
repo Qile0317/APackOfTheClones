@@ -131,8 +131,8 @@ overlayLegend_error_handler <- function(args) {
 }
 
 check_legend_params <- function(args) {
-    if (!(all(is_positive_integer(args$legend_sizes))) && !should_estimate(args$legend_sizes)) {
-        stop(call. = FALSE, "`legend_sizes` must be positive integer(s)")
+    if (!(all(is_positive_integer(args$legend_sizes))) && !is_a_character(args$legend_sizes)) {
+        stop(call. = FALSE, "`legend_sizes` must be positive integer(s) or specific single characters. Read function level documentation for more details")
     }
     
     if (!(
@@ -197,7 +197,7 @@ has_layers_after_legend <- function(apotc_ggplot) {
 get_layers_after_legend <- function(apotc_ggplot) {
     if (has_layers_after_legend(apotc_ggplot)) return(NULL)
     layers <- apotc_ggplot$layers
-    layers[get_last_legend_layer_index(apotc_ggplot) + 1:length(layers)]
+    layers[(get_last_legend_layer_index(apotc_ggplot) + 1):length(layers)]
 }
 
 get_legend_layer_indicies <- function(apotc_ggplot) {
