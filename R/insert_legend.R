@@ -4,7 +4,7 @@
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' 
+#'
 #' Removes the clone size legend on an APackOfTheClones plot, if
 #' one is present. Will preserve any additional ggplot layers.
 #'

@@ -14,6 +14,7 @@
 ## Changes
 
 - Fixed the output of `countCloneSizes` to truly be a list of "table" objects, whereas before, for the clusters with valid clones, each element was instead a list with the first and only element being the tabled clone sizes. This is technically a breaking change but the output before was bugged so the major version was not incremented.
+- Altered the ggplot object outputs of `APOTCPlot` and `vizAPOTC` to work with `overlayLegend` and `removeLegend` leftover ggplot objects from previous versions will have to be update by re-running that command (`APOTCPlot`/`vizAPOTC`) that generated them.
 - cleaned up and improved some documentation and vignette texts
 
 # APackOfTheClones 1.0.0
