@@ -84,6 +84,7 @@
 <div class="section level3">
 <h3 id="changes-1-0-0-9000">Changes<a class="anchor" aria-label="anchor" href="#changes-1-0-0-9000"></a></h3>
 <ul><li>Fixed the output of <code>countCloneSizes</code> to truly be a list of “table” objects, whereas before, for the clusters with valid clones, each element was instead a list with the first and only element being the tabled clone sizes. This is technically a breaking change but the output before was bugged so the major version was not incremented.</li>
+<li>Altered the ggplot object outputs of <code>APOTCPlot</code> and <code>vizAPOTC</code> to work with <code>overlayLegend</code> and <code>removeLegend</code> leftover ggplot objects from previous versions will have to be update by re-running that command (<code>APOTCPlot</code>/<code>vizAPOTC</code>) that generated them.</li>
 <li>cleaned up and improved some documentation and vignette texts</li>
 </ul></div>
 </div>
