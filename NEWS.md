@@ -2,6 +2,8 @@
 
 ## Additions
 
+- Added `overlayLegend` to overlay/modify current legend on a clonal eexpansion plot.
+- Added `removeLegend` to remove any existing legend on a clonal expansion plot.
 - Added `getSharedClones` to compute information about clonotypes that are present in multiple seurat clusters and return it to the user.
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
 - Added argument `verbose` in `APOTCPlot` to display some additional visual cues.

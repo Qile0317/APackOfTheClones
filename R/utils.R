@@ -81,7 +81,7 @@ subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
-# plotting related utils
+# ggplot2 utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
 #' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
@@ -108,7 +108,20 @@ get_yr <- function(p) {
     p[[2]]
 }
 
+name_latest_layer <- function(plt, new_name) {
+    if (is.null(names(plt$layers))) {
+        names(plt$layers) <- rep("", length(plt$layers))
+    }
+    names(plt$layers)[length(plt$layers)] <- new_name
+    plt
+}
+
 # type checking utils
+
+is_pair <- function(x, type_checker) {
+    if (length(x) != 2) return(FALSE)
+    all(sapply(x, type_checker))
+}
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
 
@@ -127,20 +140,29 @@ is_a_numeric <- function(x) {
     is.numeric(x)
 }
 
-is_integer <- function(x) {
-    as.numeric(x) == as.numeric(as.integer(x))
+is_numeric_pair <- function(x) is_pair(x, is.numeric)
+
+is_a_positive_numeric <- function(x) {
+    if (!is_a_numeric(x)) return(FALSE)
+    x > 0
 }
 
 is_an_integer <- function(x) {
     if (identical(x, Inf) || identical(x, -Inf)) return(TRUE)
     if (!is_a_numeric(x)) return(FALSE)
-    is_integer(x)
+    as.numeric(x) == as.numeric(as.integer(x))
 }
 
-is_integer_pair <- function(x) {
-    if (length(x) != 2) return(FALSE)
-    is_an_integer(x[1]) && is_an_integer(x[2])
+is_integer_pair <- function(x) is_pair(x, is_an_integer)
+
+is_integer <- function(x) sapply(x, is_an_integer)
+
+is_a_positive_integer <- function(x) {
+    if (!is_an_integer(x)) return(FALSE)
+    x > 0L
 }
+
+is_positive_integer <- function(x) sapply(x, is_a_positive_integer)
 
 # math utils
 

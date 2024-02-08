@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 #include <vector>
 
-// Function to subset to only edge circles in C++
 // [[Rcpp::export]]
 std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame) {
 
@@ -15,21 +14,19 @@ std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame) {
 
     for (int i = 0; i < (int) x.size(); i++) {
         
-        double xi = x[i], yi = y[i], ri = r[i];
-
-        if (xi - ri < x[xmin] - r[xmin]) {
+        if (x[i] - r[i] < x[xmin] - r[xmin]) {
             xmin = i;
         }
 
-        if (xi + ri > x[xmax] + r[xmax]) {
+        if (x[i] + r[i] > x[xmax] + r[xmax]) {
             xmax = i;
         }
 
-        if (yi - ri < y[ymin] - r[ymin]) {
+        if (y[i] - r[i] < y[ymin] - r[ymin]) {
             ymin = i;
         }
 
-        if (yi + ri > y[ymax] + r[ymax]) {
+        if (y[i] + r[i] > y[ymax] + r[ymax]) {
             ymax = i;
         }
     }

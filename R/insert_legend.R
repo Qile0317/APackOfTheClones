@@ -1,8 +1,223 @@
-# script to make a custom circle size legend overlay
+# script to manage the circle size legend overlay
 
-# there is an edgecase where the circle in the legend is too big and it
-# covers some/all the digits of the label, since the algorithms are written
-# assuming labels are a point.
+#' @title Remove current APackOfTheClones legend
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' 
+#' Removes the clone size legend on an APackOfTheClones plot, if
+#' one is present. Will preserve any additional ggplot layers.
+#'
+#' @inheritParams overlayLegend
+#' @inheritParams APOTCPlot
+#' 
+#' @inherit APOTCPlot return
+#' @export
+#' 
+#' @seealso [overlayLegend]
+#' 
+#' @examples
+#' # create an APackOfTheClones plot with a legend
+#' apotc_plot <- vizAPOTC(
+#'     get(data("combined_pbmc")),
+#'     add_size_legend = TRUE,
+#'     verbose = FALSE
+#' )
+#'
+#' # remove the legend
+#' apotc_plot <- removeLegend(apotc_plot)
+#'
+removeLegend <- function(apotc_ggplot) {
+    if (!isApotcGGPlot(apotc_ggplot))
+        stop("not an output of `APOTCPlot` or `vizAPOTC`")
+
+    if (!has_legend(apotc_ggplot)) return(apotc_ggplot)
+    apotc_ggplot$layers[get_legend_layer_indicies(apotc_ggplot)] <- NULL
+    apotc_ggplot
+}
+
+#' @title overlay a clone size legend on an APackOfTheClones plot
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' This function has most of the parameters related to legend in
+#' [APOTCPlot], and can plot a new / override the current legend.
+#' However, it is very important that the input plot to the function
+#' is a plot generated solely by [APOTCPlot] or [vizAPOTC] due to it
+#' being a custom ggplot object. It will not override or erase any
+#' additional layers that the user/other functions have added. To just
+#' remove the legend, see [removeLegend].
+#'
+#' @param apotc_ggplot a ggplot object that is the output of [APOTCPlot] or
+#' [vizAPOTC]
+#' @inheritParams APOTCPlot
+#'
+#' @inherit APOTCPlot return
+#' @export
+#'
+#' @seealso [removeLegend]
+#'
+#' @examples
+#' data("combined_pbmc")
+#'
+#' # create a plot with a legend
+#' apotc_plot <- vizAPOTC(combined_pbmc)
+#'
+#' # reposition the legend to top right
+#' overlayLegend(apotc_plot, legend_position = "top right")
+#'
+#' # use different sizes and label
+#' overlayLegend(
+#'     apotc_plot,
+#'     legend_sizes = c(1,3,7,10),
+#'     legend_label = "odd clone sizes"
+#' )
+#' 
+overlayLegend <- function(
+    apotc_ggplot,
+    legend_sizes = "auto",
+	legend_position = "auto",
+	legend_buffer = 0.2,
+	legend_color = "#808080",
+	legend_spacing = "auto",
+	legend_label = "Clone sizes",
+	legend_text_size = 5,
+	add_legend_background = TRUE,
+	add_legend_centerspace = 0,
+    res = 360L
+    # TODO handle linetype?
+) {
+
+    overlayLegend_error_handler(hash::hash(as.list(environment())))
+
+    already_had_legend <- has_legend(apotc_ggplot)
+    if (already_had_legend) {
+        layers_after_legend <- get_layers_after_legend(apotc_ggplot)
+        apotc_ggplot <- remove_legend_and_layers_after(apotc_ggplot)
+    }
+
+    apotc_ggplot <- insert_legend(
+        plt = apotc_ggplot,
+        plt_dims = get_apotc_plot_dims_from_df(apotc_ggplot$data),
+        apotc_obj = get_apotcdata(apotc_ggplot),
+        sizes = get_estimated_legend_sizes(apotc_ggplot),
+        pos = legend_position,
+        buffer = legend_buffer,
+        additional_middle_spacing = add_legend_centerspace,
+        color = legend_color,
+        n = res,
+        spacing = legend_spacing,
+        legend_label = legend_label,
+        legend_textsize = legend_text_size,
+        do_add_legend_border = add_legend_background
+    )
+
+    if (already_had_legend) {
+        apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
+    }
+
+    apotc_ggplot
+}
+
+overlayLegend_error_handler <- function(args) {
+    check_legend_params(args)
+    if (!isApotcGGPlot(args$apotc_ggplot)) {
+        stop("not an output of `APOTCPlot` or `vizAPOTC`")
+    }
+    if (!is_an_integer(args$res)) {
+        stop(call. = FALSE, "`res` must be an integer value of length 1.")
+    }
+}
+
+check_legend_params <- function(args) {
+    if (!(all(is_positive_integer(args$legend_sizes))) && !should_estimate(args$legend_sizes)) {
+        stop(call. = FALSE, "`legend_sizes` must be positive integer(s)")
+    }
+    
+    if (!(
+        should_estimate(args$legend_position) ||
+            is_numeric_pair(args$legend_position)
+    )) {
+        stop(call. = FALSE,
+            "`legend_position` must be a numeric pair."
+        )
+    }
+    
+    if (!is_a_numeric(args$legend_buffer)) {
+        stop(call. = FALSE, "`legend_buffer` must be a numeric.")
+    }
+    
+    if (!is_a_character(args$legend_color)) {
+        stop(call. = FALSE, "`legend_color` must be a character.")
+    }
+    
+    if (!(
+        is_a_numeric(args$legend_spacing) ||
+            should_estimate(args$legend_spacing)
+    )) {
+        stop(call. = FALSE, "`legend_spacing` must be a numeric.")
+    }
+    
+    if (!is_a_character(args$legend_label)) {
+        stop(call. = FALSE, "`legend_label` must be a character.")
+    }
+    
+    if (!(is_a_positive_numeric(args$legend_text_size))) {
+        stop(call. = FALSE,
+            "`legend_text_size` must be a positive numeric value."
+        )
+    }
+    
+    if (!is_a_logical(args$add_legend_background)) {
+        stop(call. = FALSE, "`add_legend_background` must be a logical value.")
+    }
+    
+    if (!is_a_numeric(args$add_legend_centerspace)) {
+        stop(call. = FALSE, "`add_legend_centerspace` must be a numeric value.")
+    }
+}
+
+# internal global constant for the name of each legend layer
+.ApotcLegendLayerName <- "ApotcLegendLayer"
+utils::globalVariables(".ApotcLegendLayerName")
+
+name_latest_legend_layer <- function(plt) {
+    name_latest_layer(plt, new_name = .ApotcLegendLayerName)
+}
+
+has_legend <- function(apotc_ggplot) {
+    any(names(apotc_ggplot$layers) == .ApotcLegendLayerName)
+}
+
+has_layers_after_legend <- function(apotc_ggplot) {
+    length(apotc_ggplot$layers) > get_last_legend_layer_index(apotc_ggplot)
+}
+
+get_layers_after_legend <- function(apotc_ggplot) {
+    if (has_layers_after_legend(apotc_ggplot)) return(NULL)
+    layers <- apotc_ggplot$layers
+    layers[get_last_legend_layer_index(apotc_ggplot) + 1:length(layers)]
+}
+
+get_legend_layer_indicies <- function(apotc_ggplot) {
+    which(names(apotc_ggplot$layers) == .ApotcLegendLayerName)
+}
+
+get_first_legend_layer_index <- function(apotc_ggplot) {
+    get_legend_layer_indicies(apotc_ggplot)[1]
+}
+
+get_last_legend_layer_index <- function(apotc_ggplot) {
+    getlast(get_legend_layer_indicies(apotc_ggplot))
+}
+
+remove_legend_and_layers_after <- function(apotc_ggplot) {
+    num_layers <- length(apotc_ggplot$layers)
+    removal_indicies <- get_first_legend_layer_index(apotc_ggplot):num_layers
+    apotc_ggplot$layers[removal_indicies] <- NULL
+    apotc_ggplot
+}
 
 insert_legend <- function(
     plt,
@@ -42,7 +257,7 @@ insert_legend <- function(
 
     if (should_estimate(pos)) {
         legend_df <- estimate_best_legend_df(
-            plt_dims, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+            plt_dims, plt$data, unpositioned_legend_df, legend_dims, buffer
         )
     } else {
         legend_df <- generate_legend_df(
@@ -54,10 +269,10 @@ insert_legend <- function(
 
     # add the legend label on top
     label_coord <- get_legend_title_coord(legend_df, legend_dims, spacing)
-    plt <- plt + ggplot2::annotate(
+    plt <- (plt + ggplot2::annotate(
         "text", x = label_coord[1], y = label_coord[2],
         label = legend_label, size = legend_textsize
-    )
+    )) %>% name_latest_legend_layer()
 
     # add the background
     if (do_add_legend_border) {
@@ -67,13 +282,13 @@ insert_legend <- function(
     }
     
     # add the side number labels
-    plt <- plt + ggplot2::annotate(
+    plt <- (plt + ggplot2::annotate(
         "text", x = legend_df[, "label_x"], y = legend_df[, "y"],
         label = legend_df[, "labels"], size = legend_textsize
-    )
-44
+    )) %>% name_latest_legend_layer()
+
     # add the circles and return
-    plt + ggforce::geom_circle(
+    (plt + ggforce::geom_circle(
         data = legend_df,
         mapping = apotc_aes_string(
             x0 = "circle_x",
@@ -83,7 +298,7 @@ insert_legend <- function(
         ),
         linetype = "blank",
         n = n
-    )
+    )) %>% name_latest_legend_layer()
 }
 
 get_processed_legend_sizes <- function(apotc_obj, s) {
@@ -93,7 +308,7 @@ get_processed_legend_sizes <- function(apotc_obj, s) {
 }
 
 estimate_legend_sizes <- function(apotc_obj) {
-    sizes <- unlist(apotc_obj@clone_sizes)
+    sizes <- unlist(get_raw_clone_sizes(apotc_obj))
     sort(unique(round(c(
         1,
         stats::median(sizes), mean(sizes), mean(unique(sizes)),
@@ -142,7 +357,7 @@ calculate_legend_spacing <- function(
 # given the circle placements, estimate the legend dataframe with the least
 # *number* of circles that overlap
 estimate_best_legend_df <- function(
-    plt_dims, apotc_obj, unpositioned_legend_df, legend_dims, buffer
+    plt_dims, plot_df, unpositioned_legend_df, legend_dims, buffer
 ) {
     min_num_circles_covered <- Inf
     best_legend_df <- data.frame()
@@ -153,8 +368,9 @@ estimate_best_legend_df <- function(
             pos, unpositioned_legend_df, legend_dims, plt_dims, buffer
         )
 
+        # TODO this should be estimate from the plot dataframe instead
         curr_num_circles_covered <- num_circles_covered_by_legend(
-            apotc_obj,
+            plot_df,
             minmax_dims = get_legend_backing_minmax_dims(curr_legend_df)
         )
 
@@ -166,34 +382,31 @@ estimate_best_legend_df <- function(
             min_num_circles_covered <- curr_num_circles_covered
             best_legend_df <- curr_legend_df
         }
-         
+
     }
 
     best_legend_df
 }
 
-num_circles_covered_by_legend <- function(apotc_obj, minmax_dims) {
+num_circles_covered_by_legend <- function(df, minmax_dims) {
     num_circles_covered <- 0
-    for (cluster in apotc_obj@clusters) {
-        for (i in seq_along(cluster$x)) {
-            does_overlap_x <- is_bound_between(
-                cluster$x[i],
-                lowerbound = minmax_dims["xmin"] + cluster$rad[i],
-                upperbound = minmax_dims["xmax"] - cluster$rad[i]
-            )
+    for (i in seq_len(nrow(df))) {
+        does_overlap_x <- is_bound_between(
+            df$x[i],
+            lowerbound = minmax_dims["xmin"] + df$r[i],
+            upperbound = minmax_dims["xmax"] - df$r[i]
+        )
 
-            does_overlap_y <- is_bound_between(
-                cluster$y[i],
-                lowerbound = minmax_dims["ymin"] + cluster$rad[i],
-                upperbound = minmax_dims["ymax"] - cluster$rad[i]
-            )
+        does_overlap_y <- is_bound_between(
+            df$y[i],
+            lowerbound = minmax_dims["ymin"] + df$r[i],
+            upperbound = minmax_dims["ymax"] - df$r[i]
+        )
 
-            if (does_overlap_x && does_overlap_y) {
-                num_circles_covered <- num_circles_covered + 1
-            }
-        }
-        
+        num_circles_covered <- num_circles_covered +
+            (does_overlap_x && does_overlap_y)
     }
+
     num_circles_covered
 }
 
@@ -326,20 +539,21 @@ add_legend_backing <- function(plt, plt_dims, legend_df) {
     dims <- get_legend_backing_minmax_dims(legend_df)
 
     # add the back border rectangle
-    plt <- plt + ggplot2::geom_rect(ggplot2::aes(
+    plt <- (plt + ggplot2::geom_rect(ggplot2::aes(
             xmin = dims["xmin"] - linewidth, xmax = dims["xmax"] + linewidth,
             ymin = dims["ymin"] - linewidth, ymax = dims["ymax"] + linewidth,
             fill = "black"
-        ))
+        ))) %>% name_latest_legend_layer()
     
     # add the white inside
-    plt + ggplot2::geom_rect(ggplot2::aes(
+    (plt + ggplot2::geom_rect(ggplot2::aes(
             xmin = dims["xmin"], xmax = dims["xmax"],
             ymin = dims["ymin"], ymax = dims["ymax"],
             fill = "white",
             linetype = "blank"
         )) +
-        ggplot2::theme(legend.position = "none")
+        ggplot2::theme(legend.position = "none")) %>%
+        name_latest_legend_layer()
 }
 
 get_linewidth <- function(plt) {

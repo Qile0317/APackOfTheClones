@@ -217,7 +217,7 @@ get_centroids <- function(apotc_obj) {
 }
 
 get_raw_clone_sizes <- function(apotc_obj) {
-	apotc_obj@clone_sizes # apparently its a list of lists, and each list's only element is the table... bruh...
+	apotc_obj@clone_sizes
 }
 
 get_clonotypes <- function(apotc_obj) {

@@ -198,7 +198,9 @@ of the progress.}
 }
 \value{
 A ggplot object of the APackOfTheClones clonal expansion plot of the
-seurat object
+seurat object. There is an additional 10th element in the object named
+\code{"APackOfTheClones"} used by other functions in this package and shouldn't
+interfere with any other ggplot functionality. (As far as currently known)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
