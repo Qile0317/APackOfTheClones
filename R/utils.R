@@ -116,6 +116,11 @@ name_latest_layer <- function(plt, new_name) {
     plt
 }
 
+secretly_init_name <- function(x) {
+    names(x) <- rep("", length(x))
+    x
+}
+
 # type checking utils
 
 is_pair <- function(x, type_checker) {

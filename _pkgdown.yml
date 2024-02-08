@@ -39,3 +39,33 @@ navbar:
       menu:
         - text: v0.1.x
           href: articles/archive/v0-main.html
+
+reference:
+- title: Core functions
+- contents:
+  - vizAPOTC
+  - RunAPOTC
+  - APOTCPlot
+  - AdjustAPOTC
+- title: Working with RunAPOTC runs
+- contents:
+  - containsApotcRun
+  - getApotcDataIds
+  - getKastApotcDataId
+  - deleteApotcData
+- title: Clonal expansion plot add-ons
+- contents:
+  - overlayLegend
+  - removeLegend
+- title: Utilities
+- contents:
+  - countCloneSizes
+  - getReductionCentroids
+  - getSharedClones
+- title: Data
+- contents:
+  - combined_pbmc
+  - mini_seurat_obj
+- title: Deprecated/Defunct
+- contents:
+  - count_clone_sizes
