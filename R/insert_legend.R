@@ -93,8 +93,11 @@ overlayLegend <- function(
 
     overlayLegend_error_handler(hash::hash(as.list(environment())))
 
+    layers_after_legend_present <- FALSE
+
     if (has_legend(apotc_ggplot)) {
         layers_after_legend <- get_layers_after_legend(apotc_ggplot)
+        layers_after_legend_present <- is.null(layers_after_legend)
         apotc_ggplot <- remove_legend_and_layers_after(apotc_ggplot)
     }
 
@@ -115,7 +118,10 @@ overlayLegend <- function(
         linetype = linetype
     )
 
-    apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
+    if (layers_after_legend_present) {
+        apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
+    }
+    
     apotc_ggplot
 }
 

@@ -34,7 +34,7 @@ quietly_test_that("removeLegend works", {
 # quietly_test_that("overlayLegend works", {
 #     data("combined_pbmc")
 #     expect_equal(
-#         vizAPOTC(combined_pbmc)$layers,
+#         unname(vizAPOTC(combined_pbmc)$layers),
 #         unname(overlayLegend(vizAPOTC(combined_pbmc))$layers)
 #     )
 
