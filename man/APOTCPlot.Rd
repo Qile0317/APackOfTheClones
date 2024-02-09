@@ -12,6 +12,7 @@ APOTCPlot(
   extra_filter = NULL,
   run_id = NULL,
   show_shared_clones = FALSE,
+  only_link_cluster = NULL,
   linked_clonesize_range = c(2L, Inf),
   clone_link_width = "auto",
   clone_link_color = "blend",
@@ -84,6 +85,9 @@ there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{show_shared_clones}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} If \code{TRUE},
 overlays straight lines between each clone that is common between clusters.}
+
+\item{only_link_cluster}{integer vector indicating which shared clone
+cluster(s) to include links from.}
 
 \item{linked_clonesize_range}{numeric vector of length 2. Indicates the
 minimum and maximum clonesize of at least one clone of a shared clonotype.

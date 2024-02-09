@@ -23,6 +23,8 @@
 #' data and has had a valid run of [RunAPOTC].
 #' @param show_shared_clones `r lifecycle::badge("experimental")` If `TRUE`,
 #' overlays straight lines between each clone that is common between clusters.
+#' @param only_link_cluster integer vector indicating which shared clone
+#' cluster(s) to include links from.
 #' @param linked_clonesize_range numeric vector of length 2. Indicates the
 #' minimum and maximum clonesize of at least one clone of a shared clonotype.
 #' Defaults to `c(2, Inf)` which means
@@ -111,8 +113,6 @@ APOTCPlot <- function(
 
 	show_shared_clones = FALSE, # TODO an alternative vizualization not based on apotcplots. e.g. those used to visualize connectedness of graphs
 	only_link_cluster = NULL, # TODO
-	# shared_clone_mapping = NULL,
-	# shared_clone_filter = NULL,
 	linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)
 	clone_link_width = "auto",
 	clone_link_color = "blend",
@@ -275,8 +275,9 @@ APOTCPlot_error_handler <- function(args) {
 # helpers for getting plot dimensions quickly
 
 get_apotc_plot_dims <- function(apotc_obj) {
-	plot_dataframe <- get_plottable_df_with_color(apotc_obj)
-	get_apotc_plot_dims_from_df(plot_dataframe)
+	apotc_obj %>%
+		get_plottable_df_with_color() %>%
+		get_apotc_plot_dims_from_df()
 }
 
 get_apotc_plot_dims_from_df <- function(plot_dataframe) {

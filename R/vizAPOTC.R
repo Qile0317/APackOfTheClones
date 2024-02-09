@@ -49,7 +49,7 @@ vizAPOTC <- function(
     max_repulsion_iter = 20L,
 
     show_shared_clones = FALSE,
-    #only_link_cluster = NULL, # TODO
+    only_link_cluster = NULL, # TODO
     linked_clonesize_range = c(2L, Inf), # TODO
     clone_link_width = "auto",
 	clone_link_color = "blend",
@@ -102,7 +102,7 @@ vizAPOTC <- function(
         seurat_obj,
         run_id = "vizAPOTC",
         show_shared_clones = show_shared_clones,
-        #only_link_cluster = only_link_cluster,
+        only_link_cluster = only_link_cluster,
         linked_clonesize_range = linked_clonesize_range,
         clone_link_width = clone_link_width,
         clone_link_color = clone_link_color,
