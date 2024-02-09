@@ -187,26 +187,7 @@ is_odd <- function(x) x %% 2 == 1
 
 get_unique_pairs_up_to <- function(x) {
     if (x <= 1) return(list())
-
-    all_unique_pairs <- init_list(choose(x, x - 2))
-    index <- 1
-    for (i in 1:(x - 1)) {
-        for (j in (i + 1):x) {
-            all_unique_pairs[[index]] <- c(i, j)
-            index <- index + 1
-        }
-    }
-
-    all_unique_pairs
-}
-
-euclidean_distance <- function(x1, x2, y1, y2) {
-    sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
-}
-
-get_unit_vector <- function(x1, x2, y1, y2) {
-    magnitude <- euclidean_distance(x1, x2, y1, y2)
-    c((x2 - x1) / magnitude, (y2 - y1) / magnitude)
+    rcppGetUniquePairsUpTo(as.integer(x), oneIndexed = TRUE)
 }
 
 # spelling related functions

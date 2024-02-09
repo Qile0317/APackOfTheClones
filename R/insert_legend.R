@@ -13,9 +13,9 @@
 #' 
 #' @inherit APOTCPlot return
 #' @export
-#' 
+#'
 #' @seealso [overlayLegend]
-#' 
+#'
 #' @examples
 #' # create an APackOfTheClones plot with a legend
 #' apotc_plot <- vizAPOTC(
@@ -88,9 +88,8 @@ overlayLegend <- function(
 	add_legend_centerspace = 0,
     linetype = "blank",
     res = 360L
-    # TODO handle linetype?
 ) {
-
+    
     overlayLegend_error_handler(hash::hash(as.list(environment())))
 
     layers_after_legend_present <- FALSE
@@ -121,12 +120,14 @@ overlayLegend <- function(
     if (layers_after_legend_present) {
         apotc_ggplot$layers <- append(apotc_ggplot$layers, layers_after_legend)
     }
-    
+
     apotc_ggplot
 }
 
 overlayLegend_error_handler <- function(args) {
+
     check_legend_params(args)
+
     if (!isApotcGGPlot(args$apotc_ggplot)) {
         stop("not an output of `APOTCPlot` or `vizAPOTC`")
     }

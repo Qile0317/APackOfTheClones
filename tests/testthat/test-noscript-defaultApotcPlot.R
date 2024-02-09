@@ -13,6 +13,7 @@ quietly_test_that("the default plot for all methods", {
   # test that AdjustAPOTC does nothing with no argument
 
   expect_doppelganger(.defaultApotcPlot, APOTCPlot(AdjustAPOTC(combined_pbmc)))
+
   expect_doppelganger(
     .defaultApotcPlot, APOTCPlot(AdjustAPOTC(combined_pbmc), run_id = "r1"),
   )
@@ -29,7 +30,11 @@ quietly_test_that("the default plot for all methods", {
   )
 
   expect_doppelganger(
-    .defaultApotcPlot, overlayLegend(removeLegend(vizAPOTC(combined_pbmc)))
+    .defaultApotcPlot,
+    overlayLegend(
+      removeLegend(vizAPOTC(combined_pbmc)),
+      legend_position = "bottom left"
+    )
   )
   
 })

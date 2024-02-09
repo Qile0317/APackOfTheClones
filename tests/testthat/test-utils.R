@@ -120,6 +120,20 @@ test_that("construct_prefix_vector works", {
     )
 })
 
+# test math utils
+
+test_that("get_unique_pairs_up_to works", {
+    expect_identical(
+        get_unique_pairs_up_to(5),
+        list(
+            1:2, c(1L, 3L), c(1L, 4L), c(1L, 5L), 2:3, c(2L, 4L), c(2L, 5L),
+            3:4, c(3L, 5L), 4:5
+        )
+    )
+})
+
+# test spelling utils
+
 test_that("strip_unquoted_spaces works", {
     expect_identical(strip_unquoted_spaces("foo"), "foo")
     expect_identical(strip_unquoted_spaces(c("foo", "bar")), c("foo", "bar"))
