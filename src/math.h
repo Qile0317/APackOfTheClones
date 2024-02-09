@@ -8,6 +8,10 @@ inline double sqr(double x) {
     return x * x;
 }
 
+inline double eucDist(double x1, double x2) {
+    return std::sqrt(sqr(x1) + sqr(x2));
+}
+
 class TwoDVector {
 protected:
     double magnitude;
@@ -20,7 +24,7 @@ public:
     // Overload +
     TwoDVector operator+(const TwoDVector& other) const {
         double dx = getX() + other.getX(), dy = getY() + other.getY();
-        return TwoDVector(std::sqrt(sqr(dx) + sqr(dy)), std::atan2(dy, dx));
+        return TwoDVector(eucDist(dx, dy), std::atan2(dy, dx));
     }
 
     // Overload +=
@@ -32,7 +36,7 @@ public:
     // Overload -
     TwoDVector operator-(const TwoDVector& other) const {
         double dx = getX() - other.getX(), dy = getY() - other.getY();
-        return TwoDVector(std::sqrt(sqr(dx) + sqr(dy)), std::atan2(dy, dx));
+        return TwoDVector(eucDist(dx, dy), std::atan2(dy, dx));
     }
 
     double getMagnitude() const {
@@ -76,7 +80,7 @@ public:
 class TwoDRightPointingLine {
 protected:
     TwoDVector originCoordinate;
-    TwoDVector lineVector; // points right of origin!
+    TwoDVector lineVector; // must point right of originCoordinate
 
 public:
     TwoDRightPointingLine(TwoDVector o, TwoDVector l) : originCoordinate(o), lineVector(l) {}

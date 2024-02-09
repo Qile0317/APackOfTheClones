@@ -221,7 +221,7 @@ overlay_shared_clone_links <- function(
             only_cluster, exclude_cluster = NULL, get_num_clusters(apotc_obj)
         )
     )
-    print(shared_clones)
+
     if (is_empty(shared_clones)) {
         if (verbose) message(
             "* no shared clonotypes with current filtering parameters"
