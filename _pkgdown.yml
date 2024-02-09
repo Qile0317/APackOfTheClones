@@ -30,8 +30,6 @@ navbar:
     vignettes:
       text: Vignettes
       menu:
-      # - text: APackOfTheClones Essentials
-      #   href: articles/APackOfTheClones.html
       - text: Storing and Fine-Tuning APackOfTheClones Runs
         href: articles/APackOfTheClones-runs.html
     archive:
@@ -51,7 +49,7 @@ reference:
 - contents:
   - containsApotcRun
   - getApotcDataIds
-  - getKastApotcDataId
+  - getLastApotcDataId
   - deleteApotcData
 - title: Clonal expansion plot add-ons
 - contents:
