@@ -119,6 +119,7 @@ the plot of the latest run.</p>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_shared_clones <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  only_link_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  linked_clonesize_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  clone_link_color <span class="op">=</span> <span class="st">"blend"</span>,</span>
@@ -204,6 +205,11 @@ there was no input for the <code>...</code> and <code>extra_filter</code> parame
 <dt>show_shared_clones</dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> If <code>TRUE</code>,
 overlays straight lines between each clone that is common between clusters.</p></dd>
+
+
+<dt>only_link_cluster</dt>
+<dd><p>integer vector indicating which shared clone
+cluster(s) to include links from.</p></dd>
 
 
 <dt>linked_clonesize_range</dt>
