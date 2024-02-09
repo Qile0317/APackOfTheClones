@@ -126,7 +126,7 @@ test_that("get_unique_pairs_up_to works", {
 
     expect_identical(get_unique_pairs_up_to(1), list())
 
-    expect_identical(get_unique_pairs_up_to(2), list(c(1, 2)))
+    expect_identical(get_unique_pairs_up_to(2), list(1:2))
 
     expect_identical(
         get_unique_pairs_up_to(5),
