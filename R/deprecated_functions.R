@@ -129,7 +129,7 @@ dev_integrate_tcr <- function(seurat_obj, tcr_file, verbose) {
 		))
 	}
 
-	return(seurat_obj)
+	seurat_obj
 }
 
 #' @title
@@ -158,6 +158,8 @@ dev_integrate_tcr <- function(seurat_obj, tcr_file, verbose) {
 #' receptor barcode for the cells in the cluster.
 #'
 #' @export
+#' 
+#' @keywords internal
 #'
 #' @examples
 #' library(Seurat)

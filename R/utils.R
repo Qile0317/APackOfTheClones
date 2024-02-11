@@ -46,6 +46,20 @@ create_valueless_vector_hash <- function(key, vector_type) {
     hash::hash(key, init_list(length(key), vector_type(0)))
 }
 
+create_empty_int_hash <- function(keys) {
+    create_valueless_vector_hash(keys, integer)
+}
+
+hash_from_tablelist <- function(tablelist) {
+    lapply(
+        tablelist,
+        function(x) {
+            if (!is_empty_table(x)) return(hash::hash(x))
+            hash::hash()
+        }
+    )
+}
+
 init_dataframe <- function(column_names, nrow, init_val = NA) {
   df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
   colnames(df) <- column_names
@@ -54,7 +68,9 @@ init_dataframe <- function(column_names, nrow, init_val = NA) {
 
 # readability functions
 
-is_empty <- function(inp) is.list(inp) && length(inp) == 0
+is_empty <- function(inp) {
+    (is.list(inp) && length(inp) == 0) || identical(inp, hash::hash())
+}
 isnt_empty <- function(inp) !is_empty(inp)
 
 isnt_na <- function(inp) !any(is.na(inp))

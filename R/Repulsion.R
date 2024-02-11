@@ -10,8 +10,11 @@
 #     check if two clusterlists overlap in c++
 
 get_repulsed_clusterlists <- function(
-  packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
-  repulsion_strength, max_repulsion_iter, verbose
+  packed_clusters,
+  repulsion_threshold,
+  repulsion_strength,
+  max_repulsion_iter,
+  verbose
 ) {
   if (verbose) {
     message(paste(

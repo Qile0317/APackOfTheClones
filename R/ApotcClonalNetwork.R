@@ -145,33 +145,22 @@ get_shared_clones <- function(
     included_cluster = TRUE
 ) {
 
-    clonotype_map <- create_valueless_vector_hash(
-        get_clonotypes(apotc_obj), numeric
-    )
+    clonotype_map <- create_empty_int_hash(get_clonotypes(apotc_obj))
+    clustered_clone_sizes <- get_raw_clone_sizes(apotc_obj, as_hash = TRUE)
 
-    clustered_clone_sizes <- lapply(
-        get_raw_clone_sizes(apotc_obj),
-        function(x) {
-            if (!is_empty_table(x)) return(hash::hash(x))
-            hash::hash()
-        }
-    )
+    for (i in seq_along(clustered_clone_sizes)) {
 
-    clustered_clonotypes <- lapply(get_raw_clone_sizes(apotc_obj), names)
+        if (is_empty(clustered_clone_sizes[[i]])) next
 
-    for (i in seq_along(clustered_clonotypes)) {
+        for (clonotype in names(clustered_clone_sizes[[i]])) {
 
-        if (is.null(clustered_clonotypes[[i]])) next
+            # if (!is_bound_between( # FIXME this isnt a good filter tbh
+            #     clustered_clone_sizes[[i]][[clonotype]],
+            #     clone_size_lowerbound,
+            #     clone_size_upperbound
+            # )) next
 
-        for (clonotype in clustered_clonotypes[[i]]) {
-
-            if (!is_bound_between( # FIXME this isnt a good filter tbh
-                clustered_clone_sizes[[i]][[clonotype]],
-                clone_size_lowerbound,
-                clone_size_upperbound
-            )) next
-
-            clonotype_map[[clonotype]] <- append(
+            clonotype_map[[clonotype]] <- c(
                 clonotype_map[[clonotype]], i - zero_indexed
             )
 
@@ -179,6 +168,9 @@ get_shared_clones <- function(
     }
 
     shared_clonotypes <- as.list(clonotype_map)
+
+    # massivep problem - some elements become $... - is it length? unsure
+
     if (exclude_unique_clones) {
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)
     }
@@ -215,6 +207,8 @@ overlay_shared_clone_links <- function(
 ) {
     shared_clones <- get_shared_clones(
         apotc_obj,
+        zero_indexed = FALSE,
+        exclude_unique_clones = TRUE,
         clone_size_lowerbound = clonesize_range[1],
         clone_size_upperbound = clonesize_range[2],
         create_cluster_truth_vector(

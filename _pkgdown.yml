@@ -64,6 +64,3 @@ reference:
 - contents:
   - combined_pbmc
   - mini_seurat_obj
-- title: Deprecated/Defunct
-- contents:
-  - count_clone_sizes

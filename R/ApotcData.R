@@ -157,8 +157,6 @@ repulseClusters <- function(
 ) {
 	repulsed_clusters <- get_repulsed_clusterlists(
 	    packed_clusters = get_clusterlists(apotc_obj),
-	    initial_centroids = get_centroids(apotc_obj),
-	    num_clusters = get_num_clusters(apotc_obj),
 	    repulsion_threshold = repulsion_threshold,
 		repulsion_strength = repulsion_strength,
 		max_repulsion_iter = max_repulsion_iter,
@@ -216,7 +214,8 @@ get_centroids <- function(apotc_obj) {
 	apotc_obj@centroids
 }
 
-get_raw_clone_sizes <- function(apotc_obj) {
+get_raw_clone_sizes <- function(apotc_obj, as_hash = FALSE) {
+	if (as_hash) return(hash_from_tablelist(apotc_obj@clone_sizes))
 	apotc_obj@clone_sizes
 }
 

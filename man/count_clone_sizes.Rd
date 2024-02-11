@@ -49,3 +49,4 @@ clonotype_counts <- count_clone_sizes(integrated_seurat_object)
 clonotype_counts
 
 }
+\keyword{internal}
