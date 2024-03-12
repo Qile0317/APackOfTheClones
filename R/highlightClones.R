@@ -11,7 +11,8 @@ methods::setGeneric(
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' TODO - some combos and mention its S4 alt to scRep
+#' TODO - some combos and mention its S4 alt to scRep, and how there will be
+#' a legend. 
 #'
 #' @param sc.data A ggplot object that is the output of [APOTCPlot] or
 #' [vizAPOTC] of an APackOfTheClones plot to be highlighted
@@ -69,7 +70,7 @@ methods::setMethod("highlightClones", "gg",
 apotc_highlight_clones <- function(
     apotc_ggplot,
     sequence, # maybe allow indicies in seperate method??
-    color_each,
+    color_each, # in future allow palettes?
     default_color,
     add_legend = TRUE # pretty dumb if it was False?
 ) {

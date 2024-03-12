@@ -69,7 +69,7 @@ getSharedClones <- function(
     get_shared_clones(
         apotc_obj,
         zero_indexed = FALSE,
-        exclude_unique_clones = TRUE,
+        exclude_unique_clones = FALSE,
         clone_size_lowerbound = clonesize_range[1],
         clone_size_upperbound = clonesize_range[2],
         included_cluster = create_cluster_truth_vector(
@@ -169,7 +169,7 @@ get_shared_clones <- function(
 
     shared_clonotypes <- as.list(clonotype_map)
 
-    # massivep problem - some elements become $... - is it length? unsure
+    # massive problem - some elements become $... - is it length? unsure
 
     if (exclude_unique_clones) {
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)

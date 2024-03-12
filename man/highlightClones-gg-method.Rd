@@ -41,7 +41,8 @@ A ggplot object with the data modified to the highlighted colors
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-TODO - some combos and mention its S4 alt to scRep
+TODO - some combos and mention its S4 alt to scRep, and how there will be
+a legend.
 }
 \details{
 TODO discuss that it modifies the ggplot data.
@@ -53,5 +54,11 @@ data("combined_pbmc")
 # By default, assigns unique colors to highlights and everything else is gray
 vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) \%>\%
     APackOfTheClones::highlightClones("CASLSGSARQLTF_CASSSTVAGEQYF")
+
+# one useful application is to highlight shared clones - beware that the
+# clonotype sequences may get extremely long in the legend
+shared_aa_clones <- names(getSharedClones(combined_pbmc, clonecall = "aa"))
+vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) \%>\%
+    APackOfTheClones::highlightClones(shared_aa_clones)
 
 }
