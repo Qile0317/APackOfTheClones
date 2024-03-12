@@ -222,7 +222,7 @@ overlay_shared_clone_links <- function(
         )
         return(result_plot)
     }
-
+    
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
             apotc_obj, shared_clones, extra_spacing, link_mode
@@ -234,6 +234,8 @@ overlay_shared_clone_links <- function(
     link_dataframe <- add_link_colors(
         apotc_obj, link_dataframe, link_color_mode
     )
+
+    print(link_dataframe)
 
     # compute width and alpha (TODO make better formulas and figure out how to vectorize)
     link_alpha <- process_link_alpha(apotc_obj, link_alpha, verbose)

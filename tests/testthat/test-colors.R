@@ -25,20 +25,22 @@ test_that("insert_colors() works", {
   new_df <- insert_colors(test_cluster_df, 5)
   
   expect_identical(
-    new_df,
-    test_cluster_df %>% dplyr::mutate(
-      'color' = c(
-        "#F8766D", "#F8766D", "#F8766D", "#F8766D",
-        "#F8766D", "#F8766D", "#F8766D", "#F8766D",
-        "#F8766D", "#A3A500", "#A3A500", "#A3A500", 
-        "#A3A500", "#A3A500", "#A3A500", "#A3A500",
-        "#A3A500", "#A3A500", "#00BF7D", "#00BF7D", 
-        "#00BF7D", "#00BF7D", "#00BF7D", "#00BF7D", 
-        "#00BF7D", "#00BF7D", "#00BF7D", "#00B0F6",
-        "#00B0F6", "#00B0F6", "#00B0F6", "#00B0F6", 
-        "#00B0F6", "#E76BF3", "#E76BF3", "#E76BF3", 
-        "#E76BF3", "#E76BF3"
-      )
-    )
+    new_df %>% dplyr::select(color),
+    test_cluster_df %>% 
+      dplyr::mutate(
+        color = c(
+          "#F8766D", "#F8766D", "#F8766D", "#F8766D",
+          "#F8766D", "#F8766D", "#F8766D", "#F8766D",
+          "#F8766D", "#A3A500", "#A3A500", "#A3A500", 
+          "#A3A500", "#A3A500", "#A3A500", "#A3A500",
+          "#A3A500", "#A3A500", "#00BF7D", "#00BF7D", 
+          "#00BF7D", "#00BF7D", "#00BF7D", "#00BF7D", 
+          "#00BF7D", "#00BF7D", "#00BF7D", "#00B0F6",
+          "#00B0F6", "#00B0F6", "#00B0F6", "#00B0F6", 
+          "#00B0F6", "#E76BF3", "#E76BF3", "#E76BF3", 
+          "#E76BF3", "#E76BF3"
+        )
+      ) %>%
+      dplyr::select(color)
   )
 })

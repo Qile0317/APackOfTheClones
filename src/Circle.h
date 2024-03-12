@@ -8,19 +8,22 @@ public:
     Circle() : xval(0), yval(0), rval(0) {}
     Circle(double x, double y, double r) : xval(x), yval(y), rval(r) {}
     
-    double x() {
+    bool hasOriginMoreLeftThan(Circle& other) {
+        return x() < other.x();
+    }
+
+    // getters
+
+    double x() const {
         return xval;
     }
 
-    double y() {
+    double y() const {
         return yval;
     }
 
-    double rad() {
+    double rad() const {
         return rval;
     }
 
-    bool hasOriginMoreLeftThan(Circle& other) {
-        return xval < other.xval;
-    }
 };

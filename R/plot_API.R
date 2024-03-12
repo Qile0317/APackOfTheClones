@@ -1,6 +1,7 @@
 create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
     plot_clusters(
         clusters = get_plottable_df_with_color(apotc_obj),
+        num_total_clusters = get_num_clusters(apotc_obj),
         n = res,
         linetype = linetype,
         alpha = alpha
@@ -9,42 +10,38 @@ create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
 
 get_plottable_df_with_color <- function(apotc_data) {
     extract_and_add_colors(
-      apotc_obj = apotc_data,
-      plot_df = df_full_join(get_clusterlists(apotc_data))
+        apotc_obj = apotc_data,
+        plot_df = df_full_join(get_clusterlists(apotc_data))
     )
 }
 
-# full join a list of lists of (x,y,r) vectors into a dataframe with
+# full join a list of clusterlists vectors into a dataframe with
 # generated labels.
 df_full_join <- function(clstr_list) {
     df <- data.frame(
         'label' = character(0),
         'x' = numeric(0),
         'y' = numeric(0),
-        'r' = numeric(0)
+        'r' = numeric(0),
+        "clonotype" = character(0)
     )
 
-    seurat_cluster_index <- 0 # zero indexed :P
+    seurat_cluster_index <- 0
     for (i in seq_along(clstr_list)) {
         if (!isnt_empty_nor_na(clstr_list[[i]])) {
             seurat_cluster_index <- seurat_cluster_index + 1
             next
         }
+
         df <- dplyr::full_join(
             df,
-            data.frame(
-                "label" = rep( # TODO this could be customized or add new col
-                  paste("cluster", seurat_cluster_index),
-                  length(clstr_list[[i]][["x"]])
-                ),
-                "x" = clstr_list[[i]][["x"]],
-                "y" = clstr_list[[i]][["y"]],
-                "r" = clstr_list[[i]][["rad"]]
-            ),
-            by = dplyr::join_by("label", "x", "y", "r")
+            convert_to_dataframe(clstr_list[[i]], seurat_cluster_index),
+            by = dplyr::join_by("label", "x", "y", "r", "clonotype")
         )
+
         seurat_cluster_index <- seurat_cluster_index + 1
     }
+
     df
 }
 
@@ -54,33 +51,41 @@ df_full_join <- function(clstr_list) {
 
 plot_clusters <- function(
   clusters,
+  num_total_clusters,
   n = 360,
   linetype = "blank",
   alpha = 1
 ) {
-  ggplot2::ggplot(data = clusters) +
-    ggforce::geom_circle(
-      mapping = apotc_aes_string(
-        x0 = "x",
-        y0 = "y",
-        r = "r",
-        fill = "color"
-      ),
-      n = n,
-      linetype = linetype,
-      alpha = alpha
-    ) +
-    ggplot2::scale_fill_identity() +
-    ggplot2::coord_fixed() +
-    ggplot2::theme(legend.position = "none")
+  clusters %>%
+    ggplot2::ggplot() +
+      ggforce::geom_circle(
+        apotc_aes_string(
+          x0 = "x",
+          y0 = "y",
+          r = "r",
+          fill = "color"
+        ),
+        n = n,
+        linetype = linetype,
+        alpha = alpha
+      ) +
+      ggplot2::coord_fixed() #+
+      # ggplot2::scale_fill_identity( # this will add a color legend
+      #   guide = "legend",
+      #   name = NULL,
+      #   labels = clusters$label,
+      #   breaks = clusters$color
+      # )
+      
 }
 
-# TODO not quite the same
+# FIXME not quite the same
 add_default_theme <- function(plt, reduction) {
 	label_hashmap <- hash::hash(
 		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
 	)
 	label <- label_hashmap[[reduction]]
+  if (is.null(label)) label <- reduction
 
 	plt +
 		ggplot2::theme_classic() +
@@ -88,7 +93,6 @@ add_default_theme <- function(plt, reduction) {
 		ggplot2::ylab(paste(label, 2, sep = "_"))
 }
 
-# TODO make better - should probably scale instead
 get_retain_scale_dims <- function(
   seurat_obj, reduction, ball_pack_plt, plot_dims
 ) {
@@ -111,5 +115,23 @@ get_retain_scale_dims <- function(
 
   # return dims in same output format as get_plot_dims
   list("xr" = c(min_xr, max_xr), "yr" = c(min_yr, max_yr))
-  
+
+}
+
+check_is_apotc_ggplot <- function(x) {
+  if (!isApotcGGPlot(x)) {
+    stop(call. = FALSE, "not an output of `APOTCPlot` or `vizAPOTC`")
+  }
+}
+
+remove_ggplot_layers <- function(ggplot_obj, layer_indicies) {
+  ggplot_obj$layers[layer_indicies] <- NULL
+  ggplot_obj
+}
+
+get_ggplot_data <- function(x) x$data
+
+set_ggplot_data <- function(ggplot_obj, new_data) {
+  ggplot_obj$data <- new_data
+  ggplot_obj
 }

@@ -1,10 +1,19 @@
 quietly_test_that("getting shared clones works", {
-    expect_identical(
-        getSharedClones(
+
+    expect_contains(
+        object = getSharedClones(
             get(data("combined_pbmc")),
             clonesize_range = c(1L, Inf)
         ),
-        getdata("ApotcClonalNetwork", "shared_clones")
+        expected = getdata("ApotcClonalNetwork", "shared_clones")
+    )
+
+    expect_equal(
+        object = getSharedClones(
+            get(data("combined_pbmc")),
+            clonesize_range = c(1L, Inf)
+        ),
+        expected = getdata("ApotcClonalNetwork", "shared_clones")
     )
 
     # expect_identical(

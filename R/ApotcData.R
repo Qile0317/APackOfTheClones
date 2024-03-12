@@ -215,12 +215,13 @@ get_centroids <- function(apotc_obj) {
 }
 
 get_raw_clone_sizes <- function(apotc_obj, as_hash = FALSE) {
-	if (as_hash) return(hash_from_tablelist(apotc_obj@clone_sizes))
-	apotc_obj@clone_sizes
+	if (!as_hash) return(apotc_obj@clone_sizes)
+	hash_from_tablelist(apotc_obj@clone_sizes)
 }
 
-get_clonotypes <- function(apotc_obj) {
-	unique(unlist(lapply(get_raw_clone_sizes(apotc_obj), names)))
+# S3 generic method
+get_clonotypes.ApotcData <- function(x) {
+	unique(unlist(lapply(get_raw_clone_sizes(x), names)))
 }
 
 get_processed_clone_sizes <- function(apotc_obj) {

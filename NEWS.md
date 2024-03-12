@@ -2,9 +2,10 @@
 
 ## Additions
 
+- Added `getSharedClones` to compute information about clonotypes that are present in multiple seurat clusters and return it to the user.
+- Added `highlightClones` to extend the scRepertoire analogue for an APackOfTheClones plot - comes with many options to have certain clones appear differently on an existing plot.
 - Added `overlayLegend` to overlay/modify current legend on a clonal expansion plot.
 - Added `removeLegend` to remove any existing legend on a clonal expansion plot.
-- Added `getSharedClones` to compute information about clonotypes that are present in multiple seurat clusters and return it to the user.
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
 - Added argument `verbose` in `APOTCPlot` to display some additional visual cues.
 - Added argument `alpha` in `APOTCPlot` and `vizAPOTC` to change the alpha (transparency) of each circle.

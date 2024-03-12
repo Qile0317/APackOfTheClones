@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Rcpp.h>
 #include <vector>
 #include <string>
@@ -23,6 +25,7 @@ public: // constructors
     }
 
     ClusterList(const Rcpp::List rClusterList) {
+        
         if (rClusterList.size() == 0) {
             isEmpty = true;
             return;
@@ -67,7 +70,7 @@ public:
     // getters
 
     Rcpp::List getRClusterList() {
-        if (isEmpty) {
+        if (isEmptyClusterList()) {
             return Rcpp::List::create();
         }
 

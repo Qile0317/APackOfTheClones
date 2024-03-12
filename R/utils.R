@@ -42,6 +42,14 @@ create_empty_table <- function() {
     )
 }
 
+init_dataframe <- function(column_names, nrow, init_val = NA) {
+  df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
+  colnames(df) <- column_names
+  df
+}
+
+# hash utilities
+
 create_valueless_vector_hash <- function(key, vector_type) {
     hash::hash(key, init_list(length(key), vector_type(0)))
 }
@@ -60,11 +68,7 @@ hash_from_tablelist <- function(tablelist) {
     )
 }
 
-init_dataframe <- function(column_names, nrow, init_val = NA) {
-  df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
-  colnames(df) <- column_names
-  df
-}
+hash_contains <- function(hash_obj, key) is.null(hash_obj[[key]])
 
 # readability functions
 

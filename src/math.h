@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+#define TAU 6.28318530717958647692
+
 inline double sqr(double x) {
     return x * x;
 }
@@ -12,32 +14,99 @@ inline double eucDist(double x1, double x2) {
     return std::sqrt(sqr(x1) + sqr(x2));
 }
 
+inline double normalizeAngle(double radianAngle) {
+    return std::abs(radianAngle) <= TAU ? radianAngle
+        : fmod(radianAngle, TAU);
+}
+
+inline double normalizeAngleAtan2(double radianAngle) {
+    radianAngle = normalizeAngle(radianAngle);
+    if (std::abs(radianAngle) <= M_PI) return radianAngle;
+    return std::abs(radianAngle) - ((1 + (radianAngle > 0)) * M_PI);
+}
+
 class TwoDVector {
 protected:
     double magnitude;
     double direction;
 
 public:
-    TwoDVector(double mag, double dir) : magnitude(mag), direction(dir) {}
-    TwoDVector(TwoDVector& v) : magnitude(v.getMagnitude()), direction(v.getDirection()) {}
 
-    // Overload +
-    TwoDVector operator+(const TwoDVector& other) const {
-        double dx = getX() + other.getX(), dy = getY() + other.getY();
-        return TwoDVector(eucDist(dx, dy), std::atan2(dy, dx));
+    // constructors
+
+    TwoDVector() : magnitude(0), direction(0) {}
+    
+    TwoDVector(double mag, double dir) : magnitude(mag), direction(dir) {}
+    
+    TwoDVector(const TwoDVector& v) :
+        magnitude(v.getMagnitude()), direction(v.getDirection()) {}
+
+    // factory constructors
+
+    static TwoDVector createFromXY(double x, double y) { // does it handle 0, 0?
+        return TwoDVector(eucDist(x, y), std::atan2(y, x));
     }
 
-    // Overload +=
-    TwoDVector& operator+=(const TwoDVector& other) {
-        *this = *this + other;
+    static TwoDVector createCircleOrigin(const Circle& circle) {
+        return createFromXY(circle.x(), circle.y());
+    }
+
+    // copy the values of another vector
+
+    TwoDVector& copyFrom(const TwoDVector& other) {
+        magnitude = other.getMagnitude();
+        direction = other.getDirection();
         return *this;
     }
 
-    // Overload -
-    TwoDVector operator-(const TwoDVector& other) const {
-        double dx = getX() - other.getX(), dy = getY() - other.getY();
-        return TwoDVector(eucDist(dx, dy), std::atan2(dy, dx));
+    // 2d vector maths
+
+    TwoDVector operator+(const TwoDVector& other) const {
+        return createFromXY(getX() + other.getX(), getY() + other.getY());
     }
+
+    TwoDVector& operator+=(const TwoDVector& other) {
+        TwoDVector result = *this + other;
+        return copyFrom(result);
+    }
+
+    TwoDVector operator-() const {
+        return createFromXY(-getX(), -getY());
+    }
+
+    TwoDVector operator-(const TwoDVector& other) const {
+        return *this + (-other);
+    }
+
+    bool operator==(const TwoDVector& other) const {
+        return getX() == other.getX() && getY() == other.getY();
+    }
+
+    TwoDVector& increaseMagnitude(double val) {
+        return setMagnitude(getMagnitude() + val);
+    }
+
+    TwoDVector& decreaseMagnitude(double val) {
+        return increaseMagnitude(-val);
+    }
+ 
+    TwoDVector& reverseDirection() {
+        return setDirection(direction + M_PI);
+    }
+
+    // setters
+
+    TwoDVector& setMagnitude(double val) {
+        magnitude = std::abs(val);
+        return val > 0 ? *this : reverseDirection();
+    }
+
+    TwoDVector& setDirection(double val) {
+        direction = normalizeAngleAtan2(val);
+        return *this;
+    }
+
+    // getters
 
     double getMagnitude() const {
         return magnitude;
@@ -55,120 +124,93 @@ public:
         return magnitude * std::sin(direction);
     }
 
-    void setMagnitude(double val) {
-        magnitude = val;
-    }
-
-    void decreaseMagnitude(double val) {
-        magnitude -= val;
-    }
 };
 
-class TwoDVectorFactory {
-public:
-    static TwoDVector createFromXY(double x, double y) {
-        double mag = std::sqrt(sqr(x) + sqr(y));
-        double dir = std::atan2(y, x);
-        return TwoDVector(mag, dir);
-    }
-
-    static TwoDVector createCircleOrigin(Circle& circle) {
-        return createFromXY(circle.x(), circle.y());
-    }
-};
-
-class TwoDRightPointingLine {
+class TwoDLine {
 protected:
-    TwoDVector originCoordinate;
-    TwoDVector lineVector; // must point right of originCoordinate
+    TwoDVector leftPoint;
+    TwoDVector rightPoint;
 
 public:
-    TwoDRightPointingLine(TwoDVector o, TwoDVector l) : originCoordinate(o), lineVector(l) {}
+    TwoDLine(const TwoDVector& left, const TwoDVector& right) {
+        leftPoint = TwoDVector(left);
+        rightPoint = TwoDVector(right);
+    }
 
-    double getLeftX() {
+    TwoDLine& shortenByTwoCirclesRadii(double leftRadius, double rightRadius) {
+        return shortenLeftByCircleRadius(leftRadius)
+            .shortenRightByCircleRadius(rightRadius);
+    }
+
+    TwoDLine& shortenLeftByCircleRadius(double val) {
+        leftPoint.copyFrom(
+            rightPoint + (leftPoint - rightPoint).decreaseMagnitude(val)
+        );
+        return *this;
+    }
+
+    TwoDLine& shortenRightByCircleRadius(double val) {
+        rightPoint.copyFrom(
+            leftPoint + (rightPoint - leftPoint).decreaseMagnitude(val)
+        );
+        return *this;
+    }
+
+    int matchLeftCircleIndex(std::vector<Circle>& circles, int i, int j) {
+        return leftPoint == TwoDVector::createCircleOrigin(circles[i]) ? i : j;
+    }
+
+    int matchRightCircleIndex(std::vector<Circle>& circles, int i, int j) {
+        return i + j - matchLeftCircleIndex(circles, i, j);
+    }
+
+    // getters
+
+    TwoDVector getLeftPoint() const {
+        return leftPoint;
+    }
+
+    TwoDVector getRightPoint() const {
+        return rightPoint;
+    }
+
+    double getLeftX() const {
         return getLeftPoint().getX();
     }
 
-    double getLeftY() {
+    double getLeftY() const {
         return getLeftPoint().getY();
     }
 
-    TwoDVector getLeftPoint() {
-        return originCoordinate;
-    }
-
-    double getRightX() {
+    double getRightX() const {
         return getRightPoint().getX();
     }
 
-    double getRightY() {
+    double getRightY() const {
         return getRightPoint().getY();
     }
 
-    TwoDVector getRightPoint() {
-        return originCoordinate + lineVector;
-    }
-
-    // assumes their origins correspond to line origin and endpoints!
-    void shortenByTwoCirclesRadiiAndExtraSpacing(
-        Circle& c1, Circle& c2, double extraSpacing
-    ) {
-        Circle& leftCircle = c1, rightCircle = c2;
-        if (c2.hasOriginMoreLeftThan(c1)) {
-            std::swap(leftCircle, rightCircle);
-        }
-
-        shortenByTwoCirclesRadii(
-            leftCircle.rad() + extraSpacing, rightCircle.rad() + extraSpacing
-        );
-    }
-
-    void shortenByTwoCirclesRadii(double leftRadius, double rightRadius) {
-        shortenLeftByCircleRadius(leftRadius);
-        shortenRightByCircleRadius(rightRadius);
-    }
-
-    void shortenLeftByCircleRadius(double val) {
-        decreaseMagnitude(val);
-
-        TwoDVector translationVector (lineVector);
-        translationVector.setMagnitude(val);
-        translate(translationVector);
-    }
-
-    void shortenRightByCircleRadius(double val) {
-        decreaseMagnitude(val);
-    }
-
-    void decreaseMagnitude(double val) {
-        lineVector.decreaseMagnitude(val);
-    }
-
-    void translate(TwoDVector v) {
-        originCoordinate += v;
-    }
 };
 
-class TwoDRightPointingLineFactory {
+class TwoDLineFactory {
 public:
-    static TwoDRightPointingLine createCircleLinkingLineWithSpacing(
+
+    static TwoDLine createCircleLinkingLineWithSpacing(
         Circle& c1, Circle& c2, double extraSpacing
     ) {
+
         Circle& leftCircle = c1, rightCircle = c2;
-        if (c2.hasOriginMoreLeftThan(c1)) {
-            std::swap(leftCircle, rightCircle);
-        }
+        if (c2.hasOriginMoreLeftThan(c1)) std::swap(leftCircle, rightCircle);
 
-        TwoDVector leftOrigin = TwoDVectorFactory::createCircleOrigin(leftCircle);
-
-        TwoDVector rightOrigin = TwoDVectorFactory::createCircleOrigin(rightCircle);
-        TwoDVector rightPointerVector = rightOrigin - leftOrigin;
-
-        TwoDRightPointingLine line (leftOrigin, rightPointerVector);
-        line.shortenByTwoCirclesRadiiAndExtraSpacing(
-            leftCircle, rightCircle, extraSpacing
+        TwoDLine circleLinkingLine = TwoDLine(
+            TwoDVector::createCircleOrigin(leftCircle),
+            TwoDVector::createCircleOrigin(rightCircle)
         );
 
-        return line;
+        return circleLinkingLine
+            .shortenByTwoCirclesRadii(
+                leftCircle.rad() + extraSpacing, rightCircle.rad() + extraSpacing
+            );
     }
+
 };

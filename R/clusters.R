@@ -7,6 +7,7 @@
 # [["rad"]] numeric vector of radii of all circles
 # [["centroid"]] numeric vector of the cluster centroid x and y coordinate
 # [["clRad"]] approximate radius of the cluster
+# [["clonotype"]] clonotype based on original clonecall
 
 # centroid finder for a matrix of [x, y, cluster]
 find_centroids <- function(df, total_clusters) {
@@ -101,3 +102,20 @@ get_y_coords <- function(l) l[[2]]
 get_radii <- function(l) l[[3]]
 get_centroid <- function(l) l$centroid
 get_cluster_radius <- function(l) l[[5]]
+get_num_clones <- function(l) length(get_x_coords(l))
+
+get_clonotypes <- function(x) UseMethod("get_clonotypes")
+get_clonotypes.list <- function(x) x[["clonotype"]]
+
+convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
+  data.frame(
+      "label" = rep(
+        as.character(seurat_cluster_index + 1),
+        get_num_clones(clstr_list)
+      ),
+      "x" = get_x_coords(clstr_list),
+      "y" = get_y_coords(clstr_list),
+      "r" = get_radii(clstr_list),
+      "clonotype" = get_clonotypes(clstr_list)
+  )
+}

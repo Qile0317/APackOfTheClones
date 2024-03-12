@@ -29,12 +29,9 @@
 #' apotc_plot
 #'
 removeLegend <- function(apotc_ggplot) {
-    if (!isApotcGGPlot(apotc_ggplot))
-        stop("not an output of `APOTCPlot` or `vizAPOTC`")
-
+    check_is_apotc_ggplot(apotc_ggplot)
     if (!has_legend(apotc_ggplot)) return(apotc_ggplot)
-    apotc_ggplot$layers[get_legend_layer_indicies(apotc_ggplot)] <- NULL
-    apotc_ggplot
+    remove_ggplot_layers(apotc_ggplot, get_legend_layer_indicies(apotc_ggplot))
 }
 
 #' @title overlay a clone size legend on an APackOfTheClones plot
@@ -127,10 +124,8 @@ overlayLegend <- function(
 overlayLegend_error_handler <- function(args) {
 
     check_legend_params(args)
-
-    if (!isApotcGGPlot(args$apotc_ggplot)) {
-        stop("not an output of `APOTCPlot` or `vizAPOTC`")
-    }
+    check_is_apotc_ggplot(args$apotc_ggplot)
+    
     if (!is_an_integer(args$res)) {
         stop(call. = FALSE, "`res` must be an integer value of length 1.")
     }
@@ -554,13 +549,13 @@ add_legend_backing <- function(plt, plt_dims, legend_df) {
         ))) %>% name_latest_legend_layer()
     
     # add the white inside
-    (plt + ggplot2::geom_rect(ggplot2::aes(
+    plt +
+        ggplot2::geom_rect(ggplot2::aes(
             xmin = dims["xmin"], xmax = dims["xmax"],
             ymin = dims["ymin"], ymax = dims["ymax"],
             fill = "white",
             linetype = "blank"
-        )) +
-        ggplot2::theme(legend.position = "none")) %>%
+        )) %>%
         name_latest_legend_layer()
 }
 

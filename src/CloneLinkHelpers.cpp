@@ -77,7 +77,7 @@ public:
 private:
     LineLinkDataFrameFactory(
         Rcpp::List clusterLists,
-        Rcpp::List rawCloneSizes,
+        Rcpp::List rawCloneSizes, // list of table objects, some may be empty
         Rcpp::List sharedClonotypeClusters,
         double extraSpacing
     ) {
@@ -128,7 +128,7 @@ private:
 
         for (int i = 0; i < numClusters; i++) {
             Rcpp::NumericVector currentClonotypeTable = rawCloneSizes[i];
-            if (currentClonotypeTable.size() == 0) {continue;};
+            if (currentClonotypeTable.size() == 0) {continue;}
 
             addElementsToHashMap(
                 outputIndex[i],
@@ -156,31 +156,29 @@ private:
         std::vector<int>& currOneIndexedClusterIndicies,
         double extraSpacing
     ) {
-        int numCircles = circles.size();
-        for (int i = 0; i < numCircles - 1; i++) {
-            for (int j = i + 1; j < numCircles; j++) {
+        for (int i = 0; i < ((int) circles.size()) - 1; i++) {
+            for (int j = i + 1; j < (int) circles.size(); j++) {
+                
                 // TODO for filtered ver, only add info if one of circles is from an origin cluster.
-                addTwoSharedCircleLinkInfo(circles[i], circles[j], extraSpacing);
 
-                // push the indicies : not guaranteed atm to be in correct order
-                cluster1.push_back(currOneIndexedClusterIndicies[i] + 1);
-                cluster2.push_back(currOneIndexedClusterIndicies[j] + 1);
+                TwoDLine linkLine = TwoDLineFactory::createCircleLinkingLineWithSpacing(
+                    circles[i], circles[j], extraSpacing
+                );
+
+                x1.push_back(linkLine.getLeftX());
+                y1.push_back(linkLine.getLeftY());
+
+                x2.push_back(linkLine.getRightX());
+                y2.push_back(linkLine.getRightY());
+
+                int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j);
+                int rightCircleIndex = i + j - leftCircleIndex;
+
+                cluster1.push_back(currOneIndexedClusterIndicies[leftCircleIndex]);
+                cluster2.push_back(currOneIndexedClusterIndicies[rightCircleIndex]);
+
             }
         }
-    }
-
-    void addTwoSharedCircleLinkInfo(Circle& c1, Circle& c2, double extraSpacing) {
-
-        TwoDRightPointingLine linkLine = TwoDRightPointingLineFactory::createCircleLinkingLineWithSpacing(
-            c1, c2, extraSpacing
-        );
-        
-        x1.push_back(linkLine.getLeftX());
-        y1.push_back(linkLine.getLeftY());
-
-        x2.push_back(linkLine.getRightX());
-        y2.push_back(linkLine.getRightY());
-
     }
 
     Rcpp::DataFrame createOutputDataFrame() {
