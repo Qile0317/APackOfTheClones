@@ -18,28 +18,32 @@ get_plottable_df_with_color <- function(apotc_data) {
 # full join a list of clusterlists vectors into a dataframe with
 # generated labels.
 df_full_join <- function(clstr_list) {
+
     df <- data.frame(
-        'label' = character(0),
-        'x' = numeric(0),
-        'y' = numeric(0),
-        'r' = numeric(0),
-        "clonotype" = character(0)
-    )
+        "label" = character(0),
+        "x" = numeric(0),
+        "y" = numeric(0),
+        "r" = numeric(0)
+    ) %>%
+        update_clusterlist_df(get_first_nonempty(clstr_list))
+    
+    if (contains_clonotypes(get_first_nonempty(clstr_list))) {
+        cols_to_join_by <- dplyr::join_by("label", "x", "y", "r", "clonotype")
+    } else {
+        cols_to_join_by <- dplyr::join_by("label", "x", "y", "r")
+    }
 
     seurat_cluster_index <- 0
-    for (i in seq_along(clstr_list)) {
-        if (!isnt_empty_nor_na(clstr_list[[i]])) {
-            seurat_cluster_index <- seurat_cluster_index + 1
-            next
-        }
 
-        df <- dplyr::full_join(
-            df,
-            convert_to_dataframe(clstr_list[[i]], seurat_cluster_index),
-            by = dplyr::join_by("label", "x", "y", "r", "clonotype")
-        )
+    for (i in seq_along(clstr_list)) {
 
         seurat_cluster_index <- seurat_cluster_index + 1
+        if (is_empty(clstr_list[[i]])) next
+
+        df <- df %>% dplyr::full_join(
+            convert_to_dataframe(clstr_list[[i]], seurat_cluster_index - 1), # zero indexed
+            by = cols_to_join_by
+        )
     }
 
     df
@@ -69,7 +73,8 @@ plot_clusters <- function(
         linetype = linetype,
         alpha = alpha
       ) +
-      ggplot2::coord_fixed() #+
+      ggplot2::coord_fixed() +
+      ggplot2::scale_fill_identity() #+
       # ggplot2::scale_fill_identity( # this will add a color legend
       #   guide = "legend",
       #   name = NULL,

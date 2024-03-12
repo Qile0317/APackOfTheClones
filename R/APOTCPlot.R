@@ -304,7 +304,7 @@ isApotcGGPlot <- function(ggplot_obj) {
 	inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
 }
 
-# FIXME getter
+# getter
 get_apotcdata <- function(apotc_ggplot_obj) {
 	apotc_ggplot_obj$APackOfTheClones
 }

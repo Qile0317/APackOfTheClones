@@ -97,6 +97,7 @@ read_centroids <- function(list_of_clusterlists) {
 }
 
 # getters for a single clusterlist
+
 get_x_coords <- function(l) l[[1]]
 get_y_coords <- function(l) l[[2]]
 get_radii <- function(l) l[[3]]
@@ -106,16 +107,33 @@ get_num_clones <- function(l) length(get_x_coords(l))
 
 get_clonotypes <- function(x) UseMethod("get_clonotypes")
 get_clonotypes.list <- function(x) x[["clonotype"]]
+get_clonotypes.data.frame <- function(x) x[["clonotype"]]
 
+contains_clonotypes <- function(x) !is.null(get_clonotypes(x))
+
+# convert clusterlist to dataframe, assuming its valid
 convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
-  data.frame(
-      "label" = rep(
-        as.character(seurat_cluster_index + 1),
-        get_num_clones(clstr_list)
-      ),
-      "x" = get_x_coords(clstr_list),
-      "y" = get_y_coords(clstr_list),
-      "r" = get_radii(clstr_list),
-      "clonotype" = get_clonotypes(clstr_list)
-  )
+    data.frame(
+        "label" = rep(
+            paste("cluster", seurat_cluster_index),
+            get_num_clones(clstr_list)
+        ),
+        "x" = get_x_coords(clstr_list),
+        "y" = get_y_coords(clstr_list),
+        "r" = get_radii(clstr_list)
+    ) %>%
+        update_clusterlist_df(clstr_list)
+}
+
+update_clusterlist_df <- function(df, clusterlist) {
+
+    if (contains_clonotypes(df) || !contains_clonotypes(clusterlist)) return(df)
+    
+    if (nrow(df) == 0) {
+        df$clonotype <- character(0)
+        return(df)
+    }
+
+    df %>% dplyr::mutate(clonotype = get_clonotypes(clusterlist))
+
 }

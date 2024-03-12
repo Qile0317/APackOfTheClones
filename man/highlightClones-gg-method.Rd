@@ -7,9 +7,33 @@
 \S4method{highlightClones}{gg}(
   sc.data,
   sequence,
-  color_each = FALSE,
+  color_each = TRUE,
   default_color = "#808080"
 )
+}
+\arguments{
+\item{sc.data}{A ggplot object that is the output of \link{APOTCPlot} or
+\link{vizAPOTC} of an APackOfTheClones plot to be highlighted}
+
+\item{sequence}{character vector of the sequence(s) to highlight. Note
+that it must be of the clonecall of the code that created the plot. A
+warning will be shown if any of the sequences are not present.}
+
+\item{color_each}{Either a logical of length 1, or a character(s). It is
+\code{TRUE} by default, which assigns a unique default ggplot color to each
+highlighted clone. If \code{FALSE}, each highlighted clone will retain its
+current color in \code{sc.data}. It can also indicate the color of each
+highlighted clone: if it is a character of length 1 and a valid color, all
+highlighted clones will be of that color. Else it must be a character vector
+of the same length as \code{sequence}, with each color corresponding to the
+clone. Currently, the user must ensure \code{sequence} contains of unique
+characters.}
+
+\item{default_color}{A character of length 1 or \code{NULL} indicating the color
+of non-highlighted clones. If \code{NULL}, all un-highlighted sequences will
+retain their original color in \code{sc.data}. Else, if it is a character, it
+should be a valid color that all un-highlighted clones are. Defaults to the
+hexcode for gray.}
 }
 \value{
 A ggplot object with the data modified to the highlighted colors
@@ -17,5 +41,17 @@ A ggplot object with the data modified to the highlighted colors
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-TODO
+TODO - some combos and mention its S4 alt to scRep
+}
+\details{
+TODO discuss that it modifies the ggplot data.
+}
+\examples{
+data("combined_pbmc")
+
+# piping the plot can be nice to read syntatically -
+# By default, assigns unique colors to highlights and everything else is gray
+vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) \%>\%
+    APackOfTheClones::highlightClones("CASLSGSARQLTF_CASSSTVAGEQYF")
+
 }

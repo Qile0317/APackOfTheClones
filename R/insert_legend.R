@@ -185,7 +185,7 @@ check_legend_params <- function(args) {
 utils::globalVariables(".ApotcLegendLayerName")
 
 name_latest_legend_layer <- function(plt) {
-    name_latest_layer(plt, new_name = .ApotcLegendLayerName)
+    plt %>% name_latest_layer(.ApotcLegendLayerName)
 }
 
 has_legend <- function(apotc_ggplot) {
@@ -279,9 +279,7 @@ insert_legend <- function(
 
     # add the background
     if (do_add_legend_border) {
-        plt <- add_legend_backing(
-            plt = plt, plt_dims = plt_dims, legend_df = legend_df
-        )
+        plt <- add_legend_backing(plt, legend_df) %>% name_latest_legend_layer()
     }
     
     # add the side number labels
@@ -537,35 +535,21 @@ get_legend_title_coord <- function(legend_df, legend_dims, spacing) {
       "y" = min_y(legend_df) + min_rad(legend_df) + (1.5 * spacing))
 }
 
-add_legend_backing <- function(plt, plt_dims, legend_df) {
-    linewidth <- get_linewidth(plt_dims)
+add_legend_backing <- function(plt, legend_df) {
+
     dims <- get_legend_backing_minmax_dims(legend_df)
 
-    # add the back border rectangle
-    plt <- (plt + ggplot2::geom_rect(ggplot2::aes(
-            xmin = dims["xmin"] - linewidth, xmax = dims["xmax"] + linewidth,
-            ymin = dims["ymin"] - linewidth, ymax = dims["ymax"] + linewidth,
-            fill = "black"
-        ))) %>% name_latest_legend_layer()
-    
-    # add the white inside
-    plt +
-        ggplot2::geom_rect(ggplot2::aes(
+    legend_backing_layer <- ggplot2::geom_rect(
+        ggplot2::aes(
             xmin = dims["xmin"], xmax = dims["xmax"],
             ymin = dims["ymin"], ymax = dims["ymax"],
-            fill = "white",
-            linetype = "blank"
-        )) %>%
-        name_latest_legend_layer()
-}
-
-get_linewidth <- function(plt) {
-    xr <- get_xr(plt)
-    bound_num(
-        abs(xr[2] - xr[1]) * 0.002,
-        lowerbound = 0.001,
-        upperbound = 0.1
+            fill = "white"
+        ),
+        colour = "black"
     )
+
+    plt + legend_backing_layer
+
 }
 
 get_legend_backing_minmax_dims <- function(legend_df) {

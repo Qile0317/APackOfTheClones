@@ -316,6 +316,11 @@ getlast <- function(x) UseMethod("getlast")
 getlast.default <- function(x) x[length(x)]
 getlast.list <- function(x) x[[length(x)]]
 
+# get first non empty list in a list of lists, assuming it exists
+get_first_nonempty <- function(l) {
+    for (el in l) if (isnt_empty(el)) return(el)
+}
+
 # operate on non-empty elements of two lists of the same length
 # with a 2-argument function
 operate_on_same_length_lists <- function(func, l1, l2) {

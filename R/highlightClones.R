@@ -11,14 +11,51 @@ methods::setGeneric(
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' TODO
+#' TODO - some combos and mention its S4 alt to scRep
+#'
+#' @param sc.data A ggplot object that is the output of [APOTCPlot] or
+#' [vizAPOTC] of an APackOfTheClones plot to be highlighted
+#' @param sequence character vector of the sequence(s) to highlight. Note
+#' that it must be of the clonecall of the code that created the plot. A
+#' warning will be shown if any of the sequences are not present.
+#' @param color_each Either a logical of length 1, or a character(s). It is
+#' `TRUE` by default, which assigns a unique default ggplot color to each
+#' highlighted clone. If `FALSE`, each highlighted clone will retain its
+#' current color in `sc.data`. It can also indicate the color of each
+#' highlighted clone: if it is a character of length 1 and a valid color, all
+#' highlighted clones will be of that color. Else it must be a character vector
+#' of the same length as `sequence`, with each color corresponding to the
+#' clone. Currently, the user must ensure `sequence` contains of unique
+#' characters.
+#' @param default_color A character of length 1 or `NULL` indicating the color
+#' of non-highlighted clones. If `NULL`, all un-highlighted sequences will
+#' retain their original color in `sc.data`. Else, if it is a character, it
+#' should be a valid color that all un-highlighted clones are. Defaults to the
+#' hexcode for gray.
+#'
+#' @details
+#' TODO discuss that it modifies the ggplot data.
 #'
 #' @return A ggplot object with the data modified to the highlighted colors
 #' @export
 #'
+#' @examples
+#' data("combined_pbmc")
+#'
+#' # piping the plot can be nice to read syntatically -
+#' # By default, assigns unique colors to highlights and everything else is gray
+#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
+#'     APackOfTheClones::highlightClones("CASLSGSARQLTF_CASSSTVAGEQYF")
+#'
+#' # one useful application is to highlight shared clones - beware that the
+#' # clonotype sequences may get extremely long in the legend
+#' shared_aa_clones <- names(getSharedClones(combined_pbmc, clonecall = "aa"))
+#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
+#'     APackOfTheClones::highlightClones(shared_aa_clones)
+#'
 methods::setMethod("highlightClones", "gg",
     function(
-        sc.data, sequence, color_each = FALSE, default_color = "#808080"
+        sc.data, sequence, color_each = TRUE, default_color = "#808080"
     ) {
         apotc_highlight_clones(
             apotc_ggplot = sc.data,
@@ -29,15 +66,12 @@ methods::setMethod("highlightClones", "gg",
     }
 )
 
-# if color_each = FALSE, retain original color. If TRUE,
-# unique colors. else custom color vector
-# TODO check what happens when no sequence matches
 apotc_highlight_clones <- function(
     apotc_ggplot,
-    sequence,
+    sequence, # maybe allow indicies in seperate method??
     color_each,
     default_color,
-    add_legend = TRUE
+    add_legend = TRUE # pretty dumb if it was False?
 ) {
 
     apotc_highlight_clones_error_handler(hash::hash(as.list(environment())))
@@ -81,9 +115,18 @@ apotc_highlight_clones <- function(
 
     apotc_ggplot <- set_ggplot_data(apotc_ggplot, highlighted_ggplot_data)
 
-    if (!add_legend) return(apotc_ggplot)
+    # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
+    if (!add_legend || identical(color_each, FALSE)) return(apotc_ggplot)
     
-    apotc_ggplot #%>% ggplot2::scale_fill_identity() # TODO
+    suppressMessages(
+        apotc_ggplot + ggplot2::scale_fill_identity(
+            guide = "legend",
+            name = "clonotype",
+            labels = sequence,
+            breaks = clone_color_vector
+        )
+    )
+
 }
 
 apotc_highlight_clones_error_handler <- function(args) {
@@ -107,7 +150,9 @@ apotc_highlight_clones_error_handler <- function(args) {
     }
 
     if (!is.null(args$default_color) && !is_a_character(args$default_color)) {
-        stop(call. = FALSE, "`default_color` must be a character of length 1")
+        stop(call. = FALSE,
+            "`default_color` must be a character of length 1 or NULL"
+        )
     }
 }
 
@@ -125,7 +170,7 @@ gen_clone_color_vector <- function(color_each, sequence, plot_data) {
         if (length(color_each) != num_sequences)
             stop(call. = FALSE,
                 "length of `color_each` doesn't match",
-                "the numeber of sequences to highlight"
+                "the number of sequences to highlight"
             )
         return(color_each)
     }

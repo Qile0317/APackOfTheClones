@@ -25,11 +25,11 @@ gen_cluster_color_hashmap <- function(num_clusters) {
 #' @noRd
 insert_colors <- function(cluster_dataframe, num_clusters) {
   color_hashmap <- gen_cluster_color_hashmap(num_clusters)
-  color_vec <- cluster_dataframe[[1]] # 1 is label
+  color_vec <- cluster_dataframe$label
   for (i in seq_along(color_vec)) {
     color_vec[i] <- color_hashmap[[color_vec[i]]]
   }
-  return(cluster_dataframe %>% dplyr::mutate("color" = color_vec))
+  cluster_dataframe %>% dplyr::mutate("color" = color_vec)
 }
 
 # new version that simply takes the readily existing colors in an seurat
@@ -48,7 +48,7 @@ pair_colors_to_hash <- function(apotc_obj) {
 
 extract_and_add_colors <- function(apotc_obj, plot_df) {
   color_hashmap <- pair_colors_to_hash(apotc_obj)
-  color_vec <- plot_df[[1]] # 1 is label
+  color_vec <- plot_df$label
   for (i in seq_along(color_vec)) {
     color_vec[i] <- color_hashmap[[color_vec[i]]]
   }
@@ -64,14 +64,6 @@ extract_and_add_colors <- function(apotc_obj, plot_df) {
 get_average_hex <- function(hex1, hex2) {
   grDevices::rgb(
     t((grDevices::col2rgb(hex1) + grDevices::col2rgb(hex2)) / 2),
-    maxColorValue = 255
-  )
-}
-
-# for if hexes were square rooted first, typically from image files
-get_average_image_hex_color <- function(hex1, hex2) {
-  grDevices::rgb(
-    t(sqrt(((grDevices::col2rgb(hex1)^2) + (grDevices::col2rgb(hex2)^2)) / 2)),
     maxColorValue = 255
   )
 }
