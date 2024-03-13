@@ -25,10 +25,6 @@
 #' overlays straight lines between each clone that is common between clusters.
 #' @param only_link_cluster integer vector indicating which shared clone
 #' cluster(s) to include links from.
-#' @param linked_clonesize_range numeric vector of length 2. Indicates the
-#' minimum and maximum clonesize of at least one clone of a shared clonotype.
-#' Defaults to `c(2, Inf)` which means
-#' only clonotypes of size 2 that are shared between will be connected.
 #' @param clone_link_width numeric. The width of the lines that connect shared
 #' clones. Defaults to `"auto"` which will estimate a reasonable value depending
 #' on circle sizes.
@@ -112,8 +108,8 @@ APOTCPlot <- function(
 	run_id = NULL,
 
 	show_shared_clones = FALSE, # TODO an alternative vizualization not based on apotcplots. e.g. those used to visualize connectedness of graphs
-	only_link_cluster = NULL, # TODO
-	linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)
+	only_link_cluster = NULL, # FIXME
+	#linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)
 	clone_link_width = "auto",
 	clone_link_color = "blend",
 	clone_link_alpha = 0.5,

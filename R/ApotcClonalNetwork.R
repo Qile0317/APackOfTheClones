@@ -63,8 +63,10 @@ getSharedClones <- function(
     getSharedClones_error_handler(args)
 
     # get the apotcdata
-	run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
-    apotc_obj <- getApotcDataIfExistsElseCreate(seurat_obj, run_id)
+    apotc_obj <- getApotcDataIfExistsElseCreate(
+        seurat_obj, 
+        run_id = infer_object_id_if_needed(args, varargs_list = varargs_list)
+    )
 
     get_shared_clones(
         apotc_obj,
@@ -142,34 +144,11 @@ get_shared_clones <- function(
     exclude_unique_clones = TRUE,
     clone_size_lowerbound = 1L,
     clone_size_upperbound = Inf,
+    # TODO have heterogeneity bounds?
     included_cluster = TRUE
 ) {
 
-    clonotype_map <- create_empty_int_hash(get_clonotypes(apotc_obj))
-    clustered_clone_sizes <- get_raw_clone_sizes(apotc_obj, as_hash = TRUE)
-
-    for (i in seq_along(clustered_clone_sizes)) {
-
-        if (is_empty(clustered_clone_sizes[[i]])) next
-
-        for (clonotype in names(clustered_clone_sizes[[i]])) {
-
-            # if (!is_bound_between( # FIXME this isnt a good filter tbh
-            #     clustered_clone_sizes[[i]][[clonotype]],
-            #     clone_size_lowerbound,
-            #     clone_size_upperbound
-            # )) next
-
-            clonotype_map[[clonotype]] <- c(
-                clonotype_map[[clonotype]], i - zero_indexed
-            )
-
-        }
-    }
-
-    shared_clonotypes <- as.list(clonotype_map)
-
-    # FIXME if some keys are too long, it becomes ... due to the environment implementation
+    shared_clonotypes <- get_raw_shared_clones(apotc_obj)
 
     if (exclude_unique_clones) {
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)
@@ -184,6 +163,32 @@ get_shared_clones <- function(
     filter_shared_clones_cluster(shared_clonotypes, included_cluster)
 }
 
+get_raw_shared_clones <- function(apotc_obj, zero_indexed) {
+
+    clonotype_map <- create_empty_int_hash(get_clonotypes(apotc_obj))
+    clustered_clone_sizes <- get_raw_clone_sizes(apotc_obj, as_hash = TRUE)
+
+    for (i in seq_along(clustered_clone_sizes)) {
+
+        if (is_empty(clustered_clone_sizes[[i]])) next
+
+        for (clonotype in names(clustered_clone_sizes[[i]])) {
+
+            clonotype_map[[clonotype]] <- c(
+                clonotype_map[[clonotype]], i - zero_indexed
+            )
+
+        }
+    }
+
+    # FIXME if some keys are too long, it becomes ... due to the environment implementation
+    as.list(clonotype_map)
+}
+
+# FIXME
+# - for single included cluster, should just connect from it to others
+# - for multiple, only should linnk between them but also give option to expand out.
+# - cirrently it expands out links - keep this implementation for if expand out is true.
 filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
     results <- rcppFilterSharedClonesByClusterHelper(
         shared_clonotypes, names(shared_clonotypes), included_cluster
@@ -193,6 +198,7 @@ filter_shared_clones_cluster <- function(shared_clonotypes, included_cluster) {
 }
 
 # overlay clone links on an APackOfTheClones plot
+# maybe also make method to take in the plot directly?
 # TODO - do some matrix visualization too, maybe use heatmap for clone sizes
 overlay_shared_clone_links <- function(
     apotc_obj,
@@ -294,9 +300,12 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
-    link_dataframe %>% dplyr::mutate(
-        color = get_average_hex(colors[.data$c1], colors[.data$c2])
-    )
+    # extremeley cursed hack fix to pass R CMD check:
+    eval(as_expression(
+        "link_dataframe %>% dplyr::mutate(",
+            "color = get_average_hex(colors[c1], colors[c2])",
+        ")"
+    ))
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {

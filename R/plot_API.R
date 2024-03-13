@@ -49,10 +49,6 @@ df_full_join <- function(clstr_list) {
     df
 }
 
-# result plotting function. clusters is a list of clusterlists TRANSFORM into a
-# dataframe, which are clusters. A cluster list includes x, y, rad, centroid,
-# clRad. the clusters imput is a dataframe.
-
 plot_clusters <- function(
   clusters,
   num_total_clusters,
@@ -74,28 +70,20 @@ plot_clusters <- function(
         alpha = alpha
       ) +
       ggplot2::coord_fixed() +
-      ggplot2::scale_fill_identity() #+
-      # ggplot2::scale_fill_identity( # this will add a color legend
-      #   guide = "legend",
-      #   name = NULL,
-      #   labels = clusters$label,
-      #   breaks = clusters$color
-      # )
-      
+      ggplot2::scale_fill_identity()
 }
 
-# FIXME not quite the same
 add_default_theme <- function(plt, reduction) {
 	label_hashmap <- hash::hash(
-		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
+		  c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
 	)
 	label <- label_hashmap[[reduction]]
   if (is.null(label)) label <- reduction
 
 	plt +
-		ggplot2::theme_classic() +
-		ggplot2::xlab(paste(label, 1, sep = "_")) +
-		ggplot2::ylab(paste(label, 2, sep = "_"))
+      ggplot2::theme_classic() +
+      ggplot2::xlab(paste(label, 1, sep = "_")) +
+      ggplot2::ylab(paste(label, 2, sep = "_"))
 }
 
 get_retain_scale_dims <- function(

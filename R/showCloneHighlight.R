@@ -97,12 +97,12 @@ showCloneHighlight <- function(
     # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
     if (identical(color_each, FALSE)) return(apotc_ggplot)
     
-    apotc_ggplot + ggplot2::scale_fill_identity(
+    suppressMessages(apotc_ggplot + ggplot2::scale_fill_identity(
         guide = "legend",
         name = "clonotype",
         labels = sequence,
         breaks = clone_color_vector
-    ) %>% suppressMessages()
+    ))
 
 }
 

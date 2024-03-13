@@ -30,6 +30,7 @@ Imports:
     grDevices,
     hash,
     lifecycle,
+    magrittr,
     methods,
     Rcpp,
     rlang,

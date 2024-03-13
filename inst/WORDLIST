@@ -7,6 +7,7 @@ ApotcRun
 BCR
 Bachert
 Barcodes
+BioConductor
 Borcherding
 CMD
 CRAN's
@@ -21,11 +22,11 @@ Coquet
 Georén
 Github
 Karolinska
-Lifecycle
 Murrell
 README
 RNAseq
 Recombinant
+Rstudio
 RunAPOTC
 SNE
 SNN
@@ -55,6 +56,7 @@ centroids
 changelog
 cloneCall
 clonecall
+clonesize
 clonotype
 clonotypes
 codechunk
@@ -65,6 +67,7 @@ contigs
 customizable
 customizations
 cytotoxic
+dev
 doi
 eabg
 eachother
@@ -75,6 +78,7 @@ getLastApotcDataId
 ggforce
 ggplot
 github
+hexcode
 https
 hyperresponsiveness
 idents
@@ -83,7 +87,7 @@ infty
 intra
 io
 julia
-lifecycle
+linetype
 multimeric
 nt
 nucleotides
@@ -92,6 +96,7 @@ pixelated
 pkgdown
 pre
 qile
+removeLegend
 removeMulti
 removeNA
 repell
@@ -110,5 +115,6 @@ tSNE
 testcases
 th
 umap
+un
 walkthrough
 xy

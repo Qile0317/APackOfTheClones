@@ -1,0 +1,13 @@
+---
+title: "Clonal Analysis Utilities in APackOfTheClones"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Clonal Analysis Utilities in APackOfTheClones}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+---
+
+## TODO
+
+TODO
