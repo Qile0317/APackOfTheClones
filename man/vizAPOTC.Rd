@@ -20,7 +20,6 @@ vizAPOTC(
   max_repulsion_iter = 20L,
   show_shared_clones = FALSE,
   only_link_cluster = NULL,
-  linked_clonesize_range = c(2L, Inf),
   clone_link_width = "auto",
   clone_link_color = "blend",
   clone_link_alpha = 0.5,
@@ -116,11 +115,6 @@ overlays straight lines between each clone that is common between clusters.}
 
 \item{only_link_cluster}{integer vector indicating which shared clone
 cluster(s) to include links from.}
-
-\item{linked_clonesize_range}{numeric vector of length 2. Indicates the
-minimum and maximum clonesize of at least one clone of a shared clonotype.
-Defaults to \code{c(2, Inf)} which means
-only clonotypes of size 2 that are shared between will be connected.}
 
 \item{clone_link_width}{numeric. The width of the lines that connect shared
 clones. Defaults to \code{"auto"} which will estimate a reasonable value depending
