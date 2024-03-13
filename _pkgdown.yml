@@ -32,6 +32,8 @@ navbar:
       menu:
       - text: Storing and Fine-Tuning APackOfTheClones Runs
         href: articles/APackOfTheClones-runs.html
+      - text: Clonal Analysis Utilities in APackOfTheClones
+        href: articles/APackOfTheClones-utils.html
     archive:
       text: Archive
       menu:
@@ -53,13 +55,14 @@ reference:
   - deleteApotcData
 - title: Clonal expansion plot add-ons
 - contents:
+  - showCloneHighlight
   - overlayLegend
   - removeLegend
 - title: Utilities
 - contents:
   - countCloneSizes
-  - getReductionCentroids
   - getSharedClones
+  - getReductionCentroids
 - title: Data
 - contents:
   - combined_pbmc
