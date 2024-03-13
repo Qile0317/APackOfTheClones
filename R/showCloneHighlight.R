@@ -1,23 +1,16 @@
-# APackOfTheClones's S4 method for highlightClones
-
-# register ggplot
-
-methods::setGeneric(
-    "highlightClones",
-    function(sc.data, ...) standardGeneric("highlightClones")
-)
-
 #' @title
 #' Highlight specific clones on an APackOfTheClones ggplot
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' TODO - some combos and mention its S4 alt to scRep, and how there will be
-#' a legend.
+#' This is an analogue for [scRepertoire::highlightClones] that can highlight
+#' certain clonotypes on an APackOfTheClones clonal expansion plot. For most
+#' combinations of the arguments, there will be a ggplot fill legend on the
+#' right side that correspond to each (existing) clonotype.
 #'
-#' @param sc.data A ggplot object that is the output of [APOTCPlot] or
-#' [vizAPOTC] of an APackOfTheClones plot to be highlighted
+#' @param apotc_ggplot A ggplot object that is the output of [APOTCPlot] or
+#' [vizAPOTC] of an APackOfTheClones plot to be highlighted on.
 #' @param sequence character vector of the sequence(s) to highlight. Note
 #' that it must be of the clonecall of the code that created the plot. A
 #' warning will be shown if any of the sequences are not present.
@@ -37,7 +30,8 @@ methods::setGeneric(
 #' hexcode for gray.
 #'
 #' @details
-#' TODO discuss that it modifies the ggplot data.
+#' Under the hood, this function simply mutates the plotting dataframe under
+#' `$data` in the ggplot object, and operates on a column named `color`.
 #'
 #' @return A ggplot object with the data modified to the highlighted colors
 #' @export
@@ -48,33 +42,17 @@ methods::setGeneric(
 #' # piping the plot can be nice to read syntatically -
 #' # By default, assigns unique colors to highlights and everything else is gray
 #' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
-#'     APackOfTheClones::highlightClones("CASLSGSARQLTF_CASSSTVAGEQYF")
+#'     showCloneHighlight("CASLSGSARQLTF_CASSSTVAGEQYF")
 #'
 #' # one useful application is to highlight shared clones - beware that the
 #' # clonotype sequences may get extremely long in the legend
 #' shared_aa_clones <- names(getSharedClones(combined_pbmc, clonecall = "aa"))
 #' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
-#'     APackOfTheClones::highlightClones(shared_aa_clones)
+#'     showCloneHighlight(shared_aa_clones)
 #'
-methods::setMethod("highlightClones", "ANY", function(
-    sc.data, sequence, color_each = TRUE, default_color = "#808080"
+showCloneHighlight <- function(
+    apotc_ggplot, sequence, color_each = TRUE, default_color = "#808080"
 ) {
-    apotc_highlight_clones(
-        apotc_ggplot = sc.data,
-        sequence = sequence,
-        color_each = color_each,
-        default_color = default_color
-    )
-})
-
-apotc_highlight_clones <- function(
-    apotc_ggplot,
-    sequence, # maybe allow indicies in seperate method??
-    color_each, # in future allow palettes?
-    default_color,
-    add_legend = TRUE # pretty dumb if it was False?
-) {
-
     apotc_highlight_clones_error_handler(hash::hash(as.list(environment())))
 
     # process data - probably should make sequences unique? for now assume unique
@@ -117,16 +95,14 @@ apotc_highlight_clones <- function(
     apotc_ggplot <- set_ggplot_data(apotc_ggplot, highlighted_ggplot_data)
 
     # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
-    if (!add_legend || identical(color_each, FALSE)) return(apotc_ggplot)
+    if (identical(color_each, FALSE)) return(apotc_ggplot)
     
-    suppressMessages(
-        apotc_ggplot + ggplot2::scale_fill_identity(
-            guide = "legend",
-            name = "clonotype",
-            labels = sequence,
-            breaks = clone_color_vector
-        )
-    )
+    apotc_ggplot + ggplot2::scale_fill_identity(
+        guide = "legend",
+        name = "clonotype",
+        labels = sequence,
+        breaks = clone_color_vector
+    ) %>% suppressMessages()
 
 }
 

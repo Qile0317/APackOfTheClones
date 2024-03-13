@@ -55,13 +55,11 @@ library(scRepertoire) # ensure v2 is installed: devtools::install_github("ncborc
 library(APackOfTheClones)
 
 # integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"
-pbmc <- combineExpression(
-    input.data = combineTCR(
-        input.data = get(data("mini_contig_list", package = "scRepertoire")),
+pbmc <- get(data("mini_contig_list", package = "scRepertoire")) %>%
+    combineTCR(
         samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L")
-    ),
-    sc.data = get(data("scRep_example", package = "scRepertoire"))
-)
+    ) %>%
+    combineExpression(get(data("scRep_example", package = "scRepertoire")))
 
 # produce the ball-packing plot with the default parameters
 vizAPOTC(pbmc)
@@ -103,6 +101,10 @@ cowplot::plot_grid(
 )
 
 ```
+
+### Package conventions
+
+Most exported functions are named with `camelCase` with the exception of three with `PascalCase` to replicate the conventions `Seurat` as they mimic their function in an analysis workflow. All function arguments follow `snake_case`.
 
 ## Documentation
 

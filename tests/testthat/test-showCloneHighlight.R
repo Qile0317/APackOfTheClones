@@ -1,6 +1,6 @@
-test_that("highlightClones works", {
+test_that("showCloneHighlight works", {
     expect_doppelganger(
-        "highlightClones_only_clusters_5_9",
+        "showCloneHighlight_only_clusters_5_9",
         get(data("combined_pbmc")) %>%
             vizAPOTC(
                 clonecall = "aa",
@@ -9,7 +9,7 @@ test_that("highlightClones works", {
                 add_size_legend = FALSE,
                 verbose = FALSE
             ) %>%
-            APackOfTheClones::highlightClones(c(
+            APackOfTheClones::showCloneHighlight(c(
                 "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
             ))
     )
