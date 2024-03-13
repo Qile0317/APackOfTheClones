@@ -10,4 +10,9 @@ data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 
 ## TODO
 
-TODO
+- countCloneSizes
+- getSharedClones
+- getReductionCentroids
+- overlayLegend
+- removeLegend
+- showCloneHighlight
