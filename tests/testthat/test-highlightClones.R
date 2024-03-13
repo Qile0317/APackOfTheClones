@@ -6,7 +6,8 @@ test_that("highlightClones works", {
                 clonecall = "aa",
                 seurat_clusters = c(5, 9),
                 retain_axis_scales = TRUE,
-                add_size_legend = FALSE
+                add_size_legend = FALSE,
+                verbose = FALSE
             ) %>%
             APackOfTheClones::highlightClones(c(
                 "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"

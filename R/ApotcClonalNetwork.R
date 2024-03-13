@@ -295,7 +295,7 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
     link_dataframe %>% dplyr::mutate(
-        color = get_average_hex(colors[c1], colors[c2])
+        color = get_average_hex(colors[.data$c1], colors[.data$c2])
     )
 }
 

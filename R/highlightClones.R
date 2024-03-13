@@ -1,4 +1,6 @@
-# APackOfTheClones's version of highlightClones
+# APackOfTheClones's S4 method for highlightClones
+
+# register ggplot
 
 methods::setGeneric(
     "highlightClones",
@@ -54,18 +56,16 @@ methods::setGeneric(
 #' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
 #'     APackOfTheClones::highlightClones(shared_aa_clones)
 #'
-methods::setMethod("highlightClones", "gg",
-    function(
-        sc.data, sequence, color_each = TRUE, default_color = "#808080"
-    ) {
-        apotc_highlight_clones(
-            apotc_ggplot = sc.data,
-            sequence = sequence,
-            color_each = color_each,
-            default_color = default_color
-        )
-    }
-)
+methods::setMethod("highlightClones", "ANY", function(
+    sc.data, sequence, color_each = TRUE, default_color = "#808080"
+) {
+    apotc_highlight_clones(
+        apotc_ggplot = sc.data,
+        sequence = sequence,
+        color_each = color_each,
+        default_color = default_color
+    )
+})
 
 apotc_highlight_clones <- function(
     apotc_ggplot,
