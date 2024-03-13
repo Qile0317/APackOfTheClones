@@ -12,7 +12,7 @@ methods::setGeneric(
 #' `r lifecycle::badge("experimental")`
 #'
 #' TODO - some combos and mention its S4 alt to scRep, and how there will be
-#' a legend. 
+#' a legend.
 #'
 #' @param sc.data A ggplot object that is the output of [APOTCPlot] or
 #' [vizAPOTC] of an APackOfTheClones plot to be highlighted

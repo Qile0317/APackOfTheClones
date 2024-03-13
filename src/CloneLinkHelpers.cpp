@@ -75,30 +75,30 @@ public:
     }
 
 private:
+    // constructor that just creates the dataframe immediately
     LineLinkDataFrameFactory(
-        Rcpp::List clusterLists,
+        Rcpp::List clusterLists, // list of potentialy empty clusterlists
         Rcpp::List rawCloneSizes, // list of table objects, some may be empty
-        Rcpp::List sharedClonotypeClusters,
+        Rcpp::List sharedClonotypeClusters, // output from getSharedClones 
         double extraSpacing
     ) {
         clusterListVector = createCppClusterListVector(clusterLists);
         clusteredClonotypeIndex = createClusteredClonotypeIndex(rawCloneSizes);
 
-        std::vector<std::string> clonotypes (sharedClonotypeClusters.names());
-        std::vector<std::vector<int>> clusterIndicies = Rcpp::as<std::vector<std::vector<int>>>(
+        std::vector<std::string> clonotypes = sharedClonotypeClusters.names();
+        std::vector<std::vector<int>> clusterIndicies = getZeroIndexedClusterIndicies(
             sharedClonotypeClusters
         );
 
         for (int i = 0; i < (int) clonotypes.size(); i++) {
 
-            int currNumSharedClusters = clusterIndicies[i].size();
-            std::vector<Circle> currCircles (currNumSharedClusters);
-            std::vector<int> currOneIndexedClusterIndicies (currNumSharedClusters);
+            std::vector<Circle> currCircles;
+            std::vector<int> currOneIndexedClusterIndicies;
 
-            for (int j = 0; j < currNumSharedClusters; j++) {
-                ClusterList& currSharedCluster = clusterListVector[clusterIndicies[i][j]];
-                currCircles[j] = currSharedCluster.getClonotypeCircle(clonotypes[i]);
-                currOneIndexedClusterIndicies[j] = clusterIndicies[i][j];
+            for (int clusterIndex : clusterIndicies[i]) {
+                ClusterList& currSharedCluster = clusterListVector[clusterIndex];
+                currCircles.push_back(currSharedCluster.getClonotypeCircle(clonotypes[i]));
+                currOneIndexedClusterIndicies.push_back(clusterIndex);
             }
 
             addSharedCircleLinkInfo(currCircles, currOneIndexedClusterIndicies, extraSpacing);
@@ -108,12 +108,9 @@ private:
     std::vector<ClusterList> createCppClusterListVector(Rcpp::List clusterLists) {
         numClusters = clusterLists.size(); // assume non-zero
         std::vector<ClusterList> outputClusterListVector (numClusters);
-
         for (int i = 0; i < numClusters; i++) {
             outputClusterListVector[i] = ClusterList(clusterLists[i]);
         }
-
-        outputClusterListVector.resize(numClusters);
         return outputClusterListVector;
     }
 
@@ -138,6 +135,22 @@ private:
         }
 
         return outputIndex;
+    }
+
+    std::vector<std::vector<int>> getZeroIndexedClusterIndicies(
+        Rcpp::List sharedClonotypeClusters
+    ) {
+        std::vector<std::vector<int>> output = Rcpp::as<std::vector<std::vector<int>>>(
+            sharedClonotypeClusters
+        );
+
+        for (int i = 0; i < (int) output.size(); i++) {
+            for (int j = 0; j < (int) output[i].size(); j++) {
+                output[i][j] -= 1;
+            }
+        }
+
+        return output;
     }
 
     static void addElementsToHashMap(

@@ -10,12 +10,11 @@
 class ClusterList {
 protected: // variables
 
+    std::unordered_map<std::string, int> clonotypeIndex;
     std::vector<Circle> circles;
     std::pair<double, double> centroid;
     double clRad;
     int numClones;
-
-    std::unordered_map<std::string, int> clonotypeIndex;
     bool isEmpty;
 
 public: // constructors
@@ -34,6 +33,7 @@ public: // constructors
         isEmpty = false;
         clRad = rClusterList["clRad"];
         centroid = getRCentroid(rClusterList);
+        clonotypeIndex = rCharactersToHashMap(rClusterList["clonotype"]);
 
         // get x,y,r and make into circles
         Rcpp::NumericVector x = rClusterList["x"], y = rClusterList["y"], r = rClusterList["rad"];
@@ -43,11 +43,6 @@ public: // constructors
             circles.push_back(Circle(x[i], y[i], r[i]));
         }
 
-        clonotypeIndex = std::unordered_map<std::string, int>();
-        std::vector<std::string> clonotypes = rClusterList["clonotype"];
-        for (int i = 0; i < numClones; i++) {
-            clonotypeIndex.emplace(clonotypes[i], i);
-        }
     }
 
 private:
@@ -55,6 +50,14 @@ private:
     std::pair<double, double> getRCentroid(Rcpp::List rClusterList) {
         Rcpp::NumericVector centroidVector = rClusterList["centroid"];
         return std::make_pair(centroidVector[0], centroidVector[1]);
+    }
+
+    std::unordered_map<std::string, int> rCharactersToHashMap(Rcpp::CharacterVector v) {
+        std::unordered_map<std::string, int> outputHashMap (v.size());
+        for (int i = 0; i < (int) v.size(); i++) {
+            outputHashMap.emplace(v[i], i);
+        }
+        return outputHashMap;
     }
 
 public:
@@ -83,6 +86,8 @@ public:
             Rcpp::Named("clonotype") = getClonotypeVector()
         );
     }
+
+    // FIXME no idea whats returned when isEmpty
 
     std::vector<double> getXVector() {
         std::vector<double> x(numClones);
@@ -123,4 +128,5 @@ public:
         }
         return clonotypes;
     }
+
 };

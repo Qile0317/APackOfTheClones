@@ -48,7 +48,18 @@ init_dataframe <- function(column_names, nrow, init_val = NA) {
   df
 }
 
-# hash utilities
+# informal Bimap<string, int> implementation
+# let a StringIntBimap = list(strings, hash(strings, int))
+
+StringIntBimap <- function(strings) {
+    list(strings, hash::hash(strings, seq_along(strings)))
+}
+
+getStrings <- function(bimap) bimap[[1]]
+
+bimapContains <- function(bimap, x) x %in% getStrings(bimap)
+
+# hash::hash utilities
 
 create_valueless_vector_hash <- function(key, vector_type) {
     hash::hash(key, init_list(length(key), vector_type(0)))
@@ -96,6 +107,8 @@ should_compute <- function(x) is.null(x)
 as_expression <- function(...) {
     parse(text = paste0(unlist(list(...)), collapse = ""))
 }
+
+eval_str <- function(...) eval(as_expression(...))
 
 subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))

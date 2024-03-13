@@ -69,7 +69,7 @@ getSharedClones <- function(
     get_shared_clones(
         apotc_obj,
         zero_indexed = FALSE,
-        exclude_unique_clones = FALSE,
+        exclude_unique_clones = TRUE,
         clone_size_lowerbound = clonesize_range[1],
         clone_size_upperbound = clonesize_range[2],
         included_cluster = create_cluster_truth_vector(
@@ -169,7 +169,7 @@ get_shared_clones <- function(
 
     shared_clonotypes <- as.list(clonotype_map)
 
-    # massive problem - some elements become $... - is it length? unsure
+    # FIXME if some keys are too long, it becomes ... due to the environment implementation
 
     if (exclude_unique_clones) {
         shared_clonotypes <- remove_unique_clones(shared_clonotypes)
@@ -177,9 +177,10 @@ get_shared_clones <- function(
 
     # TODO filter by clone size
 
-    if (is_empty(shared_clonotypes)) return(list())
+    if (is_empty(shared_clonotypes) || all(included_cluster)) {
+        return(shared_clonotypes)
+    }
 
-    if (all(included_cluster)) return(shared_clonotypes)
     filter_shared_clones_cluster(shared_clonotypes, included_cluster)
 }
 
@@ -203,7 +204,8 @@ overlay_shared_clone_links <- function(
     link_alpha = 1,
     link_width = "auto",
     verbose = TRUE,
-    link_mode = "default", extra_spacing = "auto" # not very relevant atm
+    link_mode = "default",
+    extra_spacing = "auto" # not very relevant atm
 ) {
     shared_clones <- get_shared_clones(
         apotc_obj,
@@ -224,7 +226,7 @@ overlay_shared_clone_links <- function(
     }
     
     if (identical(link_type, "line")) {
-        link_dataframe <- compute_line_link_df(
+        link_dataframe <- compute_line_link_df( # FIXME
             apotc_obj, shared_clones, extra_spacing, link_mode
         )
     } else {
@@ -235,13 +237,15 @@ overlay_shared_clone_links <- function(
         apotc_obj, link_dataframe, link_color_mode
     )
 
-    print(link_dataframe)
-
     # compute width and alpha (TODO make better formulas and figure out how to vectorize)
     link_alpha <- process_link_alpha(apotc_obj, link_alpha, verbose)
     link_width <- process_link_width(apotc_obj, link_width, verbose)
 
-    overlay_links(hash::hash(as.list(environment())))
+    result_plot %>%
+        overlay_links(
+            link_type = link_type, link_dataframe = link_dataframe,
+            link_alpha = link_alpha, link_width = link_width
+        )
 }
 
 # takes in a named list of clonotypes as names, the elements are numeric vectors
@@ -264,20 +268,21 @@ remove_unique_clones <- function(shared_clonotypes) {
 compute_line_link_df <- function(
     apotc_obj, shared_clones, extra_spacing, link_mode
 ) {
+
     if (should_estimate(extra_spacing)) {
         extra_spacing <- 0 # TODO make better in future
     }
 
-    if (link_mode == "default") {
-        return(rcppConstructLineLinkDf(
-            clusterLists = get_clusterlists(apotc_obj),
-            rawCloneSizes = get_raw_clone_sizes(apotc_obj),
-            sharedClonotypeClusters = shared_clones,
-            extraSpacing = extra_spacing - get_rad_decrease(apotc_obj)
-        ))
-    } else {
+    if (link_mode != "default") {
         stop(call. = FALSE, "no other link modes are implemented yet")
     }
+
+    rcppConstructLineLinkDf(
+        clusterLists = get_clusterlists(apotc_obj),
+        rawCloneSizes = get_raw_clone_sizes(apotc_obj),
+        sharedClonotypeClusters = shared_clones,
+        extraSpacing = extra_spacing - get_rad_decrease(apotc_obj)
+    )
 }
 
 add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
@@ -289,12 +294,9 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
-    # extremeley cursed hack fix to pass R CMD check:
-    eval(as_expression(
-        "link_dataframe %>% dplyr::mutate(",
-            "color = get_average_hex(colors[c1], colors[c2])",
-        ")"
-    ))
+    link_dataframe %>% dplyr::mutate(
+        color = get_average_hex(colors[c1], colors[c2])
+    )
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {
@@ -333,23 +335,32 @@ estimate_link_width <- function(apotc_obj) {
 # internal dispatch function to get a dataframe of line connections
 # TODO should have exportable version with identifiers so user can get it and do their own thing
 
-overlay_links <- function(args) {
-    switch(args$link_type,
-        "line" = return(overlay_line_links(args))
+overlay_links <- function(
+    result_plot, link_type, link_dataframe, link_alpha, link_width
+) {
+    switch(link_type,
+        "line" = overlay_line_links(
+            result_plot,
+            link_dataframe,
+            link_alpha,
+            link_width
+        ) %>% return()
         # should not get to any other case, this is just here for future extensions
     )
 }
 
-overlay_line_links <- function(args) {
-    args$result_plot +
+overlay_line_links <- function(
+    result_plot, link_dataframe, link_alpha, link_width
+) {
+    result_plot +
         ggplot2::geom_segment(
-            data = args$link_dataframe,
+            data = link_dataframe,
             mapping = apotc_aes_string(
                 x = "x1", y = "y1", xend = "x2", yend = "y2",
                 colour = "color"
             ),
-            alpha = args$link_alpha,
-            linewidth = args$link_width
+            alpha = link_alpha,
+            linewidth = link_width
         ) +
         ggplot2::scale_color_identity()
 }
