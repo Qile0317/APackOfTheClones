@@ -17,10 +17,20 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
-# utility functions
-head <- function(df) {
-  knitr::kable(utils::head(df))
+quiet_load_all_CRAN <- function(...) {
+  for (pkg in list(...)) {
+    if (require(pkg, quietly = TRUE, character.only = TRUE)) next
+    invisible(install.packages(
+      pkg, quiet = TRUE, verbose = FALSE, character.only = TRUE
+    ))
+    suppressPackageStartupMessages(invisible(
+      require(pkg, quietly = TRUE, character.only = TRUE)
+    ))
+  }
 }
+
+# load packages
+quiet_load_all_CRAN("ggplot2", "Seurat", "magrittr")
 
 # load data
 pbmc <- get(data("combined_pbmc"))
@@ -51,10 +61,7 @@ getSharedClones(pbmc, clonecall = "aa")
 The `getReductionCentroids` function is a shortcut for getting the centroids as a list of numeric vectors of length 2 based ono some existing reduction in a seurat object.
 
 ```{r, reduction_centroid, echo = TRUE}
-pbmc %>% 
-    RunTSNE() %>%
-    getReductionCentroids("tsne") %>%
-    head()
+head(getReductionCentroids(pbmc, "umap"))
 ```
 
 ## Highlighting Specific Clonotypes
@@ -77,7 +84,7 @@ A potentially useful application is to inspect the shared clonotypes:
 
 ```{r, highlight, echo = TRUE}
 # load data
-pbmc <- get(data("combined_pbmc))
+pbmc <- get(data("combined_pbmc"))
 
 # create the APackOfTheClones plot
 apotc_plot <- vizAPOTC(pbmc, clonecall = "aa", verbose = FALSE)
