@@ -17,11 +17,6 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
-# utility functions
-head <- function(df) {
-  knitr::kable(utils::head(df))
-}
-
 quiet_load_all_CRAN <- function(...) {
   for (pkg in list(...)) {
     if (require(pkg, quietly = TRUE, character.only = TRUE)) next

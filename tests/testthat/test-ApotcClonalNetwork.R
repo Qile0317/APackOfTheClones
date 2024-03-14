@@ -15,5 +15,16 @@ quietly_test_that("getting shared clones works", {
         ),
         expected = getdata("ApotcClonalNetwork", "shared_clones")
     )
-    
+
+})
+
+test_that("adding shared clone links works", {
+    expect_doppelganger(
+        "default shared clone line link plot",
+        vizAPOTC(
+            get(data("combined_pbmc")),
+            show_shared_clones = TRUE,
+            verbose = FALSE
+        )
+    )
 })
