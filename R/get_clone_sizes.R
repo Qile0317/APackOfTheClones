@@ -26,29 +26,28 @@ countCloneSizes <- function(
   seurat_obj, clonecall = "strict", extra_filter = NULL, ...
 ) {
 
-  # check inputs
-  if (!is_seurat_object(seurat_obj))
-    stop("`seurat_obj` must be a Seurat object.")
-  if (!is_a_character(clonecall))
-	  stop("`clonecall` must be a character of length 1.")
-  if (!is.null(extra_filter) && !is_a_character(extra_filter))
-		stop("`extra_filter` must be a character of length 1.")
-  check_filtering_conditions(as.list(environment()), frame_level = 1)
+    # type check inputs
+    if (!is_seurat_object(seurat_obj))
+        stop("`seurat_obj` must be a Seurat object.")
+    typecheck(clonecall, is_a_character)
+    typecheck(extra_filter, is.null, is_a_character)
+    check_filtering_conditions(as.list(environment()), frame_level = 1)
 
-  clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-  filter_string <- parse_to_metadata_filter_str(
-    metadata_filter = extra_filter, varargs_list = list(...)
-  )
+    # setup variables
+    clonecall <- .theCall(seurat_obj@meta.data, clonecall)
+    filter_string <- parse_to_metadata_filter_str(
+        metadata_filter = extra_filter, varargs_list = list(...)
+    )
 
-  if (is_valid_filter_str(filter_string)) { # TODO probably use seurat's built-in version :P, also probably shoudl allow for symbolic filtering.
-    seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
-  }
+    if (is_valid_filter_str(filter_string)) { # TODO probably use seurat's built-in version :P, also probably shoudl allow for symbolic filtering.
+        seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
+    }
 
-  count_raw_clone_sizes(
-    seurat_obj = seurat_obj,
-    num_clusters = get_num_total_clusters(seurat_obj),
-    clonecall = clonecall
-  )
+    count_raw_clone_sizes(
+        seurat_obj = seurat_obj,
+        num_clusters = get_num_total_clusters(seurat_obj),
+        clonecall = clonecall
+    )
 }
 
 # TODO create S4 generic to allow getting it from run_id, as an Apotc Getter

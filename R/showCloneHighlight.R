@@ -28,6 +28,8 @@
 #' retain their original color in `sc.data`. Else, if it is a character, it
 #' should be a valid color that all un-highlighted clones are. Defaults to the
 #' hexcode for gray.
+#' @param fill_legend logical indicating whether a ggplot legend of the "fill"
+#' of each clonotype should be displayed.
 #'
 #' @details
 #' Under the hood, this function simply mutates the plotting dataframe under
@@ -51,7 +53,11 @@
 #'     showCloneHighlight(shared_aa_clones)
 #'
 showCloneHighlight <- function(
-    apotc_ggplot, sequence, color_each = TRUE, default_color = "#808080"
+    apotc_ggplot,
+    sequence,
+    color_each = TRUE,
+    default_color = "#808080",
+    fill_legend = TRUE
 ) {
     apotc_highlight_clones_error_handler(hash::hash(as.list(environment())))
 
@@ -95,7 +101,7 @@ showCloneHighlight <- function(
     apotc_ggplot <- set_ggplot_data(apotc_ggplot, highlighted_ggplot_data)
 
     # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
-    if (identical(color_each, FALSE)) return(apotc_ggplot)
+    if (identical(color_each, FALSE) || !fill_legend) return(apotc_ggplot)
     
     suppressMessages(apotc_ggplot + ggplot2::scale_fill_identity(
         guide = "legend",
@@ -107,30 +113,11 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function(args) {
-
-    check_is_apotc_ggplot(args$apotc_ggplot)
-
-    if (!is.character(args$sequence) || (length(args$sequence) == 0)) {
-        stop(call. = FALSE,
-            "`sequence` must be a non-empty character vector"
-        )
-    }
-    
-    if (
-        !(is_a_logical(args$color_each) || is.character(args$color_each))
-            || (length(args$color_each) == 0)
-    ) {
-        stop(call. = FALSE,
-            "`color_each` must be a length 1 logical or character, ",
-            "or the character of `length(sequence)`"
-        )
-    }
-
-    if (!is.null(args$default_color) && !is_a_character(args$default_color)) {
-        stop(call. = FALSE,
-            "`default_color` must be a character of length 1 or NULL"
-        )
-    }
+    args$apotc_ggplot |> check_is_apotc_ggplot()
+    args$sequence |> typecheck(is_character)
+    args$color_each |> typecheck(is_a_logical, is_a_character, is_character)
+    args$default_color |> typecheck(is_a_character, is.null)
+    args$fill_legend |> typecheck(is_a_logical)
 }
 
 gen_clone_color_vector <- function(color_each, sequence, plot_data) {

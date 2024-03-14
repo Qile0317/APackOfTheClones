@@ -8,7 +8,8 @@ showCloneHighlight(
   apotc_ggplot,
   sequence,
   color_each = TRUE,
-  default_color = "#808080"
+  default_color = "#808080",
+  fill_legend = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ of non-highlighted clones. If \code{NULL}, all un-highlighted sequences will
 retain their original color in \code{sc.data}. Else, if it is a character, it
 should be a valid color that all un-highlighted clones are. Defaults to the
 hexcode for gray.}
+
+\item{fill_legend}{logical indicating whether a ggplot legend of the "fill"
+of each clonotype should be displayed.}
 }
 \value{
 A ggplot object with the data modified to the highlighted colors

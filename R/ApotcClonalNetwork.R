@@ -64,8 +64,7 @@ getSharedClones <- function(
 
     # get the apotcdata
     apotc_obj <- getApotcDataIfExistsElseCreate(
-        seurat_obj, 
-        run_id = infer_object_id_if_needed(args, varargs_list = varargs_list)
+        seurat_obj, infer_object_id_if_needed(args, varargs_list)
     )
 
     get_shared_clones(
@@ -163,7 +162,7 @@ get_shared_clones <- function(
     filter_shared_clones_cluster(shared_clonotypes, included_cluster)
 }
 
-get_raw_shared_clones <- function(apotc_obj, zero_indexed) {
+get_raw_shared_clones <- function(apotc_obj, zero_indexed = FALSE) {
 
     clonotype_map <- create_empty_int_hash(get_clonotypes(apotc_obj))
     clustered_clone_sizes <- get_raw_clone_sizes(apotc_obj, as_hash = TRUE)

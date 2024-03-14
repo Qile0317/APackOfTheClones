@@ -43,21 +43,10 @@ create_empty_table <- function() {
 }
 
 init_dataframe <- function(column_names, nrow, init_val = NA) {
-  df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
-  colnames(df) <- column_names
-  df
+    df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
+    colnames(df) <- column_names
+    df
 }
-
-# informal Bimap<string, int> implementation
-# let a StringIntBimap = list(strings, hash(strings, int))
-
-StringIntBimap <- function(strings) {
-    list(strings, hash::hash(strings, seq_along(strings)))
-}
-
-getStrings <- function(bimap) bimap[[1]]
-
-bimapContains <- function(bimap, x) x %in% getStrings(bimap)
 
 # hash::hash utilities
 
@@ -84,7 +73,7 @@ hash_contains <- function(hash_obj, key) is.null(hash_obj[[key]])
 # readability functions
 
 is_empty <- function(inp) {
-    (is.list(inp) && length(inp) == 0) || identical(inp, hash::hash())
+    (length(inp) == 0L) || identical(inp, hash::hash())
 }
 isnt_empty <- function(inp) !is_empty(inp)
 
@@ -92,7 +81,7 @@ isnt_na <- function(inp) !any(is.na(inp))
 
 isnt_empty_nor_na <- function(inp) isnt_empty(inp) && isnt_na(inp)
 
-is_empty_table <- function(inp) identical(inp, table(NULL))
+is_empty_table <- is_empty
 
 is_int <- function(num) all(num == as.integer(num))
 
@@ -163,10 +152,14 @@ is_pair <- function(x, type_checker) {
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
 
+is_an_apotc_ggplot <- isApotcGGPlot
+
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.character(x)
 }
+
+is_character <- is.character
 
 is_a_logical <- function(x) {
     if (length(x) != 1) return(FALSE)
@@ -202,6 +195,77 @@ is_a_positive_integer <- function(x) {
 
 is_positive_integer <- function(x) sapply(x, is_a_positive_integer)
 
+typecheck <- function(x, ...) {
+
+    typechecker_list <- list(...)
+    if (any(sapply(typechecker_list, function(f) f(x)))) return()
+
+    typechecker_str_vec <- convert_list_var_str_to_char(
+        deparse(substitute(list(...)))
+    )
+
+    stop(call. = FALSE,
+        "`",
+        x %>% substitute() %>% deparse() %>% get_right_of_dollarsign(),
+        "` ",
+        create_err_msg(typechecker_str_vec)
+    )
+}
+
+convert_list_var_str_to_char <- function(list_var_str) {
+    substr(list_var_str, 6, nchar(list_var_str) - 1) %>%
+        strsplit(", ") %>%
+        getlast() %>%
+        as.character()
+}
+
+create_err_msg <- function(typechecker_str_vec) {
+    paste(
+        "must be",
+        get_error_strings(typechecker_str_vec) %>%
+            join_error_strings()
+    )
+}
+
+get_error_strings <- function(funcstrs) sapply(funcstrs, get_typecheck_err_str)
+
+get_typecheck_err_str <- function(function_name_str) {
+
+    if (function_name_str == "is.null") return("NULL")
+
+    type <- gsub("_", " ", sub("^is_(a_)?(.+)$", "\\2", function_name_str))
+
+    if (grepl("^is_a_.*", function_name_str)) {
+        return(paste("a", type, "of length 1"))
+    }
+
+    if (grepl("^is_.*_pair$", function_name_str)) {
+        return(paste("a", type, "of length 2"))
+    } 
+
+    if (grepl("^is_.*$", function_name_str)) {
+        return(paste("a", type, "vector"))
+    }
+
+    return("the correct class")
+}
+
+join_error_strings <- function(error_string_vec) {
+
+    num_error_strings <- length(error_string_vec)
+
+    if (num_error_strings == 1) return(error_string_vec)
+
+    if (num_error_strings == 2) {
+        return(paste(error_string_vec, collapse = ", or "))
+    }
+
+    paste(
+        paste(error_string_vec[1:num_error_strings - 1], collapse = ", "),
+        getlast(error_string_vec), sep = ", or "
+    )
+}
+
 # math utils
 
 bound_num <- function(num, lowerbound, upperbound) {
@@ -225,7 +289,10 @@ get_unique_pairs_up_to <- function(x) {
 
 # spelling related functions
 
+get_right_of_dollarsign <- function(x) sapply(strsplit(x, "\\$"), getlast)
+
 strip_spaces <- function(s) gsub(" ", "", s)
+
 strip_and_lower <- function(s) strip_spaces(tolower(s))
 
 strip_unquoted_spaces <- function(input_str) {
@@ -237,7 +304,7 @@ strip_unquoted_spaces <- function(input_str) {
     for (j in seq_along(parts)) {
         if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
     }
-    
+
     input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
 
     if (is_even(length(parts))) {
