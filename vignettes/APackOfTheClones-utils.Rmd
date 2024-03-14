@@ -23,7 +23,7 @@ head <- function(df) {
 }
 
 # load data
-pbmc <- get(data("combined_pbmc))
+pbmc <- get(data("combined_pbmc"))
 ```
 
 ## Introduction

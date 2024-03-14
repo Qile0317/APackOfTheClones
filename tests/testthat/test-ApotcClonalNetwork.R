@@ -24,6 +24,9 @@ test_that("adding shared clone links works", {
         vizAPOTC(
             get(data("combined_pbmc")),
             show_shared_clones = TRUE,
+            seurat_clusters = c(3:5, 9, 13),
+            add_size_legend = FALSE,
+            retain_axis_scales = TRUE,
             verbose = FALSE
         )
     )
