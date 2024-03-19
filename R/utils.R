@@ -72,9 +72,8 @@ hash_contains <- function(hash_obj, key) is.null(hash_obj[[key]])
 
 # readability functions
 
-is_empty <- function(inp) {
-    (length(inp) == 0L) || identical(inp, hash::hash())
-}
+is_empty <- function(inp) (length(inp) == 0L) || identical(inp, hash::hash())
+
 isnt_empty <- function(inp) !is_empty(inp)
 
 isnt_na <- function(inp) !any(is.na(inp))
@@ -96,8 +95,6 @@ should_compute <- function(x) is.null(x)
 as_expression <- function(...) {
     parse(text = paste0(unlist(list(...)), collapse = ""))
 }
-
-eval_str <- function(...) eval(as_expression(...))
 
 subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))
@@ -145,9 +142,30 @@ secretly_init_name <- function(x) {
 
 # type checking utils
 
+# TODO could make a currying function for length checking
+
+# this function assumes its being called in an error checker
+# and the error checker has an argument varargs_list
+get_parent_func_args <- function(dn = 0L) {
+    parent.frame(2L + dn) %>%
+        as.list() %>%
+        append(parent.frame()$varargs_list) %>%
+        hash::hash()
+}
+
 is_pair <- function(x, type_checker) {
     if (length(x) != 2) return(FALSE)
     all(sapply(x, type_checker))
+}
+
+is_vector <- function(x) is.character(x) || is.numeric(x) || is.logical(x)
+
+check_is_list_and_elements <- function(
+    x, elem_type_checker, num_elements = NULL
+) {
+    if (!is.list(x)) return(FALSE)
+    if (!is.null(num_elements)) if (length(x) != num_elements) return(FALSE)
+    all(sapply(x, elem_type_checker))
 }
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
@@ -171,7 +189,11 @@ is_a_numeric <- function(x) {
     is.numeric(x)
 }
 
-is_numeric_pair <- function(x) is_pair(x, is.numeric)
+is_numeric_pair <- function(x) is_pair(x, is_a_numeric) && is.numeric(x)
+
+is_list_of_numeric_pair <- function(x) {
+    check_is_list_and_elements(x, is_numeric_pair)
+}
 
 is_a_positive_numeric <- function(x) {
     if (!is_a_numeric(x)) return(FALSE)
@@ -184,16 +206,22 @@ is_an_integer <- function(x) {
     as.numeric(x) == as.numeric(as.integer(x))
 }
 
-is_integer_pair <- function(x) is_pair(x, is_an_integer)
+is_integer_pair <- function(x) is_pair(x, is_an_integer) && is.numeric(x)
 
-is_integer <- function(x) sapply(x, is_an_integer)
+is_integer <- function(x) {
+    if (!is_vector(x)) return(FALSE)
+    all(sapply(x, is_an_integer))
+}
 
 is_a_positive_integer <- function(x) {
     if (!is_an_integer(x)) return(FALSE)
     x > 0L
 }
 
-is_positive_integer <- function(x) sapply(x, is_a_positive_integer)
+is_positive_integer <- function(x) {
+    if (!is_integer(x)) return(FALSE)
+    all(sapply(x, function(x) x > 0L))
+}
 
 typecheck <- function(x, ...) {
 
@@ -227,27 +255,40 @@ create_err_msg <- function(typechecker_str_vec) {
     )
 }
 
-get_error_strings <- function(funcstrs) sapply(funcstrs, get_typecheck_err_str)
+get_error_strings <- function(funcstrs) {
+    funcstrs %>%
+        sapply(
+            function(s) prepend_indefinite_article(get_err_type_str(s))
+        ) %>%
+        sort()
+}
 
-get_typecheck_err_str <- function(function_name_str) {
+get_err_type_str <- function(function_name_str) {
 
     if (function_name_str == "is.null") return("NULL")
 
-    type <- gsub("_", " ", sub("^is_(a_)?(.+)$", "\\2", function_name_str))
+    type <- gsub(
+        "_", " ",
+        sub("^is_(a|an)?_?", "", function_name_str)
+    )
 
-    if (grepl("^is_a_.*", function_name_str)) {
-        return(paste("a", type, "of length 1"))
+    if (grepl("^is_list_of_.*$", function_name_str)) {
+        return(paste(type, "s", sep = ""))
+    }
+
+    if (grepl("^is_an?_.*", function_name_str)) {
+        return(paste(type, "of length 1"))
     }
 
     if (grepl("^is_.*_pair$", function_name_str)) {
-        return(paste("a", type, "of length 2"))
-    } 
-
-    if (grepl("^is_.*$", function_name_str)) {
-        return(paste("a", type, "vector"))
+        return(type)
     }
 
-    return("the correct class")
+    if (grepl("^is_.*$", function_name_str)) {
+        return(paste(type, "vector"))
+    }
+
+    stop("dev error: pattern matching for typecheck failed")
 }
 
 join_error_strings <- function(error_string_vec) {
@@ -273,7 +314,7 @@ bound_num <- function(num, lowerbound, upperbound) {
 }
 
 is_bound_between <- function(num, lowerbound, upperbound) {
-    num >= lowerbound && num <= upperbound
+    (num >= lowerbound) & (num <= upperbound)
 }
 
 add <- function(x, y) x + y
@@ -289,30 +330,41 @@ get_unique_pairs_up_to <- function(x) {
 
 # spelling related functions
 
+is_vowel <- function(s) tolower(s) %in% c("a", "e", "i", "o", "u")
+starts_with_vowel <- function(s) is_vowel(get_first_char(s))
+
+prepend_indefinite_article <- function(s, exclude = c("NULL")) {
+    if (s %in% exclude) return(s)
+    paste("a", ifelse(starts_with_vowel(s), "n", ""), " ", s, sep = "")
+}
+
 get_right_of_dollarsign <- function(x) sapply(strsplit(x, "\\$"), getlast)
+
+get_first_char <- function(s) substr(s, 1, 1)
 
 strip_spaces <- function(s) gsub(" ", "", s)
 
 strip_and_lower <- function(s) strip_spaces(tolower(s))
 
 strip_unquoted_spaces <- function(input_str) {
-  all_parts <- strsplit(input_str, "'")
 
-  for (i in seq_along(input_str)) {
+    all_parts <- strsplit(input_str, "'")
+
+    for (i in seq_along(input_str)) {
     parts <- all_parts[[i]]
 
-    for (j in seq_along(parts)) {
-        if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
+        for (j in seq_along(parts)) {
+            if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
+        }
+
+        input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
+
+        if (is_even(length(parts))) {
+            input_str[i] <- paste(input_str[i], "'", sep = "")
+        }
     }
 
-    input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
-
-    if (is_even(length(parts))) {
-        input_str[i] <- paste(input_str[i], "'", sep = "")
-    }
-  }
-  
-  input_str
+    input_str
 }
 
 user_attempt_correction <- function(
@@ -392,11 +444,12 @@ init_list <- function(num_elements, init_val = NULL) {
     lapply(l, function(x) init_val)
 }
 
-getlast <- function(x) UseMethod("getlast")
-getlast.default <- function(x) x[length(x)]
-getlast.list <- function(x) x[[length(x)]]
+getlast <- function(x) {
+    if (is.list(x)) return(x[[length(x)]])
+    x[length(x)]
+}
 
-# get first non empty list in a list of lists, assuming it exists
+# get first non empty element in a list, assuming it exists
 get_first_nonempty <- function(l) {
     for (el in l) if (isnt_empty(el)) return(el)
 }
@@ -406,11 +459,8 @@ get_first_nonempty <- function(l) {
 operate_on_same_length_lists <- function(func, l1, l2) {
     l <- init_list(length(l1), list())
     for (i in seq_along(l1)) {
-        if (isnt_empty(l1[[i]]) && isnt_empty(l2[[i]])) {
-            if (!(is.null(l1[i]) || is.null(l2[i]))) {
-                l[[i]] <- func(l1[[i]], l2[[i]])
-            }
-        }
+        if (is_empty(l1[[i]]) || is_empty(l2[[i]])) next
+        l[[i]] <- func(l1[[i]], l2[[i]])
     }
     l
 }
@@ -455,9 +505,7 @@ join_list_of_characters <- function(params, sep = "_") {
 
 # S3 method to represent vectors as strings
 
-repr_as_string <- function(input, ...) {
-    UseMethod("repr_as_string")
-}
+repr_as_string <- function(input, ...) UseMethod("repr_as_string")
 
 repr_as_string.character <- function(input, ...) {
     to_string_rep_with_insert(v = input, insert = "'")
@@ -548,16 +596,17 @@ attempt_correction <- function(seurat_obj, reduction) {
         stop("No dimensional reductions detected")
     }
 
-    reduction <- ifelse(
-        test = identical(strip_and_lower(reduction), "t-sne") &&
-            !any("t-sne" == strip_and_lower(get_curr_reduc_names(seurat_obj))),
-        yes = "tsne",
-        no = reduction
-    )
+    curr_reductions <- get_curr_reduc_names(seurat_obj)
+
+    if (identical(strip_and_lower(reduction), "t-sne")) {
+        if (!any("t-sne" == strip_and_lower(curr_reductions))) {
+            reduction <- "tsne"
+        }
+    }
 
     user_attempt_correction(
       reduction,
-      strset = get_curr_reduc_names(seurat_obj),
+      strset = curr_reductions,
       stop_msg_start = "Invalid reduction"
     )
 }

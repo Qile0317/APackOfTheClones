@@ -30,7 +30,7 @@ quiet_load_all_CRAN <- function(...) {
 }
 
 # load packages
-quiet_load_all_CRAN("ggplot2", "Seurat", "magrittr")
+quiet_load_all_CRAN("ggplot2", "Seurat", "magrittr", "APackOfTheClones")
 
 # load data
 pbmc <- get(data("combined_pbmc"))
@@ -58,7 +58,7 @@ getSharedClones(pbmc, clonecall = "aa")
 
 ## Getting Geometric Centroids For Seurat Reductions
 
-The `getReductionCentroids` function is a shortcut for getting the centroids as a list of numeric vectors of length 2 based ono some existing reduction in a seurat object.
+The `getReductionCentroids` function is a shortcut for getting the centroids as a list of numeric vectors of length 2 based on some existing reduction in a seurat object.
 
 ```{r, reduction_centroid, echo = TRUE}
 head(getReductionCentroids(pbmc, "umap"))

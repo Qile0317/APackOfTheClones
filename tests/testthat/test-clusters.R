@@ -24,11 +24,13 @@ test_that("get_cluster_centroids() works", {
 })
 
 test_that("trans_coord() works withOUT new_coord", {
-  c1_new <- c1
-  c1_new$centroid <- c(4, 5)
+  c1_new <- c1 %>%
+    set_centroid(c(4, 5))
+
   expect_equal(
     trans_coord(c1_new), c1_shifted_by_4_5, tolerance = 1e-9
   )
+  
 })
 
 test_that("trans_coord() works WITH new_coord", {

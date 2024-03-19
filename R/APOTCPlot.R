@@ -139,7 +139,7 @@ APOTCPlot <- function(
 	# handle varargs and the run_id
 	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
-	args$run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+	args$run_id <- infer_object_id_if_needed(args, varargs_list)
 	APOTCPlot_error_handler(args)
 
 	# get the apotc object and initialize the plot
@@ -177,7 +177,7 @@ APOTCPlot <- function(
 			apotc_obj = apotc_obj,
 			result_plot = result_plot,
 			only_cluster = only_link_cluster,
-			clonesize_range = linked_clonesize_range,
+			#clonesize_range = linked_clonesize_range,
 			link_color_mode = clone_link_color,
 			link_width = clone_link_width,
 			link_alpha = clone_link_alpha,

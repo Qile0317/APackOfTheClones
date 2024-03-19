@@ -192,6 +192,15 @@ convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 	clone_scale_factor * (1 - rad_scale_factor)
 }
 
+# checkers
+
+is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
+	if (!is_bound_between(cluster_ind, 1, get_num_clusters(apotc_obj))) {
+		return(FALSE)
+	}
+	isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
+}
+
 # getters
 
 get_reduction_base <- function(apotc_obj) {
@@ -237,7 +246,7 @@ get_processed_clone_sizes <- function(apotc_obj) {
   processed_sizes
 }
 
-get_num_clones <- function(apotc_obj) { # TODO test
+get_num_clones <- function(apotc_obj) {
 	sum(unlist(get_raw_clone_sizes(apotc_obj)))
 }
 

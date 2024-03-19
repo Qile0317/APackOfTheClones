@@ -148,7 +148,7 @@ RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
-    ...,
+    ..., # FIXME seurat_clusters = one number is bugged, only 1 row filtered. maybe use seurat's own filtering?
     extra_filter = NULL,
     run_id = NULL,
 
@@ -168,7 +168,7 @@ RunAPOTC <- function(
     # setup and check inputs
     call_time <- Sys.time()
     varargs_list <- list(...)
-    RunAPOTC_partial_arg_checker(hash::hash(as.list(environment())))
+    RunAPOTC_partial_arg_checker(varargs_list)
     if (verbose) message("Initializing APOTC run...")
 
     # compute inputs
@@ -265,7 +265,9 @@ estimate_clone_scale_factor <- function(seurat_obj, clonecall) {
 	bound_num(approx_clone_scale_factor, lowerbound = 0.05, upperbound = 1)
 }
 
-RunAPOTC_partial_arg_checker <- function(args) {
+RunAPOTC_partial_arg_checker <- function(varargs_list = list()) {
+
+    args <- get_parent_func_args()
 
     check_apotc_identifiers(args)
     check_filtering_conditions(args)
