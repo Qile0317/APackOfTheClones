@@ -539,12 +539,11 @@ add_legend_backing <- function(plt, legend_df) {
 
     dims <- get_legend_backing_minmax_dims(legend_df)
 
-    legend_backing_layer <- ggplot2::geom_rect(
-        ggplot2::aes(
-            xmin = dims["xmin"], xmax = dims["xmax"],
-            ymin = dims["ymin"], ymax = dims["ymax"],
-            fill = "white"
-        ),
+    legend_backing_layer <- ggplot2::annotate(
+        geom = "rect",
+        xmin = dims["xmin"], xmax = dims["xmax"],
+        ymin = dims["ymin"], ymax = dims["ymax"],
+        fill = "white",
         colour = "black"
     )
 
