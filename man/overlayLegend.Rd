@@ -84,10 +84,8 @@ additional layers that the user/other functions have added. To just
 remove the legend, see \link{removeLegend}.
 }
 \examples{
-data("combined_pbmc")
-
 # create a plot with a legend
-apotc_plot <- vizAPOTC(combined_pbmc)
+apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 
 # reposition the legend to top right
 overlayLegend(apotc_plot, legend_position = "top right")
@@ -95,8 +93,8 @@ overlayLegend(apotc_plot, legend_position = "top right")
 # use different sizes and label
 overlayLegend(
     apotc_plot,
-    legend_sizes = c(1,3,7,10),
-    legend_label = "odd clone sizes"
+    legend_sizes = c(1, 3, 7, 9),
+    legend_label = "odd sizes"
 )
 
 }

@@ -12,10 +12,10 @@ test_that("showCloneHighlight works", {
             "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
         ))
     
-    # expect_doppelganger(
-    #     "showCloneHighlight_only_clusters_5_9",
-    #     test_cl_5_9_highlighted_ggplot
-    # )
+    expect_doppelganger(
+        "showCloneHighlight_only_clusters_5_9",
+        test_cl_5_9_highlighted_ggplot
+    )
 
     expect_equal(
         getdata("showCloneHighlight", "cl_5_9_highlighted_ggplot"),

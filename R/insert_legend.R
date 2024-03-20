@@ -34,6 +34,9 @@ removeLegend <- function(apotc_ggplot) {
     remove_ggplot_layers(apotc_ggplot, get_legend_layer_indicies(apotc_ggplot))
 }
 
+# FIXME
+# https://qile0317.github.io/APackOfTheClones/dev/reference/overlayLegend.html
+
 #' @title overlay a clone size legend on an APackOfTheClones plot
 #'
 #' @description
@@ -57,10 +60,8 @@ removeLegend <- function(apotc_ggplot) {
 #' @seealso [removeLegend]
 #'
 #' @examples
-#' data("combined_pbmc")
-#'
 #' # create a plot with a legend
-#' apotc_plot <- vizAPOTC(combined_pbmc)
+#' apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 #'
 #' # reposition the legend to top right
 #' overlayLegend(apotc_plot, legend_position = "top right")
@@ -68,8 +69,8 @@ removeLegend <- function(apotc_ggplot) {
 #' # use different sizes and label
 #' overlayLegend(
 #'     apotc_plot,
-#'     legend_sizes = c(1,3,7,10),
-#'     legend_label = "odd clone sizes"
+#'     legend_sizes = c(1, 3, 7, 9),
+#'     legend_label = "odd sizes"
 #' )
 #'
 overlayLegend <- function(
@@ -87,21 +88,25 @@ overlayLegend <- function(
     res = 360L
 ) {
     
-    overlayLegend_error_handler(hash::hash(as.list(environment())))
+    overlayLegend_error_handler()
 
     layers_after_legend_present <- FALSE
 
     if (has_legend(apotc_ggplot)) {
         layers_after_legend <- get_layers_after_legend(apotc_ggplot)
-        layers_after_legend_present <- is.null(layers_after_legend)
+        layers_after_legend_present <- !is.null(layers_after_legend)
         apotc_ggplot <- remove_legend_and_layers_after(apotc_ggplot)
+    }
+
+    if (should_estimate(legend_sizes)) {
+        legend_sizes <- get_estimated_legend_sizes(apotc_ggplot)
     }
 
     apotc_ggplot <- insert_legend(
         plt = apotc_ggplot,
         plt_dims = get_apotc_plot_dims_from_df(apotc_ggplot$data),
         apotc_obj = get_apotcdata(apotc_ggplot),
-        sizes = get_estimated_legend_sizes(apotc_ggplot),
+        sizes = legend_sizes,
         pos = legend_position,
         buffer = legend_buffer,
         additional_middle_spacing = add_legend_centerspace,
@@ -121,20 +126,16 @@ overlayLegend <- function(
     apotc_ggplot
 }
 
-overlayLegend_error_handler <- function(args) {
-
+overlayLegend_error_handler <- function() {
+    args <- get_parent_func_args()
     check_legend_params(args)
     check_is_apotc_ggplot(args$apotc_ggplot)
-    
-    if (!is_an_integer(args$res)) {
-        stop(call. = FALSE, "`res` must be an integer value of length 1.")
-    }
+    typecheck(args$res, is_a_positive_integer)
 }
 
 check_legend_params <- function(args) {
-    if (!(all(is_positive_integer(args$legend_sizes)) || should_estimate(args$legend_sizes))) {
-        stop(call. = FALSE, "`legend_sizes` must be positive integer(s)")
-    }
+
+    if (!should_estimate(args$legend_sizes)) typecheck(args$legend_sizes, is_positive_numeric)
 
     if (!(
         is_a_character(args$legend_position) ||
@@ -146,13 +147,8 @@ check_legend_params <- function(args) {
         )
     }
 
-    if (!is_a_numeric(args$legend_buffer)) {
-        stop(call. = FALSE, "`legend_buffer` must be a numeric.")
-    }
-
-    if (!is_a_character(args$legend_color)) {
-        stop(call. = FALSE, "`legend_color` must be a character.")
-    }
+    typecheck(args$legend_buffer, is_a_numeric)
+    typecheck(args$legend_color, is_a_character)
 
     if (!(
         is_a_numeric(args$legend_spacing) ||
@@ -161,23 +157,10 @@ check_legend_params <- function(args) {
         stop(call. = FALSE, "`legend_spacing` must be a numeric.")
     }
 
-    if (!is_a_character(args$legend_label)) {
-        stop(call. = FALSE, "`legend_label` must be a character.")
-    }
-
-    if (!(is_a_positive_numeric(args$legend_text_size))) {
-        stop(call. = FALSE,
-            "`legend_text_size` must be a positive numeric value."
-        )
-    }
-
-    if (!is_a_logical(args$add_legend_background)) {
-        stop(call. = FALSE, "`add_legend_background` must be a logical value.")
-    }
-
-    if (!is_a_numeric(args$add_legend_centerspace)) {
-        stop(call. = FALSE, "`add_legend_centerspace` must be a numeric value.")
-    }
+    typecheck(args$legend_label, is_a_character)
+    typecheck(args$legend_text_size, is_a_positive_numeric)
+    typecheck(args$add_legend_background, is_a_logical)
+    typecheck(args$add_legend_centerspace, is_a_numeric)
 }
 
 # internal global constant for the name of each legend layer
@@ -539,15 +522,13 @@ add_legend_backing <- function(plt, legend_df) {
 
     dims <- get_legend_backing_minmax_dims(legend_df)
 
-    legend_backing_layer <- ggplot2::annotate(
+    plt + ggplot2::annotate(
         geom = "rect",
         xmin = dims["xmin"], xmax = dims["xmax"],
         ymin = dims["ymin"], ymax = dims["ymax"],
         fill = "white",
         colour = "black"
     )
-
-    plt + legend_backing_layer
 
 }
 

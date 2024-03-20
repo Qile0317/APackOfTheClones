@@ -56,6 +56,12 @@ is_a_positive_numeric <- function(x) {
     x > 0
 }
 
+is_positive_numeric <- function(x) {
+    if (!is_vector(x)) return(FALSE)
+    if (length(x) < 1L) return(FALSE)
+    all(sapply(x, is_a_positive_numeric))
+}
+
 is_an_integer <- function(x) {
     if (identical(x, Inf) || identical(x, -Inf)) return(TRUE)
     if (!is_a_numeric(x)) return(FALSE)
