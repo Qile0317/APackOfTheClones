@@ -6,6 +6,7 @@
 # assume that metadata_filter is a valid ADDITIONAL filter condition.
 # assume that varargs_list is a valid named list where each name is a column
 # and element is a string vector of which factors to INCLUDE
+# FIXME %in% can be used
 #
 parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 

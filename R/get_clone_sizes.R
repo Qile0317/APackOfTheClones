@@ -53,7 +53,7 @@ countCloneSizes <- function(
 # TODO create S4 generic to allow getting it from run_id, as an Apotc Getter
 
 # count the raw clone from the integrated seurat object from the METADATA
-# newly fixed in 1.1.0
+# FIXME - for only 1 cluster doenst work
 count_raw_clone_sizes <- function(
   seurat_obj, num_clusters, clonecall
 ) {
@@ -62,24 +62,22 @@ count_raw_clone_sizes <- function(
   freq_df <- stats::aggregate(
     stats::as.formula(paste(clonecall, "~ seurat_clusters")),
     seurat_obj@meta.data,
-    function(x) table(x)
+    table
   )
 
-  # compile the tabled counts, purposefully not modifying them
-  cluster_indicies <- as.numeric(freq_df[[1]]) # converts to one based indexing!
-  num_valid_clusters <- length(cluster_indicies)
-  index <- 1
-  clone_sizes <- init_list(num_clusters, table(NULL))
+  # compile the tabled counts into a list of table objects
+  clone_sizes <- init_list(num_clusters, create_empty_table())
 
-  for (i in 1:num_clusters) {
-    if (index > num_valid_clusters) {
-      break
-    }
-    if (i != cluster_indicies[index]) {
-      next
-    }
-    clone_sizes[[i]] <- freq_df[[2]][index][[1]]
-    index <- index + 1
+  if (nrow(freq_df) == 0) return(clone_sizes)
+
+  if (nrow(freq_df) == 1) {
+    clone_sizes[[freq_df$seurat_clusters[1]]] <- as.table(freq_df[[2]][1, ])
+    for (i in 1:num_clusters) names(dimnames(clone_sizes[[i]])) <- "" #?
+    return(clone_sizes)
+  }
+
+  for (elem in enumerate(freq_df$seurat_clusters)) {
+    clone_sizes[[val1(elem)]] <- freq_df[[2]][ind(elem)][[1]]
   }
 
   clone_sizes

@@ -112,15 +112,12 @@ initializeSubsetApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
-
-	seurat_obj <- subsetSeuratMetaData(seurat_obj, metadata_filter_condition)
-
-	apotc_obj <- initializeApotcData(
-		seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
-	)
-
-	apotc_obj@metadata_filter_string <- metadata_filter_condition
-	apotc_obj
+	seurat_obj %>%
+		subsetSeuratMetaData(metadata_filter_condition) %>%
+		initializeApotcData(
+			clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+		) %>%
+		set_metadata_filter_string(metadata_filter_condition)
 }
 
 # pack the clones assuming centroids are present
@@ -289,4 +286,11 @@ get_labels <- function(apotc_obj) {
 
 get_label_coords <- function(apotc_obj) {
 	apotc_obj@label_coords
+}
+
+# setters
+
+set_metadata_filter_string <- function(apotc_obj, extra_filter) {
+	apotc_obj@metadata_filter_string <- extra_filter
+	apotc_obj
 }
