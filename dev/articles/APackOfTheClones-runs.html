@@ -311,6 +311,52 @@ locations, colors, and the adjustment of the
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>nudge_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>label_nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>verbose <span class="ot">=</span> <span class="cn">TRUE</span></span></code></pre></div>
+<p>The following sections are some example usecases</p>
+<div class="section level3">
+<h3 id="renaming-cluster-labels">Renaming Cluster Labels<a class="anchor" aria-label="anchor" href="#renaming-cluster-labels"></a>
+</h3>
+<p>After identification of the cell identity of each seurat cluster, it
+may be useful to rename each cluster label to the actual identity of the
+cells of each cluster. here is a minimal example of how this process is
+intended to be done:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Do a run with just the first 4 seurat clusters, and rename labels</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="va">pbmc</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
+<span>        run_id <span class="op">=</span> <span class="st">"first_four"</span>,</span>
+<span>        seurat_clusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>        verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="../reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
+<span>        run_id <span class="op">=</span> <span class="st">"first_four"</span>,</span>
+<span>        rename_label <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>        new_label <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
+<span>        verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span> </span>
+<span></span>
+<span><span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"first_four"</span>, show_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
+<p><img src="APackOfTheClones-runs_files/figure-html/first_four_labeled-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="extra-cluster-repulsion">Extra Cluster Repulsion<a class="anchor" aria-label="anchor" href="#extra-cluster-repulsion"></a>
+</h3>
+<p>Another possibility is that the default repulsion may have left the
+clusters too close - here this is corrected - and the labels are moved
+as well.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="va">pbmc</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span>run_id <span class="op">=</span> <span class="st">"foo"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="../reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
+<span>        repulse <span class="op">=</span> <span class="cn">TRUE</span>, repulsion_threshold <span class="op">=</span> <span class="fl">0.5</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: foo</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, show_labels <span class="op">=</span> <span class="cn">TRUE</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: foo</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
+<p><img src="APackOfTheClones-runs_files/figure-html/repulse_again-1.png" width="700"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
