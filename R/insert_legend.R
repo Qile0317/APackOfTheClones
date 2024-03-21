@@ -34,9 +34,6 @@ removeLegend <- function(apotc_ggplot) {
     remove_ggplot_layers(apotc_ggplot, get_legend_layer_indicies(apotc_ggplot))
 }
 
-# FIXME
-# https://qile0317.github.io/APackOfTheClones/dev/reference/overlayLegend.html
-
 #' @title overlay a clone size legend on an APackOfTheClones plot
 #'
 #' @description
@@ -54,6 +51,15 @@ removeLegend <- function(apotc_ggplot) {
 #' [vizAPOTC]
 #' @inheritParams APOTCPlot
 #'
+#' @details
+#' The size legend on APackOfTheClones plots are simply a collection of
+#' annotation layers of the `rect`, `text`, `circle` geoms. Therefore it
+#' isn't quite a ggplot legend. In the actual ggplot object, the `$layers`
+#' element should all be named with an empty character `""`, and those
+#' that comprise the annotation layers of the legend should be named whatever
+#' `APackOfTheClones:::.ApotcLegendLayerName` is. Note that this is simply
+#' an implementation detail that the user should not interfere with.
+#'
 #' @inherit APOTCPlot return
 #' @export
 #'
@@ -66,9 +72,8 @@ removeLegend <- function(apotc_ggplot) {
 #' # reposition the legend to top right
 #' overlayLegend(apotc_plot, legend_position = "top right")
 #'
-#' # use different sizes and label
-#' overlayLegend(
-#'     apotc_plot,
+#' # use different sizes and label - may be nice to use the pipe
+#' apotc_plot |> overlayLegend(
 #'     legend_sizes = c(1, 3, 7, 9),
 #'     legend_label = "odd sizes"
 #' )

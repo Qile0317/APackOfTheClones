@@ -83,6 +83,15 @@ being a custom ggplot object. It will not override or erase any
 additional layers that the user/other functions have added. To just
 remove the legend, see \link{removeLegend}.
 }
+\details{
+The size legend on APackOfTheClones plots are simply a collection of
+annotation layers of the \code{rect}, \code{text}, \code{circle} geoms. Therefore it
+isn't quite a ggplot legend. In the actual ggplot object, the \verb{$layers}
+element should all be named with an empty character \code{""}, and those
+that comprise the annotation layers of the legend should be named whatever
+\code{APackOfTheClones:::.ApotcLegendLayerName} is. Note that this is simply
+an implementation detail that the user should not interfere with.
+}
 \examples{
 # create a plot with a legend
 apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
@@ -90,9 +99,8 @@ apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 # reposition the legend to top right
 overlayLegend(apotc_plot, legend_position = "top right")
 
-# use different sizes and label
-overlayLegend(
-    apotc_plot,
+# use different sizes and label - may be nice to use the pipe
+apotc_plot |> overlayLegend(
     legend_sizes = c(1, 3, 7, 9),
     legend_label = "odd sizes"
 )

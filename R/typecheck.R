@@ -119,11 +119,10 @@ create_err_msg <- function(typechecker_str_vec) {
 }
 
 get_error_strings <- function(funcstrs) {
-    funcstrs %>%
-        sapply(
-            function(s) prepend_indefinite_article(get_err_type_str(s))
-        ) %>%
-        sort()
+    sapply(
+        funcstrs,
+        function(s) prepend_indefinite_article(get_err_type_str(s))
+    ) %>% sort()
 }
 
 get_err_type_str <- function(function_name_str) {
