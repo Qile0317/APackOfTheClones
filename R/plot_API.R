@@ -58,19 +58,19 @@ plot_clusters <- function(
 ) {
   clusters %>%
     ggplot2::ggplot() +
-      ggforce::geom_circle(
-        apotc_aes_string(
-          x0 = "x",
-          y0 = "y",
-          r = "r",
-          fill = "color"
-        ),
-        n = n,
-        linetype = linetype,
-        alpha = alpha
-      ) +
-      ggplot2::coord_fixed() +
-      ggplot2::scale_fill_identity()
+    ggforce::geom_circle(
+      apotc_aes_string(
+        x0 = "x",
+        y0 = "y",
+        r = "r",
+        fill = "color"
+      ),
+      n = n,
+      linetype = linetype,
+      alpha = alpha
+    ) +
+    ggplot2::coord_fixed() +
+    ggplot2::scale_fill_identity()
 }
 
 add_default_theme <- function(plt, reduction) {

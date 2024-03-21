@@ -30,11 +30,13 @@ quiet_load_all_CRAN <- function(...) {
 }
 
 # load packages
-quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat")
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "magrittr")
 ```
 
 ```{r setup}
 suppressPackageStartupMessages(library(APackOfTheClones))
+# load data
+pbmc <- get(data("combined_pbmc"))
 ```
 
 ## Introduction
@@ -194,4 +196,42 @@ label_relocation_coord = NULL,
 nudge_label = NULL,
 label_nudge_vector = NULL,
 verbose = TRUE
+```
+
+The following sections are some example usecases
+
+### Renaming Cluster Labels
+
+After identification of the cell identity of each seurat cluster, it may be useful to rename each cluster label to the actual identity of the cells of each cluster. here is a minimal example of how this process is intended to be done:
+
+```{r, first_four_labeled, echo = TRUE}
+# Do a run with just the first 4 seurat clusters, and rename labels
+pbmc <- pbmc %>%
+    RunAPOTC(
+        run_id = "first_four",
+        seurat_clusters = 1:4,
+        verbose = FALSE
+    ) %>%
+    AdjustAPOTC(
+        run_id = "first_four",
+        rename_label = 1:4,
+        new_label = letters[1:4],
+        verbose = FALSE
+    ) 
+
+APOTCPlot(pbmc, run_id = "first_four", show_labels = TRUE)
+```
+
+### Extra Cluster Repulsion
+
+Another possibility is that the default repulsion may have left the clusters too close - here this is corrected - and the labels are moved as well.
+
+```{r, repulse_again, echo = TRUE}
+pbmc <- pbmc %>%
+    RunAPOTC(run_id = "foo", verbose = FALSE) %>%
+    AdjustAPOTC(
+        repulse = TRUE, repulsion_threshold = 0.5, verbose = FALSE
+    )
+
+APOTCPlot(pbmc, show_labels = TRUE, retain_axis_scales = TRUE)
 ```

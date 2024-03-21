@@ -140,7 +140,8 @@ overlayLegend_error_handler <- function() {
 
 check_legend_params <- function(args) {
 
-    if (!should_estimate(args$legend_sizes)) typecheck(args$legend_sizes, is_positive_numeric)
+    if (!should_estimate(args$legend_sizes))
+        typecheck(args$legend_sizes, is_positive_numeric)
 
     if (!(
         is_a_character(args$legend_position) ||
