@@ -114,7 +114,9 @@ warning will be shown if any of the sequences are not present.</p></dd>
 <dd><p>Either a logical of length 1, or a character(s). It is
 <code>TRUE</code> by default, which assigns a unique default ggplot color to each
 highlighted clone. If <code>FALSE</code>, each highlighted clone will retain its
-current color in <code>sc.data</code>. It can also indicate the color of each
+current color and no legend based on color is shown. A possible application
+here is to simply gague the distribution of any shared clone.
+It can also indicate the color of each
 highlighted clone: if it is a character of length 1 and a valid color, all
 highlighted clones will be of that color. Else it must be a character vector
 of the same length as <code>sequence</code>, with each color corresponding to the
@@ -145,6 +147,8 @@ of each clonotype should be displayed.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Under the hood, this function simply mutates the plotting dataframe under
 <code>$data</code> in the ggplot object, and operates on a column named <code>color</code>.</p>
+<p>Note that if <code>color_each = FALSE</code> and <code>default_color = NULL</code>, this is
+equivalent to simply not highlighting anything and a warning will be shown.</p>
     </div>
 
     <div class="section level2">
