@@ -23,7 +23,9 @@ warning will be shown if any of the sequences are not present.}
 \item{color_each}{Either a logical of length 1, or a character(s). It is
 \code{TRUE} by default, which assigns a unique default ggplot color to each
 highlighted clone. If \code{FALSE}, each highlighted clone will retain its
-current color in \code{sc.data}. It can also indicate the color of each
+current color and no legend based on color is shown. A possible application
+here is to simply gague the distribution of any shared clone.
+It can also indicate the color of each
 highlighted clone: if it is a character of length 1 and a valid color, all
 highlighted clones will be of that color. Else it must be a character vector
 of the same length as \code{sequence}, with each color corresponding to the
@@ -53,6 +55,9 @@ right side that correspond to each (existing) clonotype.
 \details{
 Under the hood, this function simply mutates the plotting dataframe under
 \verb{$data} in the ggplot object, and operates on a column named \code{color}.
+
+Note that if \code{color_each = FALSE} and \code{default_color = NULL}, this is
+equivalent to simply not highlighting anything and a warning will be shown.
 }
 \examples{
 data("combined_pbmc")

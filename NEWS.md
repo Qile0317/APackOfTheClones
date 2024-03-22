@@ -9,7 +9,7 @@
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
 - Added argument `verbose` in `APOTCPlot` to display some additional visual cues.
 - Added argument `alpha` in `APOTCPlot` and `vizAPOTC` to change the alpha (transparency) of each circle.
-- Added arguments in `APOTCPlot` and the corresponding `vizAPOTC` to compute and plot "links" between clonotypes that are "shared" i.e. common within multiple clusters. Currently, only supports plotting straight lines.
+- Added arguments in `APOTCPlot` and the corresponding `vizAPOTC` to compute and plot "links" between clonotypes that are "shared" i.e. common within multiple clusters. Currently, only supports plotting of straight lines.
 - Add `vignette("APackOfTheClones-install")` for detailed installation instructions.
 - Add `vignette("APackOfTheClones-utils")` for more guidance on the various utilities of the package.
 

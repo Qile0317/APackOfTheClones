@@ -266,7 +266,7 @@ show_labels = FALSE,
 label_size = 5,
 ```
 
-The most important of which are 1. `show_labels` which overlays the seurat cluster on the plot in the format `"Cx"` in the center of each relevant cluster. (see `vignette("APackOfTheClones-runs")` on how one can modify them) 2. `use_default_theme` which will produce a plot that's thematically very similar to the dimensional reduction plot, with axis labels and numeric ticks on each axis. This may be helpful for visually indicating certain plot parameters. However, for publications [such as this one](https://doi.org/10.1126/sciimmunol.abg6356), as the numeric ticks in APackOfTheClones have no actual biologically relevant meaning aside from approximately matching clusters, it may be beneficial to set this argument to `FALSE` which will produce a plot with just the circles:
+The most important of which are 1. `show_labels` which overlays the seurat cluster on the plot in the format `"Cx"` in the center of each relevant cluster. (see `vignette("APackOfTheClones-runs")` on how one can modify them) 2. `use_default_theme` which will produce a plot that's thematically very similar to the dimensional reduction plot, with axis labels and numeric ticks on each axis. This may be helpful for visually indicating certain plot parameters. However, for publications [such as this one](https://doi.org/10.1126/sciimmunol.abg6356), as the numeric ticks in APackOfTheClones have no actual biologically relevant meaning aside from approximately matching clusters, it may be beneficial to set this argument to `FALSE` which will produce a plot with just the circles. The following is an example parameters to generate a plot that is likely publication-ready:
 
 ```{r, void_labelled_plot, echo = TRUE}
 vizAPOTC(

@@ -54,13 +54,12 @@ getSharedClones <- function(
     clonesize_range = c(1L, Inf),
     only_cluster = NULL#,
     # only_between = NULL #TODO
-    #exclude_cluster = NULL # FIXME change filtering in Rcpp
     # TODO export format
 ) {
     # handle inputs
     varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
-    getSharedClones_error_handler(args)
+    getSharedClones_error_handler()
 
     # get the apotcdata
     apotc_obj <- getApotcDataIfExistsElseCreate(
@@ -79,38 +78,11 @@ getSharedClones <- function(
     )
 }
 
-getSharedClones_error_handler <- function(args) {
-
+getSharedClones_error_handler <- function() {
+    args <- get_parent_func_args()
     check_apotc_identifiers(args)
-
-    if (!is_integer_pair(args$clonesize_range)) {
-        stop(call. = FALSE,
-            "`clone_size_range` must be an integer-ish vector of length 2"
-        )
-    }
-
-    if (!is.null(args$only_cluster) && !is.null(args$exclude_cluster)) {
-        stop(call. = FALSE,
-            "either both or neither of `only_cluster` and `exclude_cluster` ",
-            "must be inputted"
-        )
-    }
-
-    if (!is.null(args$only_cluster)) {
-        if (!all(is_integer(args$only_cluster))) {
-            stop(call. = FALSE,
-                "`only_cluster` must be an integer vector"
-            )
-        }
-    }
-
-    if (!is.null(args$exclude_cluster)) {
-        if (!all(is_integer(args$exclude_cluster))) {
-            stop(call. = FALSE,
-                "`exclude_cluster` must be an integer vector"
-            )
-        }
-    }
+    args$clonesize_range %>% typecheck(is_integer_pair)
+    args$only_cluster %>% typecheck(is_an_integer, is_integer, is.null)
 }
 
 create_cluster_truth_vector <- function(

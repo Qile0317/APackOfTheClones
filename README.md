@@ -24,23 +24,7 @@ The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murr
 install.packages("APackOfTheClones")
 ```
 
-If there are any issues with the CRAN installation (for example, the package has been archived on CRAN for a brief period), try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones@cran")
-```
-
-Alternatively, to download the latest semi-stable development edition, try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones")
-```
-
-A static legacy version is also available both on CRAN archives and on a git branch (`v0`), to install, try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones@v0")
-```
+For more details on installation methods and information on alternative/development versions, see [```vignette("APackOfTheClones-install")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-install.html)
 
 ## Usage
 
@@ -75,11 +59,11 @@ For finer control of the visualization / other parameters, the data for a run ca
 
 ```R
 # using the same seurat object as before, run and store associated data,
-# identifying it with a run id.
+# identifying it with a run id. If not, one will be generated.
 pbmc <- RunAPOTC(pbmc, run_id = "default_run_1")
 
 # plot the corresponding data with the run_id. If not provided, will use the latest run.
-APOTCPlot(pbmc, run_id = "default_run_1")
+APOTCPlot(pbmc)
 
 # adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was
 # left empty for no particular reason, but it will use "default_run_1" since its the latest
@@ -103,13 +87,13 @@ cowplot::plot_grid(
 
 ### Package conventions
 
-Most exported functions are named with `camelCase` with the exception of three with `PascalCase` to replicate the conventions `Seurat` as they mimic their function in an analysis workflow. All function arguments follow `snake_case`.
+Most exported functions are named with `camelCase` with the exception of those that modify Seurat objects having `PascalCase` to mimic their conventions. All function arguments follow `snake_case`.
 
 ## Documentation
 
 Comprehensive documentation, vignettes, and a changelog is deployed at <https://qile0317.github.io/APackOfTheClones/>
 
-There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones")` and `vignette("APackOfTheClones-runs")`.
+There are also two vignettes within the package locally that should be read in order, and can be called with [```vignette("APackOfTheClones")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html) and [```vignette("APackOfTheClones-runs")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html).
 
 All exported functions has function level documentation which can be called with `?function`.
 
@@ -119,13 +103,9 @@ Github pull requests from forked branches are more than welcome as it is mostly 
 
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
 
-## Upcoming features
-
-One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot. Currently, a basic experimental implementation has been completed, by introducing a new logical argument in `vizAPOTC` and `APOTCPlot` named `show_shared_clones`.
-
 ## Contact
 
-Qile Yang - qile.yang@berkeley.edu
+Qile Yang - qile.yang \[at\] berkeley.edu
 
 ## References
 

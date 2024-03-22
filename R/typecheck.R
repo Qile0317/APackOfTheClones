@@ -2,10 +2,16 @@
 
 # this function assumes its being called in an error checker
 # and the error checker has an argument varargs_list
-get_parent_func_args <- function(dn = 0L) {
-    parent.frame(2L + dn) %>%
-        as.list() %>%
-        append(parent.frame()$varargs_list) %>%
+get_parent_func_args <- function(dn = 1L) {
+
+    function_frame_list <- as.list(parent.frame(1L + dn))
+
+    if (hash::is.hash(function_frame_list[["args"]])) {
+        function_frame_list <- as.list(function_frame_list$args)
+    }
+
+    function_frame_list %>%
+        append(parent.frame(dn)$varargs_list) %>%
         hash::hash()
 }
 

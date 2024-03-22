@@ -7,6 +7,8 @@
 #include "ClusterList.h"
 #include "math.h"
 
+// TODO make class for shared clones in C++
+
 // helper for the remove_unique_clones function
 // [[Rcpp::export]]
 Rcpp::List rcppRemoveUniqueClonesHelper(
