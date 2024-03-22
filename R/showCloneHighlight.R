@@ -17,7 +17,9 @@
 #' @param color_each Either a logical of length 1, or a character(s). It is
 #' `TRUE` by default, which assigns a unique default ggplot color to each
 #' highlighted clone. If `FALSE`, each highlighted clone will retain its
-#' current color in `sc.data`. It can also indicate the color of each
+#' current color and no legend based on color is shown. A possible application
+#' here is to simply gague the distribution of any shared clone.
+#' It can also indicate the color of each
 #' highlighted clone: if it is a character of length 1 and a valid color, all
 #' highlighted clones will be of that color. Else it must be a character vector
 #' of the same length as `sequence`, with each color corresponding to the
@@ -34,6 +36,9 @@
 #' @details
 #' Under the hood, this function simply mutates the plotting dataframe under
 #' `$data` in the ggplot object, and operates on a column named `color`.
+#'
+#' Note that if `color_each = FALSE` and `default_color = NULL`, this is
+#' equivalent to simply not highlighting anything and a warning will be shown.
 #'
 #' @return A ggplot object with the data modified to the highlighted colors
 #' @export
@@ -59,7 +64,23 @@ showCloneHighlight <- function(
     default_color = "#808080",
     fill_legend = TRUE
 ) {
-    apotc_highlight_clones_error_handler(hash::hash(as.list(environment())))
+    apotc_highlight_clones_error_handler()
+
+    if (identical(color_each, FALSE) && is.null(default_color)) {
+        warning(
+            "setting `color_each = FALSE` and `default_color = NULL` is ",
+            "equivalent to not highlighting any clones - please read the ",
+            "function level documentation for details."
+        )
+        return(apotc_ggplot)
+    }
+
+    if (contains_duplicates(sequence)) {
+        warning(
+            "`sequence` contains duplicates - ",
+            "this may result in erroneous outputs"
+        )
+    }
 
     # process data - probably should make sequences unique? for now assume unique
 
@@ -113,6 +134,7 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function(args) {
+    args <- get_parent_func_args()
     args$apotc_ggplot |> check_is_apotc_ggplot()
     args$sequence |> typecheck(is_character)
     args$color_each |> typecheck(is_a_logical, is_a_character, is_character)

@@ -31,6 +31,10 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
     ))
 }
 
+# readability
+
+contains_duplicates <- function(v) anyDuplicated(v) != 0
+
 # data convenience constructors
 
 create_empty_table <- function() {

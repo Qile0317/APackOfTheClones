@@ -85,7 +85,7 @@ is_positive_integer <- function(x) {
     all(sapply(x, function(x) x > 0L))
 }
 
-# primary typechecking function where ... is a list of functions
+# primary typechecking function where `...` is a list of functions
 typecheck <- function(x, ...) {
 
     typechecker_list <- list(...)
@@ -97,7 +97,7 @@ typecheck <- function(x, ...) {
 
     stop(call. = FALSE,
         "`",
-        x %>% substitute() %>% deparse() %>% get_right_of_dollarsign(),
+        deparse(substitute(x)) %>% get_right_of_dollarsign(),
         "` ",
         create_err_msg(typechecker_str_vec)
     )
