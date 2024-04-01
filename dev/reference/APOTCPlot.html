@@ -119,8 +119,8 @@ the plot of the latest run.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  show_shared_clones <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  only_link_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_shared <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  only_link <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  clone_link_color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  clone_link_alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -202,14 +202,19 @@ in the following format:</p>
 there was no input for the <code>...</code> and <code>extra_filter</code> parameters.</p></dd>
 
 
-<dt>show_shared_clones</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> If <code>TRUE</code>,
-overlays straight lines between each clone that is common between clusters.</p></dd>
+<dt>show_shared</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> The output of
+<a href="getSharedClones.html">getSharedClones</a> can be inputted here, and the resulting plot will overlay
+lines between clone circles if that clonotype is common between clusters.
+Note that the input <em><strong>must</strong></em> be generated from data in the correct
+<code>APackOfTheClones</code> run, and the behaviour is undefined otherwise and will
+likely error. The next 4 arguments allow for aesthetic customization of these
+line links.</p></dd>
 
 
-<dt>only_link_cluster</dt>
+<dt>only_link</dt>
 <dd><p>Optional integer indicating to only display clone
-links originating from this cluster.</p></dd>
+links originating from this cluster if showing shared clones.</p></dd>
 
 
 <dt>clone_link_width</dt>
