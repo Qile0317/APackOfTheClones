@@ -306,3 +306,8 @@ set_metadata_filter_string <- function(apotc_obj, extra_filter) {
 	apotc_obj@metadata_filter_string <- extra_filter
 	apotc_obj
 }
+
+set_clusterlists <- function(apotc_obj, x) {
+	apotc_obj@clusters <- x
+	apotc_obj
+}

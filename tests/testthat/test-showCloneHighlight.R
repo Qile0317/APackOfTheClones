@@ -1,5 +1,7 @@
 test_that("showCloneHighlight works", {
 
+    skip_on_ci() # there is no visually distinguishable difference
+
     test_cl_5_9_highlighted_ggplot <- get(data("combined_pbmc")) %>%
         vizAPOTC(
             clonecall = "aa",
