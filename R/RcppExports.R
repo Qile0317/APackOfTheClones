@@ -13,8 +13,8 @@ rcppFilterSharedClonesByClusterHelper <- function(sharedClusters, clonotypes, in
     .Call(`_APackOfTheClones_rcppFilterSharedClonesByClusterHelper`, sharedClusters, clonotypes, includeCluster)
 }
 
-rcppConstructLineLinkDf <- function(clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing) {
-    .Call(`_APackOfTheClones_rcppConstructLineLinkDf`, clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing)
+rcppConstructLineLinkDf <- function(clusterLists, rawCloneSizes, sharedClonotypeClusters, oneIndexedSourceClusterIndex, extraSpacing) {
+    .Call(`_APackOfTheClones_rcppConstructLineLinkDf`, clusterLists, rawCloneSizes, sharedClonotypeClusters, oneIndexedSourceClusterIndex, extraSpacing)
 }
 
 cpp_circle_layout <- function(input_rad_vec, centroid, rad_decrease = 0, try_place = FALSE, verbose = TRUE) {

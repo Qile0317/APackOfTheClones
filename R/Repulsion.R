@@ -43,7 +43,7 @@ repulse_cluster <- function(
     transformation_vectors, num_clusters
   ) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
 
-  for(curr_iteration in 1:max_iter){
+  for (curr_iteration in 1:max_iter){
     overall_repulsion_vec <- calculate_repulsion_vectors(
       overall_repulsion_vec, inp, num_clusters, G, thr
     )
@@ -73,11 +73,7 @@ repulse_cluster <- function(
 
 # Alias to initialize direction vectors in a list
 initialize_direction_vectors <- function(num_clusters) {
-  direction_vectors <- vector("list", num_clusters)
-  for (i in 1:num_clusters) {
-    direction_vectors[[i]] <- c(0, 0)
-  }
-  direction_vectors
+  init_list(num_clusters, c(0, 0))
 }
 
 # Alias to initialize the overall repulsion vec

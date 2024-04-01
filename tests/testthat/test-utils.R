@@ -25,7 +25,16 @@ test_that("start_progress_bar works", {
     )
 })
 
-# print_completion_time cant really be tested but is extremely simple
+# test table utils
+
+test_that("union_list_of_tables works", {
+    expect_equal(
+        union_list_of_tables(list(table(letters[1:5]), table(letters[1:5]))),
+        strip_to_numeric(table(rep(letters[1:5], 2)))
+    )
+})
+
+# test readability
 
 test_that("isnt_empty works", {
     expect_true(isnt_empty(list(c(1, 2, 3))))

@@ -207,10 +207,9 @@ public:
             TwoDVector::createCircleOrigin(rightCircle)
         );
 
-        return circleLinkingLine
-            .shortenByTwoCirclesRadii(
-                leftCircle.rad() + extraSpacing, rightCircle.rad() + extraSpacing
-            );
+        return circleLinkingLine.shortenByTwoCirclesRadii(
+            leftCircle.rad() + extraSpacing, rightCircle.rad() + extraSpacing
+        );
     }
 
 };

@@ -82,3 +82,30 @@ count_raw_clone_sizes <- function(
 
   clone_sizes
 }
+
+# union the output of count_raw_clone_sizes to a named numeric, sorted uf tio
+aggregate_clone_sizes <- function(
+    clone_sizes, sort_decreasing = NULL, top_clones = NULL
+) {
+
+    if (!is.null(top_clones)) sort_decreasing <- TRUE
+    union_clone_sizes <- union_list_of_tables(clone_sizes, sort_decreasing)
+
+    if (is.null(top_clones)) return(union_clone_sizes)
+    num_clones <- length(union_clone_sizes)
+
+    if (is_an_integer(top_clones)) {
+        return(union_clone_sizes[1:min(top_clones, num_clones)])
+    }
+
+    if (is_a_numeric_in_0_1(top_clones)) {
+        return(union_clone_sizes[1:round(num_clones * top_clones)])
+    }
+
+    # TODO more filtering
+
+}
+
+get_top_clonotypes <- function(clone_sizes, top_clones) {
+    names(aggregate_clone_sizes(clone_sizes, top_clones = top_clones))
+}

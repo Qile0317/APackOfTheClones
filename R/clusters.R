@@ -30,9 +30,7 @@ get_centroid <- function(l) l$centroid
 get_cluster_radius <- function(l) l[[5]]
 get_num_clones <- function(l) length(get_x_coords(l))
 
-get_clonotypes <- function(x) UseMethod("get_clonotypes")
-get_clonotypes.list <- function(x) x[["clonotype"]]
-get_clonotypes.data.frame <- function(x) x[["clonotype"]]
+get_clonotypes <- function(x) x[["clonotype"]]
 
 contains_clonotypes <- function(x) !is.null(get_clonotypes(x))
 

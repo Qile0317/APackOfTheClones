@@ -47,16 +47,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppConstructLineLinkDf
-Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, Rcpp::List sharedClonotypeClusters, double extraSpacing);
-RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonotypeClustersSEXP, SEXP extraSpacingSEXP) {
+Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, Rcpp::List sharedClonotypeClusters, int oneIndexedSourceClusterIndex, double extraSpacing);
+RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonotypeClustersSEXP, SEXP oneIndexedSourceClusterIndexSEXP, SEXP extraSpacingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type clusterLists(clusterListsSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type rawCloneSizes(rawCloneSizesSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sharedClonotypeClusters(sharedClonotypeClustersSEXP);
+    Rcpp::traits::input_parameter< int >::type oneIndexedSourceClusterIndex(oneIndexedSourceClusterIndexSEXP);
     Rcpp::traits::input_parameter< double >::type extraSpacing(extraSpacingSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing));
+    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClonotypeClusters, oneIndexedSourceClusterIndex, extraSpacing));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -157,7 +158,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_rcppGetEdgeCircleIndicies", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleIndicies, 1},
     {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
     {"_APackOfTheClones_rcppFilterSharedClonesByClusterHelper", (DL_FUNC) &_APackOfTheClones_rcppFilterSharedClonesByClusterHelper, 3},
-    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 4},
+    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 5},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppGetUniquePairsUpTo", (DL_FUNC) &_APackOfTheClones_rcppGetUniquePairsUpTo, 2},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},

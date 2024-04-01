@@ -68,6 +68,12 @@ is_positive_numeric <- function(x) {
     all(sapply(x, is_a_positive_numeric))
 }
 
+# TODO err message regex
+is_a_numeric_in_0_1 <- function(x) {
+    if(!is_a_numeric(x)) return(FALSE)
+    x > 0 && x < 1L
+}
+
 is_an_integer <- function(x) {
     if (identical(x, Inf) || identical(x, -Inf)) return(TRUE)
     if (!is_a_numeric(x)) return(FALSE)
@@ -140,6 +146,19 @@ get_err_type_str <- function(function_name_str) {
         sub("^is_(a|an)?_?", "", function_name_str)
     )
 
+    if (grepl("_in_", function_name_str)) {
+        type_words <- strsplit(type, " ")[[1]]
+        type <- paste(
+            paste(type_words[1:(length(type_words) - 2)], collapse = " "),
+            " (",
+            type_words %>% getlast(2),
+            ", ",
+            getlast(type_words),
+            ")",
+            sep = ""
+        )
+    }
+
     if (grepl("^is_list_of_.*$", function_name_str)) {
         return(paste(type, "s", sep = ""))
     }
@@ -171,6 +190,7 @@ join_error_strings <- function(error_string_vec) {
 
     paste(
         paste(error_string_vec[1:num_error_strings - 1], collapse = ", "),
-        getlast(error_string_vec), sep = ", or "
+        getlast(error_string_vec),
+        sep = ", or "
     )
 }

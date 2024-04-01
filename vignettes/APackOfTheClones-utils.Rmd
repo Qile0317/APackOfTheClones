@@ -40,7 +40,7 @@ pbmc <- get(data("combined_pbmc"))
 
 Here is a small collection of potentially useful functions to modify clonal expansion plots and work with clonal data that may be relevant.
 
-## Modifying the Clone Size Legend
+## Seperately Modifying the Clone Size Legend
 
 The `removeLegend` and `overlayLegend` functions both takes in an existing APackOfTheClones plot to either remove or change its position/aesthetics on the plot by directly modifying the ggplot object.
 

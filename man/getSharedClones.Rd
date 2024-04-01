@@ -10,9 +10,7 @@ getSharedClones(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
-  run_id = NULL,
-  clonesize_range = c(1L, Inf),
-  only_cluster = NULL
+  run_id = NULL
 )
 }
 \arguments{
@@ -61,19 +59,11 @@ in the following format:
 
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
-
-\item{clonesize_range}{integer vector of length 2. Sets the range of clone
-sizes to keep when counting shared clones. The first element is the lower
-bound (inclusive), and the second element is the upper bound (inclusive).
-Defaults to \code{c(1L, Inf)}.}
-
-\item{only_cluster}{integer vector indicating which clusters to keep when
-counting shared clones. Note that this cannot conflict with
-\code{exclude_cluster}.}
 }
 \value{
 a named list where each name is a clonotype, each element is a
 numeric indicating which seurat cluster(s) its in, in no particular order.
+If no shared clones are present, the output is an empty named list().
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

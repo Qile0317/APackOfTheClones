@@ -23,8 +23,8 @@
 #' data and has had a valid run of [RunAPOTC].
 #' @param show_shared_clones `r lifecycle::badge("experimental")` If `TRUE`,
 #' overlays straight lines between each clone that is common between clusters.
-#' @param only_link_cluster integer vector indicating which shared clone
-#' cluster(s) to include links from.
+#' @param only_link_cluster Optional integer indicating to only display clone
+#' links originating from this cluster.
 #' @param clone_link_width numeric. The width of the lines that connect shared
 #' clones. Defaults to `"auto"` which will estimate a reasonable value depending
 #' on circle sizes.
@@ -111,7 +111,7 @@ APOTCPlot <- function(
 	only_link_cluster = NULL, # FIXME
 	#linked_clonesize_range = c(2L, Inf), # options: float in (0,1], integer pair, single int (top x)
 	clone_link_width = "auto",
-	clone_link_color = "blend",
+	clone_link_color = "black",
 	clone_link_alpha = 0.5,
 
 	res = 360L,
@@ -136,14 +136,25 @@ APOTCPlot <- function(
 
 	verbose = TRUE
 ) {
-	# handle varargs and the run_id
+	# handle varargs, run_id, and typecheck
 	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
 	args$run_id <- infer_object_id_if_needed(args, varargs_list)
 	APOTCPlot_error_handler(args)
 
-	# get the apotc object and initialize the plot
+	# get the apotc object
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
+
+	# check only_link_cluster indexing
+	if (!is.null(only_link_cluster) &&
+		!is_valid_nonempty_cluster(apotc_obj, only_link_cluster)) {
+		stop(
+			"The cluster at index `only_link_cluster` = ", only_link_cluster,
+			" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
+		)
+	}
+
+	# initialize plot
 	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
 	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
 
@@ -218,42 +229,7 @@ APOTCPlot <- function(
 APOTCPlot_error_handler <- function(args) {
 	
 	check_apotc_identifiers(args)
-
-    if (!is_an_integer(args$res)) {
-        stop(call. = FALSE, "`res` must be an integer value of length 1.")
-    }
-
-    if (!is_a_character(args$linetype)) {
-        stop(call. = FALSE, "`linetype` must be a character of length 1.")
-    }
-
-    if (!is_a_logical(args$use_default_theme)) {
-        stop(call. = FALSE,
-			"`use_default_theme` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_logical(args$retain_axis_scales)) {
-        stop(call. = FALSE,
-			"`retain_axis_scales` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_logical(args$show_labels)) {
-        stop(call. = FALSE,
-			"`show_labels` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_numeric(args$label_size)) {
-        stop(call. = FALSE, "`label_size` must be a numeric value of length 1.")
-    }
-
-    if (!is_a_logical(args$add_size_legend)) {
-        stop(call. = FALSE,
-			"`add_size_legend` must be a logical value of length 1."
-		)
-    }
+	check_filtering_conditions(args)
 
 	# check object_id validity
 	if (!containsApotcRun(args$seurat_obj, args$run_id)) {
@@ -263,9 +239,26 @@ APOTCPlot_error_handler <- function(args) {
 		))
 	}
 
-    check_legend_params(args)
+	# typecheck clone link args
+	typecheck(args$show_shared_clones, is_a_logical)
+	typecheck(args$only_link_cluster, is_an_integer, is.null)
+	if (!should_estimate(args$clone_link_width))
+		typecheck(args$clone_link_width, is_a_positive_numeric)
+	typecheck(args$clone_link_color, is_a_character)
+	typecheck(args$clone_link_alpha, is_a_numeric)
 
-	check_filtering_conditions(args)
+	# typecheck visualization args
+	typecheck(args$res, is_an_integer)
+	typecheck(args$linetype, is_a_character)
+	typecheck(args$use_default_theme, is_a_logical)
+	typecheck(args$retain_axis_scales, is_a_logical)
+	typecheck(args$show_labels, is_a_logical)
+	typecheck(args$label_size, is_a_positive_numeric)
+
+	# check legend args
+	typecheck(args$add_size_legend, is_a_logical)
+	check_legend_params(args)
+
 }
 
 # helpers for getting plot dimensions quickly

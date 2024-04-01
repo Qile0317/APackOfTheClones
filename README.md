@@ -93,9 +93,13 @@ Most exported functions are named with `camelCase` with the exception of those t
 
 Comprehensive documentation, vignettes, and a changelog is deployed at <https://qile0317.github.io/APackOfTheClones/>
 
-There are also two vignettes within the package locally that should be read in order, and can be called with [```vignette("APackOfTheClones")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html) and [```vignette("APackOfTheClones-runs")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html).
+There are also the following vignettes that should be read in the following order:
 
-All exported functions has function level documentation which can be called with `?function`.
+- [```vignette("APackOfTheClones")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html)
+- [```vignette("APackOfTheClones-runs")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html)
+- [```vignette("APackOfTheClones-utils")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-utils.html)
+
+All exported functions has function level documentation.
 
 ## Contributing
 

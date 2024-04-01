@@ -29,6 +29,13 @@ Rcpp::List rcppRemoveUniqueClonesHelper(
     return Rcpp::List::create(filteredClonotypes, filteredClusters);
 }
 
+inline int numTrue(std::vector<bool>& v) {
+    int output = 0;
+    for (bool e : v) output += e;
+    return output;
+}
+
+//  todo FIXME
 // function to filter shared clones. outputs list(filtered_names, filtered_clusters)
 // [[Rcpp::export]]
 Rcpp::List rcppFilterSharedClonesByClusterHelper(
@@ -38,10 +45,50 @@ Rcpp::List rcppFilterSharedClonesByClusterHelper(
 ) {
     std::vector<std::vector<int>> filteredSharedClusters;
     std::vector<std::string> filteredclonotypes;
+    bool onlyOneCluster = numTrue(includeCluster) == 1;
+
+    for (int i = 0; i < (int) sharedClusters.size(); i++) {
+
+        for (int clusterIndex : sharedClusters[i]) {
+
+            if (!includeCluster[clusterIndex - 1]) {
+                continue;
+            }
+
+            filteredclonotypes.push_back(clonotypes[i]);
+
+            if (onlyOneCluster) {
+                filteredSharedClusters.push_back(sharedClusters[i]);
+                break;
+            }
+
+            int currLastFilteredIndex = filteredSharedClusters.size();
+            if (currLastFilteredIndex < i) {
+                filteredSharedClusters.push_back({clusterIndex});
+            } else {
+                filteredSharedClusters[filteredSharedClusters.size() - 1].push_back(clusterIndex);
+            }
+            
+        }
+
+        // if (!onlyOneCluster && filteredSharedClusters) {
+        // }
+    }
+
+    return Rcpp::List::create(filteredclonotypes, filteredSharedClusters);
+}
+
+Rcpp::List rcppFilterSharedClonesToOneCluster(
+    std::vector<std::vector<int>> sharedClusters, // one-indexed!
+    std::vector<std::string> clonotypes,
+    int includeClusterOneIndex
+) {
+    std::vector<std::vector<int>> filteredSharedClusters;
+    std::vector<std::string> filteredclonotypes;
 
     for (int i = 0; i < (int) sharedClusters.size(); i++) {
         for (int clusterIndex : sharedClusters[i]) {
-            if (!includeCluster[clusterIndex - 1]) {continue;}
+            if (clusterIndex != includeClusterOneIndex) continue;
             filteredSharedClusters.push_back(sharedClusters[i]);
             filteredclonotypes.push_back(clonotypes[i]);
             break;
@@ -68,11 +115,18 @@ public:
         Rcpp::List clusterLists,
         Rcpp::List rawCloneSizes,
         Rcpp::List sharedClonotypeClusters,
+        int oneIndexedSourceClusterIndex,
         double extraSpacing
     ) {
+
         LineLinkDataFrameFactory llDfFactory (
-            clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing
+            clusterLists,
+            rawCloneSizes,
+            sharedClonotypeClusters,
+            oneIndexedSourceClusterIndex,
+            extraSpacing
         );
+
         return llDfFactory.createOutputDataFrame();
     }
 
@@ -81,7 +135,8 @@ private:
     LineLinkDataFrameFactory(
         Rcpp::List clusterLists, // list of potentialy empty clusterlists
         Rcpp::List rawCloneSizes, // list of table objects, some may be empty
-        Rcpp::List sharedClonotypeClusters, // output from getSharedClones 
+        Rcpp::List sharedClonotypeClusters, // output from getSharedClones
+        int oneIndexedSourceClusterIndex,
         double extraSpacing
     ) {
         clusterListVector = createCppClusterListVector(clusterLists);
@@ -103,7 +158,12 @@ private:
                 currOneIndexedClusterIndicies.push_back(clusterIndex);
             }
 
-            addSharedCircleLinkInfo(currCircles, currOneIndexedClusterIndicies, extraSpacing);
+            addSharedCircleLinkInfo(
+                currCircles,
+                currOneIndexedClusterIndicies,
+                extraSpacing,
+                oneIndexedSourceClusterIndex
+            );
         }
     }
 
@@ -169,28 +229,37 @@ private:
     void addSharedCircleLinkInfo(
         std::vector<Circle>& circles,
         std::vector<int>& currOneIndexedClusterIndicies,
-        double extraSpacing
+        double extraSpacing,
+        int oneIndexedSourceClusterIndex
     ) {
         for (int i = 0; i < ((int) circles.size()) - 1; i++) {
             for (int j = i + 1; j < (int) circles.size(); j++) {
-                
-                // TODO for filtered ver, only add info if one of circles is from an origin cluster.
 
                 TwoDLine linkLine = TwoDLineFactory::createCircleLinkingLineWithSpacing(
                     circles[i], circles[j], extraSpacing
                 );
+
+                int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j); 
+                int rightCircleIndex = linkLine.matchRightCircleIndex(circles, i, j);
+
+                int leftCircleClusterIndex = currOneIndexedClusterIndicies[leftCircleIndex];
+                int rightCircleClusterIndex = currOneIndexedClusterIndicies[rightCircleIndex];
+
+                if (oneIndexedSourceClusterIndex != -1) {
+                    if (leftCircleClusterIndex != oneIndexedSourceClusterIndex
+                        && rightCircleClusterIndex != oneIndexedSourceClusterIndex) {
+                        continue;
+                    }
+                }
+
+                cluster1.push_back(leftCircleClusterIndex);
+                cluster2.push_back(rightCircleClusterIndex);
 
                 x1.push_back(linkLine.getLeftX());
                 y1.push_back(linkLine.getLeftY());
 
                 x2.push_back(linkLine.getRightX());
                 y2.push_back(linkLine.getRightY());
-
-                int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j);
-                int rightCircleIndex = i + j - leftCircleIndex;
-
-                cluster1.push_back(currOneIndexedClusterIndicies[leftCircleIndex]);
-                cluster2.push_back(currOneIndexedClusterIndicies[rightCircleIndex]);
 
             }
         }
@@ -213,9 +282,14 @@ Rcpp::DataFrame rcppConstructLineLinkDf(
     Rcpp::List clusterLists,
     Rcpp::List rawCloneSizes,
     Rcpp::List sharedClonotypeClusters,
+    int oneIndexedSourceClusterIndex,
     double extraSpacing
 ) {
     return LineLinkDataFrameFactory::constructFrom(
-        clusterLists, rawCloneSizes, sharedClonotypeClusters, extraSpacing
+        clusterLists,
+        rawCloneSizes,
+        sharedClonotypeClusters,
+        oneIndexedSourceClusterIndex,
+        extraSpacing
     );
 }

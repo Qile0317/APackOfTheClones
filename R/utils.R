@@ -35,7 +35,7 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
 
 contains_duplicates <- function(v) anyDuplicated(v) != 0
 
-# data convenience constructors
+# table/(list of table) utils
 
 create_empty_table <- function() {
     structure(
@@ -46,6 +46,40 @@ create_empty_table <- function() {
     )
 }
 
+strip_to_numeric <- function(table_obj) {
+    name_vec <- names(table_obj)
+    out <- as.numeric(table_obj)
+    names(out) <- name_vec
+    out
+}
+
+union_list_of_tables <- function(x, sort_decreasing = NULL) {
+
+    frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
+
+    for (curr_table in x) {
+        if (is_empty(curr_table)) next
+        curr_names <- names(curr_table)
+        for (el in enumerate(strip_to_numeric(curr_table))) {
+            frequency_map[[curr_names[ind(el)]]] %+=% val1(el) # nolint
+        }
+    }
+
+	x <- unlist(as.list(frequency_map))
+
+	if (is.null(sort_decreasing)) {
+		return(x)
+	}
+
+	sort(x, decreasing = sort_decreasing)
+}
+
+sort_each_table <- function(x, desc = FALSE) {
+    lapply(x, function(y) if (is_empty(y)) y else sort(y, decreasing = desc))
+}
+
+# data convenience constructors
+
 init_dataframe <- function(column_names, nrow, init_val = NA) {
     df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
     colnames(df) <- column_names
@@ -54,8 +88,13 @@ init_dataframe <- function(column_names, nrow, init_val = NA) {
 
 # hash::hash utilities
 
+create_hash_from_keys <- function(keys, init_vals = NULL) {
+    keys <- unique(keys)
+    hash::hash(keys, init_list(length(keys), init_vals))
+}
+
 create_valueless_vector_hash <- function(key, vector_type) {
-    hash::hash(key, init_list(length(key), vector_type(0)))
+    create_hash_from_keys(key, vector_type(0))
 }
 
 create_empty_int_hash <- function(keys) {
@@ -70,6 +109,17 @@ hash_from_tablelist <- function(tablelist) {
             hash::hash()
         }
     )
+}
+
+# hashset syntactic sugar using hash::hash
+
+as_set <- function(character_vector) {
+    create_hash_from_keys(character_vector, NA)
+}
+
+contains <- function(set, x) {
+    # x must be a character
+    identical(is.na(set[[x]]), logical(0))
 }
 
 # FIXME
@@ -140,6 +190,8 @@ name_latest_layer <- function(plt, new_name) {
     plt
 }
 
+# naming utils
+
 secretly_init_name <- function(x) {
     names(x) <- rep("", length(x))
     x
@@ -157,6 +209,11 @@ is_bound_between <- function(num, lowerbound, upperbound) {
 
 add <- function(x, y) x + y
 subtract <- function(x, y) x - y
+
+# special += operator with overhead from StackOverflow
+"%+=%" <- function(var, add_val) {
+    eval(call("<-", substitute(var), var + add_val), envir = parent.frame())
+}
 
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
@@ -293,14 +350,19 @@ init_list <- function(num_elements, init_val = NULL) {
     lapply(l, function(x) init_val)
 }
 
-getlast <- function(x) {
-    if (is.list(x)) return(x[[length(x)]])
-    x[length(x)]
+sort_list <- function(lst, decreasing = FALSE) {
+    lst[order(unlist(lst), decreasing = decreasing)]
+}
+
+getlast <- function(x, n = 1) {
+    index <- length(x) - n + 1
+    if (is.list(x)) return(x[[index]])
+    x[index]
 }
 
 # get first non empty element in a list, assuming it exists
-get_first_nonempty <- function(l) {
-    for (el in l) if (isnt_empty(el)) return(el)
+get_first_nonempty <- function(lst) {
+    for (el in lst) if (isnt_empty(el)) return(el)
 }
 
 # operate on non-empty elements of two lists of the same length

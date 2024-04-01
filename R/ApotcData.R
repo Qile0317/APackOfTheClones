@@ -192,10 +192,9 @@ convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 # checkers
 
 is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
-	if (!is_bound_between(cluster_ind, 1, get_num_clusters(apotc_obj))) {
-		return(FALSE)
-	}
-	isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
+	typecheck(cluster_ind, is_an_integer)
+	is_bound_between(cluster_ind, 1, get_num_clusters(apotc_obj)) &&
+		isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
 }
 
 # getters
@@ -225,8 +224,21 @@ get_raw_clone_sizes <- function(apotc_obj, as_hash = FALSE) {
 	hash_from_tablelist(apotc_obj@clone_sizes)
 }
 
-# S3 generic method
-get_clonotypes.ApotcData <- function(x) {
+# get all clone sizes as a single table
+# TODO unsure what happens with no clones
+get_aggregated_clone_sizes <- function(
+	apotc_obj, sort_decreasing = NULL, get_top = NULL
+) {
+	clone_sizes <- aggregate_clone_sizes(
+		get_raw_clone_sizes(apotc_obj), sort_decreasing
+	)
+
+	if (is.null(get_top)) return(clone_sizes)
+	filter_top_clones(clone_sizes, get_top)
+}
+
+# S3 generic method to get clonotypes
+get_unique_clonotypes <- function(x) {
 	unique(unlist(lapply(get_raw_clone_sizes(x), names)))
 }
 

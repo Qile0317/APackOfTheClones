@@ -21,7 +21,7 @@ vizAPOTC(
   show_shared_clones = FALSE,
   only_link_cluster = NULL,
   clone_link_width = "auto",
-  clone_link_color = "blend",
+  clone_link_color = "black",
   clone_link_alpha = 0.5,
   res = 360L,
   linetype = "blank",
@@ -113,8 +113,8 @@ clusters repulse each other per iteration, and vice versa.}
 \item{show_shared_clones}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} If \code{TRUE},
 overlays straight lines between each clone that is common between clusters.}
 
-\item{only_link_cluster}{integer vector indicating which shared clone
-cluster(s) to include links from.}
+\item{only_link_cluster}{Optional integer indicating to only display clone
+links originating from this cluster.}
 
 \item{clone_link_width}{numeric. The width of the lines that connect shared
 clones. Defaults to \code{"auto"} which will estimate a reasonable value depending
