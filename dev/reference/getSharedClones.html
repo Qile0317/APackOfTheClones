@@ -103,9 +103,7 @@ shared clones.</p>
 <span>  clonecall <span class="op">=</span> <span class="st">"strict"</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  clonesize_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>  only_cluster <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  run_id <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -166,26 +164,14 @@ in the following format:</p>
 <p>where if keyword arguments and extra_filter are underscore characters if
 there was no input for the <code>...</code> and <code>extra_filter</code> parameters.</p></dd>
 
-
-<dt>clonesize_range</dt>
-<dd><p>integer vector of length 2. Sets the range of clone
-sizes to keep when counting shared clones. The first element is the lower
-bound (inclusive), and the second element is the upper bound (inclusive).
-Defaults to <code>c(1L, Inf)</code>.</p></dd>
-
-
-<dt>only_cluster</dt>
-<dd><p>integer vector indicating which clusters to keep when
-counting shared clones. Note that this cannot conflict with
-<code>exclude_cluster</code>.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
 <p>a named list where each name is a clonotype, each element is a
-numeric indicating which seurat cluster(s) its in, in no particular order.</p>
+numeric indicating which seurat cluster(s) its in, in no particular order.
+If no shared clones are present, the output is an empty named list().</p>
     </div>
 
     <div class="section level2">

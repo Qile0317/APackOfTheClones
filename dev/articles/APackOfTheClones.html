@@ -335,8 +335,12 @@ likely already be working with fully subsetted seurat object, and
 APackOfTheClones functions can be directly applied in those cases. See
 the corresponding Seurat <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link"><code>vignette("essential_commands")</code></a>
 for details.</p>
-<!-- TODO clone link stuff -->
 </div>
+</div>
+<div class="section level2">
+<h2 id="visualizing-clonotypes-shared-amongst-clusters">Visualizing Clonotypes Shared Amongst Clusters<a class="anchor" aria-label="anchor" href="#visualizing-clonotypes-shared-amongst-clusters"></a>
+</h2>
+<p>TODO</p>
 </div>
 <div class="section level2">
 <h2 id="customization-of-visual-parameters">Customization of Visual Parameters<a class="anchor" aria-label="anchor" href="#customization-of-visual-parameters"></a>
@@ -349,8 +353,9 @@ for details.</p>
 scaling factor <span class="math inline">\(C \in (0, \infty)\)</span>
 and a radius scaling factor <span class="math inline">\(R \in (0,
 1]\)</span> with the following formula:</p>
-<p><span class="math display">\[r_{ij} = C\cdot(\sqrt{s_{ij}} - (1 -
-R))\]</span></p>
+<p><span class="math display">\[
+r_{ij} = C \cdot (\sqrt{s_{ij}} - (1 - R))
+\]</span></p>
 <p>Intuitively, <span class="math inline">\(C\)</span> represents how
 much to enlarge/shrink each radius geometrically relative to the clone
 size, whereas <span class="math inline">\(R\)</span> represents the
@@ -435,6 +440,9 @@ coordinates of the top leftmost corner of the legend.
 <code>add_legend_background</code> will display a rectangular background
 to the legend. The other parameters are less relevant and more details
 about these arguments can be read in the function documentation.</p>
+<p>Note that the functions <code>overlayLegend</code> and
+<code>removeLegend</code> also exist for adding/removing legends on a
+readily generated plot.</p>
 </div>
 <div class="section level3">
 <h3 id="other-modifications">Other Modifications<a class="anchor" aria-label="anchor" href="#other-modifications"></a>
