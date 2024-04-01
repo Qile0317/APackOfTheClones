@@ -7,6 +7,8 @@ quietly_test_that("getting shared clones works", {
 
 })
 
+# TODO following two tests unfinished
+
 test_that("filter_top_clones works", {
     clone_sizes <- getdata("get_clone_sizes", "raw_strict_clone_sizes")
     expect_equal(

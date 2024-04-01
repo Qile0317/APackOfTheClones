@@ -24,7 +24,7 @@ warning will be shown if any of the sequences are not present.}
 \code{TRUE} by default, which assigns a unique default ggplot color to each
 highlighted clone. If \code{FALSE}, each highlighted clone will retain its
 current color and no legend based on color is shown. A possible application
-here is to simply gague the distribution of any shared clone.
+here is to simply gauge the distribution of any shared clone.
 It can also indicate the color of each
 highlighted clone: if it is a character of length 1 and a valid color, all
 highlighted clones will be of that color. Else it must be a character vector

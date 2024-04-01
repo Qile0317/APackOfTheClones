@@ -53,6 +53,18 @@ strip_to_numeric <- function(table_obj) {
     out
 }
 
+# intersect tables, ***ASSUMING*** that for elements with common names,
+# they have the exact same value (frequency).
+intersect_common_tables <- function(t1, t2) {
+    t1[names(t1) %in% intersect(names(t1), names(t2))]
+}
+
+# vectorized version of intersect_common_tables, assuming lists are the
+# same length, and ignores if either table is empty
+intersect_common_table_lists <- function(l1, l2) {
+    operate_on_same_length_lists(intersect_common_tables, l1, l2)
+}
+
 union_list_of_tables <- function(x, sort_decreasing = NULL) {
 
     frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
@@ -563,4 +575,24 @@ user_get_reduc_obj <- function(seurat_obj, reduction) {
     if (!is_a_character(reduction))
         stop(call. = FALSE, "`reduction` must be one character")
     seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
+}
+
+# for the future - for two bit arrays, get A union neg B.
+create_cluster_truth_vector <- function(
+    only_cluster, exclude_cluster, num_clusters
+) {
+    if (is.null(only_cluster) && is.null(exclude_cluster)) {
+        return(rep(TRUE, num_clusters))
+    }
+
+    if (!is.null(exclude_cluster)) {
+        truth_indicies <- exclude_cluster
+    } else {
+        truth_indicies <- only_cluster
+    }
+    truth_val <- ifelse(!is.null(exclude_cluster), TRUE, FALSE)
+
+    truth_vec <- rep(truth_val, num_clusters)
+    truth_vec[as.integer(truth_indicies)] <- (!truth_val)
+    truth_vec
 }

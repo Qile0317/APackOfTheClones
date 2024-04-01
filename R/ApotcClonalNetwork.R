@@ -15,6 +15,19 @@
 #' shared clones.
 #'
 #' @inheritParams RunAPOTC
+#' @param top integer or numeric in (0, 1) - if not null, filters the output
+#' clones so that only the clonotypes with overall `top` frequency/count is
+#' returned. If the input is integer, it indicates to only include the top
+#' clones overall by frequency ranking. If a numeric in (0, 1), this indicates
+#' to include the `top` clones in that *proportion* of the frequencies.
+#' @param top_per_cl integer or numeric in (0, 1) - if not null, filters the
+#' output clones so that for each seurat cluster, only the clonotypes with the
+#' `top_per_cl` frequency/count is preserved when aggregating shared clones.
+#' If the input is integer, it indicates to only include the `top_per_cl` clones
+#' overall by frequency ranking per cluster. If a numeric in (0, 1), this
+#' indicates to include the `top_per_cl` clones in that *proportion* of the
+#' frequencies for each cluster. Note that if inputted in conjunction with
+#' `top`, it will get the *intersection* of the clonotypes filtered each way.
 #'
 #' @return a named list where each name is a clonotype, each element is a
 #' numeric indicating which seurat cluster(s) its in, in no particular order.
@@ -31,6 +44,12 @@
 #'     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
 #'     clonecall = "aa"
 #' )
+#' 
+#' getSharedClones(
+#'     combined_pbmc,
+#'     clonecall = "aa",
+#'     top_per_cl = 0.5
+#' )
 #'
 #' # doing a run and then getting the clones works too
 #' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run1", verbose = FALSE)
@@ -38,11 +57,15 @@
 #'
 getSharedClones <- function(
     seurat_obj,
+
     reduction_base = "umap",
     clonecall = "strict",
     ...,
     extra_filter = NULL,
-    run_id = NULL
+    run_id = NULL,
+
+    top = NULL,
+    top_per_cl = NULL
 ) {
     # handle inputs
     varargs_list <- list(...)
@@ -57,33 +80,18 @@ getSharedClones <- function(
     get_shared_clones(
         apotc_obj,
         zero_indexed = FALSE,
-        exclude_unique_clones = TRUE
+        exclude_unique_clones = TRUE,
+        top_clones = top,
+        top_per_cluster = top_per_cl
     )
 }
 
 getSharedClones_error_handler <- function() {
     args <- get_parent_func_args()
     check_apotc_identifiers(args)
-}
-
-# for the future - for two bit arrays, get A union neg B.
-create_cluster_truth_vector <- function(
-    only_cluster, exclude_cluster, num_clusters
-) {
-    if (is.null(only_cluster) && is.null(exclude_cluster)) {
-        return(rep(TRUE, num_clusters))
-    }
-
-    if (!is.null(exclude_cluster)) {
-        truth_indicies <- exclude_cluster
-    } else {
-        truth_indicies <- only_cluster
-    }
-    truth_val <- ifelse(!is.null(exclude_cluster), TRUE, FALSE)
-
-    truth_vec <- rep(truth_val, num_clusters)
-    truth_vec[as.integer(truth_indicies)] <- (!truth_val)
-    truth_vec
+    typecheck(args$top, is_an_integer, is_a_numeric_in_0_1, is.null)
+    typecheck(args$top_per_cl, is_an_integer, is_a_numeric_in_0_1, is.null)
+    # TOOD
 }
 
 # input: an ApotcData object
@@ -96,29 +104,16 @@ get_shared_clones <- function(
     zero_indexed = FALSE,
     exclude_unique_clones = TRUE,
     top_per_cluster = NULL,
-    top_clones = NULL # top clones = 1 creates some segfault that crashes R: not compatible with requested type list, int
+    top_clones = NULL #,
     # clone_size_lowerbound = 1L,
     # clone_size_upperbound = Inf,
     # TODO have heterogeneity bounds?
 ) {
-
-    clone_sizes <- get_raw_clone_sizes(apotc_obj)
-
-    if (!is.null(top_clones)) {
-        clone_sizes <- filter_top_clones(clone_sizes, top_clones)
-    }
-
-    if (!is.null(top_per_cluster)) {
-        clone_sizes <- filter_top_by_cluster(clone_sizes, top_per_cluster)
-    }
-
-    shared_clonotypes <- get_raw_shared_clones(clone_sizes, zero_indexed)
-
-    if (exclude_unique_clones) {
-        shared_clonotypes <- remove_unique_clones(shared_clonotypes)
-    }
-
-    shared_clonotypes
+    apotc_obj %>%
+        get_raw_clone_sizes() %>%
+        filter_clonesizes_if_needed(top_clones, top_per_cluster) %>%
+        get_raw_shared_clones(zero_indexed) %>%
+        remove_unique_clones_if(exclude_unique_clones)
 }
 
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
@@ -145,18 +140,50 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
     as.list(clonotype_map)
 }
 
-# TODO FIXME segfaults for top_clones=1
+filter_clonesizes_if_needed <- function(
+    clone_sizes, top_clones, top_per_cluster
+) {
+
+    if (!is.null(top_clones)) {
+        clone_sizes_by_top <- filter_top_clones(clone_sizes, top_clones)
+    }
+
+    if (!is.null(top_per_cluster)) {
+        clone_sizes_by_top_per_cl <- filter_top_by_cluster(
+            clone_sizes, top_per_cluster
+        )
+    }
+
+    if (!is.null(top_clones)) {
+        clone_sizes <- clone_sizes_by_top
+    }
+
+    if (!is.null(top_per_cluster)) {
+        clone_sizes <- intersect_common_table_lists(
+            clone_sizes, clone_sizes_by_top_per_cl
+        )
+    }
+
+    clone_sizes
+}
+
 filter_top_clones <- function(clone_sizes, top_clones) {
 
     top_clonotypes <- get_top_clonotypes(clone_sizes, top_clones)
 
     lapply(clone_sizes, function(x) {
+
         if (is_empty(x)) return(x)
-        filtered_x <- x[names(x) %in% top_clonotypes]
-        if (is_empty(filtered_x)) {
-            return(create_empty_table())
+
+        filtered_positions <- which(names(x) %in% top_clonotypes)
+
+        # this is for an edge case: (len(x) = 1) => (x[TRUE] != x) no idea why
+        if ((length(filtered_positions) == 1) && filtered_positions == 1) {
+            return(x)
         }
-        filtered_x
+
+        filtered_x <- x[filtered_positions]
+        if (is_empty(filtered_x)) create_empty_table() else filtered_x
     })
 }
 
@@ -234,13 +261,17 @@ overlay_shared_clone_links <- function(
 # takes in a named list of clonotypes as names, the elements are numeric vectors
 # indicating the seurat_cluster(s) they are in. If the numericvector is of length
 # 1, remove the element. This is done in Rcpp to achieve true linear runtime.
-remove_unique_clones <- function(shared_clonotypes) {
+remove_unique_clones_if <- function(shared_clonotypes, should_actually_remove) {
+
+    if (!should_actually_remove) return(shared_clonotypes)
+
     results <- rcppRemoveUniqueClonesHelper(
         names(shared_clonotypes), shared_clonotypes
     )
     unique_clone_list <- results[[2]]
     names(unique_clone_list) <- results[[1]]
     unique_clone_list
+
 }
 
 compute_line_link_df <- function(

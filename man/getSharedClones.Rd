@@ -10,7 +10,9 @@ getSharedClones(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
-  run_id = NULL
+  run_id = NULL,
+  top = NULL,
+  top_per_cl = NULL
 )
 }
 \arguments{
@@ -59,6 +61,21 @@ in the following format:
 
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
+
+\item{top}{integer or numeric in (0, 1) - if not null, filters the output
+clones so that only the clonotypes with overall \code{top} frequency/count is
+returned. If the input is integer, it indicates to only include the top
+clones overall by frequency ranking. If a numeric in (0, 1), this indicates
+to include the \code{top} clones in that \emph{proportion} of the frequencies.}
+
+\item{top_per_cl}{integer or numeric in (0, 1) - if not null, filters the
+output clones so that for each seurat cluster, only the clonotypes with the
+\code{top_per_cl} frequency/count is preserved when aggregating shared clones.
+If the input is integer, it indicates to only include the \code{top_per_cl} clones
+overall by frequency ranking per cluster. If a numeric in (0, 1), this
+indicates to include the \code{top_per_cl} clones in that \emph{proportion} of the
+frequencies for each cluster. Note that if inputted in conjunction with
+\code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.}
 }
 \value{
 a named list where each name is a clonotype, each element is a
@@ -85,6 +102,12 @@ getSharedClones(
     combined_pbmc,
     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
     clonecall = "aa"
+)
+
+getSharedClones(
+    combined_pbmc,
+    clonecall = "aa",
+    top_per_cl = 0.5
 )
 
 # doing a run and then getting the clones works too
