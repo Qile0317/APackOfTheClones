@@ -18,8 +18,8 @@ vizAPOTC(
   repulsion_threshold = 1,
   repulsion_strength = 1,
   max_repulsion_iter = 20L,
-  show_shared_clones = FALSE,
-  only_link_cluster = NULL,
+  show_shared = NULL,
+  only_link = NULL,
   clone_link_width = "auto",
   clone_link_color = "black",
   clone_link_alpha = 0.5,
@@ -110,11 +110,16 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
-\item{show_shared_clones}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} If \code{TRUE},
-overlays straight lines between each clone that is common between clusters.}
+\item{show_shared}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} The output of
+\link{getSharedClones} can be inputted here, and the resulting plot will overlay
+lines between clone circles if that clonotype is common between clusters.
+Note that the input \emph{\strong{must}} be generated from data in the correct
+\code{APackOfTheClones} run, and the behaviour is undefined otherwise and will
+likely error. The next 4 arguments allow for aesthetic customization of these
+line links.}
 
-\item{only_link_cluster}{Optional integer indicating to only display clone
-links originating from this cluster.}
+\item{only_link}{Optional integer indicating to only display clone
+links originating from this cluster if showing shared clones.}
 
 \item{clone_link_width}{numeric. The width of the lines that connect shared
 clones. Defaults to \code{"auto"} which will estimate a reasonable value depending

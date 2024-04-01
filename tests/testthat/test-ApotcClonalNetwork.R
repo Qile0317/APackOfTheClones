@@ -26,11 +26,12 @@ test_that("filter_top_by_cluster works", {
 })
 
 test_that("adding shared clone links works", {
+    data("combined_pbmc")
     expect_doppelganger(
         "default shared clone line link plot",
         vizAPOTC(
-            get(data("combined_pbmc")),
-            show_shared_clones = TRUE,
+            combined_pbmc,
+            show_shared = getSharedClones(combined_pbmc),
             seurat_clusters = c(3:5, 9, 13),
             add_size_legend = FALSE,
             retain_axis_scales = TRUE,

@@ -21,10 +21,15 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
-#' @param show_shared_clones `r lifecycle::badge("experimental")` If `TRUE`,
-#' overlays straight lines between each clone that is common between clusters.
-#' @param only_link_cluster Optional integer indicating to only display clone
-#' links originating from this cluster.
+#' @param show_shared `r lifecycle::badge("experimental")` The output of
+#' [getSharedClones] can be inputted here, and the resulting plot will overlay
+#' lines between clone circles if that clonotype is common between clusters.
+#' Note that the input ***must*** be generated from data in the correct
+#' `APackOfTheClones` run, and the behaviour is undefined otherwise and will
+#' likely error. The next 4 arguments allow for aesthetic customization of these
+#' line links.
+#' @param only_link Optional integer indicating to only display clone
+#' links originating from this cluster if showing shared clones.
 #' @param clone_link_width numeric. The width of the lines that connect shared
 #' clones. Defaults to `"auto"` which will estimate a reasonable value depending
 #' on circle sizes.
@@ -107,8 +112,8 @@ APOTCPlot <- function(
 	extra_filter = NULL,
 	run_id = NULL,
 
-	show_shared_clones = FALSE, # TODO an alternative vizualization not based on apotcplots. e.g. those used to visualize connectedness of graphs
-	only_link_cluster = NULL,
+	show_shared = NULL,
+	only_link = NULL,
 	clone_link_width = "auto",
 	clone_link_color = "black",
 	clone_link_alpha = 0.5,
@@ -144,15 +149,6 @@ APOTCPlot <- function(
 	# get the apotc object
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
-	# check only_link_cluster indexing
-	if (!is.null(only_link_cluster) &&
-		!is_valid_nonempty_cluster(apotc_obj, only_link_cluster)) {
-		stop(
-			"The cluster at index `only_link_cluster` = ", only_link_cluster,
-			" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
-		)
-	}
-
 	# initialize plot
 	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
 	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
@@ -182,12 +178,23 @@ APOTCPlot <- function(
 		)
 	}
 
-	if (show_shared_clones) {
+	if (isnt_empty(show_shared)) {
+
+		# check only_link indexing
+		if (!is.null(only_link) &&
+			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
+			warning(
+				"* The cluster at index `only_link` = ", only_link,
+				" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
+			)
+			only_link <- NULL
+		}
+
 		result_plot <- overlay_shared_clone_links(
 			apotc_obj = apotc_obj,
+			shared_clones = show_shared,
 			result_plot = result_plot,
-			only_cluster = only_link_cluster,
-			#clonesize_range = linked_clonesize_range,
+			only_cluster = only_link,
 			link_color_mode = clone_link_color,
 			link_width = clone_link_width,
 			link_alpha = clone_link_alpha,
@@ -239,8 +246,8 @@ APOTCPlot_error_handler <- function(args) {
 	}
 
 	# typecheck clone link args
-	typecheck(args$show_shared_clones, is_a_logical)
-	typecheck(args$only_link_cluster, is_an_integer, is.null)
+	#typecheck(args$show_shared, )
+	typecheck(args$only_link, is_an_integer, is.null)
 	if (!should_estimate(args$clone_link_width))
 		typecheck(args$clone_link_width, is_a_positive_numeric)
 	typecheck(args$clone_link_color, is_a_character)

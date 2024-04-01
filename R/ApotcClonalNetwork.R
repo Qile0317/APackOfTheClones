@@ -214,6 +214,7 @@ filter_top_by_cluster <- function(clone_sizes, top_clones) {
 # TODO - do some matrix visualization too, maybe use heatmap for clone sizes
 overlay_shared_clone_links <- function(
     apotc_obj,
+    shared_clones,
     result_plot,
     only_cluster, # if length 1, radiate from that cl. In future ver, between pairs
     link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
@@ -224,19 +225,7 @@ overlay_shared_clone_links <- function(
     link_mode = "default",
     extra_spacing = "auto" # not very relevant atm
 ) {
-    shared_clones <- get_shared_clones(
-        apotc_obj,
-        zero_indexed = FALSE,
-        exclude_unique_clones = TRUE
-    )
 
-    if (is_empty(shared_clones)) {
-        if (verbose) message(
-            "* no shared clonotypes with current filtering parameters"
-        )
-        return(result_plot)
-    }
-    
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
             apotc_obj, shared_clones, extra_spacing, link_mode, only_cluster
