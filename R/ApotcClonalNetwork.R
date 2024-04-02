@@ -44,7 +44,7 @@
 #'     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
 #'     clonecall = "aa"
 #' )
-#' 
+#'
 #' getSharedClones(
 #'     combined_pbmc,
 #'     clonecall = "aa",
@@ -64,8 +64,10 @@ getSharedClones <- function(
     extra_filter = NULL,
     run_id = NULL,
 
-    top = NULL,
+    top = NULL, # FIXME = 1 crashes session - probably due to no matches? test.
     top_per_cl = NULL
+
+    # TODO top_shared and top_sh_per_cl. again intersect everything
 ) {
     # handle inputs
     varargs_list <- list(...)
@@ -91,7 +93,7 @@ getSharedClones_error_handler <- function() {
     check_apotc_identifiers(args)
     typecheck(args$top, is_an_integer, is_a_numeric_in_0_1, is.null)
     typecheck(args$top_per_cl, is_an_integer, is_a_numeric_in_0_1, is.null)
-    # TOOD
+    # TODO
 }
 
 # input: an ApotcData object
@@ -104,7 +106,7 @@ get_shared_clones <- function(
     zero_indexed = FALSE,
     exclude_unique_clones = TRUE,
     top_per_cluster = NULL,
-    top_clones = NULL #,
+    top_clones = NULL #, # these are top in all so maybe theres no match - the top in shared clones is a diff story
     # clone_size_lowerbound = 1L,
     # clone_size_upperbound = Inf,
     # TODO have heterogeneity bounds?
@@ -144,6 +146,10 @@ filter_clonesizes_if_needed <- function(
     clone_sizes, top_clones, top_per_cluster
 ) {
 
+    if (is.null(top_clones) && is.null(top_per_cluster)) {
+        return(clone_sizes)
+    }
+
     if (!is.null(top_clones)) {
         clone_sizes_by_top <- filter_top_clones(clone_sizes, top_clones)
     }
@@ -156,15 +162,12 @@ filter_clonesizes_if_needed <- function(
 
     if (!is.null(top_clones)) {
         clone_sizes <- clone_sizes_by_top
+        if (is.null(top_per_cluster)) return(clone_sizes)
     }
 
-    if (!is.null(top_per_cluster)) {
-        clone_sizes <- intersect_common_table_lists(
-            clone_sizes, clone_sizes_by_top_per_cl
-        )
-    }
-
-    clone_sizes
+    intersect_common_table_lists(
+        clone_sizes, clone_sizes_by_top_per_cl
+    )
 }
 
 filter_top_clones <- function(clone_sizes, top_clones) {

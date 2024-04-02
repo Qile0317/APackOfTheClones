@@ -27,6 +27,20 @@ test_that("start_progress_bar works", {
 
 # test table utils
 
+test_that("convert_named_numeric_to_table works", {
+
+    expect_identical(
+        object = convert_named_numeric_to_table(c("b" = 10, "c" = 12)),
+        expected = table(rep(c("b", "c"), times = c(10, 12)))
+    )
+
+    expect_identical(
+        object = convert_named_numeric_to_table(c("b" = 10)),
+        expected = table(rep("b", times = 10))
+    )
+
+})
+
 test_that("union_list_of_tables works", {
     expect_equal(
         union_list_of_tables(list(table(letters[1:5]), table(letters[1:5]))),

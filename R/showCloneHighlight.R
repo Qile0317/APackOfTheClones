@@ -19,17 +19,21 @@
 #' highlighted clone. If `FALSE`, each highlighted clone will retain its
 #' current color and no legend based on color is shown. A possible application
 #' here is to simply gauge the distribution of any shared clone.
-#' It can also indicate the color of each
-#' highlighted clone: if it is a character of length 1 and a valid color, all
-#' highlighted clones will be of that color. Else it must be a character vector
-#' of the same length as `sequence`, with each color corresponding to the
-#' clone. Currently, the user must ensure `sequence` contains of unique
-#' characters.
+#' It can also indicate the color of each highlighted clone: if it is a
+#' character of length 1 and a valid color, all highlighted clones will be of
+#' that color. Else it must be a character vector of the same length as
+#' `sequence`, with each color corresponding to the clone. Here is a suitable
+#' place to use any palette function from the many other CRAN palatte packages
+#' such as `"viridis"` or `"RColorBrewer"`. Note that currently, the user must
+#' ensure `sequence` contains only unique characters.
 #' @param default_color A character of length 1 or `NULL` indicating the color
 #' of non-highlighted clones. If `NULL`, all un-highlighted sequences will
 #' retain their original color in `sc.data`. Else, if it is a character, it
 #' should be a valid color that all un-highlighted clones are. Defaults to the
 #' hexcode for gray.
+#' @param scale_bg A positive numeric. Scales the brightness value of each color
+#' of the non-highlighted clones by itself as a scaling factor. Defaults to 1
+#' which will not alter the current brightness.
 #' @param fill_legend logical indicating whether a ggplot legend of the "fill"
 #' of each clonotype should be displayed.
 #'
@@ -62,6 +66,7 @@ showCloneHighlight <- function(
     sequence,
     color_each = TRUE,
     default_color = "#808080",
+    scale_bg = 1,
     fill_legend = TRUE
 ) {
     apotc_highlight_clones_error_handler()
@@ -104,6 +109,9 @@ showCloneHighlight <- function(
             if (!is.null(default_color)) {
                 highlighted_ggplot_data$color[i] <- default_color
             }
+            highlighted_ggplot_data$color[i] <- scale_hex_brightness(
+                highlighted_ggplot_data$color[i], scale_bg
+            )
             next
         }
 
@@ -135,11 +143,12 @@ showCloneHighlight <- function(
 
 apotc_highlight_clones_error_handler <- function(args) {
     args <- get_parent_func_args()
-    args$apotc_ggplot |> check_is_apotc_ggplot()
-    args$sequence |> typecheck(is_character)
-    args$color_each |> typecheck(is_a_logical, is_a_character, is_character)
-    args$default_color |> typecheck(is_a_character, is.null)
-    args$fill_legend |> typecheck(is_a_logical)
+    check_is_apotc_ggplot(args$apotc_ggplot)
+    typecheck(args$sequence, is_character)
+    typecheck(args$color_each, is_a_logical, is_a_character, is_character)
+    typecheck(args$default_color, is_a_character, is.null)
+    typecheck(args$scale_bg, is_a_positive_numeric)
+    typecheck(args$fill_legend, is_a_logical)
 }
 
 gen_clone_color_vector <- function(color_each, sequence, plot_data) {

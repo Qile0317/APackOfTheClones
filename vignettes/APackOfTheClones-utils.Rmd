@@ -46,7 +46,7 @@ The `removeLegend` and `overlayLegend` functions both takes in an existing APack
 
 ## Getting Clone Sizes as a List
 
-`scRepertoire` counts and store the clone sizes in a column of the seurat object metadata. The `countCloneSizes` function returns this information in a list where each element is a table object corresponding to the clonotype frequencies for that cluster, and a cluster with no clonotypes will have an empty table at its index. It also allows for the same filtering arguments as seen in `RunAPOTC` and `vizAPOTC`.
+`scRepertoire` counts and store the clone sizes in a column of the seurat object metadata. The `countCloneSizes` function returns this information in a list where each element is a table object corresponding to the clonotype frequencies for that cluster, and a cluster with no clonotypes will have an empty table at its index. Alternatively, it can also get the aggregate clone sizes. It also allows for the same filtering arguments as seen in `RunAPOTC` and `vizAPOTC`.
 
 ## Getting Clonotypes Common Across Seurat Clusters
 

@@ -70,9 +70,9 @@ devtools::install_github("Qile0317/APackOfTheClones@dev")
 Legacy CRAN releases can be installed with
 
 ```R
-# ensure to have the remotes package with install.packages('remotes')
-# Replace 'X.X.X' with your desired version
-remotes::install_version(package = "APackOfTheClones", version = package_version('X.X.X'))
+# ensure to have the remotes package with install.packages("remotes")
+# Replace "X.X.X" with your desired version
+remotes::install_version(package = "APackOfTheClones", version = package_version("X.X.X"))
 ```
 
 The most final version of the version 0 release of APackOfTheClones lives in a static legacy branch on github named v0. To install, try

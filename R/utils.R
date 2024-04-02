@@ -53,6 +53,14 @@ strip_to_numeric <- function(table_obj) {
     out
 }
 
+convert_named_numeric_to_table <- function(named_numeric_vector) {
+    output <- as.integer(named_numeric_vector)
+    names(output) <- names(named_numeric_vector)
+    output <- as.table(output)
+    names(dimnames(output)) <- ""
+    output
+}
+
 # intersect tables, ***ASSUMING*** that for elements with common names,
 # they have the exact same value (frequency).
 intersect_common_tables <- function(t1, t2) {
@@ -65,7 +73,7 @@ intersect_common_table_lists <- function(l1, l2) {
     operate_on_same_length_lists(intersect_common_tables, l1, l2)
 }
 
-union_list_of_tables <- function(x, sort_decreasing = NULL) {
+union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
 
     frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
 
@@ -78,16 +86,17 @@ union_list_of_tables <- function(x, sort_decreasing = NULL) {
     }
 
 	x <- unlist(as.list(frequency_map))
-
-	if (is.null(sort_decreasing)) {
-		return(x)
-	}
-
-	sort(x, decreasing = sort_decreasing)
+	if (!is.null(sort_decreasing)) {
+        x <- sort(x, decreasing = sort_decreasing, method = "radix")
+    }
+	if (as_table) x <- convert_named_numeric_to_table(x)
+    x
 }
 
 sort_each_table <- function(x, desc = FALSE) {
-    lapply(x, function(y) if (is_empty(y)) y else sort(y, decreasing = desc))
+    lapply(x, function(y) {
+        if (is_empty(y)) y else sort(y, decreasing = desc, method = "radix")
+    })
 }
 
 # data convenience constructors
@@ -472,6 +481,10 @@ subsetSeuratMetaData <- function(
 # Returns the number of valid barcodes that are not NA's
 count_tcr_barcodes <- function(seurat_obj) {
   sum(!is.na(seurat_obj@meta.data[["barcode"]]))
+}
+
+count_umap_clusters <- function(seurat_obj) {
+    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 count_clones <- function(seurat_obj, clonecall) {

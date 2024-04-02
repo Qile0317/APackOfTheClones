@@ -6,6 +6,8 @@
 - Add `showCloneHighlight` to extend the scRepertoire analogue for an APackOfTheClones plot - comes with many options to have certain clones appear differently on an existing plot.
 - Add `overlayLegend` to overlay/modify current legend on a clonal expansion plot.
 - Add `removeLegend` to remove any existing legend on a clonal expansion plot.
+- Add `mergeCloneSizes` to merge clustered raw clone sizes into one table.
+- Added arguments in `countCloneSizes` to optionally NOT get clones sizes by cluster, and to optionally sort the output.
 - Added arguments in `AdjustAPOTC` to work with labels and their locations
 - Added argument `verbose` in `APOTCPlot` to display some additional visual cues.
 - Added argument `alpha` in `APOTCPlot` and `vizAPOTC` to change the alpha (transparency) of each circle.

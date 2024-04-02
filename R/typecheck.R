@@ -74,7 +74,7 @@ get_err_type_str <- function(function_name_str) {
     if (grepl("^is_output_of_.*$", function_name_str)) {
         type_words <- strsplit(type, " ")[[1]]
         return(paste(
-            paste(type_words[-1], collapse = " "),
+            paste(type_words[-length(type_words)], collapse = " "),
             " `",
             getlast(type_words),
             "()`",
@@ -185,7 +185,6 @@ is_positive_numeric <- function(x) {
     all(sapply(x, is_a_positive_numeric))
 }
 
-# TODO err message regex
 is_a_numeric_in_0_1 <- function(x) {
     if(!is_a_numeric(x)) return(FALSE)
     x > 0 && x < 1L
@@ -220,4 +219,9 @@ is_output_of_getSharedClones <- function(x) {
     if (is_empty(x)) return(TRUE)
     if (!check_is_list_and_elements(x, is_integer)) return(FALSE)
     is_character(names(x)) && length(names(x)) == length(x)
+}
+
+is_output_of_countCloneSizes <- function(x) {
+    if (is_empty(x)) return(TRUE)
+    check_is_list_and_elements(x, function(x) is_empty(x) | is.table(x))
 }
