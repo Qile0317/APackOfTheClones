@@ -138,11 +138,13 @@ AdjustAPOTC <- function(
 	# }
 
 	if (should_change(new_clone_scale_factor)) {
-		apotc_obj <- change_clone_scale(seurat_obj, args)
+		apotc_obj <- change_clone_scale(apotc_obj, new_clone_scale_factor)
+		# maybe change the params in the seurat object itself?
 	}
 
 	if (should_change(new_rad_scale_factor)) {
 		apotc_obj <- change_rad_scale(apotc_obj, new_rad_scale_factor)
+		# maybe change the params in the seurat object itself?
 	}
 
 	if (should_change(recolor_cluster)) {
@@ -184,67 +186,48 @@ AdjustAPOTC <- function(
 	setApotcData(seurat_obj, args$object_id, apotc_obj)
 }
 
-	# rename_label = NULL, # TODO add functionality to change all at once or modify all at once
-	# new_label = NULL,
-	# relocate_label = NULL,
-	# label_relocation_coord = NULL,
-	# nudge_label = NULL,
-	# label_nudge_vector = NULL,
-
 AdjustAPOTC_error_handler <- function(args) {
 
 	check_apotc_identifiers(args)
 
-	args$new_rad_scale_factor %>% typecheck(is_a_positive_numeric, is.null)
-	args$new_clone_scale_factor %>% typecheck(is_a_positive_numeric, is.null)
+	typecheck(args$new_rad_scale_factor, is_a_positive_numeric, is.null)
+	typecheck(args$new_clone_scale_factor, is_a_positive_numeric, is.null)
 
 	check_repulsion_params(args)
 
 	# TODO check lengths for a bunch of these
 
-	args$relocate_cluster %>% typecheck(is_integer, is.null)
-	args$relocation_coord %>% typecheck(
-		is_numeric_pair, is_list_of_numeric_pair, is.null
+	typecheck(args$relocate_cluster, is_integer, is.null)
+	typecheck(
+		args$relocation_coord, is_numeric_pair, is_list_of_numeric_pair, is.null
 	) 
 
 	# if (!is.null(args$relocation_coord) && (length(args$relocate_cluster) != length(args$relocation_coord))) {
 	# return("length of relocate_cluster must be the same as the length of relocation_coord")
 	# }
 
-	args$nudge_cluster %>% typecheck(is_integer, is.null)
-	args$nudge_vector %>% typecheck(
-		is_numeric_pair, is_list_of_numeric_pair, is.null
-	)
+	typecheck(args$nudge_cluster, is_integer, is.null)
+	typecheck(args$nudge_vector, is_numeric_pair, is_list_of_numeric_pair, is.null)
 
-	args$recolor_cluster %>% typecheck(is_integer, is.null)
-	args$new_color %>% typecheck(is_character, is.null)
+	typecheck(args$recolor_cluster, is_integer, is.null)
+	typecheck(args$new_color, is_character, is.null)
 
 	# TODO more checks
 }
 
-# TODO it should be more efficient + safer to mathematically transform all vals
-change_clone_scale <- function(seurat_obj, args) {
+change_clone_scale <- function(apotc_obj, new_factor) {
 
-	if (args$verbose) {
-		message("Repacking all clusters with new clone scale factor")
-	}
+	apotc_obj %>%
+		lapply_clusterlists(function(x) {
+			rcppRescaleClones(
+				rClusterlist = x,
+				newCloneScale = new_factor,
+				prevCloneScale = get_clone_scale_factor(apotc_obj),
+				prevRadScale = get_rad_scale_factor(apotc_obj)
+			)
+		}) %>%
+		set_clone_scale_factor(new_factor)
 
-	past_params <- find_seurat_command(
-		seurat_obj = seurat_obj,
-		func_name = "RunAPOTC",
-		id = args$object_id
-	)@params
-
-	args$apotc_obj@clone_scale_factor <- args$new_clone_scale_factor
-
-	# FIXME not the best approach - floating point comparison changes shapes
-	# TODO use a linear transformation instead: is it s(v_i - c) + c ?
-	circlepackClones(
-		apotc_obj = args$apotc_obj,
-		ORDER = past_params$order_clones,
-		try_place = past_params$try_place,
-		verbose = args$verbose
-	)
 }
 
 change_rad_scale <- function(apotc_obj, new_factor) {

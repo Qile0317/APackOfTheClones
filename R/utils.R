@@ -230,14 +230,25 @@ is_bound_between <- function(num, lowerbound, upperbound) {
 
 add <- function(x, y) x + y
 subtract <- function(x, y) x - y
-
-# special += operator with overhead from StackOverflow
-"%+=%" <- function(var, add_val) {
-    eval(call("<-", substitute(var), var + add_val), envir = parent.frame())
-}
+multiply <- function(x, y) x * y
+divide <- function(x, y) x / y
 
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
+
+# special mutation operators from StackOverflow
+
+create_mutator <- function(binary_operator) {
+    function(var, val) {
+        eval(
+            call("<-", substitute(var), binary_operator(var, val)),
+            envir = parent.frame()
+        )
+    }
+}
+
+"%+=%" <- create_mutator(add)
+"%*=%" <- create_mutator(multiply)
 
 # iteration related functions for readability
 

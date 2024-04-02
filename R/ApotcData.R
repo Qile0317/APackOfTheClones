@@ -307,7 +307,16 @@ set_metadata_filter_string <- function(apotc_obj, extra_filter) {
 	apotc_obj
 }
 
+set_clone_scale_factor <- function(apotc_obj, x) {
+	apotc_obj@clone_scale_factor <- x
+	apotc_obj
+}
+
 set_clusterlists <- function(apotc_obj, x) {
 	apotc_obj@clusters <- x
 	apotc_obj
+}
+
+lapply_clusterlists <- function(apotc_obj, f) {
+	set_clusterlists(apotc_obj, lapply(get_clusterlists(apotc_obj), f))
 }

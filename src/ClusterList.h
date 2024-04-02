@@ -6,13 +6,15 @@
 #include <unordered_map>
 
 #include "Circle.h"
+#include "math.h"
 
 class ClusterList {
 protected: // variables
 
     std::unordered_map<std::string, int> clonotypeIndex;
     std::vector<Circle> circles;
-    std::pair<double, double> centroid;
+    double centroidX;
+    double centroidY;
     double clRad;
     int numClones;
     bool isEmpty;
@@ -32,7 +34,8 @@ public: // constructors
 
         isEmpty = false;
         clRad = rClusterList["clRad"];
-        centroid = getRCentroid(rClusterList);
+        centroidX = getRCentroidX(rClusterList);
+        centroidY = getRCentroidY(rClusterList);
         clonotypeIndex = rCharactersToHashMap(rClusterList["clonotype"]);
 
         // get x,y,r and make into circles
@@ -47,9 +50,14 @@ public: // constructors
 
 private:
 
-    std::pair<double, double> getRCentroid(Rcpp::List rClusterList) {
+    double getRCentroidX(Rcpp::List rClusterList) {
         Rcpp::NumericVector centroidVector = rClusterList["centroid"];
-        return std::make_pair(centroidVector[0], centroidVector[1]);
+        return centroidVector[0];
+    }
+
+    double getRCentroidY(Rcpp::List rClusterList) {
+        Rcpp::NumericVector centroidVector = rClusterList["centroid"];
+        return centroidVector[1];
     }
 
     std::unordered_map<std::string, int> rCharactersToHashMap(Rcpp::CharacterVector v) {
@@ -60,7 +68,13 @@ private:
         return outputHashMap;
     }
 
-public:
+public: // static methods
+
+    static double toRadDecrease(double cloneScale, double radScale) {
+        return cloneScale * (1 - radScale);
+    }
+
+public: // general methods
 
     bool isEmptyClusterList() {
         return isEmpty;
@@ -70,9 +84,62 @@ public:
         return circles[clonotypeIndex[clonotype]];
     }
 
-    // getters
+    ClusterList& rescaleClones(double newCloneScale, double prevCloneScale, double prevRadScale) {
+
+        if (isEmpty) return *this;
+
+        double scaleFactor = newCloneScale / prevCloneScale;
+        double prevRadDecrease = toRadDecrease(prevCloneScale, prevRadScale);
+        double newRadDecrease = toRadDecrease(newCloneScale, prevRadScale);
+
+        for (int i = 0; i < (int) circles.size(); i++) {
+
+            TwoDVector newOrigin = TwoDVector::createCircleOrigin(circles[i])
+                .decreaseXYComponent(centroidX, centroidY)
+                .scaleMagnitude(scaleFactor)
+                .increaseXYComponent(centroidX, centroidY);
+
+            circles[i]
+                .setX(newOrigin.getX())
+                .setY(newOrigin.getY())
+                .increaseRad(prevRadDecrease)
+                .scaleRad(scaleFactor)
+                .decreaseRad(newRadDecrease);
+
+        }
+
+        return recalculateClusterRadius(newRadDecrease);
+    }
+
+private:
+
+    ClusterList& recalculateClusterRadius(double radDecrease) {
+
+        if (circles.size() == 1) {
+            clRad = circles[0].rad() + radDecrease;
+            return *this;
+        }
+
+        if (circles.size() == 2) {
+            clRad = (0.5 * (circles[0].rad() + circles[1].rad()));
+            return *this;
+        }
+
+        // imperfect cluster radius approximator - same as CirclePacker
+        int xmaxIndex = 0;
+        for (int i = 1; i < (int) circles.size(); i++) {
+            if (circles[i].x() > circles[xmaxIndex].x()) {
+                xmaxIndex = i;
+            }
+        }
+        clRad = circles[xmaxIndex].x() + circles[xmaxIndex].rad() - centroidX;
+        return *this;
+    }
+
+public: // getters
 
     Rcpp::List getRClusterList() {
+
         if (isEmptyClusterList()) {
             return Rcpp::List::create();
         }
@@ -81,13 +148,13 @@ public:
             Rcpp::Named("x") = getXVector(),
             Rcpp::Named("y") = getYVector(),
             Rcpp::Named("rad") = getRadiiVector(),
-            Rcpp::Named("clRad") = getApproximatedClusterRadius(),
             Rcpp::Named("centroid") = getRCentroidVector(),
+            Rcpp::Named("clRad") = getApproximatedClusterRadius(),
             Rcpp::Named("clonotype") = getClonotypeVector()
         );
     }
 
-    // FIXME no idea whats returned when isEmpty
+    // FIXME no idea whats returned when isEmpty for the following
 
     std::vector<double> getXVector() {
         std::vector<double> x(numClones);
@@ -114,7 +181,15 @@ public:
     }
 
     Rcpp::NumericVector getRCentroidVector() {
-        return Rcpp::NumericVector::create(centroid.first, centroid.second);
+        return Rcpp::NumericVector::create(centroidX, centroidY);
+    }
+
+    double getCentroidX() {
+        return centroidX;
+    }
+
+    double getCentroidY() {
+        return centroidY;
     }
 
     double getApproximatedClusterRadius() {

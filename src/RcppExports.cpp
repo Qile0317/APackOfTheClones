@@ -21,6 +21,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppRescaleClones
+Rcpp::List rcppRescaleClones(Rcpp::List rClusterlist, double newCloneScale, double prevCloneScale, double prevRadScale);
+RcppExport SEXP _APackOfTheClones_rcppRescaleClones(SEXP rClusterlistSEXP, SEXP newCloneScaleSEXP, SEXP prevCloneScaleSEXP, SEXP prevRadScaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type rClusterlist(rClusterlistSEXP);
+    Rcpp::traits::input_parameter< double >::type newCloneScale(newCloneScaleSEXP);
+    Rcpp::traits::input_parameter< double >::type prevCloneScale(prevCloneScaleSEXP);
+    Rcpp::traits::input_parameter< double >::type prevRadScale(prevRadScaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppRescaleClones(rClusterlist, newCloneScale, prevCloneScale, prevRadScale));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppRemoveUniqueClonesHelper
 Rcpp::List rcppRemoveUniqueClonesHelper(std::vector<std::string> clonotypes, std::vector<std::vector<int>> clusters);
 RcppExport SEXP _APackOfTheClones_rcppRemoveUniqueClonesHelper(SEXP clonotypesSEXP, SEXP clustersSEXP) {
@@ -156,6 +170,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_rcppGetEdgeCircleIndicies", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleIndicies, 1},
+    {"_APackOfTheClones_rcppRescaleClones", (DL_FUNC) &_APackOfTheClones_rcppRescaleClones, 4},
     {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
     {"_APackOfTheClones_rcppFilterSharedClonesByClusterHelper", (DL_FUNC) &_APackOfTheClones_rcppFilterSharedClonesByClusterHelper, 3},
     {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 5},

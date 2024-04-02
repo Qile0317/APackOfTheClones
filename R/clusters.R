@@ -1,7 +1,6 @@
 #script for functions to deal with centroids and cluster coords
 
-# All clusters of circles are referred to as a "clusterlist" in code comments
-# A clusterlist just refers to a simple R list of length five with:
+# All clusters of circles are "clusterlist" ADTs:
 # [["x"]] numeric vector of x coordinates of all circles
 # [["y"]] numeric vector of y coordinates of all circles
 # [["rad"]] numeric vector of radii of all circles
@@ -9,28 +8,16 @@
 # [["clRad"]] approximate radius of the cluster
 # [["clonotype"]] clonotype based on original clonecall
 
-# initializer for clusterlist - is_empty will return FALSE for this though!
-init_clusterlist <- function() {
-  list(
-    "x" = numeric(0),
-    "y" = numeric(0),
-    "rad" = numeric(0),
-    "centroid" = numeric(0),
-    "clRad" = numeric(0),
-    "clonotype" = character(0)
-  )
-}
-
 # getters for a single clusterlist
 
 get_x_coords <- function(l) l[[1]]
 get_y_coords <- function(l) l[[2]]
 get_radii <- function(l) l[[3]]
-get_centroid <- function(l) l$centroid
+get_centroid <- function(l) l[[4]]
 get_cluster_radius <- function(l) l[[5]]
-get_num_clones <- function(l) length(get_x_coords(l))
+get_clonotypes <- function(l) l$clonotype # not index due to legacy clusterlists
 
-get_clonotypes <- function(x) x[["clonotype"]]
+get_num_clones <- function(l) length(get_x_coords(l))
 
 contains_clonotypes <- function(x) !is.null(get_clonotypes(x))
 
@@ -147,13 +134,7 @@ move_cluster <- function(cluster, new_coord) {
 
 # function to GET a list of centroids from a list of clusterlists,
 read_centroids <- function(list_of_clusterlists) {
-  output_centroids <- init_list(length(list_of_clusterlists), list())
-  for (i in seq_along(list_of_clusterlists)) {
-    curr <- list_of_clusterlists[[i]]
-    if (is.null(get_centroid(curr)) || is_empty(get_centroid(curr))) {
-      next
-    }
-    output_centroids[[i]] <- get_centroid(curr)
-  }
-  output_centroids
+  lapply(list_of_clusterlists, function(x) {
+    if (is_empty(x)) list() else get_centroid(x)
+  })
 }

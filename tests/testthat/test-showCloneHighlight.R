@@ -13,6 +13,7 @@ test_that("showCloneHighlight works", {
         showCloneHighlight(c(
             "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
         ))
+
     # FIXME vdiffr fails on github actions due to missing legend but not locally
     expect_doppelganger(
         "showCloneHighlight_only_clusters_5_9",

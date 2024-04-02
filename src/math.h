@@ -25,6 +25,8 @@ inline double normalizeAngleAtan2(double radianAngle) {
     return std::abs(radianAngle) - ((1 + (radianAngle > 0)) * M_PI);
 }
 
+// representation of vector in R^2. getMagnitude is guaranteed to be
+// always positive, and getDirection is guaranteed to be in (-pi, pi)
 class TwoDVector {
 protected:
     double magnitude;
@@ -43,7 +45,7 @@ public:
 
     // factory constructors
 
-    static TwoDVector createFromXY(double x, double y) { // does it handle 0, 0?
+    static TwoDVector createFromXY(double x, double y) {
         return TwoDVector(eucDist(x, y), std::atan2(y, x));
     }
 
@@ -71,7 +73,7 @@ public:
     }
 
     TwoDVector operator-() const {
-        return createFromXY(-getX(), -getY());
+        return createFromXY(-getX(), -getY()); // can also use reverse direction
     }
 
     TwoDVector operator-(const TwoDVector& other) const {
@@ -82,12 +84,36 @@ public:
         return getX() == other.getX() && getY() == other.getY();
     }
 
+    // component coordinate mutation math
+
+    TwoDVector& increaseXYComponent(double xval, double yval) {
+        return decreaseXYComponent(-xval, -yval);
+    }
+
+    TwoDVector& decreaseXYComponent(double xval, double yval) {
+        return decreaseXComponent(xval).decreaseYComponent(yval);
+    }
+
+    TwoDVector& decreaseXComponent(double val) {
+        return copyFrom(createFromXY(getX() - val, getY()));
+    }
+
+    TwoDVector& decreaseYComponent(double val) {
+        return copyFrom(createFromXY(getX(), getY() - val));
+    }
+
+    // polar coordinate mutation math
+
     TwoDVector& increaseMagnitude(double val) {
         return setMagnitude(getMagnitude() + val);
     }
 
     TwoDVector& decreaseMagnitude(double val) {
         return increaseMagnitude(-val);
+    }
+
+    TwoDVector& scaleMagnitude(double val) {
+        return setMagnitude(getMagnitude() * val);
     }
  
     TwoDVector& reverseDirection() {

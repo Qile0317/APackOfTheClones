@@ -5,6 +5,10 @@ rcppGetEdgeCircleIndicies <- function(apotcPlotDataFrame) {
     .Call(`_APackOfTheClones_rcppGetEdgeCircleIndicies`, apotcPlotDataFrame)
 }
 
+rcppRescaleClones <- function(rClusterlist, newCloneScale, prevCloneScale, prevRadScale) {
+    .Call(`_APackOfTheClones_rcppRescaleClones`, rClusterlist, newCloneScale, prevCloneScale, prevRadScale)
+}
+
 rcppRemoveUniqueClonesHelper <- function(clonotypes, clusters) {
     .Call(`_APackOfTheClones_rcppRemoveUniqueClonesHelper`, clonotypes, clusters)
 }
