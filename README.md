@@ -100,7 +100,7 @@ There are also the following vignettes that should be read in the following orde
 - - [```vignette("APackOfTheClones-shared")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-shared.html)
 - [```vignette("APackOfTheClones-utils")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-utils.html)
 
-All exported functions has function level documentation.
+All exported functions have function level documentation.
 
 ## Contributing
 

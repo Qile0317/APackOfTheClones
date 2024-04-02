@@ -30,7 +30,7 @@ It can also indicate the color of each highlighted clone: if it is a
 character of length 1 and a valid color, all highlighted clones will be of
 that color. Else it must be a character vector of the same length as
 \code{sequence}, with each color corresponding to the clone. Here is a suitable
-place to use any palette function from the many other CRAN palatte packages
+place to use any palette function from the many other CRAN palette packages
 such as \code{"viridis"} or \code{"RColorBrewer"}. Note that currently, the user must
 ensure \code{sequence} contains only unique characters.}
 

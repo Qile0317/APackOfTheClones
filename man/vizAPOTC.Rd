@@ -114,7 +114,7 @@ clusters repulse each other per iteration, and vice versa.}
 \link{getSharedClones} can be inputted here, and the resulting plot will overlay
 lines between clone circles if that clonotype is common between clusters.
 Note that the input \emph{\strong{must}} be generated from data in the correct
-\code{APackOfTheClones} run, and the behaviour is undefined otherwise and will
+\code{APackOfTheClones} run, and the behavior is undefined otherwise and will
 likely error. The next 4 arguments allow for aesthetic customization of these
 line links.}
 

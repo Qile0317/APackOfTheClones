@@ -21,7 +21,7 @@ The list of clustered clonotype frequencies from \link{countCloneSizes}
 can be merged by this function to a frequency table of all clonotypes
 similar to the data that can be seen in the seurat object metadata.
 By default, this function sorts the table with largest clonotypes first,
-and this may be useful for quickly guaging which clonotypes are the most
+and this may be useful for quickly gauging which clonotypes are the most
 expanded overall.
 }
 \examples{

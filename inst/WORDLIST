@@ -2,7 +2,6 @@ AND'ed
 APOTCPlot
 Acknowledgements
 AdjustAPOTC
-Amongst
 ApotcData
 ApotcRun
 BCR
@@ -18,6 +17,7 @@ CTnt
 CTstrict
 Cardell
 Centroids
+Clonotype
 Clonotypes
 Codecov
 Contigs
@@ -68,6 +68,7 @@ combineExpression
 combineTCR
 contig
 contigs
+countCloneSizes
 customizable
 customizations
 cytotoxic
@@ -109,6 +110,7 @@ removeNA
 repell
 replicable
 replotting
+rescaling
 sc
 scBCR
 scRNA
