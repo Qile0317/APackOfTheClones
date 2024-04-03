@@ -47,14 +47,17 @@
 #'
 #' getSharedClones(
 #'     combined_pbmc,
-#'     orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
+#'     orig.ident = c("P17B", "P18B"), # a named subsetting parameter
 #'     clonecall = "aa"
 #' )
 #'
+#' # extract shared clones from a past RunAPOTC run
+#' combined_pbmc <- RunAPOTC(
+#'     combined_pbmc, run_id = "foo", verbose = FALSE
+#' )
+#'
 #' getSharedClones(
-#'     combined_pbmc,
-#'     clonecall = "aa",
-#'     top_per_cl = 0.5
+#'     combined_pbmc, run_id = "foo", top = 5
 #' )
 #'
 #' # doing a run and then getting the clones works too
@@ -99,11 +102,14 @@ getSharedClones <- function(
 getSharedClones_error_handler <- function() {
     args <- get_parent_func_args()
     check_apotc_identifiers(args)
-    typecheck(args$intop, is_an_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$intop_per_cl, is_an_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top, is_an_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top_per_cl, is_an_integer, is_a_numeric_in_0_1, is.null)
-    # TODO
+    typecheck(args$intop,
+        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
+    typecheck(args$intop_per_cl,
+        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
+    typecheck(args$top,
+        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
+    typecheck(args$top_per_cl,
+        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
 }
 
 # input: an ApotcData object
@@ -137,7 +143,7 @@ get_shared_clones <- function(
 
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 
-    clonotype_map <- clustered_clone_sizes %>%
+    shared_clonotype_map <- clustered_clone_sizes %>%
         unlist() %>%
         names() %>%
         create_empty_int_hash()
@@ -148,15 +154,15 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 
         for (clonotype in names(clustered_clone_sizes[[i]])) {
 
-            clonotype_map[[clonotype]] <- c(
-                clonotype_map[[clonotype]], i - zero_indexed
+            shared_clonotype_map[[clonotype]] <- c(
+                shared_clonotype_map[[clonotype]], i - zero_indexed
             )
 
         }
     }
 
     # FIXME if some keys are too long, it becomes ...
-    as.list(clonotype_map)
+    as.list(shared_clonotype_map)
 }
 
 filter_clonesizes_if_needed <- function(
@@ -218,7 +224,9 @@ filter_top_by_cluster <- function(clone_sizes, top_clones) {
         clone_table_handler <- function(x) x[1:min(top_clones, length(x))]
     }
 
-    lapply(clone_sizes, function(x) if (is_empty(x)) x else clone_table_handler(x))
+    lapply(
+        clone_sizes, function(x) if (is_empty(x)) x else clone_table_handler(x)
+    )
 }
 
 # takes in a named list of clonotypes as names, the elements are numeric vectors
@@ -237,7 +245,9 @@ remove_unique_clones_if <- function(shared_clonotypes, should_actually_remove) {
 
 }
 
-filter_shared_if_needed <- function(shared_clonotypes, clone_sizes, top, top_per_cl) {
+filter_shared_if_needed <- function(
+    shared_clonotypes, clone_sizes, top, top_per_cl
+) {
     shared_clonotypes %>%
         filter_top_shared(clone_sizes, top) %>%
         filter_top_shared_per_cl(clone_sizes, top_per_cl)
@@ -277,10 +287,10 @@ filter_top_shared_per_cl <- function(shared_clones, clone_sizes, top) {
 
     if (is.null(top)) return(shared_clones)
 
-    filtered_clones <- sort_each_table(clone_sizes, decreasing = TRUE) %>%
+    filtered_clones <- sort_each_table(clone_sizes, desc = TRUE) %>%
         lapply(function(x) {
             if (is_empty(x)) return(list())
-            names(filter_top_shared(shared_clones, x, top))
+            names(filter_top_shared_w_clone_table(shared_clones, x, top))
         }) %>%
         unlist()
 

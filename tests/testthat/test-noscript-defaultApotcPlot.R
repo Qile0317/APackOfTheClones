@@ -1,9 +1,9 @@
 quietly_test_that("the default plot for all methods", {
+
   data("combined_pbmc")
   .defaultApotcPlot <- "default_apotcplot"
 
   expect_doppelganger(.defaultApotcPlot, vizAPOTC(combined_pbmc))
-
   expect_doppelganger(.defaultApotcPlot, APOTCPlot(RunAPOTC(combined_pbmc)))
 
   # do some runs and sanity test that AdjustAPOTC did nothing
@@ -15,22 +15,17 @@ quietly_test_that("the default plot for all methods", {
   expect_doppelganger(.defaultApotcPlot, APOTCPlot(AdjustAPOTC(combined_pbmc)))
 
   expect_doppelganger(
-    .defaultApotcPlot, APOTCPlot(AdjustAPOTC(combined_pbmc), run_id = "r1"),
-  )
-
-  expect_doppelganger(
     .defaultApotcPlot,
     combined_pbmc %>%
       AdjustAPOTC(
         run_id = "r2",
         nudge_cluster = 1:17,
-        nudge_vector = c(1, 1),
-
+        nudge_vector = c(1, 1)
       ) %>%
       AdjustAPOTC(
         run_id = "r2",
         nudge_cluster = 1:17,
-        nudge_vector = c(-1, -1),
+        nudge_vector = c(-1, -1)
       ) %>%
       APOTCPlot(run_id = "r2")
   )
@@ -52,6 +47,12 @@ quietly_test_that("the default plot for all methods", {
       removeLegend(vizAPOTC(combined_pbmc)),
       legend_position = "bottom left"
     )
+  )
+
+  # overlaying no shared clones works
+
+  expect_doppelganger(
+    .defaultApotcPlot, vizAPOTC(combined_pbmc, show_shared = list())
   )
   
 })

@@ -1,6 +1,6 @@
 test_that("showCloneHighlight works", {
 
-    skip_on_ci() # there is no visually distinguishable difference
+    skip_on_ci() # there is no visually distinguishable difference in the artifact
 
     test_cl_5_9_highlighted_ggplot <- get(data("combined_pbmc")) %>%
         vizAPOTC(
@@ -14,7 +14,6 @@ test_that("showCloneHighlight works", {
             "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
         ))
 
-    # FIXME vdiffr fails on github actions due to missing legend but not locally
     expect_doppelganger(
         "showCloneHighlight_only_clusters_5_9",
         test_cl_5_9_highlighted_ggplot

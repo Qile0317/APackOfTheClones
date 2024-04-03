@@ -194,15 +194,6 @@ private:
         data[c3].x -= centroid_x; data[c3].y -= centroid_y;
     }
 
-    /*
-    FIXME: problem with the 2 following functions: different fpu precisions
-    on different architectures/compilers could lead to something like
-    non-deterministic results for the closest circle due to the comparison
-    of theoretically equivalent but practically slightly different floats.
-    This also affects when clusters are repacked with different clone scale
-    factors
-    */
-
     // finds the closest circle to the origin in the linked list containing c.
     int closest(int c) {
         int closest_c = c;

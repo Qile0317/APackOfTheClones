@@ -16,7 +16,7 @@
 #' the values are the actual clone sizes. Else, outputs just the aggregate clone
 #' sizes for all cells. Note that if `FALSE`, the output should be identical to
 #' that produced by `mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))`
-#' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts the
+#' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts each/the
 #' table by clonotype frequency with largest/smallest clones first, and if
 #' NULL, no order is guaranteed but the output is deterministic.
 #'
@@ -130,7 +130,9 @@ count_raw_clone_sizes <- function(
 #' expanded overall.
 #'
 #' @param clustered_clone_sizes the output of [countCloneSizes].
-#' @inheritParams countCloneSizes
+#' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts the
+#' table by clonotype frequency with largest/smallest clones first, and if
+#' NULL, no order is guaranteed but the output is deterministic.
 #'
 #' @return a table object
 #' @export
@@ -147,12 +149,12 @@ mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
     typecheck(sort_decreasing, is_a_logical, is.null)
 
     if (is_empty(clustered_clone_sizes)) {
-        warning("no clone are present")
+        warning("no clones are present")
         return(clustered_clone_sizes)
     }
 
     clustered_clone_sizes %>%
-        aggregate_clone_sizes(sort_decreasing) %>%
+        aggregate_clone_sizes(sort_decreasing) %>% # TODO check edgecases
         convert_named_numeric_to_table()
 
 }

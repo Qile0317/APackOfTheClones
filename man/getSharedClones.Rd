@@ -110,14 +110,17 @@ getSharedClones(combined_pbmc)
 
 getSharedClones(
     combined_pbmc,
-    orig.ident = c("P17B", "P18B"), # this is a named subsetting parameter
+    orig.ident = c("P17B", "P18B"), # a named subsetting parameter
     clonecall = "aa"
 )
 
+# extract shared clones from a past RunAPOTC run
+combined_pbmc <- RunAPOTC(
+    combined_pbmc, run_id = "foo", verbose = FALSE
+)
+
 getSharedClones(
-    combined_pbmc,
-    clonecall = "aa",
-    top_per_cl = 0.5
+    combined_pbmc, run_id = "foo", top = 5
 )
 
 # doing a run and then getting the clones works too

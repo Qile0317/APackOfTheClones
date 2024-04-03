@@ -154,8 +154,6 @@ public: // getters
         );
     }
 
-    // FIXME no idea whats returned when isEmpty for the following
-
     std::vector<double> getXVector() {
         std::vector<double> x(numClones);
         for (int i = 0; i < numClones; i++) {

@@ -143,9 +143,6 @@ contains <- function(set, x) {
     identical(is.na(set[[x]]), logical(0))
 }
 
-# FIXME
-hash_contains <- function(hash_obj, key) is.null(hash_obj[[key]])
-
 # readability functions
 
 is_empty <- function(inp) (length(inp) == 0L) || identical(inp, hash::hash())

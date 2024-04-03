@@ -1,9 +1,46 @@
 quietly_test_that("getting shared clones works", {
 
+    data("combined_pbmc")
+    expected_all_shared <- getdata("ApotcClonalNetwork", "shared_clones")
+
     expect_equal(
-        object = getSharedClones(get(data("combined_pbmc"))),
-        expected = getdata("ApotcClonalNetwork", "shared_clones")
+        object = getSharedClones(combined_pbmc),
+        expected = expected_all_shared
     )
+
+    # test top
+
+    expect_equal(
+        object = getSharedClones(combined_pbmc, top = 1L),
+        expected = expected_all_shared[2]
+    ) # TODO verify
+
+    expect_equal(
+        object = getSharedClones(combined_pbmc, top = 1 / 9),
+        expected = expected_all_shared[2]
+    )
+
+    expect_equal(
+        object = getSharedClones(combined_pbmc, top = 10L),
+        expected = expected_all_shared
+    )
+
+    # check everything = Inf does nothing
+
+    expect_equal(
+        object = getSharedClones(
+            combined_pbmc,
+            top = Inf,
+            top_per_cl = Inf,
+            intop = Inf,
+            intop_per_cl = Inf
+        ),
+        expected = expected_all_shared
+    )
+
+    # check empty shared clones
+
+    # TODO everything else needs verification
 
 })
 

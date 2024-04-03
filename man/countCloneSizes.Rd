@@ -50,7 +50,7 @@ the values are the actual clone sizes. Else, outputs just the aggregate clone
 sizes for all cells. Note that if \code{FALSE}, the output should be identical to
 that produced by \code{mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))}}
 
-\item{sort_decreasing}{a logical or NULL. If \code{TRUE}/\code{FALSE}, sorts the
+\item{sort_decreasing}{a logical or NULL. If \code{TRUE}/\code{FALSE}, sorts each/the
 table by clonotype frequency with largest/smallest clones first, and if
 NULL, no order is guaranteed but the output is deterministic.}
 }

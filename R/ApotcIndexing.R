@@ -6,8 +6,7 @@
 # assume that metadata_filter is a valid ADDITIONAL filter condition.
 # assume that varargs_list is a valid named list where each name is a column
 # and element is a string vector of which factors to INCLUDE
-# FIXME %in% can be used
-#
+# In hindsight %in% can be used but its now unessecary to make changes
 parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     if (!is_valid_args(varargs_list)) {
@@ -81,7 +80,6 @@ sort_and_join_conds_by_and <- function(filter_strings) {
 
 # functions for converting args of RunAPOTC to the apotc data sample id
 # stored under under @misc[["APackOfTheClones"]][[id]]
-# FIXME
 infer_object_id_if_needed <- function(args, varargs_list) {
     if (!should_compute(args$run_id)) return(args$run_id)
     
@@ -112,7 +110,7 @@ infer_object_id_if_needed <- function(args, varargs_list) {
 }
 
 utils::globalVariables(c(".idSepStr", ".idNullStr"))
-.idSepStr = ";"
+.idSepStr = ";" # not the best idea - `;` on its own is end of line.
 .idNullStr = "_"
 
 parse_to_object_id <- function(
