@@ -12,7 +12,9 @@ getSharedClones(
   extra_filter = NULL,
   run_id = NULL,
   top = NULL,
-  top_per_cl = NULL
+  top_per_cl = NULL,
+  intop = NULL,
+  intop_per_cl = NULL
 )
 }
 \arguments{
@@ -63,19 +65,27 @@ where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{top}{integer or numeric in (0, 1) - if not null, filters the output
-clones so that only the clonotypes with overall \code{top} frequency/count is
-returned. If the input is integer, it indicates to only include the top
-clones overall by frequency ranking. If a numeric in (0, 1), this indicates
-to include the \code{top} clones in that \emph{proportion} of the frequencies.}
+clones so that only the shared clonotypes with counts the top \code{top} count /
+proportion (for numeric in (0, 1) input) shared clones are kept.}
 
 \item{top_per_cl}{integer or numeric in (0, 1) - if not null, filters the
 output clones so that for each seurat cluster, only the clonotypes with the
-\code{top_per_cl} frequency/count is preserved when aggregating shared clones.
-If the input is integer, it indicates to only include the \code{top_per_cl} clones
-overall by frequency ranking per cluster. If a numeric in (0, 1), this
-indicates to include the \code{top_per_cl} clones in that \emph{proportion} of the
-frequencies for each cluster. Note that if inputted in conjunction with
+\code{top_per_cl} frequency/count is preserved when aggregating shared clones,
+in the same way as the above. Note that if inputted in conjunction with
 \code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.}
+
+\item{intop}{integer or numeric in (0, 1) - if not null, filters the raw
+clone sizes before computing the shared clonotypes so that only the
+clonotypes that have their overall size in the top \code{intop} largest sizes
+(if it is integer, else the \code{intop} proportion) are kept. To emphasize,
+this argument \emph{\strong{does not necessarily}} return the \code{top} shared clones
+and likely a little less, because this filters the raw clone sizes, of
+which, its very likely that not all those clones end up being shared.}
+
+\item{intop_per_cl}{integer or numeric in (0, 1) - if not null, filters
+the raw \emph{clustered} clone sizes before computing shared clones, so that
+for every clone in a seurat cluster, the top \code{intop_per_cl} count /
+proportion (for numeric in (0, 1) input) clones are kept.}
 }
 \value{
 a named list where each name is a clonotype, each element is a

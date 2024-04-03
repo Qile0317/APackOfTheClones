@@ -90,7 +90,7 @@ get_err_type_str <- function(function_name_str) {
         return(paste(type, "vector"))
     }
 
-    stop("dev error: pattern matching for typecheck failed")
+    warning("dev error: pattern matching for typecheck failed")
 }
 
 join_error_strings <- function(error_string_vec) {
@@ -223,5 +223,5 @@ is_output_of_getSharedClones <- function(x) {
 
 is_output_of_countCloneSizes <- function(x) {
     if (is_empty(x)) return(TRUE)
-    check_is_list_and_elements(x, function(x) is_empty(x) | is.table(x))
+    check_is_list_and_elements(x, is.table)
 }

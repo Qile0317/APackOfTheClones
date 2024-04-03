@@ -29,75 +29,6 @@ Rcpp::List rcppRemoveUniqueClonesHelper(
     return Rcpp::List::create(filteredClonotypes, filteredClusters);
 }
 
-inline int numTrue(std::vector<bool>& v) {
-    int output = 0;
-    for (bool e : v) output += e;
-    return output;
-}
-
-//  todo FIXME
-// function to filter shared clones. outputs list(filtered_names, filtered_clusters)
-// [[Rcpp::export]]
-Rcpp::List rcppFilterSharedClonesByClusterHelper(
-    std::vector<std::vector<int>> sharedClusters, // one-indexed!
-    std::vector<std::string> clonotypes,
-    std::vector<bool> includeCluster
-) {
-    std::vector<std::vector<int>> filteredSharedClusters;
-    std::vector<std::string> filteredclonotypes;
-    bool onlyOneCluster = numTrue(includeCluster) == 1;
-
-    for (int i = 0; i < (int) sharedClusters.size(); i++) {
-
-        for (int clusterIndex : sharedClusters[i]) {
-
-            if (!includeCluster[clusterIndex - 1]) {
-                continue;
-            }
-
-            filteredclonotypes.push_back(clonotypes[i]);
-
-            if (onlyOneCluster) {
-                filteredSharedClusters.push_back(sharedClusters[i]);
-                break;
-            }
-
-            int currLastFilteredIndex = filteredSharedClusters.size();
-            if (currLastFilteredIndex < i) {
-                filteredSharedClusters.push_back({clusterIndex});
-            } else {
-                filteredSharedClusters[filteredSharedClusters.size() - 1].push_back(clusterIndex);
-            }
-            
-        }
-
-        // if (!onlyOneCluster && filteredSharedClusters) {
-        // }
-    }
-
-    return Rcpp::List::create(filteredclonotypes, filteredSharedClusters);
-}
-
-Rcpp::List rcppFilterSharedClonesToOneCluster(
-    std::vector<std::vector<int>> sharedClusters, // one-indexed!
-    std::vector<std::string> clonotypes,
-    int includeClusterOneIndex
-) {
-    std::vector<std::vector<int>> filteredSharedClusters;
-    std::vector<std::string> filteredclonotypes;
-
-    for (int i = 0; i < (int) sharedClusters.size(); i++) {
-        for (int clusterIndex : sharedClusters[i]) {
-            if (clusterIndex != includeClusterOneIndex) continue;
-            filteredSharedClusters.push_back(sharedClusters[i]);
-            filteredclonotypes.push_back(clonotypes[i]);
-            break;
-        }
-    }
-
-    return Rcpp::List::create(filteredclonotypes, filteredSharedClusters);
-}
-
 // helper class for rcppConstructLineLinkDf
 class LineLinkDataFrameFactory {
 private:
@@ -246,8 +177,8 @@ private:
                 int rightCircleClusterIndex = currOneIndexedClusterIndicies[rightCircleIndex];
 
                 if (oneIndexedSourceClusterIndex != -1) {
-                    if (leftCircleClusterIndex != oneIndexedSourceClusterIndex
-                        && rightCircleClusterIndex != oneIndexedSourceClusterIndex) {
+                    if (leftCircleClusterIndex + 1 != oneIndexedSourceClusterIndex
+                        && rightCircleClusterIndex + 1 != oneIndexedSourceClusterIndex) {
                         continue;
                     }
                 }

@@ -179,11 +179,10 @@ APOTCPlot <- function(
 	}
 
 	if (isnt_empty(show_shared)) {
-
 		# check only_link indexing
 		if (!is.null(only_link) &&
 			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
-			warning(
+			warning(call. = FALSE,
 				"* The cluster at index `only_link` = ", only_link,
 				" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
 			)
@@ -246,7 +245,7 @@ APOTCPlot_error_handler <- function(args) {
 	}
 
 	# typecheck clone link args
-	#typecheck(args$show_shared, )
+	typecheck(args$show_shared, is_output_of_getSharedClones, is.null)
 	typecheck(args$only_link, is_an_integer, is.null)
 	if (!should_estimate(args$clone_link_width))
 		typecheck(args$clone_link_width, is_a_positive_numeric)

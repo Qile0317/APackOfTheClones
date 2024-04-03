@@ -40,7 +40,7 @@ pbmc <- get(data("combined_pbmc"))
 
 A novel experimental feature in this package is the ability to get, filter, and visualize clonotypes that are common across seurat clusters. Potential applications include the ability to quickly and intuitively gauge the rough clonal heterogeneity of certain clusters. Note that in scRepertoire, the `scRepertoire::clonalNetwork` function does something similar for the original dimensional reductions using arrows, though those display the aggregated degree of commonality between each cluster.
 
-Please read `vignette("APackOfTheClones")` and ideally also `vignette("APackOfTheClones-runs")` before reading this vignette.
+Please read `vignette("APackOfTheClones")` and ideally also `vignette("APackOfTheClones-runs")` before reading this vignette. One should then also see that although some of the visualizations in this vignette were produced with the `vizAPOTC` function, all visualizations can be replicated with `RunAPOTC` and `APOTCPlot` that both share parts of the arguments of `vizAPOTC`.
 
 ## Getting Clonotypes Common Across Seurat Clusters
 
@@ -55,11 +55,13 @@ getSharedClones(
     extra_filter = NULL,
     run_id = NULL,
     top = NULL,
-    top_per_cl = NULL
+    top_per_cl = NULL,
+    intop = NULL,
+    intop_per_cl = NULL
 )
 ```
 
-The last two arguments help allow additional filtering of the clonotypes: `top` and `top_per_cl`. The former will filter the clonotypes to only those ranked in the `top` frequencies, either as a proportion or number, while the latter does so for each individual cluster. These arguments are especially useful when an experiment has a really high number of single-cells, and the only clonotypes of interest are the most expanded ones.
+The last four optional arguments allow additional filtering of the shared clonotypes. Most notably, `top` will filter the resulting shared clonotypes to only those ranked in the `top` frequencies, either as a proportion or number. More details can be found in the function level documentation for the other arguments. They are especially useful when an experiment has a really high number of single-cells, and the only clonotypes of interest are the most expanded ones.
 
 Here is an example of the function in action, where a combined seurat object is loaded with the variable name `pbmc`:
 
@@ -103,9 +105,11 @@ vizAPOTC(
     pbmc,
     clonecall = "aa",
     show_shared = shared_clones_aa,
-    only_link = 4, # only link clonotypes from cluster 4
+    only_link = 3, # only link clonotypes from cluster 3
     clone_link_color = "blend",
-    clone_link_alpha = 0.8,
+    clone_link_width = 2,
+    clone_link_alpha = 0.9,
+    show_labels = TRUE,
     verbose = FALSE
 )
 ```
@@ -115,23 +119,33 @@ vizAPOTC(
 In the interest of inspecting the topmost expanded clonotypes, the topmost clones can be obtained, and the plot of clonal links can have its shared clones highlighted with a different palette than the default ggplot hues, and the non-highlighted sequences can even be slightly dimmed to emphasize the difference. The following is an example of highlighting and linking the top 4 most expanded clonotypes in `pbmc`:
 
 ```{r, shared_clones_links_highlight, echo = TRUE}
-# get shared amino acid shared clones:
-shared_clones_aa_top4 <- getSharedClones(pbmc, clonecall = "aa", top = 4)
+# For convenience, do an APackOfTheClones Run first
+pbmc <- RunAPOTC(pbmc, clonecall = "aa", verbose = FALSE)
 
-# generate the plot
-linked_apotc_plot <- vizAPOTC(
-    pbmc, clonecall = "aa",
-    show_shared = shared_clones_aa_top4
+# get shared amino acid shared clones for the last run -
+# note that the run_id can be replaced with `clonecall = "aa"`
+shared_clones_aa_top4 <- getSharedClones(
+  pbmc,
+  run_id = getLastApotcDataId(pbmc),
+  top = 4
+)
+
+# generate the unhighlighted plot
+linked_apotc_plot <- APOTCPlot(
+    pbmc,
+    show_shared = shared_clones_aa_top4,
+    verbose = FALSE
 )
 
 # highlight the top 4 clones with the viridis palette
+# also slightly dimming other clones
 library(viridis)
 showCloneHighlight(
     linked_apotc_plot,
     sequence = names(shared_clones_aa_top4),
     color_each = viridis(4),
     default_color = NULL,
-    scale_bg = 0.75
+    scale_bg = 0.95
 )
 ```
 

@@ -58,14 +58,15 @@ countCloneSizes <- function(
         clonecall = clonecall
     )
 
+    # TODO extract function for getting sorted internally from apotc
+
     if (!by_cluster) {
         return(mergeCloneSizes(clustered_clone_sizes, sort_decreasing))
     }
 
     if (!is.null(sort_decreasing)) {
-        clustered_clone_sizes <- lapply(
-            clustered_clone_sizes,
-            function(x) sort(x, decreasing = sort_decreasing, method = "radix")
+        clustered_clone_sizes <- sort_each_clone_size_table(
+            clustered_clone_sizes, sort_decreasing
         )
     }
 
@@ -182,4 +183,8 @@ aggregate_clone_sizes <- function(
 
 get_top_clonotypes <- function(clone_sizes, top_clones) {
     names(aggregate_clone_sizes(clone_sizes, top_clones = top_clones))
+}
+
+sort_each_clone_size_table <- function(x, decreasing) {
+    sort_each_table(x, decreasing)
 }

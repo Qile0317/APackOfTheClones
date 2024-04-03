@@ -27,7 +27,8 @@ highlighted clone. If \code{FALSE}, each highlighted clone will retain its
 current color and no legend based on color is shown. A possible application
 here is to simply gauge the distribution of any shared clone.
 It can also indicate the color of each highlighted clone: if it is a
-character of length 1 and a valid color, all highlighted clones will be of
+character of length 1 and a valid color, all highlighted clone+
+s will be of
 that color. Else it must be a character vector of the same length as
 \code{sequence}, with each color corresponding to the clone. Here is a suitable
 place to use any palette function from the many other CRAN palette packages
@@ -42,7 +43,10 @@ hexcode for gray.}
 
 \item{scale_bg}{A positive numeric. Scales the brightness value of each color
 of the non-highlighted clones by itself as a scaling factor. Defaults to 1
-which will not alter the current brightness.}
+which will not alter the current brightness. Note that if
+\code{color_each = FALSE} and \code{default_color = NULL}, this is equivalent to not
+highlighting any clones - in this case, it may be useful to alter \code{scale_bg}
+slightly so that the non-highlighted clones are darkened/brightened.}
 
 \item{fill_legend}{logical indicating whether a ggplot legend of the "fill"
 of each clonotype should be displayed.}

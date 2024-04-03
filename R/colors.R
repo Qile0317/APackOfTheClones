@@ -51,7 +51,7 @@ extract_and_add_colors <- function(apotc_obj, plot_df) {
 }
 
 #' @noRd
-#' @source https://stackoverflow.com/questions/649454/what-is-the-best-way-to-average-two-colors-that-define-a-linear-gradient#:~:text=NewColor%20%3D%20sqrt((R1%5E2%2BR2%5E2)/2)%2Csqrt((G1%5E2%2BG2%5E2)/2)%2Csqrt((B1%5E2%2BB2%5E2)/2)
+#' @source https://stackoverflow.com/questions/649454
 get_average_hex <- function(hex1, hex2) {
   grDevices::rgb(
     t((grDevices::col2rgb(hex1) + grDevices::col2rgb(hex2)) / 2),

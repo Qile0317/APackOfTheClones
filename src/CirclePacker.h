@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 #include <vector>
 #include "math.h"
-#include "ProgressBar.h"
 
  // A node in a linked-list of fixed size. Each node's data is a circle.
 class CircleNode {
@@ -59,13 +58,9 @@ private:
         bool _verbose = false
     ) {
         verbose = _verbose;
-        start_progress_bar();
-
         try_place = _try_place;
-
         num_nodes = (int) input_rad_vec.size();
         data.resize(num_nodes);
-
         for (int i = 0; i < num_nodes; i++) {
             data[i] = CircleNode(input_rad_vec[i]);
         }
@@ -77,10 +72,7 @@ private:
         bool _verbose = false
     ) {
         verbose = _verbose;
-        start_progress_bar();
-
         try_place = _try_place;
-
         num_nodes = (int) final_circle_nodes.size();
         data = final_circle_nodes;
     }
@@ -113,19 +105,6 @@ public: // main circle packing method, all helpers below.
     }
 
 private:
-    void progress_bar(int x, int max) {
-        if (verbose) {
-            ProgressBar::show(x, max);
-        }
-    }
-
-    void start_progress_bar() {
-        progress_bar(0, 1);
-    }
-
-    void finish_progress_bar() {
-        progress_bar(1, 1);
-    }
 
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {
@@ -357,16 +336,13 @@ private:
             clrad = 0.5 * (data[0].rad + data[1].rad);
         }
 
-        Rcpp::List out = Rcpp::List::create(
+        return Rcpp::List::create(
             Rcpp::Named("x") = x,
             Rcpp::Named("y") = y,
             Rcpp::Named("rad") = r,
             Rcpp::Named("centroid") = centroid,
             Rcpp::Named("clRad") = clrad
         );
-
-        finish_progress_bar();
-        return out;
     }
 
     // returns the R clusterlist from a packed vector of circles for at least 3 circles
@@ -388,16 +364,13 @@ private:
             }
         }
 
-        Rcpp::List out = Rcpp::List::create(
+        return Rcpp::List::create(
             Rcpp::Named("x") = x,
             Rcpp::Named("y") = y,
             Rcpp::Named("rad") = rad,
             Rcpp::Named("centroid") = centroid,
             Rcpp::Named("clRad") = x[max_x_ind] + rad[max_x_ind] - centroid[0]
         );
-
-        finish_progress_bar();
-        return out;
     }
 
     // fit a new circle (index j) adjacent to curr_circ and its neighbor
@@ -420,11 +393,6 @@ private:
 
         insert_circle(cm, cn, j);
         j++;
-
-        if (j <= num_nodes) {
-            progress_bar(j, num_nodes);
-        }
-
     }
 
     // general readability helpers

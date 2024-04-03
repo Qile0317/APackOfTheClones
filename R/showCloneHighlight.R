@@ -20,7 +20,8 @@
 #' current color and no legend based on color is shown. A possible application
 #' here is to simply gauge the distribution of any shared clone.
 #' It can also indicate the color of each highlighted clone: if it is a
-#' character of length 1 and a valid color, all highlighted clones will be of
+#' character of length 1 and a valid color, all highlighted clone+
+#' s will be of
 #' that color. Else it must be a character vector of the same length as
 #' `sequence`, with each color corresponding to the clone. Here is a suitable
 #' place to use any palette function from the many other CRAN palette packages
@@ -33,7 +34,10 @@
 #' hexcode for gray.
 #' @param scale_bg A positive numeric. Scales the brightness value of each color
 #' of the non-highlighted clones by itself as a scaling factor. Defaults to 1
-#' which will not alter the current brightness.
+#' which will not alter the current brightness. Note that if
+#' `color_each = FALSE` and `default_color = NULL`, this is equivalent to not
+#' highlighting any clones - in this case, it may be useful to alter `scale_bg`
+#' slightly so that the non-highlighted clones are darkened/brightened.
 #' @param fill_legend logical indicating whether a ggplot legend of the "fill"
 #' of each clonotype should be displayed.
 #'
@@ -71,20 +75,19 @@ showCloneHighlight <- function(
 ) {
     apotc_highlight_clones_error_handler()
 
-    if (identical(color_each, FALSE) && is.null(default_color)) {
-        warning(
-            "setting `color_each = FALSE` and `default_color = NULL` is ",
-            "equivalent to not highlighting any clones - please read the ",
-            "function level documentation for details."
-        )
-        return(apotc_ggplot)
-    }
-
     if (contains_duplicates(sequence)) {
         warning(
             "`sequence` contains duplicates - ",
-            "this may result in erroneous outputs"
+            "this probably will result in erroneous outputs"
         )
+    }
+
+    if (identical(color_each, FALSE) & is.null(default_color) & scale_bg == 1) {
+        warning(
+            "setting `color_each` to FALSE, `default_color` to NULL without ",
+            "altering `scale_bg` is equivalent to not highlighting anything"
+        )
+        return(apotc_ggplot)
     }
 
     # process data - probably should make sequences unique? for now assume unique
@@ -164,7 +167,7 @@ gen_clone_color_vector <- function(color_each, sequence, plot_data) {
     if (is.character(color_each)) {
         if (length(color_each) != num_sequences)
             stop(call. = FALSE,
-                "length of `color_each` doesn't match",
+                "length of `color_each` doesn't match ",
                 "the number of sequences to highlight"
             )
         return(color_each)

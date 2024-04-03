@@ -448,14 +448,10 @@ join_list_of_characters <- function(params, sep = "_") {
 
 # S3 method to represent vectors as strings
 
-repr_as_string <- function(input, ...) UseMethod("repr_as_string")
-
-repr_as_string.character <- function(input, ...) {
-    to_string_rep_with_insert(v = input, insert = "'")
-}
-
-repr_as_string.default <- function(input, ...) {
-    to_string_rep_with_insert(v = input, insert = "")
+repr_as_string <- function(input) {
+    insertchar <- ""
+    if (is.character(input)) insertchar <- "'"
+    to_string_rep_with_insert(v = input, insert = insertchar)
 }
 
 # represent vector as string - doesnt take into account of names!

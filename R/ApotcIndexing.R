@@ -46,25 +46,16 @@ is_valid_filter_str <- function(metadata_string) {
 }
 
 col_cond_vec_to_filter_str <- function(condition_vector, colname) {
-  UseMethod("col_cond_vec_to_filter_str")
-}
 
-col_cond_vec_to_filter_str.character <- function(
-    condition_vector, colname
-) {
-    col_conds_to_str_w_insert(
-        condition_vector = condition_vector, colname = colname,
-        insert_char = "'"
-    )
-}
+    insertchar <- ""
+    if (is.character(condition_vector)) insertchar <- "'"
 
-col_cond_vec_to_filter_str.default <- function(
-    condition_vector, colname
-) {
     col_conds_to_str_w_insert(
-        condition_vector = condition_vector, colname = colname,
-        insert_char = ""
+        condition_vector = condition_vector,
+        colname = colname,
+        insert_char = insertchar
     )
+    
 }
 
 col_conds_to_str_w_insert <- function(
