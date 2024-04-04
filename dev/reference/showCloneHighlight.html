@@ -91,7 +91,7 @@ right side that correspond to each (existing) clonotype.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">showCloneHighlight</span><span class="op">(</span></span>
 <span>  <span class="va">apotc_ggplot</span>,</span>
-<span>  <span class="va">sequence</span>,</span>
+<span>  <span class="va">clonotype</span>,</span>
 <span>  color_each <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  default_color <span class="op">=</span> <span class="st">"#808080"</span>,</span>
 <span>  scale_bg <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -106,7 +106,7 @@ right side that correspond to each (existing) clonotype.</p>
 <a href="vizAPOTC.html">vizAPOTC</a> of an APackOfTheClones plot to be highlighted on.</p></dd>
 
 
-<dt>sequence</dt>
+<dt>clonotype</dt>
 <dd><p>character vector of the sequence(s) to highlight. Note
 that it must be of the clonecall of the code that created the plot. A
 warning will be shown if any of the sequences are not present.</p></dd>
@@ -118,14 +118,13 @@ warning will be shown if any of the sequences are not present.</p></dd>
 highlighted clone. If <code>FALSE</code>, each highlighted clone will retain its
 current color and no legend based on color is shown. A possible application
 here is to simply gauge the distribution of any shared clone.
-It can also indicate the color of each highlighted clone: if it is a
-character of length 1 and a valid color, all highlighted clone+
-s will be of
-that color. Else it must be a character vector of the same length as
-<code>sequence</code>, with each color corresponding to the clone. Here is a suitable
+It can also indicate the uniform color of each highlighted clone: if it is
+a character of length 1, all highlighted clones will be of that color.
+Else it must be a character vector of the same length as
+<code>clonotype</code>, with each color corresponding to the clone. Here is a suitable
 place to use any palette function from the many other CRAN palette packages
 such as <code>"viridis"</code> or <code>"RColorBrewer"</code>. Note that currently, the user must
-ensure <code>sequence</code> contains only unique characters.</p></dd>
+ensure <code>clonotype</code> contains only unique characters.</p></dd>
 
 
 <dt>default_color</dt>
