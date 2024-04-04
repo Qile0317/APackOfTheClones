@@ -142,7 +142,7 @@ linked_apotc_plot <- APOTCPlot(
 library(viridis)
 showCloneHighlight(
     linked_apotc_plot,
-    sequence = names(shared_clones_aa_top4),
+    clonotype = names(shared_clones_aa_top4),
     color_each = viridis(4),
     default_color = NULL,
     scale_bg = 0.95

@@ -51,8 +51,9 @@
 #' plot. Else, the plot will simply have a blank background.
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales
 #' of the original reduction plot. However, it will only attempt to extend the
-#' axes and never shorten. This is recommended to be set to `TRUE` especially if
-#' working with subsetted versions of the clonal data.
+#' axes and never shorten. Users are recommended to set this to `TRUE`
+#' especially if working with subsetted versions of the clonal data to better
+#' preserve the geometric relation to the original dimensional reduction.
 #' @param alpha numeric. The alpha of the circles in (0, 1]. Defaults to 1.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
 #' defaulting to "C0, C1, ...".
@@ -179,6 +180,7 @@ APOTCPlot <- function(
 	}
 
 	if (isnt_empty(show_shared)) {
+		
 		# check only_link indexing
 		if (!is.null(only_link) &&
 			!is_valid_nonempty_cluster(apotc_obj, only_link)) {

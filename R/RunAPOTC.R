@@ -148,7 +148,7 @@ RunAPOTC <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
-    ..., # FIXME seurat_clusters = one number is bugged, only 1 row filtered. maybe use seurat's own filtering?
+    ...,
     extra_filter = NULL,
     run_id = NULL,
 
@@ -272,39 +272,19 @@ RunAPOTC_partial_arg_checker <- function(varargs_list = list()) {
     check_apotc_identifiers(args)
     check_filtering_conditions(args)
 
-    # Check if clone_scale_factor is numeric of length 1
-    if (
-        !is_a_numeric(args$clone_scale_factor)
-            && !should_estimate(args$clone_scale_factor)
-    ) {
-        stop(call. = FALSE,
-            "`clone_scale_factor` must be a numeric value of length 1."
-        )
+    if (!should_estimate(args$clone_scale_factor)) {
+        typecheck(args$clone_scale_factor, is_a_positive_numeric)
     }
 
-    # Check if rad_scale_factor is numeric of length 1
-    if (!is_a_numeric(args[["rad_scale_factor"]])) {
-        stop(call. = FALSE,
-            "`rad_scale_factor` must be a numeric value of length 1."
-        )
-    }
+    typecheck(args$rad_scale_factor, is_a_positive_numeric)
 
-    # Check if try_place is logical of length 1
-    if (!is_a_logical(args[["try_place"]])) {
-        stop(call. = FALSE, "`try_place` must be a logical value of length 1.")
-    }
+    typecheck(args$try_place, is_a_logical)
 
     check_repulsion_params(args)
 
-    # Check if override is logical of length 1
-    if (!is_a_logical(args[["override"]])) {
-        stop(call. = FALSE, "`override` must be a logical value of length 1.")
-    }
+    typecheck(args$override, is_a_logical)
 
-    # Check if verbose is logical of length 1
-    if (!is_a_logical(args[["verbose"]])) {
-        stop(call. = FALSE, "`verbose` must be a logical value of length 1.")
-    }
+    typecheck(args$verbose, is_a_logical)
 
 }
 
@@ -314,17 +294,10 @@ check_apotc_identifiers <- function(args) {
         stop(call. = FALSE, "`seurat_obj` must be a Seurat object.")
     }
 
-	if (!is.null(args$reduction_base) && !is_a_character(args$reduction_base)) {
-		stop(call. = FALSE, "`reduction_base` must be a character of length 1.")
-	}
-    
-	if (!is.null(args$clonecall) && !is_a_character(args$clonecall)) {
-		stop(call. = FALSE, "`clonecall` must be a character of length 1.")
-	}
-
-	if (!is.null(args$extra_filter) && !is_a_character(args$extra_filter)) {
-		stop(call. = FALSE, "`extra_filter` must be a character or NULL of length 1.")
-	}
+    # TODO nulls shouldnt be allowed in some cases
+    typecheck(args$reduction_base, is_a_character, is.null)
+    typecheck(args$clonecall, is_a_character, is.null)
+    typecheck(args$extra_filter, is_character, is.null)
 
 }
 
@@ -347,56 +320,14 @@ check_filtering_conditions <- function(args, frame_level = 2) {
 }
 
 check_repulsion_params <- function(args) {
-    # Check if repulse is logical of length 1
-    if (!is_a_logical(args[["repulse"]])) {
-        stop(call. = FALSE, "`repulse` must be a logical value of length 1.")
-    }
-
+    typecheck(args$repulse, is_a_logical)
     if (!args$repulse) return()
-
-    # Check if repulsion_threshold is numeric of length 1
-    if (!is_a_numeric(args[["repulsion_threshold"]])) {
-        stop(call. = FALSE,
-            "`repulsion_threshold` must be a numeric value of length 1."
-        )
-    }
-    if (args[["repulsion_threshold"]] < 0) {
-        stop(call. = FALSE, "`repulsion_threshold` has to be a positive number")
-    }
-
-    # Check if repulsion_strength is numeric of length 1
-    if (!is_a_numeric(args[["repulsion_strength"]])) {
-        stop(call. = FALSE,
-            "`repulsion_strength` must be a numeric value of length 1."
-        )
-    }
-    if (args[["repulsion_strength"]] <= 0) {
-        stop(call. = FALSE, "`repulsion_strength` has to be a positive number")
-    }
-
-    # Check if max_repulsion_iter is an integer of length 1
-    if (!is_an_integer(args[["max_repulsion_iter"]])) {
-        stop(call. = FALSE,
-            "`max_repulsion_iter` must be an integer value of length 1."
-        )
-    }
-    if (args[["max_repulsion_iter"]] <= 0) {
-        stop(call. = FALSE, "`max_repulsion_iter` has to be a positive number")
-    }
+    typecheck(args$repulsion_threshold, is_a_positive_numeric)
+    typecheck(args$repulsion_strength, is_a_positive_numeric)
+    typecheck(args$max_repulsion_iter, is_a_positive_integer)
 }
 
 RunAPOTC_parameter_checker <- function(args) {
-    if (args[["clone_scale_factor"]] <= 0) {
-		stop(call. = FALSE,
-            "`clone_scale_factor` has to be a positive real number"
-        )
-	}
-
-    if (args[["rad_scale_factor"]] <= 0 || args[["rad_scale_factor"]] > 1) {
-		stop(call. = FALSE,
-            "`rad_scale_factor` has to be a positive real number in (0, 1]"
-        )
-	}
 
     if (!args$override && containsApotcRun(args$seurat_obj, args$obj_id)) {
         stop(call. = FALSE, paste(

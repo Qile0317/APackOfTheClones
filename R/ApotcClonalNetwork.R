@@ -153,13 +153,10 @@ filter_top_sizes_if_needed <- function(
 }
 
 filter_top_clones <- function(clone_sizes, top_clones) {
-
     top_clonotypes <- get_top_clonotypes(clone_sizes, top_clones)
-
     clone_sizes %>% lapply(function(x) {
         if (is_empty(x)) x else as_table(x[names(x) %in% top_clonotypes])
     })
-
 }
 
 # will sort clones - could make it not sort but shouldnt matter
