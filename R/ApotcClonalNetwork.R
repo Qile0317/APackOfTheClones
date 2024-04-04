@@ -37,7 +37,7 @@
 #'
 #' @return a named list where each name is a clonotype, each element is a
 #' numeric indicating which seurat cluster(s) its in, in no particular order.
-#' If no shared clones are present, the output is an empty named list().
+#' If no shared clones are present, the output is an empty list.
 #' @export
 #'
 #' @examples
@@ -75,7 +75,7 @@ getSharedClones <- function(
     top = NULL,
     top_per_cl = NULL,
 
-    intop = NULL, # FIXME = 1 crashes session - probably due to no matches? TODO test.
+    intop = NULL,
     intop_per_cl = NULL
 ) {
     # handle inputs
@@ -125,23 +125,84 @@ get_shared_clones <- function(
     in_top_per_cluster = NULL,
     top_shared = NULL,
     top_shared_per_cluster = NULL
-    # clone_size_lowerbound = 1L,
-    # clone_size_upperbound = Inf,
+    # min_size = NULL,
+    # min_size_per_cluster = NULL
     # TODO have heterogeneity bounds?
 ) {
 
     raw_clone_sizes <- get_raw_clone_sizes(apotc_obj)
 
     raw_clone_sizes %>%
-        filter_clonesizes_if_needed(in_top_clones, in_top_per_cluster) %>%
+        filter_top_sizes_if_needed(in_top_clones, in_top_per_cluster) %>%
+        # filter_min_clones_if_needed(min_size, min_size_per_cluster) %>% # again need to union
         get_raw_shared_clones(zero_indexed) %>%
         remove_unique_clones_if(exclude_unique_clones) %>%
         filter_shared_if_needed(
             raw_clone_sizes, top_shared, top_shared_per_cluster
-        )
+        ) %>%
+        unname_if_empty()
 }
 
+filter_top_sizes_if_needed <- function(
+    clone_sizes, top_clones, top_per_cluster
+) {
+    clone_sizes %>% filter_clonesize_2way_if_need(
+        filter_top_clones, top_clones,
+        filter_top_by_cluster, top_per_cluster
+    )
+}
+
+filter_top_clones <- function(clone_sizes, top_clones) {
+
+    top_clonotypes <- get_top_clonotypes(clone_sizes, top_clones)
+
+    clone_sizes %>% lapply(function(x) {
+        if (is_empty(x)) x else as_table(x[names(x) %in% top_clonotypes])
+    })
+
+}
+
+# will sort clones - could make it not sort but shouldnt matter
+filter_top_by_cluster <- function(clone_sizes, top_clones) {
+
+    if (is_list_of_empty_tables(clone_sizes)) return(clone_sizes)
+
+    clone_sizes <- sort_each_table(clone_sizes, desc = TRUE)
+
+    if (is_an_integer(top_clones)) {
+        clone_table_handler <- function(x) {
+            as_table(x[1:min(top_clones, length(x))])
+        }
+    }
+    else if (is_a_numeric_in_0_1(top_clones)) {
+        clone_table_handler <- function(x) {
+            top_index <- round(length(x) * top_clones)
+            if (top_index == 0) return(create_empty_table())
+            as_table(x[1:top_index])
+        }
+    }
+
+    lapply(
+        clone_sizes, function(x) if (is_empty(x)) x else clone_table_handler(x)
+    )
+}
+
+# # TODO
+# filter_min_clones_if_needed <- function(
+#     clone_sizes, min_size, min_size_per_cluster
+# ) {
+#     clone_sizes %>% filter_clonesize_2way_if_need(
+
+#     )
+# }
+
+# filter_min_clones <- function(clone_sizes, min_size) { # integer or float in (0,1)
+
+# }
+
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
+
+    if (is_list_of_empty_tables(clustered_clone_sizes)) return(list())
 
     shared_clonotype_map <- clustered_clone_sizes %>%
         unlist() %>%
@@ -165,76 +226,14 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
     as.list(shared_clonotype_map)
 }
 
-filter_clonesizes_if_needed <- function(
-    clone_sizes, top_clones, top_per_cluster
-) {
-
-    if (is.null(top_clones) && is.null(top_per_cluster)) {
-        return(clone_sizes)
-    }
-
-    if (!is.null(top_clones)) {
-        clone_sizes_by_top <- filter_top_clones(clone_sizes, top_clones)
-    }
-
-    if (!is.null(top_per_cluster)) {
-        clone_sizes_by_top_per_cl <- filter_top_by_cluster(
-            clone_sizes, top_per_cluster
-        )
-    }
-
-    if (!is.null(top_clones)) {
-        clone_sizes <- clone_sizes_by_top
-        if (is.null(top_per_cluster)) return(clone_sizes)
-    }
-
-    intersect_common_table_lists(
-        clone_sizes, clone_sizes_by_top_per_cl
-    )
-}
-
-filter_top_clones <- function(clone_sizes, top_clones) {
-
-    top_clonotypes <- get_top_clonotypes(clone_sizes, top_clones)
-
-    lapply(clone_sizes, function(x) {
-
-        if (is_empty(x)) return(x)
-
-        filtered_positions <- which(names(x) %in% top_clonotypes)
-
-        # this is for an edge case: (len(x) = 1) => (x[TRUE] != x) no idea why
-        if ((length(filtered_positions) == 1) && filtered_positions == 1) {
-            return(x)
-        }
-
-        filtered_x <- x[filtered_positions]
-        if (is_empty(filtered_x)) create_empty_table() else filtered_x
-    })
-}
-
-# will sort clones - maybe undesirable?
-filter_top_by_cluster <- function(clone_sizes, top_clones) {
-
-    clone_sizes <- sort_each_table(clone_sizes, desc = TRUE)
-
-    if (is_a_numeric_in_0_1(top_clones)) {
-        clone_table_handler <- function(x) x[1:round(length(x) * top_clones)]
-    } else if (is_an_integer(top_clones)) {
-        clone_table_handler <- function(x) x[1:min(top_clones, length(x))]
-    }
-
-    lapply(
-        clone_sizes, function(x) if (is_empty(x)) x else clone_table_handler(x)
-    )
-}
-
 # takes in a named list of clonotypes as names, the elements are numeric vectors
 # indicating the seurat_cluster(s) they are in. If the numericvector is of length
 # 1, remove the element. This is done in Rcpp to achieve true linear runtime.
 remove_unique_clones_if <- function(shared_clonotypes, should_actually_remove) {
 
-    if (!should_actually_remove) return(shared_clonotypes)
+    if (!should_actually_remove || is_empty(shared_clonotypes)) {
+        return(shared_clonotypes)
+    }
 
     results <- rcppRemoveUniqueClonesHelper(
         names(shared_clonotypes), shared_clonotypes
@@ -255,7 +254,7 @@ filter_shared_if_needed <- function(
 
 filter_top_shared <- function(shared_clones, raw_clone_sizes, top) {
     
-    if (is.null(top)) return(shared_clones)
+    if (is.null(top) || is_empty(shared_clones)) return(shared_clones)
 
     filter_top_shared_w_clone_table(
         shared_clones,
@@ -266,6 +265,10 @@ filter_top_shared <- function(shared_clones, raw_clone_sizes, top) {
 }
 
 filter_top_shared_w_clone_table <- function(shared_clones, clone_table, top) {
+
+    if (is_list_of_empty_tables(clone_table) || is_empty(shared_clones)) {
+        return(shared_clones)
+    }
 
     sorted_shared_clones <- sort(
         clone_table[names(shared_clones)], decreasing = TRUE, method = "radix"
@@ -285,7 +288,12 @@ filter_top_shared_w_clone_table <- function(shared_clones, clone_table, top) {
 
 filter_top_shared_per_cl <- function(shared_clones, clone_sizes, top) {
 
-    if (is.null(top)) return(shared_clones)
+    if (is.null(top) ||
+        is_list_of_empty_tables(clone_sizes) ||
+        is_empty(shared_clones)
+    ) {
+        return(shared_clones)
+    }
 
     filtered_clones <- sort_each_table(clone_sizes, desc = TRUE) %>%
         lapply(function(x) {

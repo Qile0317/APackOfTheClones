@@ -1,4 +1,4 @@
-quietly_test_that("getting shared clones works", {
+test_that("getting shared clones works", {
 
     data("combined_pbmc")
     expected_all_shared <- getdata("ApotcClonalNetwork", "shared_clones")
@@ -25,6 +25,18 @@ quietly_test_that("getting shared clones works", {
         expected = expected_all_shared
     )
 
+    # test intop
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, intop = 1),
+        expected = expected_all_shared[2] # coincidentally same as top = 1/9
+    )
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, intop = 5 / 341),
+        expected = expected_all_shared[c(2, 1, 5, 7)]
+    )
+
     # check everything = Inf does nothing
 
     expect_equal(
@@ -38,7 +50,23 @@ quietly_test_that("getting shared clones works", {
         expected = expected_all_shared
     )
 
-    # check empty shared clones
+    # check empty shared clones if seurat object is filtered
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, seurat_clusters = 15:17),
+        expected = list()
+    )
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, seurat_clusters = 12),
+        expected = list()
+    )
+
+    # check the intersection
+
+    # getSharedClones(
+    #     combined_pbmc, intop = 1
+    # )
 
     # TODO everything else needs verification
 

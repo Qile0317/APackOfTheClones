@@ -87,35 +87,45 @@ countCloneSizes_arg_checker <- function() {
     typecheck(args$sort_decreasing, is_a_logical, is.null)
 }
 
-# count the raw clone from the integrated seurat object from the METADATA
-# FIXME - for only 1 cluster doenst work
-count_raw_clone_sizes <- function(
-  seurat_obj, num_clusters, clonecall
-) {
+count_raw_clone_sizes <- function(seurat_obj, num_clusters, clonecall) {
 
-  # aggregate the raw counts
-  freq_df <- stats::aggregate(
-    stats::as.formula(paste(clonecall, "~ seurat_clusters")),
-    seurat_obj@meta.data,
-    table
-  )
+    # get the na filtered clonotype metadata
+    clonotype_cluster_df <- seurat_obj@meta.data %>%
+        select_cols(clonecall, "seurat_clusters") %>%
+        na.omit()
 
-  # compile the tabled counts into a list of table objects
-  clone_sizes <- init_list(num_clusters, create_empty_table())
+    # initialize output clone sizes
+    clone_sizes <- init_empty_table_list(num_clusters)
 
-  if (nrow(freq_df) == 0) return(clone_sizes)
+    # if no valid rows, return empty clone sizes
+    if (nrow(clonotype_cluster_df) == 0) return(clone_sizes)
 
-  if (nrow(freq_df) == 1) {
-    clone_sizes[[freq_df$seurat_clusters[1]]] <- as.table(freq_df[[2]][1, ])
-    for (i in 1:num_clusters) names(dimnames(clone_sizes[[i]])) <- "" #?
-    return(clone_sizes)
-  }
+    # aggregate the raw counts
+    freq_df <- stats::aggregate(
+        stats::as.formula(paste(clonecall, "~ seurat_clusters")),
+        clonotype_cluster_df,
+        table
+    )
 
-  for (elem in enumerate(freq_df$seurat_clusters)) {
-    clone_sizes[[val1(elem)]] <- freq_df[[2]][ind(elem)][[1]]
-  }
+    if (nrow(freq_df) == 1) {
 
-  clone_sizes
+        if (is.matrix(freq_df[[2]])) {
+            one_cluster_clone_table <- as_table(freq_df[[2]][1, ])
+        } else { # edge case with only one cluster and one clonotype
+            one_cluster_clone_table <- freq_df[[2]]
+            names(one_cluster_clone_table) <- clonotype_cluster_df[1, clonecall]
+            one_cluster_clone_table <- as_table(one_cluster_clone_table)
+        }
+
+        clone_sizes[[freq_df$seurat_clusters[1]]] <- one_cluster_clone_table
+        return(clone_sizes)
+    }
+
+    for (elem in enumerate(freq_df$seurat_clusters)) {
+        clone_sizes[[val1(elem)]] <- freq_df[[2]][ind(elem)][[1]]
+    }
+
+    clone_sizes
 }
 
 #' @title
@@ -148,7 +158,7 @@ mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
     typecheck(clustered_clone_sizes, is_output_of_countCloneSizes)
     typecheck(sort_decreasing, is_a_logical, is.null)
 
-    if (is_empty(clustered_clone_sizes)) {
+    if (is_list_of_empty_tables(clustered_clone_sizes)) {
         warning("no clones are present")
         return(clustered_clone_sizes)
     }
@@ -168,7 +178,10 @@ aggregate_clone_sizes <- function(
     if (!is.null(top_clones)) sort_decreasing <- TRUE
     union_clone_sizes <- union_list_of_tables(clone_sizes, sort_decreasing)
 
-    if (is.null(top_clones)) return(union_clone_sizes)
+    if (is.null(top_clones) || is_empty(union_clone_sizes)) {
+        return(union_clone_sizes)
+    }
+    
     num_clones <- length(union_clone_sizes)
 
     if (is_an_integer(top_clones)) {
@@ -189,4 +202,34 @@ get_top_clonotypes <- function(clone_sizes, top_clones) {
 
 sort_each_clone_size_table <- function(x, decreasing) {
     sort_each_table(x, decreasing)
+}
+
+## abstract higher order functions for filtering clustered clone sizes
+
+# filter clone sizes with two 2 arg functions, the first function
+# takes in 2 args, clone_sizes, and filter_1_arg, and so on for the
+# second one. If either arg is null, the clone size will not be
+# filtered fwith the corresponding function. If both are non-null,
+# the results are set intersected
+filter_clonesize_2way_if_need <- function(
+    clone_sizes,
+    filter_func_1, filter1_arg,
+    filter_func_2, filter2_arg
+) {
+    if (is.null(filter1_arg) && is.null(filter2_arg)) {
+        return(clone_sizes)
+    }
+
+    if (!is.null(filter1_arg) && is.null(filter2_arg)) {
+        return(filter_func_1(clone_sizes, filter1_arg))
+    }
+
+    if (is.null(filter1_arg) && !is.null(filter2_arg)) {
+        return(filter_func_2(clone_sizes, filter2_arg))
+    }
+
+    intersect_common_table_lists(
+        filter_func_1(clone_sizes, filter1_arg),
+        filter_func_2(clone_sizes, filter2_arg)
+    )
 }

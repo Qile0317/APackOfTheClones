@@ -90,7 +90,7 @@ proportion (for numeric in (0, 1) input) clones are kept.}
 \value{
 a named list where each name is a clonotype, each element is a
 numeric indicating which seurat cluster(s) its in, in no particular order.
-If no shared clones are present, the output is an empty named list().
+If no shared clones are present, the output is an empty list.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

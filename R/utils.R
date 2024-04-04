@@ -46,6 +46,13 @@ create_empty_table <- function() {
     )
 }
 
+as_table <- function(x) ensure_proper_table(as.table(x))
+
+ensure_proper_table <- function(x) {
+    if (is.null(names(dimnames(x)))) names(dimnames(x)) <- ""
+    x
+}
+
 strip_to_numeric <- function(table_obj) {
     name_vec <- names(table_obj)
     out <- as.numeric(table_obj)
@@ -75,6 +82,11 @@ intersect_common_table_lists <- function(l1, l2) {
 
 union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
 
+    if (is_list_of_empty_tables(x)) {
+        if (as_table) return(create_empty_table())
+        return(numeric(0))
+    }
+
     frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
 
     for (curr_table in x) {
@@ -95,9 +107,16 @@ union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
 
 sort_each_table <- function(x, desc = FALSE) {
     lapply(x, function(y) {
-        if (is_empty(y)) y else sort(y, decreasing = desc, method = "radix")
+        if (is_empty(y)) return(y)
+        as_table(sort(y, decreasing = desc, method = "radix"))
     })
 }
+
+init_empty_table_list <- function(num_elements) {
+    init_list(num_elements, create_empty_table())
+} 
+
+is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
 
 # data convenience constructors
 
@@ -107,11 +126,18 @@ init_dataframe <- function(column_names, nrow, init_val = NA) {
     df
 }
 
+select_cols <- function(df, ...) df[unlist(list(...))]
+
 # hash::hash utilities
 
 create_hash_from_keys <- function(keys, init_vals = NULL) {
     keys <- unique(keys)
-    hash::hash(keys, init_list(length(keys), init_vals))
+    numkeys <- length(keys)
+    switch(as.character(numkeys),
+        "0" = hash::hash(),
+        "1" = hash::hash(keys, init_vals),
+        hash::hash(keys, init_list(numkeys, init_vals))
+    )
 }
 
 create_valueless_vector_hash <- function(key, vector_type) {
@@ -214,6 +240,8 @@ secretly_init_name <- function(x) {
     names(x) <- rep("", length(x))
     x
 }
+
+unname_if_empty <- function(l) if (is_empty(l)) unname(l) else l
 
 # math utils
 
