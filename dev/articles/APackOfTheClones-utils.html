@@ -59,6 +59,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
@@ -71,7 +72,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul>
@@ -130,7 +131,8 @@ column of the seurat object metadata. The <code>countCloneSizes</code>
 function returns this information in a list where each element is a
 table object corresponding to the clonotype frequencies for that
 cluster, and a cluster with no clonotypes will have an empty table at
-its index. It also allows for the same filtering arguments as seen in
+its index. Alternatively, it can also get the aggregate clone sizes. It
+also allows for the same filtering arguments as seen in
 <code>RunAPOTC</code> and <code>vizAPOTC</code>.</p>
 </div>
 <div class="section level2">

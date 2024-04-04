@@ -42,6 +42,7 @@ right side that correspond to each (existing) clonotype."><meta property="og:ima
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
@@ -54,7 +55,7 @@ right side that correspond to each (existing) clonotype."><meta property="og:ima
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -93,6 +94,7 @@ right side that correspond to each (existing) clonotype.</p>
 <span>  <span class="va">sequence</span>,</span>
 <span>  color_each <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  default_color <span class="op">=</span> <span class="st">"#808080"</span>,</span>
+<span>  scale_bg <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  fill_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -116,12 +118,14 @@ warning will be shown if any of the sequences are not present.</p></dd>
 highlighted clone. If <code>FALSE</code>, each highlighted clone will retain its
 current color and no legend based on color is shown. A possible application
 here is to simply gauge the distribution of any shared clone.
-It can also indicate the color of each
-highlighted clone: if it is a character of length 1 and a valid color, all
-highlighted clones will be of that color. Else it must be a character vector
-of the same length as <code>sequence</code>, with each color corresponding to the
-clone. Currently, the user must ensure <code>sequence</code> contains of unique
-characters.</p></dd>
+It can also indicate the color of each highlighted clone: if it is a
+character of length 1 and a valid color, all highlighted clone+
+s will be of
+that color. Else it must be a character vector of the same length as
+<code>sequence</code>, with each color corresponding to the clone. Here is a suitable
+place to use any palette function from the many other CRAN palette packages
+such as <code>"viridis"</code> or <code>"RColorBrewer"</code>. Note that currently, the user must
+ensure <code>sequence</code> contains only unique characters.</p></dd>
 
 
 <dt>default_color</dt>
@@ -130,6 +134,15 @@ of non-highlighted clones. If <code>NULL</code>, all un-highlighted sequences wi
 retain their original color in <code>sc.data</code>. Else, if it is a character, it
 should be a valid color that all un-highlighted clones are. Defaults to the
 hexcode for gray.</p></dd>
+
+
+<dt>scale_bg</dt>
+<dd><p>A positive numeric. Scales the brightness value of each color
+of the non-highlighted clones by itself as a scaling factor. Defaults to 1
+which will not alter the current brightness. Note that if
+<code>color_each = FALSE</code> and <code>default_color = NULL</code>, this is equivalent to not
+highlighting any clones - in this case, it may be useful to alter <code>scale_bg</code>
+slightly so that the non-highlighted clones are darkened/brightened.</p></dd>
 
 
 <dt>fill_legend</dt>

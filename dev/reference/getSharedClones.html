@@ -48,6 +48,7 @@ shared clones."><meta property="og:image" content="https://qile0317.github.io/AP
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
     <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
@@ -60,7 +61,7 @@ shared clones."><meta property="og:image" content="https://qile0317.github.io/AP
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -105,7 +106,9 @@ shared clones.</p>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  top <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  top_per_cl <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  top_per_cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  intop <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  intop_per_cl <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -169,21 +172,33 @@ there was no input for the <code>...</code> and <code>extra_filter</code> parame
 
 <dt>top</dt>
 <dd><p>integer or numeric in (0, 1) - if not null, filters the output
-clones so that only the clonotypes with overall <code>top</code> frequency/count is
-returned. If the input is integer, it indicates to only include the top
-clones overall by frequency ranking. If a numeric in (0, 1), this indicates
-to include the <code>top</code> clones in that <em>proportion</em> of the frequencies.</p></dd>
+clones so that only the shared clonotypes with counts the top <code>top</code> count /
+proportion (for numeric in (0, 1) input) shared clones are kept.</p></dd>
 
 
 <dt>top_per_cl</dt>
 <dd><p>integer or numeric in (0, 1) - if not null, filters the
 output clones so that for each seurat cluster, only the clonotypes with the
-<code>top_per_cl</code> frequency/count is preserved when aggregating shared clones.
-If the input is integer, it indicates to only include the <code>top_per_cl</code> clones
-overall by frequency ranking per cluster. If a numeric in (0, 1), this
-indicates to include the <code>top_per_cl</code> clones in that <em>proportion</em> of the
-frequencies for each cluster. Note that if inputted in conjunction with
+<code>top_per_cl</code> frequency/count is preserved when aggregating shared clones,
+in the same way as the above. Note that if inputted in conjunction with
 <code>top</code>, it will get the <em>intersection</em> of the clonotypes filtered each way.</p></dd>
+
+
+<dt>intop</dt>
+<dd><p>integer or numeric in (0, 1) - if not null, filters the raw
+clone sizes before computing the shared clonotypes so that only the
+clonotypes that have their overall size in the top <code>intop</code> largest sizes
+(if it is integer, else the <code>intop</code> proportion) are kept. To emphasize,
+this argument <em><strong>does not necessarily</strong></em> return the <code>top</code> shared clones
+and likely a little less, because this filters the raw clone sizes, of
+which, its very likely that not all those clones end up being shared.</p></dd>
+
+
+<dt>intop_per_cl</dt>
+<dd><p>integer or numeric in (0, 1) - if not null, filters
+the raw <em>clustered</em> clone sizes before computing shared clones, so that
+for every clone in a seurat cluster, the top <code>intop_per_cl</code> count /
+proportion (for numeric in (0, 1) input) clones are kept.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -192,7 +207,7 @@ frequencies for each cluster. Note that if inputted in conjunction with
 
 <p>a named list where each name is a clonotype, each element is a
 numeric indicating which seurat cluster(s) its in, in no particular order.
-If no shared clones are present, the output is an empty named list().</p>
+If no shared clones are present, the output is an empty list.</p>
     </div>
 
     <div class="section level2">
@@ -230,7 +245,7 @@ If no shared clones are present, the output is an empty named list().</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">getSharedClones</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">combined_pbmc</span>,</span></span>
-<span class="r-in"><span>    orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P18B"</span><span class="op">)</span>, <span class="co"># this is a named subsetting parameter</span></span></span>
+<span class="r-in"><span>    orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P18B"</span><span class="op">)</span>, <span class="co"># a named subsetting parameter</span></span></span>
 <span class="r-in"><span>    clonecall <span class="op">=</span> <span class="st">"aa"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $CVVSDNTGGFKTIF_CASSVRRERANTGELFF</span>
@@ -243,22 +258,28 @@ If no shared clones are present, the output is an empty named list().</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">getSharedClones</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">combined_pbmc</span>,</span></span>
-<span class="r-in"><span>    clonecall <span class="op">=</span> <span class="st">"aa"</span>,</span></span>
-<span class="r-in"><span>    top_per_cl <span class="op">=</span> <span class="fl">0.5</span></span></span>
+<span class="r-in"><span><span class="co"># extract shared clones from a past RunAPOTC run</span></span></span>
+<span class="r-in"><span><span class="va">combined_pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">combined_pbmc</span>, run_id <span class="op">=</span> <span class="st">"foo"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CASLSGSARQLTF_CASSSTVAGEQYF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4 5</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">getSharedClones</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">combined_pbmc</span>, run_id <span class="op">=</span> <span class="st">"foo"</span>, top <span class="op">=</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`TRAV8-3.TRAJ42.TRAC;TGTGCTGTGGGTGAGAAGGGTTATGGAGGAAGCCAAGGAAATCTCATCTTT_TRBV12-4.None.TRBJ1-6.TRBC1;TRBV7-6.None.TRBJ1-4.TRBC1;TGTGCCAGCAGTTTCCGACCGCCGGGTTCACCCCTCCACTTT;TGTGCCAGCCACGGCGCCAGGGGTGATGGCTTTTGTGAAAAACTGTTTTTT`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CAELNQAGTALIF_CASSQAPFSTSGELFF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`TRAV12-1.TRAJ9.TRAC;TGTGTGGTCTCCGATAATACTGGAGGCTTCAAAACTATCTTT_TRBV9.None.TRBJ2-2.TRBC2;TGTGCCAGCAGCGTAAGGAGGGAAAGGGCGAACACCGGGGAGCTGTTTTTT`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`TRAV12-2.TRAJ12.TRAC;TGTGCCCGGAAGGTTAGGGATAGCAGCTATAAATTGATCTTC_TRBV6-4.None.TRBJ2-1.TRBC2;TGTGCCAGCAGTGACTCCGGATACAATGAGCAGTTCTTC`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`TRAV5.TRAJ15.TRAC;TGTGCGGAGCTAAACCAGGCAGGAACTGCTCTGATCTTT_TRBV4-1.None.TRBJ2-2.TRBC2;TGCGCCAGCAGCCAAGCCCCCTTTTCAACCTCCGGGGAGCTGTTTTTT`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CALSGSRDDKIIF_NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  3 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $CARKVRDSSYKLIF_CASSDSGYNEQFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`TRAV24.TRAJ22.TRAC;TGTGCCTCCCTATCTGGTTCTGCAAGGCAACTGACCTTT_TRBV27.None.TRBJ2-7.TRBC2;TGTGCCAGCAGCTCTACAGTTGCTGGCGAGCAGTACTTC`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># doing a run and then getting the clones works too</span></span></span>
