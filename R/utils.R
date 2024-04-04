@@ -1,3 +1,46 @@
+#' @title
+#' Calculate seurat cluster centroids based on a Dimensional reduction
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Utility function to calculate the physical xy coordinates of each seurat
+#' cluster based on a dimensional reduction already present in the object.
+#' The results are returned in a list with the length of the number of distinct
+#' seurat clusters based on the seurat_obj `meta.data`.
+#'
+#' @param seurat_obj input seurat object with the dimensional reduction of
+#' choice already present, and seurat clusters computed.
+#' @param reduction character. The reduction that the centroid calculation
+#' should be based on.
+#'
+#' @return A list of the length of the number of distinct clusters in the
+#' seurat object metadata, where each element of the list is a numeric vector
+#' of length 2, with the numbers corresponding to the x and y coordinate
+#' respectively of the seurat cluster with the corresponding index.
+#'
+#' @export
+#'
+#' @examples
+#' data("combined_pbmc")
+#' getReductionCentroids(combined_pbmc, reduction = "umap")
+#'
+getReductionCentroids <- function(seurat_obj, reduction) {
+  get_cluster_centroids(
+    seurat_obj = seurat_obj,
+    reduction = user_get_reduc_obj(seurat_obj, reduction),
+    passed_in_reduc_obj = TRUE
+  )
+}
+
+user_get_reduc_obj <- function(seurat_obj, reduction) {
+    if (!is_seurat_object(seurat_obj))
+        stop(call. = FALSE, "`seurat_obj` not a seurat object!")
+    if (!is_a_character(reduction))
+        stop(call. = FALSE, "`reduction` must be one character")
+    seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
+}
+
 # progress bar functions
 
 progress_bar <- function (x = 0, max = 100) {
@@ -30,10 +73,6 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
         "seconds\n"
     ))
 }
-
-# readability
-
-contains_duplicates <- function(v) anyDuplicated(v) != 0
 
 # table/(list of table) utils
 
@@ -118,13 +157,7 @@ init_empty_table_list <- function(num_elements) {
 
 is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
 
-# data convenience constructors
-
-init_dataframe <- function(column_names, nrow, init_val = NA) {
-    df <- data.frame(matrix(init_val, nrow = nrow, ncol = length(column_names)))
-    colnames(df) <- column_names
-    df
-}
+# dataframe utils
 
 select_cols <- function(df, ...) df[unlist(list(...))]
 
@@ -158,18 +191,9 @@ hash_from_tablelist <- function(tablelist) {
     )
 }
 
-# hashset syntactic sugar using hash::hash
-
-as_set <- function(character_vector) {
-    create_hash_from_keys(character_vector, NA)
-}
-
-contains <- function(set, x) {
-    # x must be a character
-    identical(is.na(set[[x]]), logical(0))
-}
-
 # readability functions
+
+contains_duplicates <- function(v) anyDuplicated(v) != 0
 
 is_empty <- function(inp) (length(inp) == 0L) || identical(inp, hash::hash())
 
@@ -337,11 +361,6 @@ user_attempt_correction <- function(
     modifiers = list(tolower, trimws, strip_unquoted_spaces, strip_spaces)
 ) {
 
-    # word modifiers for increase similarity - order matters!
-    modifiers <- list(
-        tolower, trimws, strip_unquoted_spaces, strip_spaces
-    )
-
     # check if the string is already present in strset and if yes return
     match_indicies <- which(s == strset)
     if (length(match_indicies) == 1) return(s)
@@ -405,10 +424,6 @@ init_list <- function(num_elements, init_val = NULL) {
     l <- vector("list", num_elements)
     if (is.null(init_val)) return(l)
     lapply(l, function(x) init_val)
-}
-
-sort_list <- function(lst, decreasing = FALSE) {
-    lst[order(unlist(lst), decreasing = decreasing)]
 }
 
 getlast <- function(x, n = 1) {
@@ -529,16 +544,6 @@ percent_na <- function(seurat_obj) {
   100 * (num_barcodes - count_tcr_barcodes(seurat_obj)) / num_barcodes
 }
 
-get_rna_assay_barcodes <- function(seurat_obj) {
-    seurat_obj@assays[["RNA"]]@data@Dimnames[[2]]
-}
-
-# seurat cluster related functions
-
-count_num_clusters <- function(seurat_obj) {
-  data.table::uniqueN((seurat_obj@meta.data[["seurat_clusters"]]))
-}
-
 get_num_total_clusters <- function(seurat_obj) {
   length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
@@ -577,67 +582,4 @@ attempt_correction <- function(seurat_obj, reduction) {
       strset = curr_reductions,
       stop_msg_start = "Invalid reduction"
     )
-}
-
-#' @title
-#' Calculate seurat cluster centroids based on a Dimensional reduction
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' Utility function to calculate the physical xy coordinates of each seurat
-#' cluster based on a dimensional reduction already present in the object.
-#' The results are returned in a list with the length of the number of distinct
-#' seurat clusters based on the seurat_obj `meta.data`.
-#'
-#' @param seurat_obj input seurat object with the dimensional reduction of
-#' choice already present, and seurat clusters computed.
-#' @param reduction character. The reduction that the centroid calculation
-#' should be based on.
-#'
-#' @return A list of the length of the number of distinct clusters in the
-#' seurat object metadata, where each element of the list is a numeric vector
-#' of length 2, with the numbers corresponding to the x and y coordinate
-#' respectively of the seurat cluster with the corresponding index.
-#'
-#' @export
-#'
-#' @examples
-#' data("combined_pbmc")
-#' getReductionCentroids(combined_pbmc, reduction = "umap")
-#'
-getReductionCentroids <- function(seurat_obj, reduction) {
-  get_cluster_centroids(
-    seurat_obj = seurat_obj,
-    reduction = user_get_reduc_obj(seurat_obj, reduction),
-    passed_in_reduc_obj = TRUE
-  )
-}
-
-user_get_reduc_obj <- function(seurat_obj, reduction) {
-    if (!is_seurat_object(seurat_obj))
-        stop(call. = FALSE, "`seurat_obj` not a seurat object!")
-    if (!is_a_character(reduction))
-        stop(call. = FALSE, "`reduction` must be one character")
-    seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
-}
-
-# for the future - for two bit arrays, get A union neg B.
-create_cluster_truth_vector <- function(
-    only_cluster, exclude_cluster, num_clusters
-) {
-    if (is.null(only_cluster) && is.null(exclude_cluster)) {
-        return(rep(TRUE, num_clusters))
-    }
-
-    if (!is.null(exclude_cluster)) {
-        truth_indicies <- exclude_cluster
-    } else {
-        truth_indicies <- only_cluster
-    }
-    truth_val <- ifelse(!is.null(exclude_cluster), TRUE, FALSE)
-
-    truth_vec <- rep(truth_val, num_clusters)
-    truth_vec[as.integer(truth_indicies)] <- (!truth_val)
-    truth_vec
 }

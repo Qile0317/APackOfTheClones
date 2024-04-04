@@ -49,7 +49,7 @@ quietly_test_that("the default plot for all methods", {
     )
   )
 
-  # overlaying no shared clones works
+  # test that overlaying no shared clones works
 
   expect_doppelganger(
     .defaultApotcPlot, vizAPOTC(combined_pbmc, show_shared = list())

@@ -32,12 +32,14 @@ navbar:
       menu:
       - text: Storing and Fine-Tuning APackOfTheClones Runs
         href: articles/APackOfTheClones-runs.html
+      - text: Working With Clonotypes Shared Across Clusters
+        href: articles/APackOfTheClones-shared.html
       - text: Clonal Analysis Utilities in APackOfTheClones
         href: articles/APackOfTheClones-utils.html
     archive:
       text: Archive
       menu:
-        - text: v0.1.x
+        - text: v0.1.x main vignette
           href: articles/archive/v0-main.html
 
 reference:
@@ -61,6 +63,7 @@ reference:
 - title: Utilities
 - contents:
   - countCloneSizes
+  - mergeCloneSizes
   - getSharedClones
   - getReductionCentroids
 - title: Data

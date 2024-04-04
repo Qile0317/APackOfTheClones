@@ -1,5 +1,13 @@
 data("mini_seurat_obj", "mini_clonotype_data")
 
+test_that("getReductionCentroids works", {
+    expect_equal(
+        getReductionCentroids(get(data("combined_pbmc")), "umap"),
+        getdata("combined_pbmc", "all_cluster_centroids"),
+        tolerance = 1e-6
+    )
+})
+
 test_that("progress_bar works", {
     expect_identical(
         capture.output(progress_bar(1, 1)),
@@ -85,7 +93,17 @@ test_that("get_xr and get_yr works", {
     # TODO more tests
 })
 
-test_that("attempt_correction works", { suppressMessages({
+test_that("subsetSeuratMetaData works", {
+    # TODO more tests
+
+    expect_error(
+        subsetSeuratMetaData(get(data("combined_pbmc")), "seurat_clusters==18"),
+        "please check `extra_filter`, no rows in the seurat metadata match the filter condition"
+    )
+
+})
+
+quietly_test_that("attempt_correction works", {
     data("combined_pbmc")
 
     combined_pbmc@reductions[["pca"]] <- 0
@@ -115,7 +133,7 @@ test_that("attempt_correction works", { suppressMessages({
     )
 
     # TODO more tests
-})})
+})
 
 test_that("closest_word works", {
     expect_identical(closest_word(" umsp", c("umap", "tsne", "pca")), "umap")
@@ -180,14 +198,6 @@ test_that("strip_unquoted_spaces works", {
     expect_identical(
         strip_unquoted_spaces(c(" f f ' o o ' ", " bb b ' a r ' rr r ")),
         c("ff' o o '", "bbb' a r 'rrr")
-    )
-})
-
-test_that("getReductionCentroids works", {
-    expect_equal(
-        getReductionCentroids(get(data("combined_pbmc")), "umap"),
-        getdata("combined_pbmc", "all_cluster_centroids"),
-        tolerance = 1e-6
     )
 })
 
