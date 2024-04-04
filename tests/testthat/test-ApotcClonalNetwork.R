@@ -99,7 +99,9 @@ test_that("adding shared clone links works", {
             show_shared = getSharedClones(combined_pbmc),
             seurat_clusters = c(3:5, 9, 13),
             add_size_legend = FALSE,
+            # also a test of these two args
             retain_axis_scales = TRUE,
+            show_labels = TRUE,
             verbose = FALSE
         )
     )

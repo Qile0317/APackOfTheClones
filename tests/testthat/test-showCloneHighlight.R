@@ -53,9 +53,7 @@ test_that("showCloneHighlight works", {
         vizAPOTC(
             combined_pbmc, clonecall = "aa", verbose = FALSE
         ) %>% showCloneHighlight(
-            sequence = c(
-                "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
-            ),
+            c("CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"),
             color_each = FALSE, default_color = NULL, scale_bg = 1
         )
     )

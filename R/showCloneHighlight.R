@@ -11,7 +11,7 @@
 #'
 #' @param apotc_ggplot A ggplot object that is the output of [APOTCPlot] or
 #' [vizAPOTC] of an APackOfTheClones plot to be highlighted on.
-#' @param sequence character vector of the sequence(s) to highlight. Note
+#' @param clonotype character vector of the sequence(s) to highlight. Note
 #' that it must be of the clonecall of the code that created the plot. A
 #' warning will be shown if any of the sequences are not present.
 #' @param color_each Either a logical of length 1, or a character(s). It is
@@ -19,14 +19,13 @@
 #' highlighted clone. If `FALSE`, each highlighted clone will retain its
 #' current color and no legend based on color is shown. A possible application
 #' here is to simply gauge the distribution of any shared clone.
-#' It can also indicate the color of each highlighted clone: if it is a
-#' character of length 1 and a valid color, all highlighted clone+
-#' s will be of
-#' that color. Else it must be a character vector of the same length as
-#' `sequence`, with each color corresponding to the clone. Here is a suitable
+#' It can also indicate the uniform color of each highlighted clone: if it is
+#' a character of length 1, all highlighted clones will be of that color.
+#' Else it must be a character vector of the same length as
+#' `clonotype`, with each color corresponding to the clone. Here is a suitable
 #' place to use any palette function from the many other CRAN palette packages
 #' such as `"viridis"` or `"RColorBrewer"`. Note that currently, the user must
-#' ensure `sequence` contains only unique characters.
+#' ensure `clonotype` contains only unique characters.
 #' @param default_color A character of length 1 or `NULL` indicating the color
 #' of non-highlighted clones. If `NULL`, all un-highlighted sequences will
 #' retain their original color in `sc.data`. Else, if it is a character, it
@@ -67,7 +66,7 @@
 #'
 showCloneHighlight <- function(
     apotc_ggplot,
-    sequence,
+    clonotype,
     color_each = TRUE,
     default_color = "#808080",
     scale_bg = 1,
@@ -75,14 +74,14 @@ showCloneHighlight <- function(
 ) {
     apotc_highlight_clones_error_handler()
 
-    if (contains_duplicates(sequence)) {
+    if (contains_duplicates(clonotype)) {
         warning(
-            "`sequence` contains duplicates - ",
+            "`clonotype` contains duplicates - ",
             "this probably will result in erroneous outputs"
         )
     }
 
-    if (identical(color_each, FALSE) & is.null(default_color) & scale_bg == 1) {
+    if (is_false(color_each) && is.null(default_color) && scale_bg == 1) {
         warning(
             "setting `color_each` to FALSE, `default_color` to NULL without ",
             "altering `scale_bg` is equivalent to not highlighting anything"
@@ -92,13 +91,13 @@ showCloneHighlight <- function(
 
     # process data - probably should make sequences unique? for now assume unique
 
-    num_seqs <- length(sequence)
-    sequence_index_map <- hash::hash(sequence, 1:num_seqs)
+    num_seqs <- length(clonotype)
+    sequence_index_map <- hash::hash(clonotype, 1:num_seqs)
 
     highlighted_ggplot_data <- get_ggplot_data(apotc_ggplot)
 
     clone_color_vector <- gen_clone_color_vector(
-        color_each, sequence, highlighted_ggplot_data
+        color_each, clonotype, highlighted_ggplot_data
     )
 
     num_matches <- 0
@@ -134,11 +133,12 @@ showCloneHighlight <- function(
 
     # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
     if (identical(color_each, FALSE) || !fill_legend) return(apotc_ggplot)
-    
+
+    # FIXME fill colors doesnt show up on pkgdown though legend show up
     suppressMessages(apotc_ggplot + ggplot2::scale_fill_identity(
         guide = "legend",
         name = "clonotype",
-        labels = sequence,
+        labels = clonotype,
         breaks = clone_color_vector
     ))
 
@@ -147,7 +147,7 @@ showCloneHighlight <- function(
 apotc_highlight_clones_error_handler <- function(args) {
     args <- get_parent_func_args()
     check_is_apotc_ggplot(args$apotc_ggplot)
-    typecheck(args$sequence, is_character)
+    typecheck(args$clonotype, is_character)
     typecheck(args$color_each, is_a_logical, is_a_character, is_character)
     typecheck(args$default_color, is_a_character, is.null)
     typecheck(args$scale_bg, is_a_positive_numeric)

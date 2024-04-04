@@ -93,6 +93,12 @@ test_that("get_xr and get_yr works", {
     # TODO more tests
 })
 
+test_that("prepend_indefinite_article works", {
+    expect_identical(prepend_indefinite_article("A"), "an A")
+    expect_identical(prepend_indefinite_article("B"), "a B")
+    expect_identical(prepend_indefinite_article("NULL"), "NULL")
+})
+
 test_that("subsetSeuratMetaData works", {
     # TODO more tests
 

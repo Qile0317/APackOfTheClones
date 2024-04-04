@@ -166,6 +166,11 @@
 <line x1='370.79' y1='389.45' x2='413.07' y2='290.55' style='stroke-width: 1.92; stroke: #000000; stroke-opacity: 0.50; stroke-linecap: butt;' />
 <line x1='373.32' y1='335.16' x2='455.50' y2='287.07' style='stroke-width: 1.92; stroke: #000000; stroke-opacity: 0.50; stroke-linecap: butt;' />
 <line x1='343.42' y1='488.71' x2='453.28' y2='320.51' style='stroke-width: 1.92; stroke: #000000; stroke-opacity: 0.50; stroke-linecap: butt;' />
+<text x='341.00' y='348.89' text-anchor='middle' style='font-size: 14.23px; font-family: sans;' textLength='18.19px' lengthAdjust='spacingAndGlyphs'>C3</text>
+<text x='422.01' y='389.53' text-anchor='middle' style='font-size: 14.23px; font-family: sans;' textLength='18.19px' lengthAdjust='spacingAndGlyphs'>C4</text>
+<text x='429.60' y='290.69' text-anchor='middle' style='font-size: 14.23px; font-family: sans;' textLength='18.19px' lengthAdjust='spacingAndGlyphs'>C5</text>
+<text x='339.21' y='490.17' text-anchor='middle' style='font-size: 14.23px; font-family: sans;' textLength='18.19px' lengthAdjust='spacingAndGlyphs'>C9</text>
+<text x='520.25' y='404.62' text-anchor='middle' style='font-size: 14.23px; font-family: sans;' textLength='26.10px' lengthAdjust='spacingAndGlyphs'>C13</text>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='150.36,545.11 150.36,22.78 ' style='stroke-width: 1.07; stroke-linecap: butt;' />

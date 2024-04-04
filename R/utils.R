@@ -195,6 +195,8 @@ hash_from_tablelist <- function(tablelist) {
 
 contains_duplicates <- function(v) anyDuplicated(v) != 0
 
+is_false <- function(x) identical(x, FALSE)
+
 is_empty <- function(inp) (length(inp) == 0L) || identical(inp, hash::hash())
 
 isnt_empty <- function(inp) !is_empty(inp)

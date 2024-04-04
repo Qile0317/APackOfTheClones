@@ -6,7 +6,7 @@
 \usage{
 showCloneHighlight(
   apotc_ggplot,
-  sequence,
+  clonotype,
   color_each = TRUE,
   default_color = "#808080",
   scale_bg = 1,
@@ -17,7 +17,7 @@ showCloneHighlight(
 \item{apotc_ggplot}{A ggplot object that is the output of \link{APOTCPlot} or
 \link{vizAPOTC} of an APackOfTheClones plot to be highlighted on.}
 
-\item{sequence}{character vector of the sequence(s) to highlight. Note
+\item{clonotype}{character vector of the sequence(s) to highlight. Note
 that it must be of the clonecall of the code that created the plot. A
 warning will be shown if any of the sequences are not present.}
 
@@ -26,14 +26,13 @@ warning will be shown if any of the sequences are not present.}
 highlighted clone. If \code{FALSE}, each highlighted clone will retain its
 current color and no legend based on color is shown. A possible application
 here is to simply gauge the distribution of any shared clone.
-It can also indicate the color of each highlighted clone: if it is a
-character of length 1 and a valid color, all highlighted clone+
-s will be of
-that color. Else it must be a character vector of the same length as
-\code{sequence}, with each color corresponding to the clone. Here is a suitable
+It can also indicate the uniform color of each highlighted clone: if it is
+a character of length 1, all highlighted clones will be of that color.
+Else it must be a character vector of the same length as
+\code{clonotype}, with each color corresponding to the clone. Here is a suitable
 place to use any palette function from the many other CRAN palette packages
 such as \code{"viridis"} or \code{"RColorBrewer"}. Note that currently, the user must
-ensure \code{sequence} contains only unique characters.}
+ensure \code{clonotype} contains only unique characters.}
 
 \item{default_color}{A character of length 1 or \code{NULL} indicating the color
 of non-highlighted clones. If \code{NULL}, all un-highlighted sequences will
