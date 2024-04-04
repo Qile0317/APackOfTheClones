@@ -120,8 +120,9 @@ plot. Else, the plot will simply have a blank background.}
 
 \item{retain_axis_scales}{If \code{TRUE}, approximately maintains the axis scales
 of the original reduction plot. However, it will only attempt to extend the
-axes and never shorten. This is recommended to be set to \code{TRUE} especially if
-working with subsetted versions of the clonal data.}
+axes and never shorten. Users are recommended to set this to \code{TRUE}
+especially if working with subsetted versions of the clonal data to better
+preserve the geometric relation to the original dimensional reduction.}
 
 \item{alpha}{numeric. The alpha of the circles in (0, 1]. Defaults to 1.}
 

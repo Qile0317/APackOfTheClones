@@ -55,12 +55,12 @@ reference:
   - getApotcDataIds
   - getLastApotcDataId
   - deleteApotcData
-- title: Clonal expansion plot add-ons
+- title: Further Customization of Clonal Expansion Plots
 - contents:
   - showCloneHighlight
   - overlayLegend
   - removeLegend
-- title: Utilities
+- title: Clonal Analysis Utilities
 - contents:
   - countCloneSizes
   - mergeCloneSizes

@@ -3,14 +3,14 @@
 #' @title Remove current APackOfTheClones legend
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
+#' `r lifecycle::badge("stable")`
+#' 
 #' Removes the clone size legend on an APackOfTheClones plot, if
 #' one is present. Will preserve any additional ggplot layers.
 #'
 #' @inheritParams overlayLegend
 #' @inheritParams APOTCPlot
-#' 
+#'
 #' @inherit APOTCPlot return
 #' @export
 #'
@@ -37,7 +37,7 @@ removeLegend <- function(apotc_ggplot) {
 #' @title overlay a clone size legend on an APackOfTheClones plot
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' This function has most of the parameters related to legend in
 #' [APOTCPlot], and can plot a new / override the current legend.

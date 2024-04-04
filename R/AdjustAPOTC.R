@@ -3,7 +3,7 @@
 #' object
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' If the user is unsatisfied with the clonal expansion plot that
 #' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
