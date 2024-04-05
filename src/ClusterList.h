@@ -140,7 +140,7 @@ public: // getters
 
     Rcpp::List getRClusterList() {
 
-        if (isEmptyClusterList()) {
+        if (isEmpty) {
             return Rcpp::List::create();
         }
 

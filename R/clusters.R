@@ -30,6 +30,7 @@ set_cluster_radius <- function(l, v) {l$clRad <- v; l}
 set_clonotypes <- function(l, v) {l$clonotype <- v; l}
 
 # convert clusterlist to dataframe, assuming its valid
+# TODO allow get_abstract option to just get 1 large circle
 convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
     data.frame(
         "label" = rep(

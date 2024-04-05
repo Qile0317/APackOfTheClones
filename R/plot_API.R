@@ -1,3 +1,4 @@
+# main apotc plot initializer
 create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
     plot_clusters(
         clusters = get_plottable_df_with_color(apotc_obj),
@@ -118,16 +119,4 @@ check_is_apotc_ggplot <- function(x) {
   if (!isApotcGGPlot(x)) {
     stop(call. = FALSE, "not an output of `APOTCPlot` or `vizAPOTC`")
   }
-}
-
-remove_ggplot_layers <- function(ggplot_obj, layer_indicies) {
-  ggplot_obj$layers[layer_indicies] <- NULL
-  ggplot_obj
-}
-
-get_ggplot_data <- function(x) x$data
-
-set_ggplot_data <- function(ggplot_obj, new_data) {
-  ggplot_obj$data <- new_data
-  ggplot_obj
 }

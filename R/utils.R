@@ -260,6 +260,18 @@ name_latest_layer <- function(plt, new_name) {
     plt
 }
 
+remove_ggplot_layers <- function(ggplot_obj, layer_indicies) {
+  ggplot_obj$layers[layer_indicies] <- NULL
+  ggplot_obj
+}
+
+get_ggplot_data <- function(x) x$data
+
+set_ggplot_data <- function(ggplot_obj, new_data) {
+  ggplot_obj$data <- new_data
+  ggplot_obj
+}
+
 # naming utils
 
 secretly_init_name <- function(x) {
@@ -527,23 +539,12 @@ subsetSeuratMetaData <- function(
 	seurat_obj
 }
 
-# Returns the number of valid barcodes that are not NA's
-count_tcr_barcodes <- function(seurat_obj) {
-  sum(!is.na(seurat_obj@meta.data[["barcode"]]))
-}
-
 count_umap_clusters <- function(seurat_obj) {
     length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 count_clones <- function(seurat_obj, clonecall) {
   sum(!is.na(seurat_obj@meta.data[[clonecall]]))
-}
-
-# get the percent of NA's in the metadata barcode column for the message
-percent_na <- function(seurat_obj) {
-  num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
-  100 * (num_barcodes - count_tcr_barcodes(seurat_obj)) / num_barcodes
 }
 
 get_num_total_clusters <- function(seurat_obj) {

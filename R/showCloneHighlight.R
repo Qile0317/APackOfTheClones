@@ -66,7 +66,7 @@
 #'
 showCloneHighlight <- function(
     apotc_ggplot,
-    clonotype,
+    clonotype, # could make into unlist(list(...))
     color_each = TRUE,
     default_color = "#808080",
     scale_bg = 1,
@@ -88,8 +88,6 @@ showCloneHighlight <- function(
         )
         return(apotc_ggplot)
     }
-
-    # process data - probably should make sequences unique? for now assume unique
 
     num_seqs <- length(clonotype)
     sequence_index_map <- hash::hash(clonotype, 1:num_seqs)
@@ -144,7 +142,7 @@ showCloneHighlight <- function(
 
 }
 
-apotc_highlight_clones_error_handler <- function(args) {
+apotc_highlight_clones_error_handler <- function() {
     args <- get_parent_func_args()
     check_is_apotc_ggplot(args$apotc_ggplot)
     typecheck(args$clonotype, is_character)

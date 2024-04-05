@@ -2,51 +2,20 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{count_clone_sizes}
 \alias{count_clone_sizes}
-\title{DEPRECATED: count the number of clonotype sizes per cell cluster in a seurat
+\title{DEFUNCT: count the number of clonotype sizes per cell cluster in a seurat
 object integrated with a TCR library}
 \usage{
-count_clone_sizes(integrated_seurat_obj)
+count_clone_sizes(...)
 }
 \arguments{
-\item{integrated_seurat_obj}{Seurat object that has been integrated with a
-T-cell receptor library with the deprecated function
-\code{\link[=integrate_tcr]{integrate_tcr()}}. More specifically, in the metadata, there must
-at least be the elements \code{seurat_clusters} and \code{raw_clonotype_id}}
+\item{...}{arbitrary arguments}
 }
 \value{
-A list of \code{table} objects, where each element is tabled
-clonotype frequencies for the seurat cluster corresponding to the same index
-\itemize{
-\item 
-\enumerate{
-\item For example, the 5th element is a tabled frequency of counts that
-corresponds to the 4th seurat cluster (as seurat clusters are 0-indexed).
-If an element is \code{NULL}, it indicates that there were no corresponding T-cell
-receptor barcode for the cells in the cluster.
-}
-}
+error message
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 
 \emph{\strong{ALL v0.1.x functions are deprecated}}, and the workflow has been completely revamped - now depending on the scRepertoire v2 package - which allows for the processing of multi-sampled single cell data. Please read the vignettes with \code{browseVignettes("APackOfTheClones")}or visit https://qile0317.github.io/APackOfTheClones/
-}
-\details{
-The function is no longer needed as the \code{scRepertoire} workflow takes care
-of this step.
-}
-\examples{
-library(Seurat)
-library(APackOfTheClones)
-data("mini_clonotype_data","mini_seurat_obj")
-
-# produce an integrated seurat_object
-integrated_seurat_object <- integrate_tcr(
-    mini_seurat_obj, mini_clonotype_data, verbose = FALSE
-)
-
-clonotype_counts <- count_clone_sizes(integrated_seurat_object)
-clonotype_counts
-
 }
 \keyword{internal}

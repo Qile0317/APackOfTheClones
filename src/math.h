@@ -14,6 +14,8 @@ inline double eucDist(double x1, double x2) {
     return std::sqrt(sqr(x1) + sqr(x2));
 }
 
+// TODO test these
+
 inline double normalizeAngle(double radianAngle) {
     return std::abs(radianAngle) <= TAU ? radianAngle
         : fmod(radianAngle, TAU);
@@ -29,6 +31,7 @@ inline double normalizeAngleAtan2(double radianAngle) {
 // always positive, and getDirection is guaranteed to be in (-pi, pi)
 class TwoDVector {
 protected:
+
     double magnitude;
     double direction;
 
@@ -154,10 +157,12 @@ public:
 
 class TwoDLine {
 protected:
+
     TwoDVector leftPoint;
     TwoDVector rightPoint;
 
 public:
+
     TwoDLine(const TwoDVector& left, const TwoDVector& right) {
         leftPoint = TwoDVector(left);
         rightPoint = TwoDVector(right);
