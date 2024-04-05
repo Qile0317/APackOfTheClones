@@ -4,7 +4,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This is an analogue for [scRepertoire::highlightClones] that can highlight
+#' This is an analogue for `scRepertoire::highlightClones` that can highlight
 #' certain clonotypes on an APackOfTheClones clonal expansion plot. For most
 #' combinations of the arguments, there will be a ggplot fill legend on the
 #' right side that correspond to each (existing) clonotype.

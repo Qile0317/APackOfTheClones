@@ -30,7 +30,7 @@ quiet_load_all_CRAN <- function(...) {
 }
 
 # load packages
-quiet_load_all_CRAN("ggplot2", "Seurat", "magrittr", "viridis", "APackOfTheClones")
+quiet_load_all_CRAN("ggplot2", "Seurat", "magrittr", "APackOfTheClones")
 
 # load data
 pbmc <- get(data("combined_pbmc"))
@@ -118,7 +118,7 @@ vizAPOTC(
 
 In the interest of inspecting the topmost expanded clonotypes, the topmost clones can be obtained, and the plot of clonal links can have its shared clones highlighted with a different palette than the default ggplot hues, and the non-highlighted sequences can even be slightly dimmed to emphasize the difference. The following is an example of highlighting and linking the top 4 most expanded clonotypes in `pbmc`:
 
-```{r, shared_clones_links_highlight, echo = TRUE}
+```R
 # For convenience, do an APackOfTheClones Run first
 pbmc <- RunAPOTC(pbmc, clonecall = "aa", verbose = FALSE)
 
@@ -144,6 +144,36 @@ showCloneHighlight(
     linked_apotc_plot,
     clonotype = names(shared_clones_aa_top4),
     color_each = viridis(4),
+    default_color = NULL,
+    scale_bg = 0.95
+)
+```
+
+```{r, shared_clones_links_highlight, eval = TRUE, echo = FALSE}
+# For convenience, do an APackOfTheClones Run first
+pbmc <- RunAPOTC(pbmc, clonecall = "aa", verbose = FALSE)
+
+# get shared amino acid shared clones for the last run -
+# note that the run_id can be replaced with `clonecall = "aa"`
+shared_clones_aa_top4 <- getSharedClones(
+  pbmc,
+  run_id = getLastApotcDataId(pbmc),
+  top = 4
+)
+
+# generate the unhighlighted plot
+linked_apotc_plot <- APOTCPlot(
+    pbmc,
+    show_shared = shared_clones_aa_top4,
+    verbose = FALSE
+)
+
+# highlight the top 4 clones with the viridis palette
+# also slightly dimming other clones
+showCloneHighlight(
+    linked_apotc_plot,
+    clonotype = names(shared_clones_aa_top4),
+    color_each = c("#440154FF", "#31688EFF", "#35B779FF", "#FDE725FF"),
     default_color = NULL,
     scale_bg = 0.95
 )

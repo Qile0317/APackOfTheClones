@@ -56,7 +56,7 @@ A ggplot object with the data modified to the highlighted colors
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This is an analogue for \link[scRepertoire:highlightClones]{scRepertoire::highlightClones} that can highlight
+This is an analogue for \code{scRepertoire::highlightClones} that can highlight
 certain clonotypes on an APackOfTheClones clonal expansion plot. For most
 combinations of the arguments, there will be a ggplot fill legend on the
 right side that correspond to each (existing) clonotype.

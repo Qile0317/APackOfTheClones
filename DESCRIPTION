@@ -23,7 +23,6 @@ Suggests:
     vdiffr
 Config/testthat/edition: 3
 Imports:
-    data.table,
     dplyr,
     ggforce,
     ggplot2,

@@ -92,7 +92,7 @@ count_raw_clone_sizes <- function(seurat_obj, num_clusters, clonecall) {
     # get the na filtered clonotype metadata
     clonotype_cluster_df <- seurat_obj@meta.data %>%
         select_cols(clonecall, "seurat_clusters") %>%
-        na.omit()
+        stats::na.omit()
 
     # initialize output clone sizes
     clone_sizes <- init_empty_table_list(num_clusters)
