@@ -21,6 +21,24 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
+#' @param show_shared `r lifecycle::badge("experimental")` The output of
+#' [getSharedClones] can be inputted here, and the resulting plot will overlay
+#' lines between clone circles if that clonotype is common between clusters.
+#' Note that the input ***must*** be generated from data in the correct
+#' `APackOfTheClones` run, and the behavior is undefined otherwise and will
+#' likely error. The next 4 arguments allow for aesthetic customization of these
+#' line links.
+#' @param only_link Optional integer indicating to only display clone
+#' links originating from this cluster if showing shared clones.
+#' @param clone_link_width numeric. The width of the lines that connect shared
+#' clones. Defaults to `"auto"` which will estimate a reasonable value depending
+#' on circle sizes.
+#' @param clone_link_color character. The color of the lines that connect shared
+#' clones. Defaults to `"blend"` which will use the average colors of the two
+#' connected clones. Else, any hex color or valid color string input will work,
+#' and the corresponding color will be applied on all links.
+#' @param clone_link_alpha numeric. The alpha of the lines that connect shared
+#' clones.
 #' @param res The number of points on the generated path per full circle. From
 #' plot viewers, if circles seem slightly too pixelated, it is recommended to
 #' first try to export the plot as an `.svg` before increasing `res` due to
@@ -33,8 +51,10 @@
 #' plot. Else, the plot will simply have a blank background.
 #' @param retain_axis_scales If `TRUE`, approximately maintains the axis scales
 #' of the original reduction plot. However, it will only attempt to extend the
-#' axes and never shorten. This is recommended to be set to `TRUE` especially if
-#' working with subsetted versions of the clonal data.
+#' axes and never shorten. Users are recommended to set this to `TRUE`
+#' especially if working with subsetted versions of the clonal data to better
+#' preserve the geometric relation to the original dimensional reduction.
+#' @param alpha numeric. The alpha of the circles in (0, 1]. Defaults to 1.
 #' @param show_labels If `TRUE`, will label each circle cluster at the centroid,
 #' defaulting to "C0, C1, ...".
 #' @param label_size The text size of labels if shown. Defaults to 5.
@@ -62,13 +82,18 @@
 #' the legend
 #' @param add_legend_background logical. If `TRUE`, will add a border around the
 #' legend and fill the background to be white, overlaying anything else.
+#' @param add_legend_centerspace numeric. An additional amount of distance
+#' changed between the circle sizes on the left side of the legend and the
+#' numbers on the right. Useful to set to around 0.5 (or more / less) when there
+#' are particularly large clone sizes that may cover the numbers.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
-#' seurat object
+#' seurat object. There is an additional 10th element in the object named
+#' `"APackOfTheClones"` used by other functions in this package and shouldn't
+#' interfere with any other ggplot functionality. (As far as currently known)
+#' @export
 #'
 #' @seealso [AdjustAPOTC]
-#'
-#' @export
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -88,11 +113,17 @@ APOTCPlot <- function(
 	extra_filter = NULL,
 	run_id = NULL,
 
+	show_shared = NULL,
+	only_link = NULL,
+	clone_link_width = "auto",
+	clone_link_color = "black",
+	clone_link_alpha = 0.5,
+
 	res = 360L,
 	linetype = "blank",
 	use_default_theme = TRUE,
 	retain_axis_scales = FALSE,
-	#alpha = 1,
+	alpha = 1,
 
 	show_labels = FALSE,
 	label_size = 5,
@@ -105,21 +136,23 @@ APOTCPlot <- function(
 	legend_spacing = "auto",
 	legend_label = "Clone sizes",
 	legend_text_size = 5,
-	add_legend_background = TRUE
+	add_legend_background = TRUE,
+	add_legend_centerspace = 0,
+
+	verbose = TRUE
 ) {
+	# handle varargs, run_id, and typecheck
 	varargs_list <- list(...)
 	args <- hash::hash(as.list(environment()))
-	args$run_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+	args$run_id <- infer_object_id_if_needed(args, varargs_list)
 	APOTCPlot_error_handler(args)
 
+	# get the apotc object
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
-	result_plot <- plot_clusters(
-		clusters = get_plottable_df_with_color(apotc_obj),
-		n = res,
-		linetype = linetype#,
-		#alpha=alpha
-	)
+	# initialize plot
+	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
+	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
 
 	#set theme
 	if (use_default_theme) {
@@ -130,9 +163,6 @@ APOTCPlot <- function(
 	} else {
 		result_plot <- result_plot + ggplot2::theme_void()
 	}
-
-	# get current plot dimensions
-	result_plot_dimensions <- get_plot_dims(result_plot)
 
 	# retain axis scales on the resulting plot.
 	if (retain_axis_scales) {
@@ -149,7 +179,30 @@ APOTCPlot <- function(
 		)
 	}
 
-	# TODO clonal link computation here
+	if (isnt_empty(show_shared)) {
+		
+		# check only_link indexing
+		if (!is.null(only_link) &&
+			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
+			warning(call. = FALSE,
+				"* The cluster at index `only_link` = ", only_link,
+				" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
+			)
+			only_link <- NULL
+		}
+
+		result_plot <- overlay_shared_clone_links(
+			apotc_obj = apotc_obj,
+			shared_clones = show_shared,
+			result_plot = result_plot,
+			only_cluster = only_link,
+			link_color_mode = clone_link_color,
+			link_width = clone_link_width,
+			link_alpha = clone_link_alpha,
+			verbose = verbose
+			# TODO other params in the future
+		)
+	}
 
 	if (show_labels) {
 		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
@@ -163,57 +216,27 @@ APOTCPlot <- function(
 			sizes = legend_sizes,
 			pos = legend_position,
 			buffer = legend_buffer,
+			additional_middle_spacing = add_legend_centerspace,
 			color = legend_color,
 			n = res,
 			spacing = legend_spacing,
 			legend_label = legend_label,
 			legend_textsize = legend_text_size,
-			do_add_legend_border = add_legend_background
+			do_add_legend_border = add_legend_background,
+			linetype = linetype
 		)
 	}
-	
+
+	result_plot <- ApotcGGPlot(result_plot, apotc_obj)
+
+	if (verbose) message("* generated ggplot object")
 	result_plot
 }
 
 APOTCPlot_error_handler <- function(args) {
 	
 	check_apotc_identifiers(args)
-
-    if (!is_an_integer(args$res)) {
-        stop(call. = FALSE, "`res` must be an integer value of length 1.")
-    }
-
-    if (!is_a_character(args$linetype)) {
-        stop(call. = FALSE, "`linetype` must be a character of length 1.")
-    }
-
-    if (!is_a_logical(args$use_default_theme)) {
-        stop(call. = FALSE,
-			"`use_default_theme` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_logical(args$retain_axis_scales)) {
-        stop(call. = FALSE,
-			"`retain_axis_scales` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_logical(args$show_labels)) {
-        stop(call. = FALSE,
-			"`show_labels` must be a logical value of length 1."
-		)
-    }
-
-    if (!is_a_numeric(args$label_size)) {
-        stop(call. = FALSE, "`label_size` must be a numeric value of length 1.")
-    }
-
-    if (!is_a_logical(args$add_size_legend)) {
-        stop(call. = FALSE,
-			"`add_size_legend` must be a logical value of length 1."
-		)
-    }
+	check_filtering_conditions(args)
 
 	# check object_id validity
 	if (!containsApotcRun(args$seurat_obj, args$run_id)) {
@@ -223,7 +246,69 @@ APOTCPlot_error_handler <- function(args) {
 		))
 	}
 
-    # TODO: Add more specific checks for other parameters
+	# typecheck clone link args
+	typecheck(args$show_shared, is_output_of_getSharedClones, is.null)
+	typecheck(args$only_link, is_an_integer, is.null)
+	if (!should_estimate(args$clone_link_width))
+		typecheck(args$clone_link_width, is_a_positive_numeric)
+	typecheck(args$clone_link_color, is_a_character)
+	typecheck(args$clone_link_alpha, is_a_numeric)
 
-	check_filtering_conditions(args)
+	# typecheck visualization args
+	typecheck(args$res, is_an_integer)
+	typecheck(args$linetype, is_a_character)
+	typecheck(args$use_default_theme, is_a_logical)
+	typecheck(args$retain_axis_scales, is_a_logical)
+	typecheck(args$show_labels, is_a_logical)
+	typecheck(args$label_size, is_a_positive_numeric)
+
+	# check legend args
+	typecheck(args$add_size_legend, is_a_logical)
+	check_legend_params(args)
+
 }
+
+# helpers for getting plot dimensions quickly
+
+get_apotc_plot_dims <- function(apotc_obj) {
+	apotc_obj %>%
+		get_plottable_df_with_color() %>%
+		get_apotc_plot_dims_from_df()
+}
+
+get_apotc_plot_dims_from_df <- function(plot_dataframe) {
+	plot_dataframe %>%
+		subset_to_only_edge_circles() %>%
+		plot_clusters() %>%
+		get_plot_dims()
+}
+
+subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
+	apotc_plot_dataframe[unique(rcppGetEdgeCircleIndicies(apotc_plot_dataframe)), ]
+}
+
+# Produce modified ggplot object of an APackOfTheClones plot with an extra slot
+# hack fix - the clone size slot stores the autogenerated legend sizes
+ApotcGGPlot <- function(ggplot_obj, apotc_obj) {
+	apotc_obj@clusters <- list()
+	apotc_obj@clone_sizes <- list(estimate_legend_sizes(apotc_obj))
+	ggplot_obj$APackOfTheClones <- apotc_obj
+	ggplot_obj
+}
+
+isApotcGGPlot <- function(ggplot_obj) {
+	inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
+}
+
+# getter
+get_apotcdata <- function(apotc_ggplot_obj) {
+	apotc_ggplot_obj$APackOfTheClones
+}
+
+# based on the hack fix - get the estimated legend sizes in a apot ggplot
+get_estimated_legend_sizes <- function(apotc_ggplot_obj) {
+	get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
+}
+
+# TODO may need an updater function for the plot object since old versions wont have them.
+# alternatively can have the user in a warning function to update their object.

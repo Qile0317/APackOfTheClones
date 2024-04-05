@@ -3,7 +3,7 @@
 #' object
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' If the user is unsatisfied with the clonal expansion plot that
 #' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
@@ -59,7 +59,7 @@
 #' translate all labels in `nudge_label` by the input - which mostly is
 #' syntactic sugar for translating a single label if the input of
 #' `nudge_label` is of length 1.
-#' 
+#'
 #' @return The adjusted `seurat_obj`
 #' @export
 #'
@@ -114,7 +114,7 @@ AdjustAPOTC <- function(
 	recolor_cluster = NULL,
 	new_color = NULL,
 
-	rename_label = NULL,
+	rename_label = NULL, # TODO add functionality to change all at once or modify all at once
 	new_label = NULL,
 	relocate_label = NULL,
 	label_relocation_coord = NULL,
@@ -129,9 +129,8 @@ AdjustAPOTC <- function(
 	args <- hash::hash(as.list(environment()))
 	AdjustAPOTC_error_handler(args)
 
-	object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
-	apotc_obj <- getApotcData(seurat_obj, object_id)
-	args <- hash::hash(as.list(environment()))
+	args$object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+	apotc_obj <- getApotcData(seurat_obj, args$object_id)
 
 	# # TODO
 	# if (interactive) {
@@ -139,11 +138,13 @@ AdjustAPOTC <- function(
 	# }
 
 	if (should_change(new_clone_scale_factor)) {
-		apotc_obj <- change_clone_scale(seurat_obj, args)
+		apotc_obj <- change_clone_scale(apotc_obj, new_clone_scale_factor)
+		# maybe change the params in the seurat object itself?
 	}
 
 	if (should_change(new_rad_scale_factor)) {
 		apotc_obj <- change_rad_scale(apotc_obj, new_rad_scale_factor)
+		# maybe change the params in the seurat object itself?
 	}
 
 	if (should_change(recolor_cluster)) {
@@ -182,62 +183,51 @@ AdjustAPOTC <- function(
 		apotc_obj <- nudge_labels(apotc_obj, nudge_label, label_nudge_vector)
 	}
 
-	setApotcData(seurat_obj, object_id, apotc_obj)
+	setApotcData(seurat_obj, args$object_id, apotc_obj)
 }
 
 AdjustAPOTC_error_handler <- function(args) {
-	# TODO - type check
-	# TODO rest of errors
 
 	check_apotc_identifiers(args)
 
-	if (should_change(args$new_rad_scale_factor)) {
-		if (args$new_rad_scale_factor < 0) {
-			stop(call. = FALSE, "new_rad_scale_factor must be a positive number")
-		}
-	}
-
-	if (should_change(args$new_clone_scale_factor)) {
-		if (args$new_clone_scale_factor < 0) {
-			stop(call. = FALSE, "new_rad_scale_factor must be a positive number")
-		}
-	}
+	typecheck(args$new_rad_scale_factor, is_a_positive_numeric, is.null)
+	typecheck(args$new_clone_scale_factor, is_a_positive_numeric, is.null)
 
 	check_repulsion_params(args)
+
+	# TODO check lengths for a bunch of these
+
+	typecheck(args$relocate_cluster, is_integer, is.null)
+	typecheck(
+		args$relocation_coord, is_numeric_pair, is_list_of_numeric_pair, is.null
+	) 
+
 	# if (!is.null(args$relocation_coord) && (length(args$relocate_cluster) != length(args$relocation_coord))) {
 	# return("length of relocate_cluster must be the same as the length of relocation_coord")
 	# }
-	# if (!is.null(args$nudge_vector) && (length(args$nudge_cluster) != length(args$nudge_vector))) {
-	# return("length of nudge_cluster must be the same as the length of nudge_vector")
-	# }
-	# if ((args$relocate_cluster != -1) && (args$nudge_cluster != -1)) {
-	# 	if (!is.null(intersect(args$relocation_cluster, args$nudge_cluster))) {
-	# 		return("There are repeated elements in relocate_cluster and/or nudge_cluster")
-	# 	}
-	# }
+
+	typecheck(args$nudge_cluster, is_integer, is.null)
+	typecheck(args$nudge_vector, is_numeric_pair, is_list_of_numeric_pair, is.null)
+
+	typecheck(args$recolor_cluster, is_integer, is.null)
+	typecheck(args$new_color, is_character, is.null)
+
+	# TODO more checks
 }
 
-# TODO it should be more efficient + safer to mathematically transform all vals
-change_clone_scale <- function(seurat_obj, args) {
+change_clone_scale <- function(apotc_obj, new_factor) {
 
-	if (args$verbose) {
-		message("Repacking all clusters with new clone scale factor")
-	}
+	apotc_obj %>%
+		lapply_clusterlists(function(x) {
+			rcppRescaleClones(
+				rClusterlist = x,
+				newCloneScale = new_factor,
+				prevCloneScale = get_clone_scale_factor(apotc_obj),
+				prevRadScale = get_rad_scale_factor(apotc_obj)
+			)
+		}) %>%
+		set_clone_scale_factor(new_factor)
 
-	past_params <- find_seurat_command(
-		seurat_obj = seurat_obj,
-		func_name = "RunAPOTC",
-		id = args$object_id
-	)@params
-
-	args$apotc_obj@clone_scale_factor <- args$new_clone_scale_factor
-
-	circlepackClones(
-		apotc_obj = args$apotc_obj,
-		ORDER = past_params$order_clones,
-		try_place = past_params$try_place,
-		verbose = args$verbose
-	)
 }
 
 change_rad_scale <- function(apotc_obj, new_factor) {
@@ -266,7 +256,7 @@ recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
 
 relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 
-	if (is.numeric(relocation_coord)) {
+	if (is_numeric_pair(relocation_coord)) {
 		relocation_coord <- init_list(length(relocate_cluster), relocation_coord)
 	}
 
@@ -274,6 +264,7 @@ relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 
 	for (i in seq_along(relocate_cluster)) {
 		cl_ind <- relocate_cluster[i]
+		if (!is_valid_nonempty_cluster(apotc_obj, cl_ind)) next
 		new_clusterlists[[cl_ind]] <- move_cluster(
 	    	cluster = new_clusterlists[[cl_ind]],
 	    	new_coord = relocation_coord[[i]]
@@ -285,7 +276,7 @@ relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 
 nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 
-	if (is.numeric(nudge_vector)) {
+	if (is_numeric_pair(nudge_vector)) {
 		nudge_vector <- init_list(length(nudge_cluster), nudge_vector)
 	}
 
@@ -305,6 +296,7 @@ nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 rename_labels <- function(apotc_obj, rename_label, new_label) {
 	rename_label <- process_label_input(apotc_obj, rename_label)
 	for (i in seq_along(rename_label)) {
+		if (!is_valid_nonempty_cluster(apotc_obj, rename_label[i])) next
 		apotc_obj@labels[rename_label[i]] <- new_label[i]
 	}
 	apotc_obj
@@ -337,14 +329,13 @@ operate_on_label_locations <- function(apotc_obj, labels, two_d_vectors, func) {
 
 	labels <- process_label_input(apotc_obj, labels)
 
-	if (is.numeric(two_d_vectors)) {
-		two_d_vectors <- init_list(
-			length(labels), two_d_vectors
-		)
+	if (is_numeric_pair(two_d_vectors)) {
+		two_d_vectors <- init_list(length(labels), two_d_vectors)
 	}
 
 	for (i in seq_along(labels)) {
 		index <- labels[i]
+		if (!is_valid_nonempty_cluster(apotc_obj, index)) next
 		apotc_obj@label_coords[[index]] <- func(
 			apotc_obj@label_coords[[index]],
 			two_d_vectors[[i]]

@@ -1,3 +1,46 @@
+#' @title
+#' Calculate seurat cluster centroids based on a Dimensional reduction
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Utility function to calculate the physical xy coordinates of each seurat
+#' cluster based on a dimensional reduction already present in the object.
+#' The results are returned in a list with the length of the number of distinct
+#' seurat clusters based on the seurat_obj `meta.data`.
+#'
+#' @param seurat_obj input seurat object with the dimensional reduction of
+#' choice already present, and seurat clusters computed.
+#' @param reduction character. The reduction that the centroid calculation
+#' should be based on.
+#'
+#' @return A list of the length of the number of distinct clusters in the
+#' seurat object metadata, where each element of the list is a numeric vector
+#' of length 2, with the numbers corresponding to the x and y coordinate
+#' respectively of the seurat cluster with the corresponding index.
+#'
+#' @export
+#'
+#' @examples
+#' data("combined_pbmc")
+#' getReductionCentroids(combined_pbmc, reduction = "umap")
+#'
+getReductionCentroids <- function(seurat_obj, reduction) {
+  get_cluster_centroids(
+    seurat_obj = seurat_obj,
+    reduction = user_get_reduc_obj(seurat_obj, reduction),
+    passed_in_reduc_obj = TRUE
+  )
+}
+
+user_get_reduc_obj <- function(seurat_obj, reduction) {
+    if (!is_seurat_object(seurat_obj))
+        stop(call. = FALSE, "`seurat_obj` not a seurat object!")
+    if (!is_a_character(reduction))
+        stop(call. = FALSE, "`reduction` must be one character")
+    seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
+}
+
 # progress bar functions
 
 progress_bar <- function (x = 0, max = 100) {
@@ -31,7 +74,7 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
     ))
 }
 
-# readability functions
+# table/(list of table) utils
 
 create_empty_table <- function() {
     structure(
@@ -42,14 +85,127 @@ create_empty_table <- function() {
     )
 }
 
-is_empty <- function(inp) identical(inp, list())
-isnt_empty <- function(inp) !identical(inp, list())
+as_table <- function(x) ensure_proper_table(as.table(x))
+
+ensure_proper_table <- function(x) {
+    if (is.null(names(dimnames(x)))) names(dimnames(x)) <- ""
+    x
+}
+
+strip_to_numeric <- function(table_obj) {
+    name_vec <- names(table_obj)
+    out <- as.numeric(table_obj)
+    names(out) <- name_vec
+    out
+}
+
+convert_named_numeric_to_table <- function(named_numeric_vector) {
+    output <- as.integer(named_numeric_vector)
+    names(output) <- names(named_numeric_vector)
+    output <- as.table(output)
+    names(dimnames(output)) <- ""
+    output
+}
+
+# intersect tables, ***ASSUMING*** that for elements with common names,
+# they have the exact same value (frequency).
+intersect_common_tables <- function(t1, t2) {
+    t1[names(t1) %in% intersect(names(t1), names(t2))]
+}
+
+# vectorized version of intersect_common_tables, assuming lists are the
+# same length, and ignores if either table is empty
+intersect_common_table_lists <- function(l1, l2) {
+    operate_on_same_length_lists(intersect_common_tables, l1, l2)
+}
+
+union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
+
+    if (is_list_of_empty_tables(x)) {
+        if (as_table) return(create_empty_table())
+        return(numeric(0))
+    }
+
+    frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
+
+    for (curr_table in x) {
+        if (is_empty(curr_table)) next
+        curr_names <- names(curr_table)
+        for (el in enumerate(strip_to_numeric(curr_table))) {
+            frequency_map[[curr_names[ind(el)]]] %+=% val1(el) # nolint
+        }
+    }
+
+	x <- unlist(as.list(frequency_map))
+	if (!is.null(sort_decreasing)) {
+        x <- sort(x, decreasing = sort_decreasing, method = "radix")
+    }
+	if (as_table) x <- convert_named_numeric_to_table(x)
+    x
+}
+
+sort_each_table <- function(x, desc = FALSE) {
+    lapply(x, function(y) {
+        if (is_empty(y)) return(y)
+        as_table(sort(y, decreasing = desc, method = "radix"))
+    })
+}
+
+init_empty_table_list <- function(num_elements) {
+    init_list(num_elements, create_empty_table())
+} 
+
+is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
+
+# dataframe utils
+
+select_cols <- function(df, ...) df[unlist(list(...))]
+
+# hash::hash utilities
+
+create_hash_from_keys <- function(keys, init_vals = NULL) {
+    keys <- unique(keys)
+    numkeys <- length(keys)
+    switch(as.character(numkeys),
+        "0" = hash::hash(),
+        "1" = hash::hash(keys, init_vals),
+        hash::hash(keys, init_list(numkeys, init_vals))
+    )
+}
+
+create_valueless_vector_hash <- function(key, vector_type) {
+    create_hash_from_keys(key, vector_type(0))
+}
+
+create_empty_int_hash <- function(keys) {
+    create_valueless_vector_hash(keys, integer)
+}
+
+hash_from_tablelist <- function(tablelist) {
+    lapply(
+        tablelist,
+        function(x) {
+            if (!is_empty_table(x)) return(hash::hash(x))
+            hash::hash()
+        }
+    )
+}
+
+# readability functions
+
+contains_duplicates <- function(v) anyDuplicated(v) != 0
+
+is_false <- function(x) identical(x, FALSE)
+
+is_empty <- function(inp) (length(inp) == 0L) || identical(inp, hash::hash())
+
+isnt_empty <- function(inp) !is_empty(inp)
 
 isnt_na <- function(inp) !any(is.na(inp))
 
 isnt_empty_nor_na <- function(inp) isnt_empty(inp) && isnt_na(inp)
 
-is_empty_table <- function(inp) identical(inp, table(NULL))
+is_empty_table <- is_empty
 
 is_int <- function(num) all(num == as.integer(num))
 
@@ -61,7 +217,15 @@ should_change <- function(obj) !is.null(obj)
 
 should_compute <- function(x) is.null(x)
 
-# plotting related utils
+as_expression <- function(...) {
+    parse(text = paste0(unlist(list(...)), collapse = ""))
+}
+
+subset_dataframe <- function(df, filter_string) {
+    df %>% dplyr::filter(eval(as_expression(filter_string)))
+}
+
+# ggplot2 utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
 #' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
@@ -88,27 +252,34 @@ get_yr <- function(p) {
     p[[2]]
 }
 
-is_seurat_object <- function(obj) inherits(obj, "Seurat")
-
-is_a_character <- function(x) {
-    if (length(x) != 1) return(FALSE)
-    is.character(x)
+name_latest_layer <- function(plt, new_name) {
+    if (is.null(names(plt$layers))) {
+        names(plt$layers) <- rep("", length(plt$layers))
+    }
+    names(plt$layers)[length(plt$layers)] <- new_name
+    plt
 }
 
-is_an_integer <- function(x) {
-    if (length(x) != 1) return(FALSE)
-    as.numeric(x) == as.numeric(as.integer(x))
+remove_ggplot_layers <- function(ggplot_obj, layer_indicies) {
+  ggplot_obj$layers[layer_indicies] <- NULL
+  ggplot_obj
 }
 
-is_a_numeric <- function(x) {
-    if (length(x) != 1) return(FALSE)
-    is.numeric(x)
+get_ggplot_data <- function(x) x$data
+
+set_ggplot_data <- function(ggplot_obj, new_data) {
+  ggplot_obj$data <- new_data
+  ggplot_obj
 }
 
-is_a_logical <- function(x) {
-    if (length(x) != 1) return(FALSE)
-    is.logical(x)
+# naming utils
+
+secretly_init_name <- function(x) {
+    names(x) <- rep("", length(x))
+    x
 }
+
+unname_if_empty <- function(l) if (is_empty(l)) unname(l) else l
 
 # math utils
 
@@ -117,53 +288,84 @@ bound_num <- function(num, lowerbound, upperbound) {
 }
 
 is_bound_between <- function(num, lowerbound, upperbound) {
-    num >= lowerbound && num <= upperbound
+    (num >= lowerbound) & (num <= upperbound)
 }
 
 add <- function(x, y) x + y
 subtract <- function(x, y) x - y
+multiply <- function(x, y) x * y
+divide <- function(x, y) x / y
 
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
 
+# special mutation operators from StackOverflow
+
+create_mutator <- function(binary_operator) {
+    function(var, val) {
+        eval(
+            call("<-", substitute(var), binary_operator(var, val)),
+            envir = parent.frame()
+        )
+    }
+}
+
+"%+=%" <- create_mutator(add)
+"%*=%" <- create_mutator(multiply)
+
+# iteration related functions for readability
+
 get_unique_pairs_up_to <- function(x) {
     if (x <= 1) return(list())
-
-    all_unique_pairs <- init_list(choose(x, x - 2))
-    index <- 1
-    for (i in 1:(x - 1)) {
-        for (j in (i + 1):x) {
-            all_unique_pairs[[index]] <- c(i, j)
-            index <- index + 1
-        }
-    }
-
-    all_unique_pairs
+    rcppGetUniquePairsUpTo(as.integer(x), oneIndexed = TRUE)
 }
+
+zip <- function(...) mapply(list, ..., SIMPLIFY = FALSE)
+
+enumerate <- function(..., zero_indexed = FALSE) {
+    zip(seq_along(..1) - zero_indexed, ...)
+}
+ind <- function(elem) elem[[1]]
+val <- function(elem, index) elem[[index + 1]]
+val1 <- function(elem) val(elem, 1)
 
 # spelling related functions
 
+is_vowel <- function(s) tolower(s) %in% c("a", "e", "i", "o", "u")
+starts_with_vowel <- function(s) is_vowel(get_first_char(s))
+
+prepend_indefinite_article <- function(s, exclude = c("NULL")) {
+    if (s %in% exclude) return(s)
+    paste("a", ifelse(starts_with_vowel(s), "n", ""), " ", s, sep = "")
+}
+
+get_right_of_dollarsign <- function(x) sapply(strsplit(x, "\\$"), getlast)
+
+get_first_char <- function(s) substr(s, 1, 1)
+
 strip_spaces <- function(s) gsub(" ", "", s)
+
 strip_and_lower <- function(s) strip_spaces(tolower(s))
 
 strip_unquoted_spaces <- function(input_str) {
-  all_parts <- strsplit(input_str, "'")
 
-  for (i in seq_along(input_str)) {
+    all_parts <- strsplit(input_str, "'")
+
+    for (i in seq_along(input_str)) {
     parts <- all_parts[[i]]
 
-    for (j in seq_along(parts)) {
-        if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
-    }
-    
-    input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
+        for (j in seq_along(parts)) {
+            if (is_odd(j)) parts[j] <- strip_spaces(parts[j])
+        }
 
-    if (is_even(length(parts))) {
-        input_str[i] <- paste(input_str[i], "'", sep = "")
+        input_str[i] <- Reduce(function(...) paste(..., sep = "'"), parts)
+
+        if (is_even(length(parts))) {
+            input_str[i] <- paste(input_str[i], "'", sep = "")
+        }
     }
-  }
-  
-  input_str
+
+    input_str
 }
 
 user_attempt_correction <- function(
@@ -172,11 +374,6 @@ user_attempt_correction <- function(
     stop_msg_start,
     modifiers = list(tolower, trimws, strip_unquoted_spaces, strip_spaces)
 ) {
-
-    # word modifiers for increase similarity - order matters!
-    modifiers <- list(
-        tolower, trimws, strip_unquoted_spaces, strip_spaces
-    )
 
     # check if the string is already present in strset and if yes return
     match_indicies <- which(s == strset)
@@ -239,26 +436,28 @@ closest_word <- function(s, strset) {
 
 init_list <- function(num_elements, init_val = NULL) {
     l <- vector("list", num_elements)
-    for (i in 1:num_elements) {
-        l[[i]] <- init_val
-    }
-    l
+    if (is.null(init_val)) return(l)
+    lapply(l, function(x) init_val)
 }
 
-getlast <- function(x) UseMethod("getlast")
-getlast.default <- function(x) x[length(x)]
-getlast.list <- function(x) x[[length(x)]]
+getlast <- function(x, n = 1) {
+    index <- length(x) - n + 1
+    if (is.list(x)) return(x[[index]])
+    x[index]
+}
+
+# get first non empty element in a list, assuming it exists
+get_first_nonempty <- function(lst) {
+    for (el in lst) if (isnt_empty(el)) return(el)
+}
 
 # operate on non-empty elements of two lists of the same length
 # with a 2-argument function
 operate_on_same_length_lists <- function(func, l1, l2) {
     l <- init_list(length(l1), list())
     for (i in seq_along(l1)) {
-        if (isnt_empty(l1[[i]]) && isnt_empty(l2[[i]])) {
-            if (!(is.null(l1[i]) || is.null(l2[i]))) {
-                l[[i]] <- func(l1[[i]], l2[[i]])
-            }
-        }
+        if (is_empty(l1[[i]]) || is_empty(l2[[i]])) next
+        l[[i]] <- func(l1[[i]], l2[[i]])
     }
     l
 }
@@ -303,16 +502,10 @@ join_list_of_characters <- function(params, sep = "_") {
 
 # S3 method to represent vectors as strings
 
-repr_as_string <- function(input, ...) {
-    UseMethod("repr_as_string")
-}
-
-repr_as_string.character <- function(input, ...) {
-    to_string_rep_with_insert(v = input, insert = "'")
-}
-
-repr_as_string.default <- function(input, ...) {
-    to_string_rep_with_insert(v = input, insert = "")
+repr_as_string <- function(input) {
+    insertchar <- ""
+    if (is.character(input)) insertchar <- "'"
+    to_string_rep_with_insert(v = input, insert = insertchar)
 }
 
 # represent vector as string - doesnt take into account of names!
@@ -326,10 +519,6 @@ to_string_rep_with_insert <- function(v, insert) {
         output <- paste(output, insert, x, insert, ",", sep = "")
     }
     paste("c(", substr(output, 1, nchar(output) - 1), ")", sep = "")
-}
-
-subset_dataframe <- function(df, filter_string) {
-    df %>% dplyr::filter(eval(parse(text = filter_string)))
 }
 
 # Seurat utils
@@ -350,29 +539,12 @@ subsetSeuratMetaData <- function(
 	seurat_obj
 }
 
-# Returns the number of valid barcodes that are not NA's
-count_tcr_barcodes <- function(seurat_obj) {
-  sum(!is.na(seurat_obj@meta.data[["barcode"]]))
+count_umap_clusters <- function(seurat_obj) {
+    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 count_clones <- function(seurat_obj, clonecall) {
   sum(!is.na(seurat_obj@meta.data[[clonecall]]))
-}
-
-# get the percent of NA's in the metadata barcode column for the message
-percent_na <- function(seurat_obj) {
-  num_barcodes <- length(seurat_obj@meta.data[["barcode"]])
-  100 * (num_barcodes - count_tcr_barcodes(seurat_obj)) / num_barcodes
-}
-
-get_rna_assay_barcodes <- function(seurat_obj) {
-    seurat_obj@assays[["RNA"]]@data@Dimnames[[2]]
-}
-
-# seurat cluster related functions
-
-count_num_clusters <- function(seurat_obj) {
-  data.table::uniqueN((seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 get_num_total_clusters <- function(seurat_obj) {
@@ -400,59 +572,17 @@ attempt_correction <- function(seurat_obj, reduction) {
         stop("No dimensional reductions detected")
     }
 
-    reduction <- ifelse(
-        test = identical(strip_and_lower(reduction), "t-sne") &&
-            !any("t-sne" == strip_and_lower(get_curr_reduc_names(seurat_obj))),
-        yes = "tsne",
-        no = reduction
-    )
+    curr_reductions <- get_curr_reduc_names(seurat_obj)
+
+    if (identical(strip_and_lower(reduction), "t-sne")) {
+        if (!any("t-sne" == strip_and_lower(curr_reductions))) {
+            reduction <- "tsne"
+        }
+    }
 
     user_attempt_correction(
       reduction,
-      strset = get_curr_reduc_names(seurat_obj),
+      strset = curr_reductions,
       stop_msg_start = "Invalid reduction"
     )
-}
-
-#' @title
-#' Calculate seurat cluster centroids based on a Dimensional reduction
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' Utility function to calculate the physical xy coordinates of each seurat
-#' cluster based on a dimensional reduction already present in the object.
-#' The results are returned in a list with the length of the number of distinct
-#' seurat clusters based on the seurat_obj `meta.data`.
-#'
-#' @param seurat_obj input seurat object with the dimensional reduction of
-#' choice already present, and seurat clusters computed.
-#' @param reduction character. The reduction that the centroid calculation
-#' should be based on.
-#'
-#' @return A list of the length of the number of distinct clusters in the
-#' seurat object metadata, where each element of the list is a numeric vector
-#' of length 2, with the numbers corresponding to the x and y coordinate
-#' respectively of the seurat cluster with the corresponding index.
-#'
-#' @export
-#'
-#' @examples
-#' data("combined_pbmc")
-#' getReductionCentroids(combined_pbmc, reduction = "umap")
-#'
-getReductionCentroids <- function(seurat_obj, reduction) {
-  get_cluster_centroids(
-    seurat_obj = seurat_obj,
-    reduction = user_get_reduc_obj(seurat_obj, reduction),
-    passed_in_reduc_obj = TRUE
-  )
-}
-
-user_get_reduc_obj <- function(seurat_obj, reduction) {
-    if (!is_seurat_object(seurat_obj))
-        stop(call. = FALSE, "`seurat_obj` not a seurat object!")
-    if (!is_a_character(reduction))
-        stop(call. = FALSE, "`reduction` must be one character")
-    seurat_obj@reductions[[attempt_correction(seurat_obj, reduction)]]
 }

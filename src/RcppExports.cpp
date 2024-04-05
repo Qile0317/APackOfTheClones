@@ -10,6 +10,58 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// rcppGetEdgeCircleIndicies
+std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame);
+RcppExport SEXP _APackOfTheClones_rcppGetEdgeCircleIndicies(SEXP apotcPlotDataFrameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type apotcPlotDataFrame(apotcPlotDataFrameSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppGetEdgeCircleIndicies(apotcPlotDataFrame));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppRescaleClones
+Rcpp::List rcppRescaleClones(Rcpp::List rClusterlist, double newCloneScale, double prevCloneScale, double prevRadScale);
+RcppExport SEXP _APackOfTheClones_rcppRescaleClones(SEXP rClusterlistSEXP, SEXP newCloneScaleSEXP, SEXP prevCloneScaleSEXP, SEXP prevRadScaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type rClusterlist(rClusterlistSEXP);
+    Rcpp::traits::input_parameter< double >::type newCloneScale(newCloneScaleSEXP);
+    Rcpp::traits::input_parameter< double >::type prevCloneScale(prevCloneScaleSEXP);
+    Rcpp::traits::input_parameter< double >::type prevRadScale(prevRadScaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppRescaleClones(rClusterlist, newCloneScale, prevCloneScale, prevRadScale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppRemoveUniqueClonesHelper
+Rcpp::List rcppRemoveUniqueClonesHelper(std::vector<std::string> clonotypes, std::vector<std::vector<int>> clusters);
+RcppExport SEXP _APackOfTheClones_rcppRemoveUniqueClonesHelper(SEXP clonotypesSEXP, SEXP clustersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type clonotypes(clonotypesSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::vector<int>> >::type clusters(clustersSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppRemoveUniqueClonesHelper(clonotypes, clusters));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppConstructLineLinkDf
+Rcpp::DataFrame rcppConstructLineLinkDf(Rcpp::List clusterLists, Rcpp::List rawCloneSizes, Rcpp::List sharedClonotypeClusters, int oneIndexedSourceClusterIndex, double extraSpacing);
+RcppExport SEXP _APackOfTheClones_rcppConstructLineLinkDf(SEXP clusterListsSEXP, SEXP rawCloneSizesSEXP, SEXP sharedClonotypeClustersSEXP, SEXP oneIndexedSourceClusterIndexSEXP, SEXP extraSpacingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type clusterLists(clusterListsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type rawCloneSizes(rawCloneSizesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sharedClonotypeClusters(sharedClonotypeClustersSEXP);
+    Rcpp::traits::input_parameter< int >::type oneIndexedSourceClusterIndex(oneIndexedSourceClusterIndexSEXP);
+    Rcpp::traits::input_parameter< double >::type extraSpacing(extraSpacingSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppConstructLineLinkDf(clusterLists, rawCloneSizes, sharedClonotypeClusters, oneIndexedSourceClusterIndex, extraSpacing));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_circle_layout
 Rcpp::List cpp_circle_layout(std::vector<double> input_rad_vec, Rcpp::NumericVector centroid, double rad_decrease, bool try_place, bool verbose);
 RcppExport SEXP _APackOfTheClones_cpp_circle_layout(SEXP input_rad_vecSEXP, SEXP centroidSEXP, SEXP rad_decreaseSEXP, SEXP try_placeSEXP, SEXP verboseSEXP) {
@@ -22,6 +74,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type try_place(try_placeSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(cpp_circle_layout(input_rad_vec, centroid, rad_decrease, try_place, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppGetUniquePairsUpTo
+std::vector<std::vector<int>> rcppGetUniquePairsUpTo(int x, bool oneIndexed);
+RcppExport SEXP _APackOfTheClones_rcppGetUniquePairsUpTo(SEXP xSEXP, SEXP oneIndexedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type oneIndexed(oneIndexedSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppGetUniquePairsUpTo(x, oneIndexed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -92,7 +156,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_APackOfTheClones_rcppGetEdgeCircleIndicies", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleIndicies, 1},
+    {"_APackOfTheClones_rcppRescaleClones", (DL_FUNC) &_APackOfTheClones_rcppRescaleClones, 4},
+    {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
+    {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 5},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
+    {"_APackOfTheClones_rcppGetUniquePairsUpTo", (DL_FUNC) &_APackOfTheClones_rcppGetUniquePairsUpTo, 2},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},

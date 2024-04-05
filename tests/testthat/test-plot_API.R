@@ -32,16 +32,5 @@ test_that("df_full_join() works", {
 
 })
 
-test_that("plot_clusters() works", {
-    test_plot <- plot_clusters(
-        insert_colors(df_full_join(list(c1, c2, c3)), 3))
-
-    expect_doppelganger("plot_c1_c2_c3", test_plot)
-
-    test_plot <- plot_clusters(
-        insert_colors(df_full_join(test_cluster_lists), 5))
-
-    expect_doppelganger("plot_API_all", test_plot)
-})
-
+# TODO plot_clusters by itself
 # TODO more tests

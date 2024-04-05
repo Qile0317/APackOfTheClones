@@ -6,8 +6,8 @@
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/unstable/LICENSE.md)
+[![Developmental Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://qile0317.github.io/APackOfTheClones/dev/)
+[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md)
 <!-- badges: end -->
 
 ```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
@@ -24,23 +24,7 @@ The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murr
 install.packages("APackOfTheClones")
 ```
 
-If there are any issues with the CRAN installation (for example, the package has been archived on CRAN for a brief period), try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones@cran")
-```
-
-Alternatively, to download the latest semi-stable development edition, try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones")
-```
-
-A static legacy version is also available both on CRAN archives and on a git branch (`v0`), to install, try
-
-```R
-devtools::install_github("Qile0317/APackOfTheClones@v0")
-```
+For more details on installation methods and information on alternative/development versions, see [```vignette("APackOfTheClones-install")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-install.html)
 
 ## Usage
 
@@ -54,13 +38,11 @@ library(scRepertoire) # ensure v2 is installed: devtools::install_github("ncborc
 library(APackOfTheClones)
 
 # integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"
-pbmc <- combineExpression(
-    input.data = combineTCR(
-        input.data = get(data("mini_contig_list", package = "scRepertoire")),
+pbmc <- get(data("mini_contig_list", package = "scRepertoire")) %>%
+    combineTCR(
         samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L")
-    ),
-    sc.data = get(data("scRep_example", package = "scRepertoire"))
-)
+    ) %>%
+    combineExpression(get(data("scRep_example", package = "scRepertoire")))
 
 # produce the ball-packing plot with the default parameters
 vizAPOTC(pbmc)
@@ -77,11 +59,11 @@ For finer control of the visualization / other parameters, the data for a run ca
 
 ```R
 # using the same seurat object as before, run and store associated data,
-# identifying it with a run id.
+# identifying it with a run id. If not, one will be generated.
 pbmc <- RunAPOTC(pbmc, run_id = "default_run_1")
 
 # plot the corresponding data with the run_id. If not provided, will use the latest run.
-APOTCPlot(pbmc, run_id = "default_run_1")
+APOTCPlot(pbmc)
 
 # adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was
 # left empty for no particular reason, but it will use "default_run_1" since its the latest
@@ -103,13 +85,22 @@ cowplot::plot_grid(
 
 ```
 
+### Package conventions
+
+Most exported functions are named with `camelCase` with the exception of those that modify Seurat objects having `PascalCase` to mimic their conventions. All function arguments follow `snake_case`.
+
 ## Documentation
 
 Comprehensive documentation, vignettes, and a changelog is deployed at <https://qile0317.github.io/APackOfTheClones/>
 
-There are also two vignettes within the package locally that should be read in order, and can be called with `vignette("APackOfTheClones")` and `vignette("APackOfTheClones-runs")`.
+There are also the following vignettes that should be read in the following order:
 
-All exported functions has function level documentation which can be called with `?function`.
+- [```vignette("APackOfTheClones")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html)
+- [```vignette("APackOfTheClones-runs")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html)
+- [```vignette("APackOfTheClones-shared")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-shared.html)
+- [```vignette("APackOfTheClones-utils")```](https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-utils.html)
+
+All exported functions have function level documentation.
 
 ## Contributing
 
@@ -117,13 +108,9 @@ Github pull requests from forked branches are more than welcome as it is mostly 
 
 An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.
 
-## Upcoming features
-
-One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.
-
 ## Contact
 
-Qile Yang - qile.yang@berkeley.edu
+Qile Yang - qile.yang \[at\] berkeley.edu
 
 ## References
 

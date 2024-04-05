@@ -66,9 +66,10 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Generated with `scRepertoire::combineExpression`, more specifically, with:
+#' Generated with `scRepertoire::combineExpression`. To construct this object
+#' from scratch, try:
 #'
-#' `r get(data(combined_pbmc))@commands[["combineExpression"]]@call.string`
+#' `r get(data(combined_pbmc))@commands$combineExpression@call.string`
 #'
 #' @usage data("combined_pbmc")
 #'

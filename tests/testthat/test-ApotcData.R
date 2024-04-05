@@ -90,12 +90,39 @@ test_that("The subset case ApotcData constructor works", {
 	expect_equal(test_apotc_data@centroids, expected_centroids)
 	expect_equal(test_apotc_data@label_coords, expected_centroids)
 
-	expected_raw_clone_sizes <- getdata(
-		"get_clone_sizes", "raw_strict_clone_sizes"
-	)
+	expected_raw_clone_sizes <- getdata("get_clone_sizes", "raw_strict_clone_sizes")
 	expected_raw_clone_sizes[[1]] <- create_empty_table()
 	expect_equal(
 		test_apotc_data@clone_sizes, expected_raw_clone_sizes
+	)
+
+})
+
+test_that("ApotcData subsetting works for 1 seurat cluster", {
+
+	test_apotc_data <- ApotcData(
+		seurat_obj = get(data("combined_pbmc")),
+		metadata_filter_condition = "seurat_clusters == 4",
+		clonecall = "CTstrict",
+		reduction_base = "umap",
+		clone_scale_factor = 0.300051,
+		rad_scale_factor = 0.95
+	)
+
+	expect_s4_class(test_apotc_data, "ApotcData")
+	expect_true(is_empty(test_apotc_data@clusters))
+
+	expect_common_apotc_els_equal(test_apotc_data)
+
+	expect_equal(test_apotc_data@metadata_filter_string, "seurat_clusters == 4")
+
+	expected_clone_sizes <- init_list(17, create_empty_table())
+	expected_clone_sizes[[4]] <- getdata(
+		"get_clone_sizes", "raw_strict_clone_sizes"
+	)[[4]]
+	expect_equal(
+		object = get_raw_clone_sizes(test_apotc_data),
+		expected = expected_clone_sizes
 	)
 
 })

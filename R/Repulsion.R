@@ -9,13 +9,12 @@
 # - do_cluster_intersect(cn_c,cn_r,cm_c,cm_r,thr):
 #     check if two clusterlists overlap in c++
 
-# convinience function for more code conciseness
-# repulses clusters and returns a list of length 2.
-# first is the new modified list of clusterlists
-# second is the centroids
 get_repulsed_clusterlists <- function(
-  packed_clusters, initial_centroids, num_clusters, repulsion_threshold,
-  repulsion_strength, max_repulsion_iter, verbose
+  packed_clusters,
+  repulsion_threshold,
+  repulsion_strength,
+  max_repulsion_iter,
+  verbose
 ) {
   if (verbose) {
     message(paste(
@@ -30,13 +29,51 @@ get_repulsed_clusterlists <- function(
   packed_clusters
 }
 
+# iterative repulsion. inp is a list of clusterlists.
+# returns the modified clusterlist
+# TODO rewrite in Rcpp
+repulse_cluster <- function(
+  inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
+) {
+  start_progress_bar(verbose)
+
+  num_clusters <- length(inp)
+  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration.
+  overall_repulsion_vec <- initialize_list_of_transformation_vectors(
+    transformation_vectors, num_clusters
+  ) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
+
+  for (curr_iteration in 1:max_iter){
+    overall_repulsion_vec <- calculate_repulsion_vectors(
+      overall_repulsion_vec, inp, num_clusters, G, thr
+    )
+    transformation_vectors <- calculate_transformation_vectors(
+      transformation_vectors, overall_repulsion_vec, num_clusters
+    )
+
+    #transformation vectors is an empty list() if everything was c(0,0)
+    if (!isnt_empty(transformation_vectors)) {
+      end_progress_bar(verbose)
+      return(inp)
+    }
+
+    # with the transformation vectors established, each cluster is moved
+    for (i in 1:num_clusters) {
+      if (isnt_empty(inp[[i]])) {
+        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
+      }
+    }
+
+    if (verbose) progress_bar(curr_iteration, max_iter)
+  }
+  
+  end_progress_bar(verbose)
+  inp
+}
+
 # Alias to initialize direction vectors in a list
 initialize_direction_vectors <- function(num_clusters) {
-  direction_vectors <- vector("list", num_clusters)
-  for (i in 1:num_clusters) {
-    direction_vectors[[i]] <- c(0, 0)
-  }
-  direction_vectors
+  init_list(num_clusters, c(0, 0))
 }
 
 # Alias to initialize the overall repulsion vec
@@ -81,47 +118,4 @@ calculate_repulsion_vectors <- function(
     }
   }
   overall_repulsion_vec
-}
-
-# iterative repulsion. inp is a list of clusterlists.
-# missing members of clusterlists are NA right now
-# returns the modified clusterlist
-repulse_cluster <- function(
-  inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
-) {
-  start_progress_bar(verbose)
-
-  #init variables - could use a class
-  num_clusters <- length(inp)
-  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration.
-  overall_repulsion_vec <- initialize_list_of_transformation_vectors(
-    transformation_vectors, num_clusters
-  ) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
-
-  for(curr_iteration in 1:max_iter){
-    overall_repulsion_vec <- calculate_repulsion_vectors(
-      overall_repulsion_vec, inp, num_clusters, G, thr
-    )
-    transformation_vectors <- calculate_transformation_vectors(
-      transformation_vectors, overall_repulsion_vec, num_clusters
-    )
-
-    #transformation vectors is an empty list() if everything was c(0,0)
-    if (!isnt_empty(transformation_vectors)) {
-      end_progress_bar(verbose)
-      return(inp)
-    }
-
-    # with the transformation vectors established, each cluster is moved
-    for (i in 1:num_clusters) {
-      if (isnt_empty(inp[[i]])) {
-        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
-      }
-    }
-
-    if (verbose) progress_bar(curr_iteration, max_iter)
-  }
-  
-  end_progress_bar(verbose)
-  inp
 }

@@ -11,10 +11,16 @@ APOTCPlot(
   ...,
   extra_filter = NULL,
   run_id = NULL,
+  show_shared = NULL,
+  only_link = NULL,
+  clone_link_width = "auto",
+  clone_link_color = "black",
+  clone_link_alpha = 0.5,
   res = 360L,
   linetype = "blank",
   use_default_theme = TRUE,
   retain_axis_scales = FALSE,
+  alpha = 1,
   show_labels = FALSE,
   label_size = 5,
   add_size_legend = TRUE,
@@ -25,7 +31,9 @@ APOTCPlot(
   legend_spacing = "auto",
   legend_label = "Clone sizes",
   legend_text_size = 5,
-  add_legend_background = TRUE
+  add_legend_background = TRUE,
+  add_legend_centerspace = 0,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -74,6 +82,29 @@ in the following format:
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
 
+\item{show_shared}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} The output of
+\link{getSharedClones} can be inputted here, and the resulting plot will overlay
+lines between clone circles if that clonotype is common between clusters.
+Note that the input \emph{\strong{must}} be generated from data in the correct
+\code{APackOfTheClones} run, and the behavior is undefined otherwise and will
+likely error. The next 4 arguments allow for aesthetic customization of these
+line links.}
+
+\item{only_link}{Optional integer indicating to only display clone
+links originating from this cluster if showing shared clones.}
+
+\item{clone_link_width}{numeric. The width of the lines that connect shared
+clones. Defaults to \code{"auto"} which will estimate a reasonable value depending
+on circle sizes.}
+
+\item{clone_link_color}{character. The color of the lines that connect shared
+clones. Defaults to \code{"blend"} which will use the average colors of the two
+connected clones. Else, any hex color or valid color string input will work,
+and the corresponding color will be applied on all links.}
+
+\item{clone_link_alpha}{numeric. The alpha of the lines that connect shared
+clones.}
+
 \item{res}{The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to
 first try to export the plot as an \code{.svg} before increasing \code{res} due to
@@ -89,8 +120,11 @@ plot. Else, the plot will simply have a blank background.}
 
 \item{retain_axis_scales}{If \code{TRUE}, approximately maintains the axis scales
 of the original reduction plot. However, it will only attempt to extend the
-axes and never shorten. This is recommended to be set to \code{TRUE} especially if
-working with subsetted versions of the clonal data.}
+axes and never shorten. Users are recommended to set this to \code{TRUE}
+especially if working with subsetted versions of the clonal data to better
+preserve the geometric relation to the original dimensional reduction.}
+
+\item{alpha}{numeric. The alpha of the circles in (0, 1]. Defaults to 1.}
 
 \item{show_labels}{If \code{TRUE}, will label each circle cluster at the centroid,
 defaulting to "C0, C1, ...".}
@@ -129,10 +163,20 @@ the legend}
 
 \item{add_legend_background}{logical. If \code{TRUE}, will add a border around the
 legend and fill the background to be white, overlaying anything else.}
+
+\item{add_legend_centerspace}{numeric. An additional amount of distance
+changed between the circle sizes on the left side of the legend and the
+numbers on the right. Useful to set to around 0.5 (or more / less) when there
+are particularly large clone sizes that may cover the numbers.}
+
+\item{verbose}{logical. Decides if visual cues are displayed to the R console
+of the progress.}
 }
 \value{
 A ggplot object of the APackOfTheClones clonal expansion plot of the
-seurat object
+seurat object. There is an additional 10th element in the object named
+\code{"APackOfTheClones"} used by other functions in this package and shouldn't
+interfere with any other ggplot functionality. (As far as currently known)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

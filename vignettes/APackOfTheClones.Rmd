@@ -120,12 +120,12 @@ default_apotc_plot
 
 ### Key characteristics of the plot
 
-* One should notice the immediate correspondence of circular clusters to umap clusters, and be able to derive some immediate insights about which clusters have expanded.
-* The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
-* The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
-* On the plot, there is a somewhat imperfect visual legend of the relative clone sizes
-* Some clusters have considerable visual overlap
-* The returned plot is a fully customizable `ggplot` object
+- One should notice the immediate correspondence of circular clusters to umap clusters, and be able to derive some immediate insights about which clusters have expanded.
+- The clonotype counts for each seurat cluster corresponds to their position and color in the original UMAP centroids
+- The most expanded clonotypes are in the center of each circle cluster with larger sizes, symbolizing increased expansion
+- On the plot, there is a somewhat imperfect visual legend of the relative clone sizes
+- Some clusters have considerable visual overlap
+- The returned plot is a fully customizable `ggplot` object
 
 The resulting clonal expansion plot may not be visually satisfactory on the first run without customizations from optional arguments. These arguments and other `ggplot` tricks will be covered to fine-tune the visualization until publication-ready.
 
@@ -202,7 +202,7 @@ cowplot::plot_grid(
 
 ### A Note on Subsetting Data
 
-The subsetting parameters are barely more than syntactic sugar to subset the seurat metadata and dimensional reduction coordinates, and serves as a convenience to the user if they want to quickly generate insights. Generally, if the analysis of data subsets (such as certain samples, or condition, etc.) is crucial to a publication, one would likely already be working with fully subsetted seurat object, and APackOfTheClones functions can be directly applied in those cases. See the corresponding Seurat [`vignette("essential_commands")`](https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging) for details.
+The subsetting parameters are barely more than syntactic sugar to subset the seurat metadata and dimensional reduction coordinates, and serves as a convenience to the user if they want to quickly generate insights. Generally, if the analysis of data subsets (such as certain samples, or condition, etc.) is crucial to a publication, one would likely already be working with fully subsetted seurat objects, and APackOfTheClones functions can be directly applied in those cases. See the corresponding Seurat [`vignette("essential_commands")`](https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging) for details.
 
 ## Customization of Visual Parameters
 
@@ -210,7 +210,9 @@ The subsetting parameters are barely more than syntactic sugar to subset the seu
 
 For each seurat cluster at index $i$, the final radii $r_{ij}$ of each physical circle at index $j$ representing clone size $s_{ij}$ is calculated with a clone size scaling factor $C \in (0, \infty)$ and a radius scaling factor $R \in (0, 1]$ with the following formula:
 
-$$r_{ij} = C\cdot(\sqrt{s_{ij}} - (1 - R))$$
+$$
+r_{ij} = C \cdot (\sqrt{s_{ij}} - (1 - R))
+$$
 
 Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
 
@@ -225,9 +227,9 @@ repulsion_strength = 1,
 max_repulsion_iter = 10
 ```
 
-* `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusterss are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders. 
-* `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
-* `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
+- `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusters are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders. 
+- `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
+- `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
 
 For more details on them, read the "Arguments" section in the function documentation. Briefly, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form due to a constant need to fine-tune, see the vignette `APackOfTheClones-runs`.)
 
@@ -249,6 +251,8 @@ add_legend_background = TRUE,
 
 `legend_sizes` are autogenerated, with at least sizes for clone size 1 and max(clone sizes). The user can also input whichever sizes they wish as a numeric vector. The `legend_position` on the plot defaults to one of the four corners, whichever will result in the least overlap of the legend with circles present. Otherwise, the user can input manually `"top left"`, `"top right"`, `"bottom left"` `"bottom right`, or just a numeric indicating the x and y coordinates of the top leftmost corner of the legend. `add_legend_background` will display a rectangular background to the legend. The other parameters are less relevant and more details about these arguments can be read in the function documentation.
 
+Note that the functions `overlayLegend` and `removeLegend` also exist for adding/removing legends on a readily generated plot.
+
 ### Other Modifications
 
 A collection of other utility parameters are:
@@ -264,7 +268,7 @@ show_labels = FALSE,
 label_size = 5,
 ```
 
-The most important of which are 1. `show_labels` which overlays the seurat cluster on the plot in the format `"Cx"` in the center of each relevant cluster. (see `vignette("APackOfTheClones-runs")` on how one can modify them) 2. `use_default_theme` which will produce a plot that's thematically very similar to the dimensional reduction plot, with axis labels and numeric ticks on each axis. This may be helpful for visually indicating certain plot parameters. However, for publications [such as this one](https://doi.org/10.1126/sciimmunol.abg6356), as the numeric ticks in APackOfTheClones have no actual biologically relevant meaning aside from approximately matching clusters, it may be beneficial to set this argument to `FALSE` which will produce a plot with just the circles:
+The most important of which are 1. `show_labels` which overlays the seurat cluster on the plot in the format `"Cx"` in the center of each relevant cluster. (see `vignette("APackOfTheClones-runs")` on how one can modify them) 2. `use_default_theme` which will produce a plot that's thematically very similar to the dimensional reduction plot, with axis labels and numeric ticks on each axis. This may be helpful for visually indicating certain plot parameters. However, for publications [such as this one](https://doi.org/10.1126/sciimmunol.abg6356), as the numeric ticks in APackOfTheClones have no actual biologically relevant meaning aside from approximately matching clusters, it may be beneficial to set this argument to `FALSE` which will produce a plot with just the circles. The following is an example parameters to generate a plot that is likely publication-ready:
 
 ```{r, void_labelled_plot, echo = TRUE}
 vizAPOTC(
@@ -287,5 +291,5 @@ For users that need to fine-tune plot parameters and/or save the data within the
 
 For inspiration of how it could practically look like in a real paper context, see the following papers where the original julia implementation of APackOfTheClones was successfully used:
 
-* [Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ $T_{H}2$ cell population in nasal polyps](https://doi.org/10.1126/sciimmunol.abg6356)
-* [Recombinant multimeric dog allergen prevents airway hyperresponsiveness in a model of asthma marked by vigorous $T_{H}2$ and $T_{H}17$ cell responses](https://doi.org/10.1111/all.15399)
+- [Single-cell analysis pinpoints distinct populations of cytotoxic CD4+ T cells and an IL-10+CD109+ $T_{H}2$ cell population in nasal polyps](https://doi.org/10.1126/sciimmunol.abg6356)
+- [Recombinant multimeric dog allergen prevents airway hyperresponsiveness in a model of asthma marked by vigorous $T_{H}2$ and $T_{H}17$ cell responses](https://doi.org/10.1111/all.15399)

@@ -30,12 +30,43 @@ navbar:
     vignettes:
       text: Vignettes
       menu:
-      # - text: APackOfTheClones Essentials
-      #   href: articles/APackOfTheClones.html
       - text: Storing and Fine-Tuning APackOfTheClones Runs
         href: articles/APackOfTheClones-runs.html
+      - text: Working With Clonotypes Shared Across Clusters
+        href: articles/APackOfTheClones-shared.html
+      - text: Clonal Analysis Utilities in APackOfTheClones
+        href: articles/APackOfTheClones-utils.html
     archive:
       text: Archive
       menu:
-        - text: v0.1.x
+        - text: v0.1.x main vignette
           href: articles/archive/v0-main.html
+
+reference:
+- title: Core functions
+- contents:
+  - vizAPOTC
+  - RunAPOTC
+  - APOTCPlot
+  - AdjustAPOTC
+- title: Working with RunAPOTC runs
+- contents:
+  - containsApotcRun
+  - getApotcDataIds
+  - getLastApotcDataId
+  - deleteApotcData
+- title: Further Customization of Clonal Expansion Plots
+- contents:
+  - showCloneHighlight
+  - overlayLegend
+  - removeLegend
+- title: Clonal Analysis Utilities
+- contents:
+  - countCloneSizes
+  - mergeCloneSizes
+  - getSharedClones
+  - getReductionCentroids
+- title: Data
+- contents:
+  - combined_pbmc
+  - mini_seurat_obj

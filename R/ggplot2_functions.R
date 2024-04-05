@@ -1,6 +1,4 @@
-# the following code is copied and modified from ggplot2 under the R/aes.R file
-# (under MIT license). Implements the soft deprecated `aes_string()` function as
-# `apotc_aes_string()`
+# the following code is copied and modified from ggplot2 under the MIT license
 
 apotc_rename_aes <- function(x) {
   names(x) <- ggplot2::standardise_aes_names(names(x))

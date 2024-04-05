@@ -1,0 +1,82 @@
+---
+title: "Installing APackOfTheClones"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Installing APackOfTheClones}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+data: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_chunk$set(echo = FALSE)
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+```
+
+To install APackOfTheClones, R version 4.0.0 is required. The free IDE Rstudio is also highly recommended for convenient visualizations and interactions with related objects.
+
+## Dependencies
+
+APackOfTheClones extends the BioConductor scRepertoire v2 package, which itself is an extension of the Seurat package. See their respective installation guides for details, although users of APackOfTheClones are expected to be familiar with Seurat and most should have used scRepertoire to integrate the clonotype data into a seurat object. Briefly, the following should work for most devices:
+
+```R
+# install BiocManager for scRepertoire installation
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+library(BiocManager)
+
+# install scRepertoire from Bioconductor
+BiocManager::install("scRepertoire")
+
+# install Seurat from CRAN
+install.packages("Seurat")
+```
+
+## Installation of Latest CRAN release
+
+`APackOfTheClones` is registered on CRAN. To install the latest stable release, try
+
+```R
+install.packages("APackOfTheClones")
+```
+
+If there are any issues with the CRAN installation, try
+
+```R
+# ensure the devtools package is installed via install.packages("devtools")
+devtools::install_github("Qile0317/APackOfTheClones@cran")
+```
+
+## Installation of Development Editions
+
+APackOfTheClones' main branch will have the same features as the latest CRAN release but the latest documentation/vignettes and critical bug fixes if any is present. So if any bugs are present, try
+
+```R
+devtools::install_github("Qile0317/APackOfTheClones")
+```
+
+The latest semi-stable development edition with new (potentially undocumented) features and changes live on the dev branch, and can be downloaded with
+
+```R
+devtools::install_github("Qile0317/APackOfTheClones@dev")
+```
+
+## Installation of legacy versions
+
+Legacy CRAN releases can be installed with
+
+```R
+# ensure to have the remotes package with install.packages("remotes")
+# Replace "X.X.X" with your desired version
+remotes::install_version(package = "APackOfTheClones", version = package_version("X.X.X"))
+```
+
+The most final version of the version 0 release of APackOfTheClones lives in a static legacy branch on github named v0. To install, try
+
+```R
+devtools::install_github("Qile0317/APackOfTheClones@v0")
+```

@@ -1,8 +1,7 @@
 #include <Rcpp.h>
 #include <vector>
 #include <cmath>
-
-#define sqr(x) ((x) * (x))
+#include "math.h"
 
 std::vector<double> neg_dir_vec(Rcpp::List c1, Rcpp::List c2) {
     std::vector<double> c1_centroid = c1[3], c2_centroid = c2[3];

@@ -156,7 +156,7 @@ of the progress.}
 The adjusted \code{seurat_obj}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 If the user is unsatisfied with the clonal expansion plot that
 was generated from \code{RunAPOTC} and \code{APOTCPlot}, this function has a range of

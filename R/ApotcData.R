@@ -112,15 +112,12 @@ initializeSubsetApotcData <- function(
 	seurat_obj, metadata_filter_condition, clonecall, reduction_base,
 	clone_scale_factor, rad_scale_factor
 ) {
-
-	seurat_obj <- subsetSeuratMetaData(seurat_obj, metadata_filter_condition)
-
-	apotc_obj <- initializeApotcData(
-		seurat_obj, clonecall, reduction_base, clone_scale_factor, rad_scale_factor
-	)
-
-	apotc_obj@metadata_filter_string <- metadata_filter_condition
-	apotc_obj
+	seurat_obj %>%
+		subsetSeuratMetaData(metadata_filter_condition) %>%
+		initializeApotcData(
+			clonecall, reduction_base, clone_scale_factor, rad_scale_factor
+		) %>%
+		set_metadata_filter_string(metadata_filter_condition)
 }
 
 # pack the clones assuming centroids are present
@@ -157,8 +154,6 @@ repulseClusters <- function(
 ) {
 	repulsed_clusters <- get_repulsed_clusterlists(
 	    packed_clusters = get_clusterlists(apotc_obj),
-	    initial_centroids = get_centroids(apotc_obj),
-	    num_clusters = get_num_clusters(apotc_obj),
 	    repulsion_threshold = repulsion_threshold,
 		repulsion_strength = repulsion_strength,
 		max_repulsion_iter = max_repulsion_iter,
@@ -194,6 +189,14 @@ convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 	clone_scale_factor * (1 - rad_scale_factor)
 }
 
+# checkers
+
+is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
+	typecheck(cluster_ind, is_an_integer)
+	is_bound_between(cluster_ind, 1, get_num_clusters(apotc_obj)) &&
+		isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
+}
+
 # getters
 
 get_reduction_base <- function(apotc_obj) {
@@ -216,8 +219,27 @@ get_centroids <- function(apotc_obj) {
 	apotc_obj@centroids
 }
 
-get_raw_clone_sizes <- function(apotc_obj) {
-	apotc_obj@clone_sizes
+get_raw_clone_sizes <- function(apotc_obj, as_hash = FALSE) {
+	if (!as_hash) return(apotc_obj@clone_sizes)
+	hash_from_tablelist(apotc_obj@clone_sizes)
+}
+
+# get all clone sizes as a single table
+# TODO unsure what happens with no clones
+get_aggregated_clone_sizes <- function(
+	apotc_obj, sort_decreasing = NULL, get_top = NULL
+) {
+	clone_sizes <- aggregate_clone_sizes(
+		get_raw_clone_sizes(apotc_obj), sort_decreasing
+	)
+
+	if (is.null(get_top)) return(clone_sizes)
+	filter_top_clones(clone_sizes, get_top)
+}
+
+# S3 generic method to get clonotypes
+get_unique_clonotypes <- function(x) {
+	unique(unlist(lapply(get_raw_clone_sizes(x), names)))
 }
 
 get_processed_clone_sizes <- function(apotc_obj) {
@@ -227,13 +249,13 @@ get_processed_clone_sizes <- function(apotc_obj) {
   for (i in seq_len(get_num_clusters(apotc_obj))) {
     if (!is_empty_table(raw_tabled_clone_sizes[[i]])) {
       processed_sizes[[i]] <- apotc_obj@clone_scale_factor *
-        sqrt(as.numeric(raw_tabled_clone_sizes[[i]][[1]]))
+        sqrt(raw_tabled_clone_sizes[[i]])
     }
   }
   processed_sizes
 }
 
-get_num_clones <- function(apotc_obj) { # TODO test
+get_num_clones <- function(apotc_obj) {
 	sum(unlist(get_raw_clone_sizes(apotc_obj)))
 }
 
@@ -276,4 +298,25 @@ get_labels <- function(apotc_obj) {
 
 get_label_coords <- function(apotc_obj) {
 	apotc_obj@label_coords
+}
+
+# setters
+
+set_metadata_filter_string <- function(apotc_obj, extra_filter) {
+	apotc_obj@metadata_filter_string <- extra_filter
+	apotc_obj
+}
+
+set_clone_scale_factor <- function(apotc_obj, x) {
+	apotc_obj@clone_scale_factor <- x
+	apotc_obj
+}
+
+set_clusterlists <- function(apotc_obj, x) {
+	apotc_obj@clusters <- x
+	apotc_obj
+}
+
+lapply_clusterlists <- function(apotc_obj, f) {
+	set_clusterlists(apotc_obj, lapply(get_clusterlists(apotc_obj), f))
 }

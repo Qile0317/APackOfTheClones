@@ -1,12 +1,61 @@
 #script for functions to deal with centroids and cluster coords
 
-# All clusters of circles are referred to as a "clusterlist" in code comments
-# A clusterlist just refers to a simple R list of length five with:
+# All clusters of circles are "clusterlist" ADTs:
 # [["x"]] numeric vector of x coordinates of all circles
 # [["y"]] numeric vector of y coordinates of all circles
 # [["rad"]] numeric vector of radii of all circles
 # [["centroid"]] numeric vector of the cluster centroid x and y coordinate
 # [["clRad"]] approximate radius of the cluster
+# [["clonotype"]] clonotype based on original clonecall
+
+# getters for a single clusterlist
+
+get_x_coords <- function(l) l[[1]]
+get_y_coords <- function(l) l[[2]]
+get_radii <- function(l) l[[3]]
+get_centroid <- function(l) l[[4]]
+get_cluster_radius <- function(l) l[[5]]
+get_clonotypes <- function(l) l$clonotype # not index due to legacy clusterlists
+
+get_num_clones <- function(l) length(get_x_coords(l))
+
+contains_clonotypes <- function(x) !is.null(get_clonotypes(x))
+
+# setters for a single clusterlist
+set_x_coords <- function(l, v) {l$x <- v; l}
+set_y_coords <- function(l, v) {l$y <- v; l}
+set_radii <- function(l, v) {l$rad <- v; l}
+set_centroid <- function(l, v) {l$centroid <- v; l}
+set_cluster_radius <- function(l, v) {l$clRad <- v; l}
+set_clonotypes <- function(l, v) {l$clonotype <- v; l}
+
+# convert clusterlist to dataframe, assuming its valid
+# TODO allow get_abstract option to just get 1 large circle
+convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
+    data.frame(
+        "label" = rep(
+            paste("cluster", seurat_cluster_index),
+            get_num_clones(clstr_list)
+        ),
+        "x" = get_x_coords(clstr_list),
+        "y" = get_y_coords(clstr_list),
+        "r" = get_radii(clstr_list)
+    ) %>%
+        update_clusterlist_df(clstr_list)
+}
+
+update_clusterlist_df <- function(df, clusterlist) {
+
+    if (contains_clonotypes(df) || !contains_clonotypes(clusterlist)) return(df)
+    
+    if (nrow(df) == 0) {
+        df$clonotype <- character(0)
+        return(df)
+    }
+
+    df %>% dplyr::mutate(clonotype = get_clonotypes(clusterlist))
+
+}
 
 # centroid finder for a matrix of [x, y, cluster]
 find_centroids <- function(df, total_clusters) {
@@ -55,20 +104,22 @@ get_cluster_centroids <- function(
   )
 }
 
-# TRANSFORM coordinates of a clusterlist from c(0, 0) to its own new centroid,
-# or MOVE to new coord from current
+# if new coord is null, assumes current coords are from the
+# cluster being centered at (0, 0), and transforms x and y by
+# centroid. Otherwise, translates by new_coord.
 trans_coord <- function(cluster, new_coord = NULL) {
+
   if (!is.null(new_coord)) {
-    dx <- new_coord[1]
-    dy <- new_coord[2]
-    cluster[[4]] <- cluster[[4]] + c(dx, dy)
+    trans_vec <- new_coord
+    cluster <- set_centroid(cluster, get_centroid(cluster) + new_coord)
   } else {
-    dx <- cluster[[4]][1]
-    dy <- cluster[[4]][2]
+    trans_vec <- get_centroid(cluster)
   }
-  cluster[[1]] <- cluster[[1]] + dx
-  cluster[[2]] <- cluster[[2]] + dy
-  cluster
+
+  cluster %>%
+    set_x_coords(get_x_coords(cluster) + trans_vec[1]) %>%
+    set_y_coords(get_y_coords(cluster) + trans_vec[2])
+
 }
 
 # MOVE clusterlist to a new centroid, irrespective of previous centroid
@@ -84,20 +135,7 @@ move_cluster <- function(cluster, new_coord) {
 
 # function to GET a list of centroids from a list of clusterlists,
 read_centroids <- function(list_of_clusterlists) {
-  output_centroids <- init_list(length(list_of_clusterlists), list())
-  for (i in seq_along(list_of_clusterlists)) {
-    curr <- list_of_clusterlists[[i]]
-    if (is.null(get_centroid(curr)) || is_empty(get_centroid(curr))) {
-      next
-    }
-    output_centroids[[i]] <- get_centroid(curr)
-  }
-  output_centroids
+  lapply(list_of_clusterlists, function(x) {
+    if (is_empty(x)) list() else get_centroid(x)
+  })
 }
-
-# getters for a single clusterlist
-get_x_coords <- function(l) l[[1]]
-get_y_coords <- function(l) l[[2]]
-get_radii <- function(l) l[[3]]
-get_centroid <- function(l) l$centroid
-get_cluster_radius <- function(l) l[[5]]

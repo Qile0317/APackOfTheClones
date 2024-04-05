@@ -2,10 +2,17 @@
 % Please edit documentation in R/get_clone_sizes.R
 \name{countCloneSizes}
 \alias{countCloneSizes}
-\title{count the number of clonotype sizes per cell cluster in a seurat
-object combined with a VDJ library}
+\title{count the number of clonotype sizes in a seurat object combined with a
+VDJ library overall or by cluster}
 \usage{
-countCloneSizes(seurat_obj, clonecall = "strict", extra_filter = NULL, ...)
+countCloneSizes(
+  seurat_obj,
+  clonecall = "strict",
+  extra_filter = NULL,
+  ...,
+  by_cluster = TRUE,
+  sort_decreasing = NULL
+)
 }
 \arguments{
 \item{seurat_obj}{a seurat object combined with a VDJ library with the
@@ -35,11 +42,20 @@ keyword arguments are a \emph{prefix} of any preceding argument names (e.g. a
 column named \code{reduction} is a prefix of the \code{reduction_base} argument)
 R will interpret it as the same argument unless \emph{both} arguments
 are named. Additionally, this means any subsequent arguments \emph{must} be named.}
+
+\item{by_cluster}{If \code{TRUE}, will output a list of table objects, with the
+table at each index corresponding to each seurat cluster index. Each table's
+names are the clonotype name indicated by \code{clonecall} after filtering, while
+the values are the actual clone sizes. Else, outputs just the aggregate clone
+sizes for all cells. Note that if \code{FALSE}, the output should be identical to
+that produced by \code{mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))}}
+
+\item{sort_decreasing}{a logical or NULL. If \code{TRUE}/\code{FALSE}, sorts each/the
+table by clonotype frequency with largest/smallest clones first, and if
+NULL, no order is guaranteed but the output is deterministic.}
 }
 \value{
-A list of table objects, with the table at each index corresponding
-to each cluster index. Each table's names are the clonotype name indicated
-by \code{clonecall} after filtering, while the values are the actual clone sizes.
+A list of tables or a single table depending on \code{by_cluster}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -53,4 +69,7 @@ countCloneSizes(combined_pbmc)
 countCloneSizes(combined_pbmc, "aa")
 countCloneSizes(combined_pbmc, "nt", orig.ident = c("P17B", "P17L"))
 
+}
+\seealso{
+\link{mergeCloneSizes}
 }

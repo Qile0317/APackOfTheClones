@@ -20,3 +20,25 @@
 # 		)
 # 	)
 # })
+
+quietly_test_that("removeLegend works", {
+    data("combined_pbmc")
+    expect_equal(
+        secretly_init_name(
+            vizAPOTC(combined_pbmc, add_size_legend = FALSE)$layers
+        ),
+        removeLegend(vizAPOTC(combined_pbmc))$layers
+    )
+
+    # TODO test if add layer
+})
+
+# quietly_test_that("overlayLegend works", {
+#     data("combined_pbmc")
+#     expect_equal(
+#         unname(vizAPOTC(combined_pbmc)$layers),
+#         unname(overlayLegend(vizAPOTC(combined_pbmc))$layers)
+#     )
+
+#     # TODO test if add layer
+# })

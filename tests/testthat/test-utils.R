@@ -1,5 +1,13 @@
 data("mini_seurat_obj", "mini_clonotype_data")
 
+test_that("getReductionCentroids works", {
+    expect_equal(
+        getReductionCentroids(get(data("combined_pbmc")), "umap"),
+        getdata("combined_pbmc", "all_cluster_centroids"),
+        tolerance = 1e-6
+    )
+})
+
 test_that("progress_bar works", {
     expect_identical(
         capture.output(progress_bar(1, 1)),
@@ -25,7 +33,30 @@ test_that("start_progress_bar works", {
     )
 })
 
-# print_completion_time cant really be tested but is extremely simple
+# test table utils
+
+test_that("convert_named_numeric_to_table works", {
+
+    expect_identical(
+        object = convert_named_numeric_to_table(c("b" = 10, "c" = 12)),
+        expected = table(rep(c("b", "c"), times = c(10, 12)))
+    )
+
+    expect_identical(
+        object = convert_named_numeric_to_table(c("b" = 10)),
+        expected = table(rep("b", times = 10))
+    )
+
+})
+
+test_that("union_list_of_tables works", {
+    expect_equal(
+        union_list_of_tables(list(table(letters[1:5]), table(letters[1:5]))),
+        strip_to_numeric(table(rep(letters[1:5], 2)))
+    )
+})
+
+# test readability
 
 test_that("isnt_empty works", {
     expect_true(isnt_empty(list(c(1, 2, 3))))
@@ -62,7 +93,23 @@ test_that("get_xr and get_yr works", {
     # TODO more tests
 })
 
-test_that("attempt_correction works", { suppressMessages({
+test_that("prepend_indefinite_article works", {
+    expect_identical(prepend_indefinite_article("A"), "an A")
+    expect_identical(prepend_indefinite_article("B"), "a B")
+    expect_identical(prepend_indefinite_article("NULL"), "NULL")
+})
+
+test_that("subsetSeuratMetaData works", {
+    # TODO more tests
+
+    expect_error(
+        subsetSeuratMetaData(get(data("combined_pbmc")), "seurat_clusters==18"),
+        "please check `extra_filter`, no rows in the seurat metadata match the filter condition"
+    )
+
+})
+
+quietly_test_that("attempt_correction works", {
     data("combined_pbmc")
 
     combined_pbmc@reductions[["pca"]] <- 0
@@ -92,7 +139,7 @@ test_that("attempt_correction works", { suppressMessages({
     )
 
     # TODO more tests
-})})
+})
 
 test_that("closest_word works", {
     expect_identical(closest_word(" umsp", c("umap", "tsne", "pca")), "umap")
@@ -120,6 +167,25 @@ test_that("construct_prefix_vector works", {
     )
 })
 
+# test math utils
+
+test_that("get_unique_pairs_up_to works", {
+
+    expect_identical(get_unique_pairs_up_to(1), list())
+
+    expect_identical(get_unique_pairs_up_to(2), list(1:2))
+
+    expect_identical(
+        get_unique_pairs_up_to(5),
+        list(
+            1:2, c(1L, 3L), c(1L, 4L), c(1L, 5L), 2:3, c(2L, 4L), c(2L, 5L),
+            3:4, c(3L, 5L), 4:5
+        )
+    )
+})
+
+# test spelling utils
+
 test_that("strip_unquoted_spaces works", {
     expect_identical(strip_unquoted_spaces("foo"), "foo")
     expect_identical(strip_unquoted_spaces(c("foo", "bar")), c("foo", "bar"))
@@ -138,14 +204,6 @@ test_that("strip_unquoted_spaces works", {
     expect_identical(
         strip_unquoted_spaces(c(" f f ' o o ' ", " bb b ' a r ' rr r ")),
         c("ff' o o '", "bbb' a r 'rrr")
-    )
-})
-
-test_that("getReductionCentroids works", {
-    expect_equal(
-        getReductionCentroids(get(data("combined_pbmc")), "umap"),
-        getdata("combined_pbmc", "all_cluster_centroids"),
-        tolerance = 1e-6
     )
 })
 

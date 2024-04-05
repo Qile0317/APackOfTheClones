@@ -4,7 +4,7 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' This function combines the functionality of both `RunAPOTC` and `APOTCPlot`.
+#' This function combines the functionality of both [RunAPOTC] and [APOTCPlot].
 #' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC])
 #' to compute clonal expansion information, and then generates a customizable
 #' ggplot2 object of the clonal expansion plot with a circle size legend
@@ -12,9 +12,13 @@
 #'
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
+#' @param seurat_obj A seurat object that has been integrated with clonotype
+#' data.
 #'
 #' @inherit APOTCPlot return
 #' @export
+#'
+#' @seealso [AdjustAPOTC]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -44,11 +48,17 @@ vizAPOTC <- function(
     repulsion_strength = 1,
     max_repulsion_iter = 20L,
 
+    show_shared = NULL,
+    only_link = NULL,
+    clone_link_width = "auto",
+	clone_link_color = "black",
+	clone_link_alpha = 0.5,
+
     res = 360L,
     linetype = "blank",
     use_default_theme = TRUE,
     retain_axis_scales = FALSE,
-    #alpha = 1,
+    alpha = 1,
 
     show_labels = FALSE,
     label_size = 5,
@@ -62,6 +72,7 @@ vizAPOTC <- function(
     legend_label = "Clone sizes",
     legend_text_size = 5,
     add_legend_background = TRUE,
+    add_legend_centerspace = 0,
 
     verbose = TRUE
 ) {
@@ -72,7 +83,6 @@ vizAPOTC <- function(
         ...,
         extra_filter = extra_filter,
         run_id = "vizAPOTC",
-
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,
         order_clones = order_clones,
@@ -85,20 +95,24 @@ vizAPOTC <- function(
         verbose = verbose
     )
 
-    if (verbose) message("Plotting...\n")
+    if (verbose) message("Plotting...")
 
     APOTCPlot(
         seurat_obj,
         run_id = "vizAPOTC",
-
+        show_shared = show_shared,
+        only_link = only_link,
+        #linked_clonesize_range = linked_clonesize_range,
+        clone_link_width = clone_link_width,
+        clone_link_color = clone_link_color,
+        clone_link_alpha = clone_link_alpha,
         res = res,
         linetype = linetype,
         use_default_theme = use_default_theme,
         retain_axis_scales = retain_axis_scales,
-        
+        alpha = alpha,
         show_labels = show_labels,
         label_size = label_size,
-
         add_size_legend = add_size_legend,
         legend_sizes = legend_sizes,
         legend_position = legend_position,
@@ -107,6 +121,8 @@ vizAPOTC <- function(
         legend_spacing = legend_spacing,
         legend_label = legend_label,
         legend_text_size = legend_text_size,
-        add_legend_background = add_legend_background
+        add_legend_background = add_legend_background,
+        add_legend_centerspace = add_legend_centerspace,
+        verbose = verbose
     )
 }

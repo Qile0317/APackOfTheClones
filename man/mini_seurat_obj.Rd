@@ -33,6 +33,6 @@ Has a corresponding T-cell receptor library generated from
 single cell immune profiling, named \code{"mini_clonotype_data"}
 }
 \seealso{
-\code{\link[=mini_clonotype_data]{mini_clonotype_data()}}
+\link{mini_clonotype_data}
 }
 \keyword{datasets}

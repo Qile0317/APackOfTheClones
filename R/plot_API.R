@@ -1,85 +1,92 @@
-get_plottable_df_with_color <- function(apotc_data) {
-    extract_and_add_colors(
-      apotc_obj = apotc_data,
-      plot_df = df_full_join(get_clusterlists(apotc_data))
+# main apotc plot initializer
+create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
+    plot_clusters(
+        clusters = get_plottable_df_with_color(apotc_obj),
+        num_total_clusters = get_num_clusters(apotc_obj),
+        n = res,
+        linetype = linetype,
+        alpha = alpha
     )
 }
 
-# full join a list of lists of (x,y,r) vectors into a dataframe with
+get_plottable_df_with_color <- function(apotc_data) {
+    extract_and_add_colors(
+        apotc_obj = apotc_data,
+        plot_df = df_full_join(get_clusterlists(apotc_data))
+    )
+}
+
+# full join a list of clusterlists vectors into a dataframe with
 # generated labels.
 df_full_join <- function(clstr_list) {
-    df <- data.frame(
-        'label' = character(0),
-        'x' = numeric(0),
-        'y' = numeric(0),
-        'r' = numeric(0)
-    )
 
-    seurat_cluster_index <- 0 # zero indexed :P
-    for (i in seq_along(clstr_list)) {
-        if (!isnt_empty_nor_na(clstr_list[[i]])) {
-            seurat_cluster_index <- seurat_cluster_index + 1
-            next
-        }
-        df <- dplyr::full_join(
-            df,
-            data.frame(
-                "label" = rep( # TODO this could be customized or add new col
-                  paste("cluster", seurat_cluster_index),
-                  length(clstr_list[[i]][["x"]])
-                ),
-                "x" = clstr_list[[i]][["x"]],
-                "y" = clstr_list[[i]][["y"]],
-                "r" = clstr_list[[i]][["rad"]]
-            ),
-            by = dplyr::join_by("label", "x", "y", "r")
-        )
-        seurat_cluster_index <- seurat_cluster_index + 1
+    df <- data.frame(
+        "label" = character(0),
+        "x" = numeric(0),
+        "y" = numeric(0),
+        "r" = numeric(0)
+    ) %>%
+        update_clusterlist_df(get_first_nonempty(clstr_list))
+    
+    if (contains_clonotypes(get_first_nonempty(clstr_list))) {
+        cols_to_join_by <- dplyr::join_by("label", "x", "y", "r", "clonotype")
+    } else {
+        cols_to_join_by <- dplyr::join_by("label", "x", "y", "r")
     }
+
+    seurat_cluster_index <- 0
+
+    for (i in seq_along(clstr_list)) {
+
+        seurat_cluster_index <- seurat_cluster_index + 1
+        if (is_empty(clstr_list[[i]])) next
+
+        df <- df %>% dplyr::full_join(
+            convert_to_dataframe(clstr_list[[i]], seurat_cluster_index - 1), # zero indexed
+            by = cols_to_join_by
+        )
+    }
+
     df
 }
 
-# result plotting function. clusters is a list of clusterlists TRANSFORM into a
-# dataframe, which are clusters. A cluster list includes x, y, rad, centroid,
-# clRad. the clusters imput is a dataframe.
-
 plot_clusters <- function(
   clusters,
+  num_total_clusters,
   n = 360,
-  linetype = "blank"#,
-  #alpha = 1
+  linetype = "blank",
+  alpha = 1
 ) {
-  ggplot2::ggplot(data = clusters) +
+  clusters %>%
+    ggplot2::ggplot() +
     ggforce::geom_circle(
-      mapping = apotc_aes_string(
+      apotc_aes_string(
         x0 = "x",
         y0 = "y",
         r = "r",
-        fill = "color"#,
-        #alpha = as.character(alpha)
+        fill = "color"
       ),
       n = n,
-      linetype = linetype
+      linetype = linetype,
+      alpha = alpha
     ) +
-    ggplot2::scale_fill_identity() +
     ggplot2::coord_fixed() +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::scale_fill_identity()
 }
 
-# TODO not quite the same
 add_default_theme <- function(plt, reduction) {
 	label_hashmap <- hash::hash(
-		c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
+		  c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
 	)
 	label <- label_hashmap[[reduction]]
+  if (is.null(label)) label <- reduction
 
 	plt +
-		ggplot2::theme_classic() +
-		ggplot2::xlab(paste(label, 1, sep = "_")) +
-		ggplot2::ylab(paste(label, 2, sep = "_"))
+      ggplot2::theme_classic() +
+      ggplot2::xlab(paste(label, 1, sep = "_")) +
+      ggplot2::ylab(paste(label, 2, sep = "_"))
 }
 
-# TODO make better - should probably scale instead
 get_retain_scale_dims <- function(
   seurat_obj, reduction, ball_pack_plt, plot_dims
 ) {
@@ -102,5 +109,14 @@ get_retain_scale_dims <- function(
 
   # return dims in same output format as get_plot_dims
   list("xr" = c(min_xr, max_xr), "yr" = c(min_yr, max_yr))
-  
+
+}
+
+# TODO: make a function so that only a single large circle for each
+# cluster is plotted to help speedup
+
+check_is_apotc_ggplot <- function(x) {
+  if (!isApotcGGPlot(x)) {
+    stop(call. = FALSE, "not an output of `APOTCPlot` or `vizAPOTC`")
+  }
 }

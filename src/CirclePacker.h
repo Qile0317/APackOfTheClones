@@ -1,28 +1,52 @@
 #include <Rcpp.h>
 #include <vector>
-#include "../src/CircleNode.h"
-#include "ProgressBar.h"
+#include "math.h"
 
-// general readability helpers
+ // A node in a linked-list of fixed size. Each node's data is a circle.
+class CircleNode {
+public:
+    double x;
+    double y;
+    double rad;
+    int prv;
+    int nxt;
 
-inline double sqr(double a) {
-    return a * a;
-}
+    CircleNode() {
+        x = 0;
+        y = 0;
+        rad = 0;
+        prv = -1;
+        nxt = -1;
+    }
 
-inline double centre_dist(CircleNode& c) {
-    return sqrt(sqr(c.x) + sqr(c.y));
-}
+    CircleNode(double rad_val) {
+        x = 0;
+        y = 0;
+        rad = rad_val;
+        prv = -1;
+        nxt = -1;
+    }
 
-inline std::pair<int, int> sentinel_pair() {
-    return std::make_pair(-1, -1);
-}
+    CircleNode(double x_val, double y_val, double rad_val) {
+        x = x_val;
+        y = y_val;
+        rad = rad_val;
+        prv = -1;
+        nxt = -1;
+    }
 
-bool is_clear(std::pair<int, int>& p) {
-    return (p.first == -1) && (p.second == -1);
-}
+    bool operator==(CircleNode& other) {
+        return (x == other.x)
+            && (y == other.y)
+            && (rad == other.rad)
+            && (prv == other.prv)
+            && (nxt == other.nxt);
+    }
+};
 
 class CirclePacker {
-public:
+private: 
+    // class variables
     std::vector<CircleNode> data;
     int num_nodes;
     bool try_place;
@@ -34,13 +58,9 @@ public:
         bool _verbose = false
     ) {
         verbose = _verbose;
-        start_progress_bar();
-
         try_place = _try_place;
-
         num_nodes = (int) input_rad_vec.size();
         data.resize(num_nodes);
-
         for (int i = 0; i < num_nodes; i++) {
             data[i] = CircleNode(input_rad_vec[i]);
         }
@@ -52,15 +72,12 @@ public:
         bool _verbose = false
     ) {
         verbose = _verbose;
-        start_progress_bar();
-
         try_place = _try_place;
-
         num_nodes = (int) final_circle_nodes.size();
         data = final_circle_nodes;
     }
 
-    // main circle packing method, all helpers below.
+public: // main circle packing method, all helpers below.
     static Rcpp::List pack(
         std::vector<double> input_rad_vec,
         Rcpp::NumericVector centroid,
@@ -87,19 +104,7 @@ public:
         return packer.process_into_clusterlist(centroid, rad_decrease);
     }
 
-    void progress_bar(int x, int max) {
-        if (verbose) {
-            ProgressBar::show(x, max);
-        }
-    }
-
-    void start_progress_bar() {
-        progress_bar(0, 1);
-    }
-
-    void finish_progress_bar() {
-        progress_bar(1, 1);
-    }
+private:
 
     // initialize node vector into the circular boundary linked list
     void init_boundary(int a = 0, int b = 2) {
@@ -188,15 +193,6 @@ public:
         data[c2].x -= centroid_x; data[c2].y -= centroid_y;
         data[c3].x -= centroid_x; data[c3].y -= centroid_y;
     }
-
-    /*
-    FIXME: problem with the 2 following functions: different fpu precisions
-    on different architectures/compilers could lead to something like
-    non-deterministic results for the closest circle due to the comparison
-    of theoretically equivalent but practically slightly different floats.
-    This also affects when clusters are repacked with different clone scale
-    factors
-    */
 
     // finds the closest circle to the origin in the linked list containing c.
     int closest(int c) {
@@ -331,16 +327,13 @@ public:
             clrad = 0.5 * (data[0].rad + data[1].rad);
         }
 
-        Rcpp::List out = Rcpp::List::create(
+        return Rcpp::List::create(
             Rcpp::Named("x") = x,
             Rcpp::Named("y") = y,
             Rcpp::Named("rad") = r,
             Rcpp::Named("centroid") = centroid,
             Rcpp::Named("clRad") = clrad
         );
-
-        finish_progress_bar();
-        return out;
     }
 
     // returns the R clusterlist from a packed vector of circles for at least 3 circles
@@ -362,16 +355,13 @@ public:
             }
         }
 
-        Rcpp::List out = Rcpp::List::create(
+        return Rcpp::List::create(
             Rcpp::Named("x") = x,
             Rcpp::Named("y") = y,
             Rcpp::Named("rad") = rad,
             Rcpp::Named("centroid") = centroid,
             Rcpp::Named("clRad") = x[max_x_ind] + rad[max_x_ind] - centroid[0]
         );
-
-        finish_progress_bar();
-        return out;
     }
 
     // fit a new circle (index j) adjacent to curr_circ and its neighbor
@@ -394,11 +384,20 @@ public:
 
         insert_circle(cm, cn, j);
         j++;
+    }
 
-        if (j <= num_nodes) {
-            progress_bar(j, num_nodes);
-        }
+    // general readability helpers
 
+    inline double centre_dist(CircleNode& c) {
+        return sqrt(sqr(c.x) + sqr(c.y));
+    }
+
+    inline std::pair<int, int> sentinel_pair() {
+        return std::make_pair(-1, -1);
+    }
+
+    bool is_clear(std::pair<int, int>& p) {
+        return (p.first == -1) && (p.second == -1);
     }
 
 };

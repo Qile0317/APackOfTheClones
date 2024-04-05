@@ -1,19 +1,29 @@
-#' @title count the number of clonotype sizes per cell cluster in a seurat
-#' object combined with a VDJ library
+#' @title
+#' count the number of clonotype sizes in a seurat object combined with a
+#' VDJ library overall or by cluster
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
 #' Get clonotype frequencies from a seurat object's meta.data slot.
 #'
-#' @inheritParams RunAPOTC
 #' @param seurat_obj a seurat object combined with a VDJ library with the
 #' `scRepertoire`.
+#' @inheritParams RunAPOTC
+#' @param by_cluster If `TRUE`, will output a list of table objects, with the
+#' table at each index corresponding to each seurat cluster index. Each table's
+#' names are the clonotype name indicated by `clonecall` after filtering, while
+#' the values are the actual clone sizes. Else, outputs just the aggregate clone
+#' sizes for all cells. Note that if `FALSE`, the output should be identical to
+#' that produced by `mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))`
+#' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts each/the
+#' table by clonotype frequency with largest/smallest clones first, and if
+#' NULL, no order is guaranteed but the output is deterministic.
 #'
-#' @return A list of table objects, with the table at each index corresponding
-#' to each cluster index. Each table's names are the clonotype name indicated
-#' by `clonecall` after filtering, while the values are the actual clone sizes.
+#' @return A list of tables or a single table depending on `by_cluster`
 #' @export
+#' 
+#' @seealso [mergeCloneSizes]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -23,63 +33,203 @@
 #' countCloneSizes(combined_pbmc, "nt", orig.ident = c("P17B", "P17L"))
 #'
 countCloneSizes <- function(
-  seurat_obj, clonecall = "strict", extra_filter = NULL, ...
+    seurat_obj,
+    clonecall = "strict",
+    extra_filter = NULL,
+    ...,
+    by_cluster = TRUE,
+    sort_decreasing = NULL
 ) {
+    countCloneSizes_arg_checker()
 
-  # check inputs
-  if (!is_seurat_object(seurat_obj))
-    stop("`seurat_obj` must be a Seurat object.")
-  if (!is_a_character(clonecall))
-	  stop("`clonecall` must be a character of length 1.")
-  if (!is.null(extra_filter) && !is_a_character(extra_filter))
-		stop("`extra_filter` must be a character of length 1.")
-  check_filtering_conditions(as.list(environment()), frame_level = 1)
+    # setup variables
+    clonecall <- .theCall(seurat_obj@meta.data, clonecall)
+    filter_string <- parse_to_metadata_filter_str(
+        metadata_filter = extra_filter, varargs_list = list(...)
+    )
 
-  clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-  filter_string <- parse_to_metadata_filter_str(
-    metadata_filter = extra_filter, varargs_list = list(...)
-  )
+    if (is_valid_filter_str(filter_string)) { # TODO probably use seurat's built-in version :P, also probably shoudl allow for symbolic filtering.
+        seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
+    }
 
-  if (is_valid_filter_str(filter_string)) {
-    seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
-  }
+    clustered_clone_sizes <- count_raw_clone_sizes(
+        seurat_obj = seurat_obj,
+        num_clusters = get_num_total_clusters(seurat_obj),
+        clonecall = clonecall
+    )
 
-  count_raw_clone_sizes(
-    seurat_obj = seurat_obj,
-    num_clusters = get_num_total_clusters(seurat_obj),
-    clonecall = clonecall
-  )
+    # TODO extract function for getting sorted internally from apotc
+
+    if (!by_cluster) {
+        return(mergeCloneSizes(clustered_clone_sizes, sort_decreasing))
+    }
+
+    if (!is.null(sort_decreasing)) {
+        clustered_clone_sizes <- sort_each_clone_size_table(
+            clustered_clone_sizes, sort_decreasing
+        )
+    }
+
+    clustered_clone_sizes
 }
 
-# count the raw clone from the integrated seurat object from the METADATA
-# TODO should make another function with a user wrapper AND as a getter
-count_raw_clone_sizes <- function(
-  seurat_obj, num_clusters, clonecall
+# TODO create S4 generic to allow getting it from run_id, as an Apotc Getter
+
+countCloneSizes_arg_checker <- function() {
+    args <- get_parent_func_args()
+
+    if (!is_seurat_object(args$seurat_obj))
+        stop("`seurat_obj` must be a Seurat object.")
+    typecheck(args$clonecall, is_a_character)
+    typecheck(args$extra_filter, is.null, is_a_character)
+    check_filtering_conditions(as.list(environment()), frame_level = 2)
+    typecheck(args$by_cluster, is_a_logical)
+    typecheck(args$sort_decreasing, is_a_logical, is.null)
+}
+
+count_raw_clone_sizes <- function(seurat_obj, num_clusters, clonecall) {
+
+    # get the na filtered clonotype metadata
+    clonotype_cluster_df <- seurat_obj@meta.data %>%
+        select_cols(clonecall, "seurat_clusters") %>%
+        stats::na.omit()
+
+    # initialize output clone sizes
+    clone_sizes <- init_empty_table_list(num_clusters)
+
+    # if no valid rows, return empty clone sizes
+    if (nrow(clonotype_cluster_df) == 0) return(clone_sizes)
+
+    # aggregate the raw counts
+    freq_df <- stats::aggregate(
+        stats::as.formula(paste(clonecall, "~ seurat_clusters")),
+        clonotype_cluster_df,
+        table
+    )
+
+    if (nrow(freq_df) == 1) {
+
+        if (is.matrix(freq_df[[2]])) {
+            one_cluster_clone_table <- as_table(freq_df[[2]][1, ])
+        } else { # edge case with only one cluster and one clonotype
+            one_cluster_clone_table <- freq_df[[2]]
+            names(one_cluster_clone_table) <- clonotype_cluster_df[1, clonecall]
+            one_cluster_clone_table <- as_table(one_cluster_clone_table)
+        }
+
+        clone_sizes[[freq_df$seurat_clusters[1]]] <- one_cluster_clone_table
+        return(clone_sizes)
+    }
+
+    for (elem in enumerate(freq_df$seurat_clusters)) {
+        clone_sizes[[val1(elem)]] <- freq_df[[2]][ind(elem)][[1]]
+    }
+
+    clone_sizes
+}
+
+#' @title
+#' Merge a list of Clustered Clonotype Frequency Tables
+#'
+#' @description
+#' The list of clustered clonotype frequencies from [countCloneSizes]
+#' can be merged by this function to a frequency table of all clonotypes
+#' similar to the data that can be seen in the seurat object metadata.
+#' By default, this function sorts the table with largest clonotypes first,
+#' and this may be useful for quickly gauging which clonotypes are the most
+#' expanded overall.
+#'
+#' @param clustered_clone_sizes the output of [countCloneSizes].
+#' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts the
+#' table by clonotype frequency with largest/smallest clones first, and if
+#' NULL, no order is guaranteed but the output is deterministic.
+#'
+#' @return a table object
+#' @export
+#'
+#' @seealso [countCloneSizes]
+#'
+#' @examples
+#' clustered_clone_sizes <- countCloneSizes(get(data("combined_pbmc")))
+#' mergeCloneSizes(clustered_clone_sizes)
+#'
+mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
+
+    typecheck(clustered_clone_sizes, is_output_of_countCloneSizes)
+    typecheck(sort_decreasing, is_a_logical, is.null)
+
+    if (is_list_of_empty_tables(clustered_clone_sizes)) {
+        warning("no clones are present")
+        return(clustered_clone_sizes)
+    }
+
+    clustered_clone_sizes %>%
+        aggregate_clone_sizes(sort_decreasing) %>% # TODO check edgecases
+        convert_named_numeric_to_table()
+
+}
+
+# union the output of count_raw_clone_sizes to a named numeric
+# (not table but exactly like one)
+aggregate_clone_sizes <- function(
+    clone_sizes, sort_decreasing = NULL, top_clones = NULL
 ) {
 
-  # aggregate the raw counts
-  freq_df <- stats::aggregate(
-    stats::as.formula(paste(clonecall, "~ seurat_clusters")),
-    seurat_obj@meta.data,
-    function(x) table(x)
-  )
+    if (!is.null(top_clones)) sort_decreasing <- TRUE
+    union_clone_sizes <- union_list_of_tables(clone_sizes, sort_decreasing)
 
-  # compile the tabled counts, purposefully not modifying them
-  cluster_indicies <- as.numeric(freq_df[[1]]) # converts to one based indexing!
-  num_valid_clusters <- length(cluster_indicies)
-  index <- 1
-  clone_sizes <- init_list(num_clusters, table(NULL))
-
-  for (i in 1:num_clusters) {
-    if (index > num_valid_clusters) {
-      break
+    if (is.null(top_clones) || is_empty(union_clone_sizes)) {
+        return(union_clone_sizes)
     }
-    if (i != cluster_indicies[index]) {
-      next
-    }
-    clone_sizes[[i]] <- freq_df[[2]][index]
-    index <- index + 1
-  }
+    
+    num_clones <- length(union_clone_sizes)
 
-  clone_sizes
+    if (is_an_integer(top_clones)) {
+        return(union_clone_sizes[1:min(top_clones, num_clones)])
+    }
+
+    if (is_a_numeric_in_0_1(top_clones)) {
+        return(union_clone_sizes[1:round(num_clones * top_clones)])
+    }
+
+    # TODO more filtering
+
+}
+
+get_top_clonotypes <- function(clone_sizes, top_clones) {
+    names(aggregate_clone_sizes(clone_sizes, top_clones = top_clones))
+}
+
+sort_each_clone_size_table <- function(x, decreasing) {
+    sort_each_table(x, decreasing)
+}
+
+## abstract higher order functions for filtering clustered clone sizes
+
+# filter clone sizes with two 2 arg functions, the first function
+# takes in 2 args, clone_sizes, and filter_1_arg, and so on for the
+# second one. If either arg is null, the clone size will not be
+# filtered fwith the corresponding function. If both are non-null,
+# the results are set intersected
+filter_clonesize_2way_if_need <- function(
+    clone_sizes,
+    filter_func_1, filter1_arg,
+    filter_func_2, filter2_arg
+) {
+    if (is.null(filter1_arg) && is.null(filter2_arg)) {
+        return(clone_sizes)
+    }
+
+    if (!is.null(filter1_arg) && is.null(filter2_arg)) {
+        return(filter_func_1(clone_sizes, filter1_arg))
+    }
+
+    if (is.null(filter1_arg) && !is.null(filter2_arg)) {
+        return(filter_func_2(clone_sizes, filter2_arg))
+    }
+
+    intersect_common_table_lists(
+        filter_func_1(clone_sizes, filter1_arg),
+        filter_func_2(clone_sizes, filter2_arg)
+    )
 }
