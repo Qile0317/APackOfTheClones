@@ -41,7 +41,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,6 +60,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="nav-item">
@@ -71,7 +73,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul>
@@ -236,8 +238,8 @@ fine-tune the visualization until publication-ready.</p>
 representations<a class="anchor" aria-label="anchor" href="#working-with-different-reduction-bases-and-clonal-representations"></a>
 </h2>
 <p>The arguments to do so are:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reduction_base <span class="ot">=</span> <span class="st">"umap"</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>clonecall <span class="ot">=</span> <span class="st">"strict"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>reduction_base <span class="ot">=</span> <span class="st">"umap"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>clonecall <span class="ot">=</span> <span class="st">"strict"</span></span></code></pre></div>
 <p><code>reduction_base</code> indicates what each seurat cluster’s
 centroid locations should be based upon, so UMAP, T-SNE, or PCA
 (provided the reduction has been ran on the object).
@@ -265,8 +267,8 @@ clone for B-cells isn’t as clear as it is for TCRs</a>.</p>
 for subsets of the full dataset, which may be useful in cases like the
 need for clonal expansion plotting for only certain samples or
 conditions. There are two arguments to do so:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>...,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>extra_filter <span class="ot">=</span> <span class="cn">NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>...,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>extra_filter <span class="ot">=</span> <span class="cn">NULL</span></span></code></pre></div>
 <p><code>...</code> represents an arbitrary number of additional keyword
 arguments indicating the rows corresponding to elements in the seurat
 object metadata that should be filtered by. For example, seurat_clusters
@@ -329,7 +331,7 @@ subset the seurat metadata and dimensional reduction coordinates, and
 serves as a convenience to the user if they want to quickly generate
 insights. Generally, if the analysis of data subsets (such as certain
 samples, or condition, etc.) is crucial to a publication, one would
-likely already be working with fully subsetted seurat object, and
+likely already be working with fully subsetted seurat objects, and
 APackOfTheClones functions can be directly applied in those cases. See
 the corresponding Seurat <a href="https://satijalab.org/seurat/articles/essential_commands.html#subsetting-and-merging" class="external-link"><code>vignette("essential_commands")</code></a>
 for details.</p>
@@ -346,8 +348,9 @@ for details.</p>
 scaling factor <span class="math inline">\(C \in (0, \infty)\)</span>
 and a radius scaling factor <span class="math inline">\(R \in (0,
 1]\)</span> with the following formula:</p>
-<p><span class="math display">\[r_{ij} = C\cdot(\sqrt{s_{ij}} - (1 -
-R))\]</span></p>
+<p><span class="math display">\[
+r_{ij} = C \cdot (\sqrt{s_{ij}} - (1 - R))
+\]</span></p>
 <p>Intuitively, <span class="math inline">\(C\)</span> represents how
 much to enlarge/shrink each radius geometrically relative to the clone
 size, whereas <span class="math inline">\(R\)</span> represents the
@@ -365,10 +368,10 @@ attempt to fit clusters to the original UMAP coordinates) may occur and
 obstruct eachother excessively. APackOfTheClones by default tries to
 alleviate this by repulsing overlapping clusters away from eachother.
 There are four optional arguments:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 <ul>
 <li>
 <code>repulsion_threshold</code> indicates the amount of
@@ -379,7 +382,7 @@ to not be overlapping. Increasing this number will increase the amount
 of overlap between clusters, and decreasing this number will do the
 opposite, while decreasing it to negative values will incur additional
 spacing between clusters. Note that as of the current version, two
-clusterss are considered overlapping by comparing their approximated
+clusters are considered overlapping by comparing their approximated
 radii, which is computed from the right-most x coordinate. This isn’t a
 very accurate approximation for smaller clusters with non-circular
 borders.</li>
@@ -411,15 +414,15 @@ the vignette <code>APackOfTheClones-runs</code>.)</p>
 <h3 id="managing-the-clone-size-legend">Managing the Clone Size Legend<a class="anchor" aria-label="anchor" href="#managing-the-clone-size-legend"></a>
 </h3>
 <p>There are the following six parameters to adjust the legend:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">0.2</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="st">"auto"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>legend_label <span class="ot">=</span> <span class="st">"Clone sizes"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>legend_text_size <span class="ot">=</span> <span class="dv">5</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>add_legend_background <span class="ot">=</span> <span class="cn">TRUE</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">0.2</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="st">"auto"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>legend_label <span class="ot">=</span> <span class="st">"Clone sizes"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>legend_text_size <span class="ot">=</span> <span class="dv">5</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>add_legend_background <span class="ot">=</span> <span class="cn">TRUE</span>,</span></code></pre></div>
 <p><code>legend_sizes</code> are autogenerated, with at least sizes for
 clone size 1 and max(clone sizes). The user can also input whichever
 sizes they wish as a numeric vector. The <code>legend_position</code> on
@@ -432,19 +435,22 @@ coordinates of the top leftmost corner of the legend.
 <code>add_legend_background</code> will display a rectangular background
 to the legend. The other parameters are less relevant and more details
 about these arguments can be read in the function documentation.</p>
+<p>Note that the functions <code>overlayLegend</code> and
+<code>removeLegend</code> also exist for adding/removing legends on a
+readily generated plot.</p>
 </div>
 <div class="section level3">
 <h3 id="other-modifications">Other Modifications<a class="anchor" aria-label="anchor" href="#other-modifications"></a>
 </h3>
 <p>A collection of other utility parameters are:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>order_clones <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>try_place <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> 360L,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>linetype <span class="ot">=</span> <span class="st">"blank"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>use_default_theme <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>retain_axis_scales <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>show_labels <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>label_size <span class="ot">=</span> <span class="dv">5</span>,</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>order_clones <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>try_place <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>res <span class="ot">=</span> <span class="dv">360</span><span class="dt">L</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>linetype <span class="ot">=</span> <span class="st">"blank"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>use_default_theme <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>retain_axis_scales <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>show_labels <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>label_size <span class="ot">=</span> <span class="dv">5</span>,</span></code></pre></div>
 <p>The most important of which are 1. <code>show_labels</code> which
 overlays the seurat cluster on the plot in the format <code>"Cx"</code>
 in the center of each relevant cluster. (see
@@ -456,7 +462,8 @@ indicating certain plot parameters. However, for publications <a href="https://d
 as the numeric ticks in APackOfTheClones have no actual biologically
 relevant meaning aside from approximately matching clusters, it may be
 beneficial to set this argument to <code>FALSE</code> which will produce
-a plot with just the circles:</p>
+a plot with just the circles. The following is an example parameters to
+generate a plot that is likely publication-ready:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>,</span>

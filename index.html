@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="nav-item">
@@ -69,7 +71,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul>
@@ -107,34 +109,24 @@
 <p><code>APackOfTheClones</code> is registered on CRAN. To install the latest stable release, simply run the following</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"APackOfTheClones"</span><span class="op">)</span></span></code></pre></div>
-<p>If there are any issues with the CRAN installation (for example, the package has been archived on CRAN for a brief period), try</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@cran"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, to download the latest semi-stable development edition, try</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones"</span><span class="op">)</span></span></code></pre></div>
-<p>A static legacy version is also available both on CRAN archives and on a git branch (<code>v0</code>), to install, try</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Qile0317/APackOfTheClones@v0"</span><span class="op">)</span></span></code></pre></div>
+<p>For more details on installation methods and information on alternative/development versions, see <a href="https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-install.html"><code>vignette("APackOfTheClones-install")</code></a></p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The package extends the functionality of <code>scRepertoire</code> <strong><em>v2</em></strong> by working with a seurat object’s corresponding T/B cell receptor library. To do this, read the <a href="borch.dev/uploads/screpertoire">scRepertoire vignette</a>. Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with <code>scRepertoire::combineTCR</code> / <code>scRepertoire::combineBCR</code> first. Then, it should be integrated into the corresponding seurat object either with <code>scRepertoire::combineExpression</code>.</p>
 <p>To quickly produce the visualization, the <code>vizAPOTC(your_combined_seurat_object)</code> should give a reasonable visualization. There is an example seurat object included in the package which can be used with <code>data("combined_pbmc")</code>. The following codechunk is an example of how it can be done:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span> <span class="co"># ensure v2 is installed: devtools::install_github("ncborcherding/scRepertoire")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://qile0317.github.io/APackOfTheClones/">APackOfTheClones</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># integrate the contigs with scRepertoire example data - this is identical to "combined_pbmc"</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">combineExpression</span><span class="op">(</span></span>
-<span>    input.data <span class="op">=</span> <span class="fu">combineTCR</span><span class="op">(</span></span>
-<span>        input.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mini_contig_list"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mini_contig_list"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">combineTCR</span><span class="op">(</span></span>
 <span>        samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span>, <span class="st">"P18B"</span>, <span class="st">"P18L"</span>, <span class="st">"P19B"</span>, <span class="st">"P19L"</span>, <span class="st">"P20B"</span>, <span class="st">"P20L"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    sc.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"scRep_example"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">combineExpression</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"scRep_example"</span>, package <span class="op">=</span> <span class="st">"scRepertoire"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># produce the ball-packing plot with the default parameters</span></span>
 <span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
@@ -146,13 +138,13 @@
 <span><span class="co"># in seurat clusters 1, 3, and 4.</span></span>
 <span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, seurat_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code>RunAPOTC</code> and <code>AdjustAPOTC</code>, then visualized with <code>APOTCPlot</code>, like so:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># using the same seurat object as before, run and store associated data,</span></span>
-<span><span class="co"># identifying it with a run id.</span></span>
+<span><span class="co"># identifying it with a run id. If not, one will be generated.</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the corresponding data with the run_id. If not provided, will use the latest run.</span></span>
-<span><span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was</span></span>
 <span><span class="co"># left empty for no particular reason, but it will use "default_run_1" since its the latest</span></span>
@@ -171,13 +163,24 @@
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span>, <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"run2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="package-conventions">Package conventions<a class="anchor" aria-label="anchor" href="#package-conventions"></a>
+</h3>
+<p>Most exported functions are named with <code>camelCase</code> with the exception of those that modify Seurat objects having <code>PascalCase</code> to mimic their conventions. All function arguments follow <code>snake_case</code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <p>Comprehensive documentation, vignettes, and a changelog is deployed at <a href="https://qile0317.github.io/APackOfTheClones/" class="uri">https://qile0317.github.io/APackOfTheClones/</a></p>
-<p>There are also two vignettes within the package locally that should be read in order, and can be called with <code><a href="articles/APackOfTheClones.html">vignette("APackOfTheClones")</a></code> and <code><a href="articles/APackOfTheClones-runs.html">vignette("APackOfTheClones-runs")</a></code>.</p>
-<p>All exported functions has function level documentation which can be called with <code>?function</code>.</p>
+<p>There are also the following vignettes that should be read in the following order:</p>
+<ul>
+<li><a href="https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html"><code>vignette("APackOfTheClones")</code></a></li>
+<li><a href="https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html"><code>vignette("APackOfTheClones-runs")</code></a></li>
+<li><a href="https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-shared.html"><code>vignette("APackOfTheClones-shared")</code></a></li>
+<li><a href="https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-utils.html"><code>vignette("APackOfTheClones-utils")</code></a></li>
+</ul>
+<p>All exported functions have function level documentation.</p>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
@@ -186,14 +189,9 @@
 <p>An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.</p>
 </div>
 <div class="section level2">
-<h2 id="upcoming-features">Upcoming features<a class="anchor" aria-label="anchor" href="#upcoming-features"></a>
-</h2>
-<p>One novel feature in the making is the ability to compute and visualize shared clonotypes on the ball packing plot.</p>
-</div>
-<div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
 </h2>
-<p>Qile Yang - <a href="mailto:qile.yang@berkeley.edu" class="email">qile.yang@berkeley.edu</a></p>
+<p>Qile Yang - qile.yang [at] berkeley.edu</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

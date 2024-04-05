@@ -26,7 +26,7 @@ that some of the arguments may conflict with eachother."><meta property="og:imag
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,8 @@ that some of the arguments may conflict with eachother."><meta property="og:imag
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -55,7 +57,7 @@ that some of the arguments may conflict with eachother."><meta property="og:imag
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -81,7 +83,7 @@ object</h1>
     </div>
 
     <div class="ref-description section level2">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
 <p>If the user is unsatisfied with the clonal expansion plot that
 was generated from <code>RunAPOTC</code> and <code>APOTCPlot</code>, this function has a range of
 arguments to modify the data and/or parameters of the visualization. Note
@@ -314,6 +316,7 @@ of the progress.</p></dd>
 <span class="r-in"><span><span class="co"># plot the result</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * using the latest APackOfTheClones Run Data with object id: umap;CTstrict;_;_</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> * generated ggplot object</span>
 <span class="r-plt img"><img src="AdjustAPOTC-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># perhaps multiple clusters need to be relocated and repulsed</span></span></span>
@@ -329,6 +332,7 @@ of the progress.</p></dd>
 <span class="r-in"><span><span class="co"># plot again to check results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * using the latest APackOfTheClones Run Data with object id: umap;CTstrict;_;_</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> * generated ggplot object</span>
 <span class="r-plt img"><img src="AdjustAPOTC-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

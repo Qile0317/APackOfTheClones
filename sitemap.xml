@@ -10,7 +10,16 @@
     <loc>https://qile0317.github.io/APackOfTheClones/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-install.html</loc>
+  </url>
+  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-runs.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-shared.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones-utils.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/articles/APackOfTheClones.html</loc>
@@ -70,16 +79,31 @@
     <loc>https://qile0317.github.io/APackOfTheClones/reference/getReductionCentroids.html</loc>
   </url>
   <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/getSharedClones.html</loc>
+  </url>
+  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/index.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/integrate_tcr.html</loc>
   </url>
   <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/mergeCloneSizes.html</loc>
+  </url>
+  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/mini_clonotype_data.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/mini_seurat_obj.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/overlayLegend.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/removeLegend.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/showCloneHighlight.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/vizAPOTC.html</loc>

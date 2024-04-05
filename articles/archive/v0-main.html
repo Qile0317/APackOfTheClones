@@ -41,7 +41,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,6 +60,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="../../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="nav-item">
@@ -71,7 +73,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul>
@@ -668,10 +670,10 @@ attempt to fit clusters to the original UMAP coordinates) may sometimes
 obstruct eachother excessively.</p>
 <p>To account for this, there are four optional arguments in
 <code>clonal_expansion plot</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>repulse <span class="ot">=</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>repulsion_threshold <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>repulsion_strength <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>max_repulsion_iter <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 <p>For more details on them, read the “Arguments” section in the
 function documentation (<code><a href="../../reference/clonal_expansion_plot.html">?clonal_expansion_plot</a></code>). But to
 summarize, first, to make the circle clusters move away from eachother,
@@ -738,12 +740,12 @@ we see that it is partially outside of the plot. Unfortunately the
 algorithm for placing the legend is far from perfect in version 0 so the
 user will have to do a little extra work.</p>
 <p>There are the following six parameters to adjust the legend:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">50</span>),</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"top_left"</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">1.5</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="fl">0.4</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>add_size_legend <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>legend_sizes <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">50</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>legend_position <span class="ot">=</span> <span class="st">"top_left"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>legend_buffer <span class="ot">=</span> <span class="fl">1.5</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>legend_color <span class="ot">=</span> <span class="st">"#808080"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>legend_spacing <span class="ot">=</span> <span class="fl">0.4</span></span></code></pre></div>
 <p>Here, we can adjust the argument <code>legend_buffer</code>, which
 indicates the amount of <code>ggplot2</code> units to move the legend
 “inwards” by. We can also slightly increase <code>legend_spacing</code>,

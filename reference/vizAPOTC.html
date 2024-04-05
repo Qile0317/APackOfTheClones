@@ -26,7 +26,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,8 @@ ggplot2 object of the clonal expansion plot with a circle size legend
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -55,7 +57,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -81,7 +83,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 
     <div class="ref-description section level2">
     <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
-<p>This function combines the functionality of both <code>RunAPOTC</code> and <code>APOTCPlot</code>.
+<p>This function combines the functionality of both <a href="RunAPOTC.html">RunAPOTC</a> and <a href="APOTCPlot.html">APOTCPlot</a>.
 Given a Seurat object, it first runs the APackOfTheClones method (<a href="RunAPOTC.html">RunAPOTC</a>)
 to compute clonal expansion information, and then generates a customizable
 ggplot2 object of the clonal expansion plot with a circle size legend
@@ -104,10 +106,16 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  repulsion_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  repulsion_strength <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  max_repulsion_iter <span class="op">=</span> <span class="fl">20L</span>,</span>
+<span>  show_shared <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  only_link <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  clone_link_color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  clone_link_alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  res <span class="op">=</span> <span class="fl">360L</span>,</span>
 <span>  linetype <span class="op">=</span> <span class="st">"blank"</span>,</span>
 <span>  use_default_theme <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  retain_axis_scales <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  show_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  label_size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  add_size_legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -119,6 +127,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  legend_label <span class="op">=</span> <span class="st">"Clone sizes"</span>,</span>
 <span>  legend_text_size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  add_legend_background <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_legend_centerspace <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -126,9 +135,8 @@ ggplot2 object of the clonal expansion plot with a circle size legend
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>seurat_obj</dt>
-<dd><p>Seurat object with one or more dimension reductions and
-already have been integrated with a TCR/BCR library with
-<code>scRepertoire::combineExpression</code>.</p></dd>
+<dd><p>A seurat object that has been integrated with clonotype
+data.</p></dd>
 
 
 <dt>reduction_base</dt>
@@ -218,6 +226,39 @@ clusters repulse each other per iteration, and vice versa.</p></dd>
 <dd><p>integer. The number of repulsion iterations.</p></dd>
 
 
+<dt>show_shared</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> The output of
+<a href="getSharedClones.html">getSharedClones</a> can be inputted here, and the resulting plot will overlay
+lines between clone circles if that clonotype is common between clusters.
+Note that the input <em><strong>must</strong></em> be generated from data in the correct
+<code>APackOfTheClones</code> run, and the behavior is undefined otherwise and will
+likely error. The next 4 arguments allow for aesthetic customization of these
+line links.</p></dd>
+
+
+<dt>only_link</dt>
+<dd><p>Optional integer indicating to only display clone
+links originating from this cluster if showing shared clones.</p></dd>
+
+
+<dt>clone_link_width</dt>
+<dd><p>numeric. The width of the lines that connect shared
+clones. Defaults to <code>"auto"</code> which will estimate a reasonable value depending
+on circle sizes.</p></dd>
+
+
+<dt>clone_link_color</dt>
+<dd><p>character. The color of the lines that connect shared
+clones. Defaults to <code>"blend"</code> which will use the average colors of the two
+connected clones. Else, any hex color or valid color string input will work,
+and the corresponding color will be applied on all links.</p></dd>
+
+
+<dt>clone_link_alpha</dt>
+<dd><p>numeric. The alpha of the lines that connect shared
+clones.</p></dd>
+
+
 <dt>res</dt>
 <dd><p>The number of points on the generated path per full circle. From
 plot viewers, if circles seem slightly too pixelated, it is recommended to
@@ -240,8 +281,13 @@ plot. Else, the plot will simply have a blank background.</p></dd>
 <dt>retain_axis_scales</dt>
 <dd><p>If <code>TRUE</code>, approximately maintains the axis scales
 of the original reduction plot. However, it will only attempt to extend the
-axes and never shorten. This is recommended to be set to <code>TRUE</code> especially if
-working with subsetted versions of the clonal data.</p></dd>
+axes and never shorten. Users are recommended to set this to <code>TRUE</code>
+especially if working with subsetted versions of the clonal data to better
+preserve the geometric relation to the original dimensional reduction.</p></dd>
+
+
+<dt>alpha</dt>
+<dd><p>numeric. The alpha of the circles in (0, 1]. Defaults to 1.</p></dd>
 
 
 <dt>show_labels</dt>
@@ -304,6 +350,13 @@ the legend</p></dd>
 legend and fill the background to be white, overlaying anything else.</p></dd>
 
 
+<dt>add_legend_centerspace</dt>
+<dd><p>numeric. An additional amount of distance
+changed between the circle sizes on the left side of the legend and the
+numbers on the right. Useful to set to around 0.5 (or more / less) when there
+are particularly large clone sizes that may cover the numbers.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical. Decides if visual cues are displayed to the R console
 of the progress.</p></dd>
@@ -314,7 +367,13 @@ of the progress.</p></dd>
     
 
 <p>A ggplot object of the APackOfTheClones clonal expansion plot of the
-seurat object</p>
+seurat object. There is an additional 10th element in the object named
+<code>"APackOfTheClones"</code> used by other functions in this package and shouldn't
+interfere with any other ggplot functionality. (As far as currently known)</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="AdjustAPOTC.html">AdjustAPOTC</a></p></div>
     </div>
 
     <div class="section level2">

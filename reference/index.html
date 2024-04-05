@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a>
+    <a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -45,7 +47,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-archive">Archive</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-archive">
-    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a>
+    <a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -68,7 +70,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="core-functions">Core functions<a class="anchor" aria-label="anchor" href="#core-functions"></a></h2>
       
       
 
@@ -80,6 +82,17 @@
 
       <dl><dt>
           
+          <code><a href="vizAPOTC.html">vizAPOTC()</a></code> 
+        </dt>
+        <dd>Directly visualize clonal expansion of a combined seurat object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="RunAPOTC.html">RunAPOTC()</a></code> 
+        </dt>
+        <dd>Run the APackOfTheClones method on a combined Seurat object for
+downstream visualization of clonal expansion</dd>
+      </dl><dl><dt>
+          
           <code><a href="APOTCPlot.html">APOTCPlot()</a></code> 
         </dt>
         <dd>Various variations of visualizations of clonal expansion post-RunAPOTC</dd>
@@ -89,39 +102,22 @@
         </dt>
         <dd>Adjust the parameters of the APackOfTheClones reduction in a seurat
 object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="RunAPOTC.html">RunAPOTC()</a></code> 
-        </dt>
-        <dd>Run the APackOfTheClones method on a combined Seurat object for
-downstream visualization of clonal expansion</dd>
-      </dl><dl><dt>
-          
-          <code><a href="combined_pbmc.html">combined_pbmc</a></code> 
-        </dt>
-        <dd>Example Multi-sampled T-cell seurat object with integrated TCR library</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="working-with-runapotc-runs">Working with RunAPOTC runs<a class="anchor" aria-label="anchor" href="#working-with-runapotc-runs"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="containsApotcRun.html">containsApotcRun()</a></code> 
         </dt>
         <dd>Check for the existence of an APackOfTheClones run with its run id</dd>
-      </dl><dl><dt>
-          
-          <code><a href="countCloneSizes.html">countCloneSizes()</a></code> 
-        </dt>
-        <dd>count the number of clonotype sizes per cell cluster in a seurat
-object combined with a VDJ library</dd>
-      </dl><dl><dt>
-          
-          <code><a href="count_clone_sizes.html">count_clone_sizes()</a></code> 
-        </dt>
-        <dd>DEPRECATED: count the number of clonotype sizes per cell cluster in a seurat
-object integrated with a TCR library</dd>
-      </dl><dl><dt>
-          
-          <code><a href="deleteApotcData.html">deleteApotcData()</a></code> 
-        </dt>
-        <dd>Delete the results of an APackOfTheClones run</dd>
       </dl><dl><dt>
           
           <code><a href="getApotcDataIds.html">getApotcDataIds()</a></code> 
@@ -134,21 +130,91 @@ object integrated with a TCR library</dd>
         <dd>Get the object id of the most recent RunAPOTC run on a seurat object</dd>
       </dl><dl><dt>
           
+          <code><a href="deleteApotcData.html">deleteApotcData()</a></code> 
+        </dt>
+        <dd>Delete the results of an APackOfTheClones run</dd>
+      </dl></div><div class="section level2">
+      <h2 id="further-customization-of-clonal-expansion-plots">Further Customization of Clonal Expansion Plots<a class="anchor" aria-label="anchor" href="#further-customization-of-clonal-expansion-plots"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="showCloneHighlight.html">showCloneHighlight()</a></code> 
+        </dt>
+        <dd>Highlight specific clones on an APackOfTheClones ggplot</dd>
+      </dl><dl><dt>
+          
+          <code><a href="overlayLegend.html">overlayLegend()</a></code> 
+        </dt>
+        <dd>overlay a clone size legend on an APackOfTheClones plot</dd>
+      </dl><dl><dt>
+          
+          <code><a href="removeLegend.html">removeLegend()</a></code> 
+        </dt>
+        <dd>Remove current APackOfTheClones legend</dd>
+      </dl></div><div class="section level2">
+      <h2 id="clonal-analysis-utilities">Clonal Analysis Utilities<a class="anchor" aria-label="anchor" href="#clonal-analysis-utilities"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="countCloneSizes.html">countCloneSizes()</a></code> 
+        </dt>
+        <dd>count the number of clonotype sizes in a seurat object combined with a
+VDJ library overall or by cluster</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mergeCloneSizes.html">mergeCloneSizes()</a></code> 
+        </dt>
+        <dd>Merge a list of Clustered Clonotype Frequency Tables</dd>
+      </dl><dl><dt>
+          
+          <code><a href="getSharedClones.html">getSharedClones()</a></code> 
+        </dt>
+        <dd>Compute a list of clonotypes that are shared between seurat clusters</dd>
+      </dl><dl><dt>
+          
           <code><a href="getReductionCentroids.html">getReductionCentroids()</a></code> 
         </dt>
         <dd>Calculate seurat cluster centroids based on a Dimensional reduction</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="combined_pbmc.html">combined_pbmc</a></code> 
+        </dt>
+        <dd>Example Multi-sampled T-cell seurat object with integrated TCR library</dd>
       </dl><dl><dt>
           
           <code><a href="mini_seurat_obj.html">mini_seurat_obj</a></code> 
         </dt>
         <dd>Artificially generated Seurat object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="vizAPOTC.html">vizAPOTC()</a></code> 
-        </dt>
-        <dd>Directly visualize clonal expansion of a combined seurat object</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
