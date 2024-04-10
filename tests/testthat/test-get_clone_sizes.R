@@ -19,9 +19,18 @@ test_that("countCloneSizes works", {
 		object = countCloneSizes(combined_pbmc, seurat_clusters = 1),
 		expected = append(
 			list(expected_clone_sizes[[1]]),
-			init_list(length(expected_clone_sizes) - 1, create_empty_table())
+			init_empty_table_list(length(expected_clone_sizes) - 1)
 		)
 	)
+
+	expect_contains(
+        object = combined_pbmc %>%
+			countCloneSizes(extra_filter = "clonalFrequency > 1L") %>%
+			unlist() %>%
+			names() %>%
+			intersect(names(getSharedClones(combined_pbmc))),
+        expected = names(getdata("ApotcClonalNetwork", "shared_clones"))
+    )
 
 })
 

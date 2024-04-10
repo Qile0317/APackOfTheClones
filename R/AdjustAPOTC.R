@@ -114,7 +114,7 @@ AdjustAPOTC <- function(
 	recolor_cluster = NULL,
 	new_color = NULL,
 
-	rename_label = NULL, # TODO add functionality to change all at once or modify all at once
+	rename_label = NULL,
 	new_label = NULL,
 	relocate_label = NULL,
 	label_relocation_coord = NULL,

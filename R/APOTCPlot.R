@@ -86,6 +86,12 @@
 #' changed between the circle sizes on the left side of the legend and the
 #' numbers on the right. Useful to set to around 0.5 (or more / less) when there
 #' are particularly large clone sizes that may cover the numbers.
+#' @param detail logical. If `FALSE`, will only plot entire clusters as one
+#' large circle, which may be useful in cases where there are a high number
+#' of clones resulting in a large number of circles on the resulting ggplot,
+#' which has increased plotting times, and certain aspects of the plot needs
+#' to be finely adjusted with [AdjustAPOTC] or simply inspected. This should
+#' not be set to `FALSE` for the actual clonal expansion plot.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object. There is an additional 10th element in the object named
@@ -139,6 +145,8 @@ APOTCPlot <- function(
 	add_legend_background = TRUE,
 	add_legend_centerspace = 0,
 
+	detail = TRUE,
+
 	verbose = TRUE
 ) {
 	# handle varargs, run_id, and typecheck
@@ -151,7 +159,9 @@ APOTCPlot <- function(
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
 	# initialize plot
-	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
+	result_plot <- create_initial_apotc_plot(
+		apotc_obj, res, linetype, alpha, detail
+	)
 	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
 
 	#set theme
@@ -180,7 +190,7 @@ APOTCPlot <- function(
 	}
 
 	if (isnt_empty(show_shared)) {
-		
+
 		# check only_link indexing
 		if (!is.null(only_link) &&
 			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
@@ -234,7 +244,7 @@ APOTCPlot <- function(
 }
 
 APOTCPlot_error_handler <- function(args) {
-	
+
 	check_apotc_identifiers(args)
 	check_filtering_conditions(args)
 
@@ -265,6 +275,8 @@ APOTCPlot_error_handler <- function(args) {
 	# check legend args
 	typecheck(args$add_size_legend, is_a_logical)
 	check_legend_params(args)
+
+	typecheck(args$detail, is_a_logical)
 
 }
 

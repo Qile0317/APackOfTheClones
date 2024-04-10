@@ -40,12 +40,13 @@ vizAPOTC(
   legend_text_size = 5,
   add_legend_background = TRUE,
   add_legend_centerspace = 0,
+  detail = TRUE,
   verbose = TRUE
 )
 }
 \arguments{
 \item{seurat_obj}{A seurat object that has been integrated with clonotype
-data.}
+data with \code{scRepertoire::combineExpression}.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can be any reduction present
@@ -196,6 +197,13 @@ legend and fill the background to be white, overlaying anything else.}
 changed between the circle sizes on the left side of the legend and the
 numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.}
+
+\item{detail}{logical. If \code{FALSE}, will only plot entire clusters as one
+large circle, which may be useful in cases where there are a high number
+of clones resulting in a large number of circles on the resulting ggplot,
+which has increased plotting times, and certain aspects of the plot needs
+to be finely adjusted with \link{AdjustAPOTC} or simply inspected. This should
+not be set to \code{FALSE} for the actual clonal expansion plot.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress.}

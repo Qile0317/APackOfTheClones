@@ -1,3 +1,7 @@
+# cluster repulsion - the n body problem
+# FIXME the repulsion is too aggressive when clusters are super close, put upper bound on force based on clone scale
+# time complexity is O(mn^2) where m is the max number of iterations and n is the number of clusters(circles). n will never be that high so the timing isnt a problem
+
 # Functions defined in src/repulsion.cpp
 # - get_average_vector(vec_list)
 #     avg vector of a list of vectors

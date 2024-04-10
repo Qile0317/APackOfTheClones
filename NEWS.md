@@ -2,6 +2,8 @@
 
 ## Additions
 
+- Add argument `detail` in `APOTCPlot` and `vizAPOTC` to allow user to plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in `vignette("APackOfTheClones-shared")`.
+
 ## Changes
 
 # APackOfTheClones 1.1.0

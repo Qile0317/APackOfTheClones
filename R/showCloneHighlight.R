@@ -72,6 +72,7 @@ showCloneHighlight <- function(
     scale_bg = 1,
     fill_legend = TRUE
 ) {
+    # TODO check if detail = FALSE with global var
     apotc_highlight_clones_error_handler()
 
     if (contains_duplicates(clonotype)) {
@@ -96,7 +97,7 @@ showCloneHighlight <- function(
 
     clone_color_vector <- gen_clone_color_vector(
         color_each, clonotype, highlighted_ggplot_data
-    )
+    ) # TODO be able to color by individual clone (not clonotype) for stuff like other parameters in the metadata
 
     num_matches <- 0
 
@@ -144,7 +145,14 @@ showCloneHighlight <- function(
 
 apotc_highlight_clones_error_handler <- function() {
     args <- get_parent_func_args()
+
     check_is_apotc_ggplot(args$apotc_ggplot)
+    if (is_undetailed(args$apotc_ggplot)) {
+        stop(call. = FALSE,
+            "`apotc_ggplot` must be generated with `detail = TRUE`"
+        )
+    }
+
     typecheck(args$clonotype, is_character)
     typecheck(args$color_each, is_a_logical, is_a_character, is_character)
     typecheck(args$default_color, is_a_character, is.null)

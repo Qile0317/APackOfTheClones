@@ -116,7 +116,6 @@ getSharedClones_error_handler <- function() {
 # output: a named list where each name is a clonotype, each element is a
 # numeric indicating which seurat cluster(s) its in. If exclude_unique_clones,
 # will filter out any clonotype with only length one. (not shared)
-# TODO - allow filtering based on original clone size
 get_shared_clones <- function(
     apotc_obj,
     zero_indexed = FALSE,

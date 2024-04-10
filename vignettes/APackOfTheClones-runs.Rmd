@@ -198,9 +198,15 @@ label_nudge_vector = NULL,
 verbose = TRUE
 ```
 
-The following sections are some example usecases
+### Tip to Speeding up Adjustments
 
-### Renaming Cluster Labels
+While the `vizAPOTC` and `RunAPOTC` / `APOTCPlot` functions to do APackOfTHeClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if nessecary, and repeat - the long plot display times may pose as a large inconvenience.
+
+Setting the argument `detail` to `FALSE` when using `APOTCPlot` or `vizAPOTC` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more plesant process.
+
+### Usage Examples
+
+#### Renaming Cluster Labels
 
 After identification of the cell identity of each seurat cluster, it may be useful to rename each cluster label to the actual identity of the cells of each cluster. here is a minimal example of how this process is intended to be done:
 
@@ -229,7 +235,7 @@ APOTCPlot(
 )
 ```
 
-### Extra Cluster Repulsion
+#### Extra Cluster Repulsion
 
 Another possibility is that the default repulsion may have left the clusters too close - here this is corrected - and the labels are moved as well. Note the use of the pipe operator may also be useful.
 

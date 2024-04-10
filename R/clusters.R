@@ -14,6 +14,8 @@ get_x_coords <- function(l) l[[1]]
 get_y_coords <- function(l) l[[2]]
 get_radii <- function(l) l[[3]]
 get_centroid <- function(l) l[[4]]
+get_centroid_x <- function(l) get_centroid(l)[1]
+get_centroid_y <- function(l) get_centroid(l)[2]
 get_cluster_radius <- function(l) l[[5]]
 get_clonotypes <- function(l) l$clonotype # not index due to legacy clusterlists
 
@@ -29,9 +31,19 @@ set_centroid <- function(l, v) {l$centroid <- v; l}
 set_cluster_radius <- function(l, v) {l$clRad <- v; l}
 set_clonotypes <- function(l, v) {l$clonotype <- v; l}
 
-# convert clusterlist to dataframe, assuming its valid
-# TODO allow get_abstract option to just get 1 large circle
-convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
+# convert clusterlist to dataframe, assuming its ***valid***
+convert_to_dataframe <- function(
+    clstr_list, seurat_cluster_index, detail = TRUE
+) {
+    if (!detail) {
+      return(data.frame(
+        "label" = paste("cluster", seurat_cluster_index),
+        "x" = get_centroid_x(clstr_list),
+        "y" = get_centroid_y(clstr_list),
+        "r" = get_cluster_radius(clstr_list)
+      ))
+    }
+
     data.frame(
         "label" = rep(
             paste("cluster", seurat_cluster_index),

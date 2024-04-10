@@ -13,7 +13,7 @@
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
 #' @param seurat_obj A seurat object that has been integrated with clonotype
-#' data.
+#' data with `scRepertoire::combineExpression`.
 #'
 #' @inherit APOTCPlot return
 #' @export
@@ -74,6 +74,8 @@ vizAPOTC <- function(
     add_legend_background = TRUE,
     add_legend_centerspace = 0,
 
+    detail = TRUE,
+
     verbose = TRUE
 ) {
     seurat_obj <- RunAPOTC(
@@ -123,6 +125,7 @@ vizAPOTC <- function(
         legend_text_size = legend_text_size,
         add_legend_background = add_legend_background,
         add_legend_centerspace = add_legend_centerspace,
+        detail = detail,
         verbose = verbose
     )
 }
