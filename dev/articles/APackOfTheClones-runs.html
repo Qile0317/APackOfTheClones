@@ -312,10 +312,30 @@ locations, colors, and the adjustment of the
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>nudge_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>label_nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>verbose <span class="ot">=</span> <span class="cn">TRUE</span></span></code></pre></div>
-<p>The following sections are some example usecases</p>
 <div class="section level3">
-<h3 id="renaming-cluster-labels">Renaming Cluster Labels<a class="anchor" aria-label="anchor" href="#renaming-cluster-labels"></a>
+<h3 id="tip-to-speeding-up-adjustments">Tip to Speeding up Adjustments<a class="anchor" aria-label="anchor" href="#tip-to-speeding-up-adjustments"></a>
 </h3>
+<p>While the <code>vizAPOTC</code> and <code>RunAPOTC</code> /
+<code>APOTCPlot</code> functions to do APackOfTHeClones runs and
+generate the ggplot object are relatively fast even for very large
+seurat objects, plot display times can get quite long the more circles
+there are. <code>AdjustAPOTC</code> is meant to be used in an
+incremental/iterative manner, where the user can adjust one aspect,
+inspect the plot, and adjust again if nessecary, and repeat - the long
+plot display times may pose as a large inconvenience.</p>
+<p>Setting the argument <code>detail</code> to <code>FALSE</code> when
+using <code>APOTCPlot</code> or <code>vizAPOTC</code> can help - this
+will plot entire clusters as one large circle - speeding up plotting
+times significantly. The details of the individual clonotype circles
+will be lost but the inspection of other aspects like label locations
+will be a much more plesant process.</p>
+</div>
+<div class="section level3">
+<h3 id="usage-examples">Usage Examples<a class="anchor" aria-label="anchor" href="#usage-examples"></a>
+</h3>
+<div class="section level4">
+<h4 id="renaming-cluster-labels">Renaming Cluster Labels<a class="anchor" aria-label="anchor" href="#renaming-cluster-labels"></a>
+</h4>
 <p>After identification of the cell identity of each seurat cluster, it
 may be useful to rename each cluster label to the actual identity of the
 cells of each cluster. here is a minimal example of how this process is
@@ -346,9 +366,9 @@ intended to be done:</p>
 <span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/first_four_labeled-1.png" width="700"></p>
 </div>
-<div class="section level3">
-<h3 id="extra-cluster-repulsion">Extra Cluster Repulsion<a class="anchor" aria-label="anchor" href="#extra-cluster-repulsion"></a>
-</h3>
+<div class="section level4">
+<h4 id="extra-cluster-repulsion">Extra Cluster Repulsion<a class="anchor" aria-label="anchor" href="#extra-cluster-repulsion"></a>
+</h4>
 <p>Another possibility is that the default repulsion may have left the
 clusters too close - here this is corrected - and the labels are moved
 as well. Note the use of the pipe operator may also be useful.</p>
@@ -371,6 +391,7 @@ as well. Note the use of the pipe operator may also be useful.</p>
 <span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: foo</span></span>
 <span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/repulse_again-1.png" width="700"></p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -142,6 +142,7 @@ the plot of the latest run.</p>
 <span>  legend_text_size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  add_legend_background <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_legend_centerspace <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  detail <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -332,6 +333,15 @@ legend and fill the background to be white, overlaying anything else.</p></dd>
 changed between the circle sizes on the left side of the legend and the
 numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.</p></dd>
+
+
+<dt>detail</dt>
+<dd><p>logical. If <code>FALSE</code>, will only plot entire clusters as one
+large circle, which may be useful in cases where there are a high number
+of clones resulting in a large number of circles on the resulting ggplot,
+which has increased plotting times, and certain aspects of the plot needs
+to be finely adjusted with <a href="AdjustAPOTC.html">AdjustAPOTC</a> or simply inspected. This should
+not be set to <code>FALSE</code> for the actual clonal expansion plot.</p></dd>
 
 
 <dt>verbose</dt>
