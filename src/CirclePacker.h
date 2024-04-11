@@ -117,7 +117,7 @@ private:
         data[a].prv = b;
     }
 
-    // insert a node cn in-between c1 and c2 where inputs are indicies in data
+    // insert a node cn in-between c1 and c2 where inputs are indices in data
     void insert_circle(int c1, int c2, int cn) {
         if (data[c1].nxt != c2 || data[c2].prv != c1) {
             Rcpp::stop("Two circles not adjacent");

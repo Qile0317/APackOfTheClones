@@ -189,11 +189,46 @@ convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 	clone_scale_factor * (1 - rad_scale_factor)
 }
 
+match_index <- function(apotc_obj, index) {
+
+	varname <- deparse(substitute(index))
+
+	if (is_integer(index)) {
+		if(all(sapply(index, function(x) is_valid_cluster(apotc_obj, x)))) {
+			return(index)
+		}
+		stop(call. = FALSE, 
+			"Some or all indices in `", varname, "` ",
+			"are out of bounds of the APackOfTheClones Run."
+		)
+	}
+
+	# assume character of names
+	labels <- get_labels(apotc_obj)
+	for (i in seq_along(index)) {
+		location <- which(labels == index[i])
+		if (length(location) > 1) {
+			warning(call. = FALSE,
+				"* label '", index[i], "' ",
+				"had multiple matches in the APackOfTheClones run, ",
+				"using the first occurence at index ", location[1]
+			)
+		}
+		index[i] <- location[1]
+	}
+
+	index
+}
+
 # checkers
+
+is_valid_cluster <- function(apotc_obj, cluster_ind) {
+	cluster_ind %>% is_bound_between(1, get_num_clusters(apotc_obj))
+}
 
 is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
 	typecheck(cluster_ind, is_an_integer)
-	is_bound_between(cluster_ind, 1, get_num_clusters(apotc_obj)) &&
+	is_valid_cluster(apotc_obj, cluster_ind) &&
 		isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
 }
 
@@ -237,7 +272,6 @@ get_aggregated_clone_sizes <- function(
 	filter_top_clones(clone_sizes, get_top)
 }
 
-# S3 generic method to get clonotypes
 get_unique_clonotypes <- function(x) {
 	unique(unlist(lapply(get_raw_clone_sizes(x), names)))
 }

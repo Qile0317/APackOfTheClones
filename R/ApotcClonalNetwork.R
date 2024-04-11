@@ -123,10 +123,10 @@ get_shared_clones <- function(
     in_top_clones = NULL,
     in_top_per_cluster = NULL,
     top_shared = NULL,
-    top_shared_per_cluster = NULL
+    top_shared_per_cluster = NULL#,
+    #min_publicity = 0
     # min_size = NULL,
     # min_size_per_cluster = NULL
-    # TODO have heterogeneity bounds?
 ) {
 
     raw_clone_sizes <- get_raw_clone_sizes(apotc_obj)
@@ -302,7 +302,7 @@ filter_top_shared_per_cl <- function(shared_clones, clone_sizes, top) {
 }
 
 filter_shared_that_contain <- function(shared_clones, filter_clonotypes) {
-    # TODO maybe use rcpp
+    # TODO maybe use rcpp for better time complexity
     shared_clones[names(shared_clones) %in% filter_clonotypes]
 }
 
@@ -313,8 +313,8 @@ overlay_shared_clone_links <- function(
     apotc_obj,
     shared_clones,
     result_plot,
-    only_cluster, # if length 1, radiate from that cl. In future ver, between pairs
-    link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
+    only_cluster, # TODO allow between pairs
+    link_type = "line",
     link_color_mode = "blend",
     link_alpha = 1,
     link_width = "auto",

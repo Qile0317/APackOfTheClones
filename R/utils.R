@@ -260,8 +260,8 @@ name_latest_layer <- function(plt, new_name) {
     plt
 }
 
-remove_ggplot_layers <- function(ggplot_obj, layer_indicies) {
-  ggplot_obj$layers[layer_indicies] <- NULL
+remove_ggplot_layers <- function(ggplot_obj, layer_indices) {
+  ggplot_obj$layers[layer_indices] <- NULL
   ggplot_obj
 }
 
@@ -376,17 +376,17 @@ user_attempt_correction <- function(
 ) {
 
     # check if the string is already present in strset and if yes return
-    match_indicies <- which(s == strset)
-    if (length(match_indicies) == 1) return(s)
+    match_indices <- which(s == strset)
+    if (length(match_indices) == 1) return(s)
 
     get_only_similar_word_or_null <- function(modifier) {
-        match_indicies <- which(modifier(s) == modifier(strset))
-        if (length(match_indicies) != 1) return(NULL)
+        match_indices <- which(modifier(s) == modifier(strset))
+        if (length(match_indices) != 1) return(NULL)
         message(paste(
             "* assuming `", s, "` corresponds to `",
-            strset[match_indicies], "`", sep = ""
+            strset[match_indices], "`", sep = ""
         ))
-        strset[match_indicies]
+        strset[match_indices]
     }
 
     for (modifier in append(identity, modifiers)) {

@@ -153,9 +153,6 @@ get_retain_scale_dims <- function(
 
 }
 
-# TODO: make a function so that only a single large circle for each
-# cluster is plotted to help speedup
-
 check_is_apotc_ggplot <- function(x) {
   if (!isApotcGGPlot(x)) {
     stop(call. = FALSE, "not an output of `APOTCPlot` or `vizAPOTC`")

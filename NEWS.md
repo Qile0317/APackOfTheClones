@@ -6,6 +6,10 @@
 
 ## Changes
 
+- All arguments in `AdjustAPOTC` that asks for cluster indices as input now also accept characters representing their respective labels in the APackOfTheClones runs.
+- The argument `recolor_indicies` has been renamed to `recolor_indices` in `AdjustAPOTC`.
+- Several exported functions now have stricter argument checking of type and length.
+
 # APackOfTheClones 1.1.0
 
 ## Additions

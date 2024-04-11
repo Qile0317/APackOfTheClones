@@ -74,24 +74,24 @@ private:
         clusteredClonotypeIndex = createClusteredClonotypeIndex(rawCloneSizes);
 
         std::vector<std::string> clonotypes = sharedClonotypeClusters.names();
-        std::vector<std::vector<int>> clusterIndicies = getZeroIndexedClusterIndicies(
+        std::vector<std::vector<int>> clusterindices = getZeroIndexedClusterindices(
             sharedClonotypeClusters
         );
 
         for (int i = 0; i < (int) clonotypes.size(); i++) {
 
             std::vector<Circle> currCircles;
-            std::vector<int> currOneIndexedClusterIndicies;
+            std::vector<int> currOneIndexedClusterindices;
 
-            for (int clusterIndex : clusterIndicies[i]) {
+            for (int clusterIndex : clusterindices[i]) {
                 ClusterList& currSharedCluster = clusterListVector[clusterIndex];
                 currCircles.push_back(currSharedCluster.getClonotypeCircle(clonotypes[i]));
-                currOneIndexedClusterIndicies.push_back(clusterIndex);
+                currOneIndexedClusterindices.push_back(clusterIndex);
             }
 
             addSharedCircleLinkInfo(
                 currCircles,
-                currOneIndexedClusterIndicies,
+                currOneIndexedClusterindices,
                 extraSpacing,
                 oneIndexedSourceClusterIndex
             );
@@ -130,7 +130,7 @@ private:
         return outputIndex;
     }
 
-    std::vector<std::vector<int>> getZeroIndexedClusterIndicies(
+    std::vector<std::vector<int>> getZeroIndexedClusterindices(
         Rcpp::List sharedClonotypeClusters
     ) {
         std::vector<std::vector<int>> output = Rcpp::as<std::vector<std::vector<int>>>(
@@ -159,7 +159,7 @@ private:
     // this is dependent on if the user wants to show every link
     void addSharedCircleLinkInfo(
         std::vector<Circle>& circles,
-        std::vector<int>& currOneIndexedClusterIndicies,
+        std::vector<int>& currOneIndexedClusterindices,
         double extraSpacing,
         int oneIndexedSourceClusterIndex
     ) {
@@ -173,8 +173,8 @@ private:
                 int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j); 
                 int rightCircleIndex = linkLine.matchRightCircleIndex(circles, i, j);
 
-                int leftCircleClusterIndex = currOneIndexedClusterIndicies[leftCircleIndex];
-                int rightCircleClusterIndex = currOneIndexedClusterIndicies[rightCircleIndex];
+                int leftCircleClusterIndex = currOneIndexedClusterindices[leftCircleIndex];
+                int rightCircleClusterIndex = currOneIndexedClusterindices[rightCircleIndex];
 
                 if (oneIndexedSourceClusterIndex != -1) {
                     if (leftCircleClusterIndex + 1 != oneIndexedSourceClusterIndex

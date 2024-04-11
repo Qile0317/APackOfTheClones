@@ -31,7 +31,7 @@
 removeLegend <- function(apotc_ggplot) {
     check_is_apotc_ggplot(apotc_ggplot)
     if (!has_legend(apotc_ggplot)) return(apotc_ggplot)
-    remove_ggplot_layers(apotc_ggplot, get_legend_layer_indicies(apotc_ggplot))
+    remove_ggplot_layers(apotc_ggplot, get_legend_layer_indices(apotc_ggplot))
 }
 
 #' @title overlay a clone size legend on an APackOfTheClones plot
@@ -191,22 +191,22 @@ get_layers_after_legend <- function(apotc_ggplot) {
     layers[(get_last_legend_layer_index(apotc_ggplot) + 1):length(layers)]
 }
 
-get_legend_layer_indicies <- function(apotc_ggplot) {
+get_legend_layer_indices <- function(apotc_ggplot) {
     which(names(apotc_ggplot$layers) == .ApotcLegendLayerName)
 }
 
 get_first_legend_layer_index <- function(apotc_ggplot) {
-    get_legend_layer_indicies(apotc_ggplot)[1]
+    get_legend_layer_indices(apotc_ggplot)[1]
 }
 
 get_last_legend_layer_index <- function(apotc_ggplot) {
-    getlast(get_legend_layer_indicies(apotc_ggplot))
+    getlast(get_legend_layer_indices(apotc_ggplot))
 }
 
 remove_legend_and_layers_after <- function(apotc_ggplot) {
     num_layers <- length(apotc_ggplot$layers)
-    removal_indicies <- get_first_legend_layer_index(apotc_ggplot):num_layers
-    apotc_ggplot$layers[removal_indicies] <- NULL
+    removal_indices <- get_first_legend_layer_index(apotc_ggplot):num_layers
+    apotc_ggplot$layers[removal_indices] <- NULL
     apotc_ggplot
 }
 

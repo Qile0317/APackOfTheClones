@@ -191,7 +191,7 @@ RunAPOTC <- function(
         args = hash::hash(as.list(environment())), varargs_list = varargs_list
     )
 
-    RunAPOTC_parameter_checker(hash::hash(as.list(environment())))
+    RunAPOTC_parameter_checker()
 
     if (verbose) {
         message(paste("* id for this run:", obj_id))
@@ -327,7 +327,8 @@ check_repulsion_params <- function(args) {
     typecheck(args$max_repulsion_iter, is_a_positive_integer)
 }
 
-RunAPOTC_parameter_checker <- function(args) {
+RunAPOTC_parameter_checker <- function() {
+    args <- parent.frame()
 
     if (!args$override && containsApotcRun(args$seurat_obj, args$obj_id)) {
         stop(call. = FALSE, paste(

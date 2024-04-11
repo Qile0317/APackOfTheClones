@@ -200,9 +200,9 @@ verbose = TRUE
 
 ### Tip to Speeding up Adjustments
 
-While the `vizAPOTC` and `RunAPOTC` / `APOTCPlot` functions to do APackOfTHeClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if nessecary, and repeat - the long plot display times may pose as a large inconvenience.
+While the `vizAPOTC` and `RunAPOTC` / `APOTCPlot` functions to do APackOfTheClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if necessary, and repeat - the long plot display times may pose as a large inconvenience.
 
-Setting the argument `detail` to `FALSE` when using `APOTCPlot` or `vizAPOTC` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more plesant process.
+Setting the argument `detail` to `FALSE` when using `APOTCPlot` or `vizAPOTC` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more pleasant process.
 
 ### Usage Examples
 

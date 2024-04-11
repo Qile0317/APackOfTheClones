@@ -10,14 +10,14 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// rcppGetEdgeCircleIndicies
-std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame);
-RcppExport SEXP _APackOfTheClones_rcppGetEdgeCircleIndicies(SEXP apotcPlotDataFrameSEXP) {
+// rcppGetEdgeCircleindices
+std::vector<int> rcppGetEdgeCircleindices(Rcpp::DataFrame apotcPlotDataFrame);
+RcppExport SEXP _APackOfTheClones_rcppGetEdgeCircleindices(SEXP apotcPlotDataFrameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type apotcPlotDataFrame(apotcPlotDataFrameSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppGetEdgeCircleIndicies(apotcPlotDataFrame));
+    rcpp_result_gen = Rcpp::wrap(rcppGetEdgeCircleindices(apotcPlotDataFrame));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -156,7 +156,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_APackOfTheClones_rcppGetEdgeCircleIndicies", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleIndicies, 1},
+    {"_APackOfTheClones_rcppGetEdgeCircleindices", (DL_FUNC) &_APackOfTheClones_rcppGetEdgeCircleindices, 1},
     {"_APackOfTheClones_rcppRescaleClones", (DL_FUNC) &_APackOfTheClones_rcppRescaleClones, 4},
     {"_APackOfTheClones_rcppRemoveUniqueClonesHelper", (DL_FUNC) &_APackOfTheClones_rcppRemoveUniqueClonesHelper, 2},
     {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 5},

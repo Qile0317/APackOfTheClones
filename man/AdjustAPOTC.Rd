@@ -95,8 +95,8 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
-\item{relocate_cluster}{numeric of arbitrary length. Indicates which
-cluster(s) to relocate to new coordinates}
+\item{relocate_cluster}{Numeric or Character. Indicates which
+cluster(s) based on the index or label to relocate to new coordinates.}
 
 \item{relocation_coord}{numeric of length two or a list of numerics of length
 two of length of \code{relocate_cluster}. If its a list, indicates each coordinate
@@ -105,8 +105,9 @@ numeric, then will relocate all clusters in \code{relocate_cluster} to the input
 which is likely not desired behavior, so this should only be convenience
 syntax if \code{relocate_cluster} has length 1.}
 
-\item{nudge_cluster}{numeric of arbitrary length. Indicates which
-cluster(s) to "nudge"/translate their coordinate(s) by.}
+\item{nudge_cluster}{Numeric or Character. Indicates which
+cluster(s) based on the index or label to "nudge"/translate their
+coordinate(s) by.}
 
 \item{nudge_vector}{numeric of length two or a list of numerics of length
 two of length of \code{nudge_cluster}. If its a list, indicates each translation
@@ -116,8 +117,8 @@ translate all clusters in \code{nudge_cluster} by the input - which mostly is
 syntactic sugar for translating a single cluster if the input of
 \code{nudge_cluster} is of length 1.}
 
-\item{recolor_cluster}{numeric of arbitrary length. Indicates which
-cluster(s) to change their color by.}
+\item{recolor_cluster}{Numeric or Character. Indicates which
+cluster(s) based on the index or label to change their color by.}
 
 \item{new_color}{character of arbitrary length. Indicates the corresponding
 new colors that selected clusters in \code{recolor_cluster} should be changed to.}
@@ -167,7 +168,7 @@ that some of the arguments may conflict with eachother.
 # do an APackOfTheClones run
 pbmc <- RunAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 
-# adjust the rad_scale_factor, and nudge cluster 1 by (1, 1)
+# adjust the rad_scale_factor, and nudge cluster 1 by x = 1, y = 1
 pbmc <- AdjustAPOTC(
     pbmc,
     new_rad_scale_factor = 0.9,
@@ -179,16 +180,21 @@ pbmc <- AdjustAPOTC(
 # plot the result
 APOTCPlot(pbmc)
 
+# rename some labels
+pbmc <- AdjustAPOTC(
+    pbmc, rename_label = c(2, 5), new_label = c("Foo", "Bar")
+)
+
 # perhaps multiple clusters need to be relocated and repulsed
 pbmc <- AdjustAPOTC(
     pbmc,
-    relocate_cluster = c(5, 10),
+    relocate_cluster = c("Foo", "C10"), # using labels works too
     relocation_coord = list(c(2, 3.5), c(0, 5)),
     repulse = TRUE,
     verbose = FALSE
 )
 
 # plot again to check results
-APOTCPlot(pbmc)
+APOTCPlot(pbmc, show_labels = TRUE, verbose = FALSE)
 
 }

@@ -151,7 +151,7 @@ APOTCPlot <- function(
 ) {
 	# handle varargs, run_id, and typecheck
 	varargs_list <- list(...)
-	args <- hash::hash(as.list(environment()))
+	args <- environment()
 	args$run_id <- infer_object_id_if_needed(args, varargs_list)
 	APOTCPlot_error_handler(args)
 
@@ -296,7 +296,7 @@ get_apotc_plot_dims_from_df <- function(plot_dataframe) {
 }
 
 subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
-	apotc_plot_dataframe[unique(rcppGetEdgeCircleIndicies(apotc_plot_dataframe)), ]
+	apotc_plot_dataframe[unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)), ]
 }
 
 # Produce modified ggplot object of an APackOfTheClones plot with an extra slot
