@@ -81,8 +81,6 @@ df_full_join <- function(clstr_list, detail = TRUE) {
     df
 }
 
-# TODO better to just rewrite df_full_join and color adding :P
-
 make_undetailed_df <- function(apotc_obj) {
 
 	df <- data.frame(

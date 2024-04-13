@@ -102,7 +102,8 @@ private:
         numClusters = clusterLists.size(); // assume non-zero
         std::vector<ClusterList> outputClusterListVector (numClusters);
         for (int i = 0; i < numClusters; i++) {
-            outputClusterListVector[i] = ClusterList(clusterLists[i]);
+            Rcpp::List currRClusterList = clusterLists[i];
+            outputClusterListVector[i] = ClusterList(currRClusterList);
         }
         return outputClusterListVector;
     }

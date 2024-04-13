@@ -37,7 +37,7 @@ countCloneSizes <- function(
     clonecall = "strict",
     extra_filter = NULL,
     ...,
-    by_cluster = TRUE,
+    by_cluster = TRUE, # FIXME allow this arg to also be string indicating cluster. by default should be active ident
     sort_decreasing = NULL
 ) {
     countCloneSizes_arg_checker()
@@ -54,8 +54,9 @@ countCloneSizes <- function(
 
     clustered_clone_sizes <- count_raw_clone_sizes(
         seurat_obj = seurat_obj,
-        num_clusters = get_num_total_clusters(seurat_obj),
-        clonecall = clonecall
+        ident_levels = get_ident_levels(seurat_obj),
+        clonecall = clonecall,
+        named = TRUE
     )
 
     # TODO extract function for getting sorted internally from apotc
@@ -87,18 +88,20 @@ countCloneSizes_arg_checker <- function() {
     typecheck(args$sort_decreasing, is_a_logical, is.null)
 }
 
-count_raw_clone_sizes <- function(seurat_obj, num_clusters, clonecall) {
+count_raw_clone_sizes <- function(
+    seurat_obj, ident_levels, clonecall, named = FALSE
+) {
 
     # get the na filtered clonotype metadata
     clonotype_cluster_df <- seurat_obj@meta.data %>%
         select_cols(clonecall, "seurat_clusters") %>%
         stats::na.omit()
 
-    # initialize output clone sizes
-    clone_sizes <- init_empty_table_list(num_clusters)
+    # initialize output clone sizes - named!
+    clone_sizes <- init_empty_table_list(ident_levels)
 
     # if no valid rows, return empty clone sizes
-    if (nrow(clonotype_cluster_df) == 0) return(clone_sizes)
+    if(nrow(clonotype_cluster_df) == 0) return(clone_sizes |> unname_if(!named))
 
     # aggregate the raw counts
     freq_df <- stats::aggregate(
@@ -117,15 +120,19 @@ count_raw_clone_sizes <- function(seurat_obj, num_clusters, clonecall) {
             one_cluster_clone_table <- as_table(one_cluster_clone_table)
         }
 
-        clone_sizes[[freq_df$seurat_clusters[1]]] <- one_cluster_clone_table
-        return(clone_sizes)
+        clone_sizes[[
+            as.character(freq_df$seurat_clusters[1])
+        ]] <- one_cluster_clone_table
+
+        return(clone_sizes %>% unname_if(!named))
     }
 
-    for (elem in enumerate(freq_df$seurat_clusters)) {
-        clone_sizes[[val1(elem)]] <- freq_df[[2]][ind(elem)][[1]]
+    for (ident in as.character(freq_df[[1]])) {
+        clone_sizes[[ident]] <- freq_df[[2]][
+            as.character(freq_df[[1]]) == ident][[1]]
     }
 
-    clone_sizes
+    clone_sizes %>% unname_if(!named)
 }
 
 #' @title

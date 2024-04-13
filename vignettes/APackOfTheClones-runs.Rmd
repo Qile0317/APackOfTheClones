@@ -50,7 +50,6 @@ As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat &
   </summary>
 
 ```{r, load_data, eval = TRUE, echo = FALSE, include = FALSE}
-# TODO use a nicer looking dataset
 pbmc <- get(data("combined_pbmc"))
 ```
 
@@ -122,7 +121,7 @@ pbmc <- RunAPOTC(
 
 ### Important Note
 
-In a lot of real world applications, the user may only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
+Practically speaking, most users probably only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot - or they already will have several subsetted seurat objects. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
 
 ### Utilities for Managing APackOfTheClones Runs
 
@@ -131,6 +130,7 @@ It is to note that the data abstraction here with a `run_id` is intentional, and
 - `getApotcDataIds(pbmc)` gets all current `run_id`'s, if any.
 - `getLastApotcDataId(pbmc)` gets the latest `run_id`, if any.
 - `containsApotcRun(pbmc, run_id = "foo")` returns whether a `run_id` exists in the seurat object.
+- `renameApotcRun(pbmc, old_run_id = "foo", new_run_id = "bar")` renames runs.
 - `deleteApotcData(pbmc, run_id = "foo")` deletes *all data* associated with a certain `run_id`.
 
 ## APOTCPlot

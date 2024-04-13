@@ -61,6 +61,11 @@
 #' one wanted to filter by the length of the amino acid sequence of TCRs, one
 #' could pass in something like `extra_filter = "nchar(CTaa) - 1 > 10"`. When
 #' involving characters, ensure to enclose with single quotes.
+#' @param alt_ident character. By default, cluster identity is assumed to be
+#' whatever is in `Idents(seurat_obj)`, and clones will be grouped by the active
+#' ident. However, `alt_ident` could be set as the name of some column in the
+#' meta data of the seurat object to be grouped by. This column is meant to have
+#' been a product of `Seurat::StashIdent` or manually added.
 #' @param run_id character. This will be the ID associated with the data of a
 #' run, and will be used by other important functions like [APOTCPlot] and
 #' [AdjustAPOTC]. Defaults to `NULL`, in which case the ID will be generated
@@ -99,6 +104,12 @@
 #' of the progress.
 #'
 #' @details
+#' Note that the subsetting arguments `...` and `extra_filter` are only a
+#' quick convenience to subset based on metadata, and the `subset` S3 method
+#' defined in `Seurat` is much more mature are has more features. Additionally,
+#' users need to work with data subsets are recommended to and likely already
+#' are working with seurat objects subsetted/split with `Seurat::SplitObject`.
+#'
 #' All APackOfTheClones run data is stored in the Seurat object under
 #' `seurat_object@misc$APackOfTheClones`, which is a list of S4 objects of the
 #' type "ApotcData", with each element corresponding to a unique run. The id of
@@ -106,11 +117,9 @@
 #' ***really shouldn't*** manually modify anything in the list as it may cause
 #' unexpected behavior with many other functions.
 #'
-#' Additionally, it also logs a seurat command associated with the run in the
+#' Additionally, it logs a seurat command associated with the run in the
 #' `seurat_object@commands` slot as a "SeuratCommand" object (from Seurat),
 #' where the name of the object in the list is formatted as `RunAPOTC.run_id`.
-#' Again, the user should not modify anything in these objects as they are used
-#' by some related functions, mainly [AdjustAPOTC].
 #'
 #' @return A modified version of the input seurat object, which harbors data
 #' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
@@ -146,10 +155,14 @@
 #'
 RunAPOTC <- function(
     seurat_obj,
+    # TODO! select ident to identify cluster by! should be based on ident - should also work if subsetted! so needs matching with hashmap with Rcpp after adding dataframe column. then add optional column for optional cluster. this column should be guaranteed to internally have diff name. probably should just rewrite countclonesizes to not use stats::aggregate
+    # TODO! Therefore cluster labels should also default the the name in the active.ident, and only be Cx if they are ints in asc order
+    # One test is to make it all one Ident and then see if the clone sizes are just the aggregated sizes
     reduction_base = "umap",
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL, # TODO check
     run_id = NULL,
 
     clone_scale_factor = "auto",
@@ -171,9 +184,10 @@ RunAPOTC <- function(
     RunAPOTC_partial_arg_checker(varargs_list)
     if (verbose) message("Initializing APOTC run...")
 
-    # compute inputs
+    # compute/check inputs
     reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
+    # TODO check alt_ident
     
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
@@ -187,9 +201,7 @@ RunAPOTC <- function(
         metadata_filter = extra_filter, varargs_list = varargs_list
     )
 
-    obj_id <- infer_object_id_if_needed(
-        args = hash::hash(as.list(environment())), varargs_list = varargs_list
-    )
+    obj_id <- infer_object_id_if_needed(environment(), varargs_list)
 
     RunAPOTC_parameter_checker()
 
@@ -202,12 +214,13 @@ RunAPOTC <- function(
 
     # run the packing algos
     apotc_obj <- ApotcData(
-        seurat_obj,
-        metadata_filter_string,
-        clonecall,
-        reduction_base,
-        clone_scale_factor,
-        rad_scale_factor
+        seurat_obj = seurat_obj,
+        alt_ident = alt_ident,
+        metadata_filter_condition = metadata_filter_string,
+        clonecall = clonecall,
+        reduction_base = reduction_base,
+        clone_scale_factor = clone_scale_factor,
+        rad_scale_factor = rad_scale_factor
     )
 
     if (verbose) message("\nPacking clones into clusters")
@@ -298,6 +311,7 @@ check_apotc_identifiers <- function(args) {
     typecheck(args$reduction_base, is_a_character, is.null)
     typecheck(args$clonecall, is_a_character, is.null)
     typecheck(args$extra_filter, is_character, is.null)
+    typecheck(args$alt_ident, is_character, is.null)
 
 }
 

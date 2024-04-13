@@ -10,6 +10,7 @@ vizAPOTC(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
+  alt_ident = NULL,
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
   order_clones = TRUE,
@@ -79,6 +80,12 @@ alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
+
+\item{alt_ident}{character. By default, cluster identity is assumed to be
+whatever is in \code{Idents(seurat_obj)}, and clones will be grouped by the active
+ident. However, \code{alt_ident} could be set as the name of some column in the
+meta data of the seurat object to be grouped by. This column is meant to have
+been a product of \code{Seurat::StashIdent} or manually added.}
 
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent

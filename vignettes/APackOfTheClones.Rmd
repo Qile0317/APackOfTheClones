@@ -93,7 +93,6 @@ pbmc <- scRepertoire::combineExpression(
 ```
 
 ```{r, actual_print_pbmc, eval = TRUE, echo = FALSE, include = FALSE}
-# TODO use a nicer looking dataset
 pbmc <- get(data("combined_pbmc"))
 ```
 

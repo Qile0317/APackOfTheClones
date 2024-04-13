@@ -51,9 +51,10 @@ reference:
   - AdjustAPOTC
 - title: Working with RunAPOTC runs
 - contents:
-  - containsApotcRun
   - getApotcDataIds
   - getLastApotcDataId
+  - containsApotcRun
+  - renameAopotcRun
   - deleteApotcData
 - title: Further Customization of Clonal Expansion Plots
 - contents:
@@ -69,4 +70,3 @@ reference:
 - title: Data
 - contents:
   - combined_pbmc
-  - mini_seurat_obj

@@ -6,17 +6,17 @@ expected_clone_sizes <- getdata("get_clone_sizes", "raw_strict_clone_sizes")
 
 test_that("count_raw_clone_sizes works", {
 	expect_identical(
-		count_raw_clone_sizes(get(data("combined_pbmc")), 17, "CTstrict"),
+		count_raw_clone_sizes(combined_pbmc, as.character(1:17), "CTstrict"),
 		expected_clone_sizes
 	)
 })
 
 test_that("countCloneSizes works", {
 
-	expect_identical(countCloneSizes(combined_pbmc), expected_clone_sizes)
+	expect_identical(unname(countCloneSizes(combined_pbmc)), expected_clone_sizes)
 
 	expect_identical(
-		object = countCloneSizes(combined_pbmc, seurat_clusters = 1),
+		object = unname(countCloneSizes(combined_pbmc, seurat_clusters = 1)),
 		expected = append(
 			list(expected_clone_sizes[[1]]),
 			init_empty_table_list(length(expected_clone_sizes) - 1)

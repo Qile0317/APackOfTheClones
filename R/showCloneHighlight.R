@@ -72,7 +72,6 @@ showCloneHighlight <- function(
     scale_bg = 1,
     fill_legend = TRUE
 ) {
-    # TODO check if detail = FALSE with global var
     apotc_highlight_clones_error_handler()
 
     if (contains_duplicates(clonotype)) {
@@ -144,6 +143,7 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function() {
+    
     args <- get_parent_func_args()
 
     check_is_apotc_ggplot(args$apotc_ggplot)

@@ -322,5 +322,3 @@ get_estimated_legend_sizes <- function(apotc_ggplot_obj) {
 	get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
 }
 
-# TODO may need an updater function for the plot object since old versions wont have them.
-# alternatively can have the user in a warning function to update their object.

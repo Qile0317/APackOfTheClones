@@ -302,13 +302,11 @@ filter_top_shared_per_cl <- function(shared_clones, clone_sizes, top) {
 }
 
 filter_shared_that_contain <- function(shared_clones, filter_clonotypes) {
-    # TODO maybe use rcpp for better time complexity
     shared_clones[names(shared_clones) %in% filter_clonotypes]
 }
 
 # overlay clone links on an APackOfTheClones plot
 # maybe also make method to take in the plot directly?
-# TODO - do some matrix visualization too, maybe use heatmap for clone sizes
 overlay_shared_clone_links <- function(
     apotc_obj,
     shared_clones,
@@ -418,8 +416,6 @@ estimate_link_width <- function(apotc_obj) {
 }
 
 # internal dispatch function to get a dataframe of line connections
-# TODO should have exportable version with identifiers so user can get it and do their own thing
-
 overlay_links <- function(
     result_plot, link_type, link_dataframe, link_alpha, link_width
 ) {

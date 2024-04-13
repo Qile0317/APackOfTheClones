@@ -261,13 +261,62 @@ containsAnyApotcData <- function(seurat_obj) {
 containsApotcRun <- function(seurat_obj, run_id) {
 
     if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
-    if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
+    typecheck(run_id, is_a_character)
 
     if (!containsAnyApotcData(seurat_obj)) {
         return(FALSE)
     }
 
     any(getApotcDataIds(seurat_obj) == run_id)
+}
+
+#' @title
+#' Rename an APackOfTheClones run
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' A function to rename an APackOfTheClones run identified by its run id in
+#' a Seurat object.
+#'
+#' @param seurat_obj A Seurat object containing APackOfTheClones data - the
+#' output of [RunAPOTC]
+#' @param old_run_id Character. The current id of the APackOfTheClones run to
+#' be renamed.
+#' @param new_run_id Character. The new id to assign to the APackOfTheClones
+#' run.
+#'
+#' @return A Seurat object with the APackOfTheClones run renamed.
+#' @export
+#'
+#' @examples
+#' pbmc <- RunAPOTC(
+#'     seurat_obj = get(data("combined_pbmc")),
+#'     reduction_base = "umap",
+#'     clonecall = "strict",
+#'     run_id = "run1",
+#'     verbose = FALSE
+#' )
+#'
+#' pbmc <- renameApotcRun(pbmc, "run1", "new_run")
+#' # Now "run1" has been renamed to "new_run"
+#'
+renameApotcRun <- function(seurat_obj, old_run_id, new_run_id) {
+
+    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    typecheck(old_run_id, is_a_character)
+    typecheck(new_run_id, is_a_character)
+
+    if (!containsApotcRun(seurat_obj, old_run_id))
+        stop("There's no run named `", old_run_id, "`")
+    if (containsApotcRun(seurat_obj, new_run_id))
+        stop("There is already a run named `", new_run_id, "`")
+
+    names(seurat_obj@misc$APackOfTheClones)[
+        getApotcDataIds(seurat_obj) == old_run_id
+    ] <- new_run_id
+
+    seurat_obj
 }
 
 #' @title

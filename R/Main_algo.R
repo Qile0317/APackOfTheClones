@@ -3,9 +3,9 @@ pack_into_clusterlists <- function(
     sizes, centroids, num_clusters, rad_decrease = 0,
     ORDER = TRUE, scramble = FALSE, try_place = FALSE, verbose = TRUE
 ){
-  output_list <- init_list(num_elements = num_clusters, init_val = list())
 
-  # initialize progress bar stats
+  output_list <- init_list(num_clusters, init_val = list())
+
   if (verbose) {
     packed_clone_count <- 0
     total_clone_count <- sum(sapply(sizes, length))
@@ -15,9 +15,7 @@ pack_into_clusterlists <- function(
   for(i in 1:num_clusters){
       input_rad_vec <- sizes[[i]]
 
-      if (!isnt_empty(input_rad_vec) || is.null(input_rad_vec)) {
-          next
-      }
+      if (is_empty(input_rad_vec)) next
 
       processed_rad_vec <- process_rad_vec(input_rad_vec, ORDER, scramble)
 
@@ -29,11 +27,10 @@ pack_into_clusterlists <- function(
           verbose = FALSE
       )
 
-      # new in 1.1.0: sixth element in clusterlist is the clone
       output_list[[i]][["clonotype"]] <- names(processed_rad_vec)
 
       if (verbose) {
-        packed_clone_count <- packed_clone_count + length(input_rad_vec)
+        packed_clone_count %+=% length(input_rad_vec) # nolint
         progress_bar(packed_clone_count, total_clone_count)
       }
   }
@@ -47,7 +44,6 @@ process_rad_vec <- function(input_rad_vec, ORDER, scramble) {
     return(sort(input_rad_vec, decreasing = TRUE))
   }
   if (scramble) {
-    # user should set seed themselves
     return(sample(input_rad_vec))
   }
   input_rad_vec

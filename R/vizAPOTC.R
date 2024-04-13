@@ -37,6 +37,7 @@ vizAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL,
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -84,6 +85,7 @@ vizAPOTC <- function(
         clonecall = clonecall,
         ...,
         extra_filter = extra_filter,
+        alt_ident = alt_ident,
         run_id = "vizAPOTC",
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,

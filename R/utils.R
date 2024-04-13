@@ -29,7 +29,7 @@ getReductionCentroids <- function(seurat_obj, reduction) {
   get_cluster_centroids(
     seurat_obj = seurat_obj,
     reduction = user_get_reduc_obj(seurat_obj, reduction),
-    passed_in_reduc_obj = TRUE
+    get_ident_levels(seurat_obj)
   )
 }
 
@@ -151,8 +151,8 @@ sort_each_table <- function(x, desc = FALSE) {
     })
 }
 
-init_empty_table_list <- function(num_elements) {
-    init_list(num_elements, create_empty_table())
+init_empty_table_list <- function(x) {
+    init_list(x, create_empty_table())
 } 
 
 is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
@@ -280,6 +280,8 @@ secretly_init_name <- function(x) {
 }
 
 unname_if_empty <- function(l) if (is_empty(l)) unname(l) else l
+
+unname_if <- function(x, do_unname) if (do_unname) unname(x) else x
 
 # math utils
 
@@ -434,8 +436,9 @@ closest_word <- function(s, strset) {
 
 # list utilities
 
-init_list <- function(num_elements, init_val = NULL) {
-    l <- vector("list", num_elements)
+init_list <- function(x, init_val = NULL) {
+    l <- vector("list", ifelse(is_an_integer(x), x, length(x)))
+    if (!is_an_integer(x)) names(l) <- as.character(x)
     if (is.null(init_val)) return(l)
     lapply(l, function(x) init_val)
 }
@@ -539,12 +542,16 @@ subsetSeuratMetaData <- function(
 	seurat_obj
 }
 
-count_umap_clusters <- function(seurat_obj) {
-    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
-}
-
 count_clones <- function(seurat_obj, clonecall) {
   sum(!is.na(seurat_obj@meta.data[[clonecall]]))
+}
+
+get_ident_levels <- function(seurat_obj, custom_ident = NULL) {
+    if (is.null(custom_ident)) return(as.character(levels(seurat_obj@active.ident)))
+    if (!is.null(seurat_obj@meta.data[["__active.ident__"]])) {
+        return(as.character(levels(seurat_obj@meta.data[["__active.ident__"]])))
+    }
+    as.character(levels(as.factor(seurat_obj@meta.data$seurat_clusters)))
 }
 
 get_num_total_clusters <- function(seurat_obj) {

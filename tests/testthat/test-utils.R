@@ -1,5 +1,3 @@
-data("mini_seurat_obj", "mini_clonotype_data")
-
 test_that("getReductionCentroids works", {
     expect_equal(
         getReductionCentroids(get(data("combined_pbmc")), "umap"),
