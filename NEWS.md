@@ -13,7 +13,7 @@
 
 ## Changes
 
-- `vizAPOTC` and `RunAPOTC` now defaults to aggregating clustered clonotype frequencies based on active ident of the seurat object.
+- `vizAPOTC` and `RunAPOTC` now defaults to aggregating clustered clonotype frequencies based on active ident of the seurat object. Additionally, if using an ident where its levels are not ordered integers, then the cluster labels for each APackOfTheClones run that is stored in the seurat object will no longer just be "C1", "C2", ... and will be the names of the idents.
 - All arguments in `AdjustAPOTC` that asks for cluster indices as input now also accept characters representing their respective labels in the APackOfTheClones runs.
 - The argument `recolor_indicies` has been renamed to `recolor_indices` in `AdjustAPOTC`.
 - `countCloneSizes` now outputs a named list with each name being the cluster identity. Additionally, the argument `by_cluster` can now also take in single characters as arguments representing possible alternative cluster identities in the metadata TODO.

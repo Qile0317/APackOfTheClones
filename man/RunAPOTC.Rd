@@ -128,7 +128,8 @@ Computes necessary information for an APackOfTheClones
 clonal expansion plot (\link{APOTCPlot}) and stores it in the seurat object.
 Gets sizes of unique clones and utilizes a circle-packing algorithm to
 pack circles representing individual clones in approximately the same
-dimensional reduction (\code{reduction_base}) coordinates.
+dimensional reduction (\code{reduction_base}) coordinates based on some cell
+ident (defaults to the active ident).
 
 The parameter \code{extra_filter} along with an unlimited number of additional
 keyword arguments can be used to filter the cells by certain conditions
@@ -167,6 +168,16 @@ Additionally, it logs a seurat command associated with the run in the
 \code{seurat_object@commands} slot as a "SeuratCommand" object (from Seurat),
 where the name of the object in the list is formatted as \code{RunAPOTC.run_id}.
 }
+\section{Cluster labelling}{
+
+For the ident that was used to cluster the clones, labels for each cluster
+are inferred and stored in the run so that they can be used by other
+functions and optionally overlaid on the plot over clusters. If the levels
+of the ident used is a naturally ordered integer sequence, then the labels
+generated would be \verb{"C1", "C2", "C3" ... }, else they would be the actual
+ident levels themselves.
+}
+
 \examples{
 data("combined_pbmc")
 

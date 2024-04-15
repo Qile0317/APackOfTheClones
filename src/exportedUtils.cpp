@@ -20,6 +20,9 @@ std::vector<std::vector<int>> rcppGetUniquePairsUpTo(int x, bool oneIndexed) {
     return uniquePairList;
 }
 
+// string to integer map that does not support key value pair removal.
+// Key values can be retrieved in the order *unique keys* were
+// added.
 class AddOnlyOrderedStringIntMap {
 protected:
     std::unordered_map<std::string, unsigned> keyIndex;

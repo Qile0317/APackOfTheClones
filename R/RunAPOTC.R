@@ -9,7 +9,8 @@
 #' clonal expansion plot ([APOTCPlot]) and stores it in the seurat object.
 #' Gets sizes of unique clones and utilizes a circle-packing algorithm to
 #' pack circles representing individual clones in approximately the same
-#' dimensional reduction (`reduction_base`) coordinates.
+#' dimensional reduction (`reduction_base`) coordinates based on some cell 
+#' ident (defaults to the active ident).
 #'
 #' The parameter `extra_filter` along with an unlimited number of additional
 #' keyword arguments can be used to filter the cells by certain conditions
@@ -121,14 +122,21 @@
 #' `seurat_object@commands` slot as a "SeuratCommand" object (from Seurat),
 #' where the name of the object in the list is formatted as `RunAPOTC.run_id`.
 #'
+#' @section Cluster labelling:
+#' For the ident that was used to cluster the clones, labels for each cluster
+#' are inferred and stored in the run so that they can be used by other
+#' functions and optionally overlaid on the plot over clusters. If the levels
+#' of the ident used is a naturally ordered integer sequence, then the labels
+#' generated would be `"C1", "C2", "C3" ... `, else they would be the actual
+#' ident levels themselves.
+#'
 #' @return A modified version of the input seurat object, which harbors data
 #' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
 #' and has a friendly user interface to modify certain attributes with
 #' [AdjustAPOTC].
+#' @export
 #'
 #' @seealso [APOTCPlot], [AdjustAPOTC], [getApotcDataIds]
-#'
-#' @export
 #'
 #' @examples
 #' data("combined_pbmc")

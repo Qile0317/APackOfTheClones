@@ -230,6 +230,23 @@ to compute clonal expansion information, and then generates a customizable
 ggplot2 object of the clonal expansion plot with a circle size legend
 (\link{APOTCPlot}).
 }
+\details{
+Note that the subsetting arguments \code{...} and \code{extra_filter} are only a
+quick convenience to subset based on metadata, and the \code{subset} S3 method
+defined in \code{Seurat} is much more mature are has more features. Additionally,
+users need to work with data subsets are recommended to and likely already
+are working with seurat objects subsetted/split with \code{Seurat::SplitObject}.
+}
+\section{Cluster labelling}{
+
+For the ident that was used to cluster the clones, labels for each cluster
+are inferred and stored in the run so that they can be used by other
+functions and optionally overlaid on the plot over clusters. If the levels
+of the ident used is a naturally ordered integer sequence, then the labels
+generated would be \verb{"C1", "C2", "C3" ... }, else they would be the actual
+ident levels themselves.
+}
+
 \examples{
 data("combined_pbmc")
 

@@ -31,14 +31,22 @@ test_that("getting shared clones works", {
 
     expect_identical(
         object = getSharedClones(combined_pbmc, intop = 1),
-        expected = expected_all_shared[2] # coincidentally same as top = 1/9
+        expected = expected_all_shared[2]
     )
 
-    # TODO FIXME
+    expect_identical(
+        object = getSharedClones(combined_pbmc, intop = 1 / 341),
+        expected = expected_all_shared[2]
+    )
 
     expect_identical(
-        object = getSharedClones(combined_pbmc, intop = 5 / 341),
-        expected = expected_all_shared[c(2, 1, 5, 7)]
+        object = getSharedClones(combined_pbmc, intop = 2 / 341),
+        expected = expected_all_shared[c(2, 5)]
+    )
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, intop = 3 / 341),
+        expected = expected_all_shared
     )
 
     # check everything = Inf does nothing

@@ -32,8 +32,6 @@ test_that("countCloneSizes works", {
         expected = names(getdata("ApotcClonalNetwork", "shared_clones"))
     )
 
-	# TODO FIXME test with by_cluster as arg
-
 	same_ident_pbmc <- combined_pbmc
 	same_ident_pbmc@active.ident <- "Foo" %>%
 		rep(length(combined_pbmc@active.ident)) %>%
@@ -46,6 +44,13 @@ test_that("countCloneSizes works", {
 
 	expect_mapequal(test_obj, expected_obj)
 	expect_identical(test_obj, expected_obj) # TODO FIXME order is wrong
+
+	expect_identical(
+		unname(countCloneSizes(combined_pbmc, by_cluster = "seurat_clusters")),
+		expected_clone_sizes
+	)
+
+	# TODO test with custom by_cluster as arg
 
 })
 

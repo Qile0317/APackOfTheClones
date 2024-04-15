@@ -63,7 +63,12 @@ A list of tables or a single table depending on \code{by_cluster}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Get clonotype frequencies from a seurat object's meta.data slot.
+Get clonotype frequencies from a seurat object's metadata, either as one
+whole table, or in a list of tables, based on the current / some custom
+ident of each cell. Note that depending on the ident (indicated by the
+\code{by_cluster} argument) there may be more or less clonotypes counted based
+on the number of rows containing NA for that column of that ident if it
+isn't the active ident.
 }
 \examples{
 data("combined_pbmc")

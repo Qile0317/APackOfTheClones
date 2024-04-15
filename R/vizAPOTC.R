@@ -15,6 +15,15 @@
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data with `scRepertoire::combineExpression`.
 #'
+#' @details
+#' Note that the subsetting arguments `...` and `extra_filter` are only a
+#' quick convenience to subset based on metadata, and the `subset` S3 method
+#' defined in `Seurat` is much more mature are has more features. Additionally,
+#' users need to work with data subsets are recommended to and likely already
+#' are working with seurat objects subsetted/split with `Seurat::SplitObject`.
+#'
+#' @inheritSection RunAPOTC Cluster labelling
+#'
 #' @inherit APOTCPlot return
 #' @export
 #'
