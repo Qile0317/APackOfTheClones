@@ -25,26 +25,27 @@ test_that("countCloneSizes works", {
 
 	expect_contains(
         object = combined_pbmc %>%
-			countCloneSizes(extra_filter = "clonalFrequency > 1L") %>% # getSharedClones is not wrong
+			countCloneSizes(extra_filter = "clonalFrequency > 1L") %>%
+			unname() %>%
 			unlist() %>%
-			names() %>%
-			intersect(names(getSharedClones(combined_pbmc))),
+			names(),
         expected = names(getdata("ApotcClonalNetwork", "shared_clones"))
     )
 
 	# TODO FIXME test with by_cluster as arg
-
-	# the following are BOTH wrong
 
 	same_ident_pbmc <- combined_pbmc
 	same_ident_pbmc@active.ident <- "Foo" %>%
 		rep(length(combined_pbmc@active.ident)) %>%
 		as.factor()
 
-	expect_identical(
-		object = countCloneSizes(same_ident_pbmc, sort_decreasing = TRUE)[[1]],
-		expected = unname(countCloneSizes(combined_pbmc, by_cluster = FALSE, sort_decreasing = TRUE))
+	test_obj <- countCloneSizes(same_ident_pbmc, sort_decreasing = TRUE)[[1]]
+	expected_obj <- countCloneSizes(
+		combined_pbmc, by_cluster = FALSE, sort_decreasing = TRUE
 	)
+
+	expect_mapequal(test_obj, expected_obj)
+	expect_identical(test_obj, expected_obj) # TODO FIXME order is wrong
 
 })
 
@@ -60,16 +61,18 @@ test_that("mergeCloneSizes works", {
 		sort_decreasing = TRUE
 	)
 
-	expect_contains(test_merged_cluster1, expected_clone_sizes[[1]])
+	expect_identical(test_merged_cluster1, expected_clone_sizes[[1]])
 
 })
 
 quietly_test_that("get_top_clonotypes works", {
-	expect_contains(
+
+	expect_setequal(
 		get_top_clonotypes(expected_clone_sizes, Inf),
-		get_unique_clonotypes(getLastApotcData(RunAPOTC(get(data("combined_pbmc")))))
+		get_unique_clonotypes(getLastApotcData(RunAPOTC(combined_pbmc)))
 	)
-	#TODO - not remotely a good test
+
+	# TODO more tests
 })
 
 test_that("aggregate_clone_sizes works", {

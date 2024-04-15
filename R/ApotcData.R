@@ -208,6 +208,30 @@ convert_to_rad_decrease <- function(clone_scale_factor, rad_scale_factor) {
 	clone_scale_factor * (1 - rad_scale_factor)
 }
 
+# checkers
+
+is_valid_cluster <- function(apotc_obj, cluster_ind) {
+	cluster_ind %>% is_bound_between(1, get_num_clusters(apotc_obj))
+}
+
+is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
+	typecheck(cluster_ind, is_an_integer)
+	is_valid_cluster(apotc_obj, cluster_ind) &&
+		isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
+}
+
+have_default_idents <- function(apotc_obj) {
+	identical(get_idents(apotc_obj), as.character(1:get_num_clusters(apotc_obj)))
+}
+
+# functions for matching clusters and clonotypes
+
+match_clonotypes_to_sizes <- function(apotc_obj, clonotypes, as_table = FALSE) {
+	get_aggregated_clone_sizes(apotc_obj)[clonotypes] %>%
+		ifelse(!as_table, identity, convert_named_numeric_to_table)()
+}
+
+# match a cluster either by index or label
 match_index <- function(apotc_obj, index) {
 
 	varname <- deparse(substitute(index))
@@ -250,22 +274,6 @@ match_index <- function(apotc_obj, index) {
 	output
 }
 
-# checkers
-
-is_valid_cluster <- function(apotc_obj, cluster_ind) {
-	cluster_ind %>% is_bound_between(1, get_num_clusters(apotc_obj))
-}
-
-is_valid_nonempty_cluster <- function(apotc_obj, cluster_ind) {
-	typecheck(cluster_ind, is_an_integer)
-	is_valid_cluster(apotc_obj, cluster_ind) &&
-		isnt_empty(get_clusterlists(apotc_obj)[[cluster_ind]])
-}
-
-have_default_idents <- function(apotc_obj) {
-	identical(get_idents(apotc_obj), as.character(1:get_num_clusters(apotc_obj)))
-}
-
 # getters
 
 get_reduction_base <- function(apotc_obj) {
@@ -301,8 +309,6 @@ get_raw_clone_sizes <- function(apotc_obj, as_hash = FALSE) {
 	hash_from_tablelist(apotc_obj@clone_sizes)
 }
 
-# get all clone sizes as a single table
-# TODO unsure what happens with no clones
 get_aggregated_clone_sizes <- function(
 	apotc_obj, sort_decreasing = NULL, get_top = NULL
 ) {
@@ -315,7 +321,7 @@ get_aggregated_clone_sizes <- function(
 }
 
 get_unique_clonotypes <- function(x) {
-	unique(unlist(lapply(get_raw_clone_sizes(x), names)))
+	unique(unlist(lapply(unname(get_raw_clone_sizes(x)), names)))
 }
 
 get_processed_clone_sizes <- function(apotc_obj) {

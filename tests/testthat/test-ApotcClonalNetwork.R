@@ -20,6 +20,8 @@ test_that("getting shared clones works", {
         expected = expected_all_shared[2]
     )
 
+    # TODO test getting top 4 - the first should be the same (size 11) while 2,3,4, (size 3) should setequal
+
     expect_equal(
         object = getSharedClones(combined_pbmc, top = 10L),
         expected = expected_all_shared
@@ -31,6 +33,8 @@ test_that("getting shared clones works", {
         object = getSharedClones(combined_pbmc, intop = 1),
         expected = expected_all_shared[2] # coincidentally same as top = 1/9
     )
+
+    # TODO FIXME
 
     expect_identical(
         object = getSharedClones(combined_pbmc, intop = 5 / 341),

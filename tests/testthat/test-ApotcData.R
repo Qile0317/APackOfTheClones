@@ -1,7 +1,3 @@
-# test_that("ident_into_seurat_clusters works", {
-
-# })
-
 data("combined_pbmc")
 non_subset_apotc_data <- ApotcData(
 	seurat_obj = combined_pbmc,
@@ -261,6 +257,16 @@ test_that("circlepackClones packs right for the subset case", {
 })
 
 # TODO test the repulsion API
+
+test_that("match_clonotypes_to_sizes works", {
+
+	a <- getLastApotcData(RunAPOTC(combined_pbmc, verbose = FALSE))
+
+	expect_equal(
+		match_clonotypes_to_sizes(a, get_unique_clonotypes(a)),
+		get_aggregated_clone_sizes(a)
+	)
+})
 
 test_that("match_index works", {
 

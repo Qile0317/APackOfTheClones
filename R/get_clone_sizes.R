@@ -5,7 +5,12 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' Get clonotype frequencies from a seurat object's meta.data slot.
+#' Get clonotype frequencies from a seurat object's metadata, either as one
+#' whole table, or in a list of tables, based on the current / some custom
+#' ident of each cell. Note that depending on the ident (indicated by the
+#' `by_cluster` argument) there may be more or less clonotypes counted based
+#' on the number of rows containing NA for that column of that ident if it
+#' isn't the active ident.
 #'
 #' @param seurat_obj a seurat object combined with a VDJ library with the
 #' `scRepertoire`.
@@ -185,6 +190,11 @@ mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) { # F
 
 # union the output of count_raw_clone_sizes to a named numeric
 # (not table but exactly like one)
+# depending on the ident, there may be more or less NA rows dropped when aggregating by cluster
+# the following outputs 317
+# (countCloneSizes(combined_pbmc, by_cluster = "mito.genes") %>% mergeCloneSizes() == (countCloneSizes(combined_pbmc,by_cluster=FALSE))) %>% sum
+# if "mito.genes" is replaced with TRUE, output is 341
+#
 aggregate_clone_sizes <- function(
     clone_sizes, sort_decreasing = NULL, top_clones = NULL
 ) {
