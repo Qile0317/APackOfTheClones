@@ -89,6 +89,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppUnionListOfNamedNumericsHelper
+Rcpp::NumericVector rcppUnionListOfNamedNumericsHelper(Rcpp::List listOfNamedNumerics);
+RcppExport SEXP _APackOfTheClones_rcppUnionListOfNamedNumericsHelper(SEXP listOfNamedNumericsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type listOfNamedNumerics(listOfNamedNumericsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppUnionListOfNamedNumericsHelper(listOfNamedNumerics));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppFilterReductionCoords
 Rcpp::NumericMatrix rcppFilterReductionCoords(std::vector<std::string>& seuratBarcodes, Rcpp::NumericMatrix reductionCoords);
 RcppExport SEXP _APackOfTheClones_rcppFilterReductionCoords(SEXP seuratBarcodesSEXP, SEXP reductionCoordsSEXP) {
@@ -162,6 +173,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_APackOfTheClones_rcppConstructLineLinkDf", (DL_FUNC) &_APackOfTheClones_rcppConstructLineLinkDf, 5},
     {"_APackOfTheClones_cpp_circle_layout", (DL_FUNC) &_APackOfTheClones_cpp_circle_layout, 5},
     {"_APackOfTheClones_rcppGetUniquePairsUpTo", (DL_FUNC) &_APackOfTheClones_rcppGetUniquePairsUpTo, 2},
+    {"_APackOfTheClones_rcppUnionListOfNamedNumericsHelper", (DL_FUNC) &_APackOfTheClones_rcppUnionListOfNamedNumericsHelper, 1},
     {"_APackOfTheClones_rcppFilterReductionCoords", (DL_FUNC) &_APackOfTheClones_rcppFilterReductionCoords, 2},
     {"_APackOfTheClones_get_average_vector", (DL_FUNC) &_APackOfTheClones_get_average_vector, 1},
     {"_APackOfTheClones_get_component_repulsion_vector", (DL_FUNC) &_APackOfTheClones_get_component_repulsion_vector, 4},

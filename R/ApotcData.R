@@ -115,6 +115,8 @@ addIdentsLabelsColors <- function(apotc_obj, seurat_obj) {
 	set_labels(apotc_obj, get_idents(apotc_obj))
 }
 
+# important function to be ran after setting meta ident col
+# to merge that temporary column into seurat_clusters column
 ident_into_seurat_clusters <- function(seurat_obj) {
     idents <- seurat_obj@meta.data[["__active.ident__"]]
     seurat_obj@meta.data[["__active.ident__"]] <- NULL
@@ -129,7 +131,6 @@ addRawClusteredCloneSizes <- function(apotc_obj, seurat_obj) {
 	))
 }
 
-# FIXME
 # assume apotc_obj has correct ident levels
 addInitialCentroids <- function(apotc_obj, seurat_obj) {
 	initial_centroids <- get_cluster_centroids(
@@ -216,15 +217,25 @@ match_index <- function(apotc_obj, index) {
 			return(index)
 		}
 		stop(call. = FALSE,
-			"Some or all indices in `", varname, "` ",
+			"Some or all indices in `", varname, "` ", #FIXME likely wrong varname
 			"are out of bounds of the APackOfTheClones Run."
 		)
 	}
 
 	# assume character of names
 	labels <- get_labels(apotc_obj)
+	output <- integer(length(labels))
+
 	for (i in seq_along(index)) {
-		location <- which(labels == index[i])
+
+		location <- which(labels == index[i]) # TODO check invalid labels
+
+		if (length(location) == 0) {
+			stop(call. = FALSE,
+				"No label matched the input string"
+			)
+		}
+
 		if (length(location) > 1) {
 			warning(call. = FALSE,
 				"* label '", index[i], "' ",
@@ -232,10 +243,11 @@ match_index <- function(apotc_obj, index) {
 				"using the first occurence at index ", location[1]
 			)
 		}
-		index[i] <- location[1]
+
+		output[i] <- location[1]
 	}
 
-	index
+	output
 }
 
 # checkers

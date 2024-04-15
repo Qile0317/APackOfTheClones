@@ -74,6 +74,19 @@ print_completion_time <- function(start_time, digits = 3, newline = FALSE) {
     ))
 }
 
+# data initialization utils
+
+init_numeric <- function(x, init_val = 0) {
+
+    if (is_an_integer(x)) {
+        named_vals <- numeric(x)
+    } else {
+        named_vals <- structure(numeric(length(x)), names = x)
+    }
+
+    sapply(named_vals, function(y) init_val)
+}
+
 # table/(list of table) utils
 
 create_empty_table <- function() {
@@ -85,6 +98,10 @@ create_empty_table <- function() {
     )
 }
 
+convert_table_to_named_numeric <- function(x) {
+    structure(as.numeric(x), names = names(x))
+}
+
 as_table <- function(x) ensure_proper_table(as.table(x))
 
 ensure_proper_table <- function(x) {
@@ -93,10 +110,7 @@ ensure_proper_table <- function(x) {
 }
 
 strip_to_numeric <- function(table_obj) {
-    name_vec <- names(table_obj)
-    out <- as.numeric(table_obj)
-    names(out) <- name_vec
-    out
+    convert_table_to_named_numeric(table_obj)
 }
 
 convert_named_numeric_to_table <- function(named_numeric_vector) {
@@ -126,22 +140,25 @@ union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
         return(numeric(0))
     }
 
-    frequency_map <- create_hash_from_keys(names(unlist(x)), init_vals = 0)
-
-    for (curr_table in x) {
-        if (is_empty(curr_table)) next
-        curr_names <- names(curr_table)
-        for (el in enumerate(strip_to_numeric(curr_table))) {
-            frequency_map[[curr_names[ind(el)]]] %+=% val1(el) # nolint
-        }
+    if (length(x) == 1) {
+        return(sort_if_desc_arg_not_null(
+            convert_table_to_named_numeric(x[[1]]), sort_decreasing
+        ))
     }
 
-	x <- unlist(as.list(frequency_map))
+    x <- x %>%
+        lapply(convert_table_to_named_numeric) %>%
+        union_list_of_named_numerics()
+
 	if (!is.null(sort_decreasing)) {
         x <- sort(x, decreasing = sort_decreasing, method = "radix")
     }
 	if (as_table) x <- convert_named_numeric_to_table(x)
     x
+}
+
+union_list_of_named_numerics <- function(x) {
+    rcppUnionListOfNamedNumericsHelper(x)
 }
 
 sort_each_table <- function(x, desc = FALSE) {
@@ -192,6 +209,21 @@ hash_from_tablelist <- function(tablelist) {
 }
 
 # readability functions
+
+sort_if_desc_arg_not_null <- function(x, desc) {
+    if (is.null(desc)) return(x)
+    sort(x, decreasing = desc, method = "radix")
+}
+
+sort_if_needed <- function(x, do_sort, desc = FALSE) {
+    if (is.null(do_sort) || is_false(do_sort)) return(x)
+    sort(x, decreasing = desc)
+}
+
+if_a_logical_convert_null <- function(x) {
+    if (!is_a_logical(x)) return(x)
+    return(NULL)
+}
 
 contains_duplicates <- function(v) anyDuplicated(v) != 0
 
@@ -315,7 +347,7 @@ create_mutator <- function(binary_operator) {
 "%+=%" <- create_mutator(add)
 "%*=%" <- create_mutator(multiply)
 
-# iteration related functions for readability
+# iteration utils
 
 get_unique_pairs_up_to <- function(x) {
     if (x <= 1) return(list())
@@ -331,7 +363,7 @@ ind <- function(elem) elem[[1]]
 val <- function(elem, index) elem[[index + 1]]
 val1 <- function(elem) val(elem, 1)
 
-# spelling related functions
+# spelling utils
 
 is_vowel <- function(s) tolower(s) %in% c("a", "e", "i", "o", "u")
 starts_with_vowel <- function(s) is_vowel(get_first_char(s))
@@ -546,12 +578,18 @@ count_clones <- function(seurat_obj, clonecall) {
   sum(!is.na(seurat_obj@meta.data[[clonecall]]))
 }
 
+# TODO check if identical with ApotcData order
 get_ident_levels <- function(seurat_obj, custom_ident = NULL) {
-    if (is.null(custom_ident)) return(as.character(levels(seurat_obj@active.ident)))
+
+    if (is.null(custom_ident)) {
+        return(as.character(levels(seurat_obj@active.ident)))
+    }
+
     if (!is.null(seurat_obj@meta.data[["__active.ident__"]])) {
         return(as.character(levels(seurat_obj@meta.data[["__active.ident__"]])))
     }
-    as.character(levels(as.factor(seurat_obj@meta.data$seurat_clusters)))
+
+    as.character(levels(as.factor(seurat_obj@meta.data[[custom_ident]])))
 }
 
 get_num_total_clusters <- function(seurat_obj) {

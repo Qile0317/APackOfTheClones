@@ -5,7 +5,8 @@
 - Functionality around defining "clusters"/"Idents" has been revamped but backwards compatible. Added argument `alt_ident` in many functions including `vizAPOTC` and `RunAPOTC` to allow for counting clusters based on different cell identities or the current active identity if `NULL`, and it is now part of the subsetting arguments for all functions that work with APackOfTheClones runs/data. This includes:
     - `vizAPOTC`
     - `RunAPOTC`
-    - TODO
+    - `getSharedClones`
+    - `countCloneSizes` (see section below in changes to incorporate identity functionality)
     - TODO vignette
 - Add `renameApotcRun` to rename APackOfTheClones runs.
 - Add argument `detail` in `APOTCPlot` and `vizAPOTC` to allow user to quickly plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in `vignette("APackOfTheClones-shared")`.
@@ -15,7 +16,7 @@
 - `vizAPOTC` and `RunAPOTC` now defaults to aggregating clustered clonotype frequencies based on active ident of the seurat object.
 - All arguments in `AdjustAPOTC` that asks for cluster indices as input now also accept characters representing their respective labels in the APackOfTheClones runs.
 - The argument `recolor_indicies` has been renamed to `recolor_indices` in `AdjustAPOTC`.
-- `countCloneSizes` now outputs a named list with each name being the cluster identity.
+- `countCloneSizes` now outputs a named list with each name being the cluster identity. Additionally, the argument `by_cluster` can now also take in single characters as arguments representing possible alternative cluster identities in the metadata TODO.
 - Removed `mini_seurat_obj` from publicly exported data.
 - Several exported functions, including `AdjustAPOTC`, now have stricter argument checking of type and length.
 

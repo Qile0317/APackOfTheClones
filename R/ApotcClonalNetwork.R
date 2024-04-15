@@ -64,12 +64,13 @@
 #' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run1", verbose = FALSE)
 #' getSharedClones(combined_pbmc, run_id = "run1")
 #'
-getSharedClones <- function(
+getSharedClones <- function( # TODO FIXME output now can not longer just be numbers - but convert to numbers if the original factor levels are 1:num_clusters
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL,
     run_id = NULL,
 
     top = NULL,
@@ -80,16 +81,12 @@ getSharedClones <- function(
 ) {
     # handle inputs
     varargs_list <- list(...)
-	args <- hash::hash(as.list(environment()))
     getSharedClones_error_handler()
 
-    # get the apotcdata
-    apotc_obj <- getApotcDataIfExistsElseCreate(
-        seurat_obj, infer_object_id_if_needed(args, varargs_list)
-    )
-
     get_shared_clones(
-        apotc_obj,
+        apotc_obj = getApotcDataIfExistsElseCreate(
+            seurat_obj, run_id, environment(), ...
+        ),
         zero_indexed = FALSE,
         exclude_unique_clones = TRUE,
         in_top_clones = intop,
@@ -116,6 +113,7 @@ getSharedClones_error_handler <- function() {
 # output: a named list where each name is a clonotype, each element is a
 # numeric indicating which seurat cluster(s) its in. If exclude_unique_clones,
 # will filter out any clonotype with only length one. (not shared)
+# TODO FIXME make it based on ident
 get_shared_clones <- function(
     apotc_obj,
     zero_indexed = FALSE,
@@ -124,7 +122,7 @@ get_shared_clones <- function(
     in_top_per_cluster = NULL,
     top_shared = NULL,
     top_shared_per_cluster = NULL#,
-    #min_publicity = 0
+    # min_publicity = 0,
     # min_size = NULL,
     # min_size_per_cluster = NULL
 ) {

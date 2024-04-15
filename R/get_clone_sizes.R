@@ -10,12 +10,15 @@
 #' @param seurat_obj a seurat object combined with a VDJ library with the
 #' `scRepertoire`.
 #' @inheritParams RunAPOTC
-#' @param by_cluster If `TRUE`, will output a list of table objects, with the
-#' table at each index corresponding to each seurat cluster index. Each table's
-#' names are the clonotype name indicated by `clonecall` after filtering, while
-#' the values are the actual clone sizes. Else, outputs just the aggregate clone
-#' sizes for all cells. Note that if `FALSE`, the output should be identical to
-#' that produced by `mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))`
+#' @param by_cluster Logical or Character. If `TRUE`, will output a list of
+#' table objects, with the table at each index corresponding to level in
+#' Idents(). Each table's names are the clonotype name indicated by `clonecall`
+#' after filtering, while the values are the actual clone sizes. If `FALSE`,
+#' outputs just the aggregate clone sizes for all cells. Note that if `FALSE`,
+#' the output should be identical to that produced by
+#' `mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))`. Otherwise, this
+#' argument can also be a character indicating some column in the seurat object
+#' metadata to use a cell identity guiding (e.g. `"seurat_clusters"`).
 #' @param sort_decreasing a logical or NULL. If `TRUE`/`FALSE`, sorts each/the
 #' table by clonotype frequency with largest/smallest clones first, and if
 #' NULL, no order is guaranteed but the output is deterministic.
@@ -32,15 +35,15 @@
 #' countCloneSizes(combined_pbmc, "aa")
 #' countCloneSizes(combined_pbmc, "nt", orig.ident = c("P17B", "P17L"))
 #'
-countCloneSizes <- function(
+countCloneSizes <- function( # FIXME
     seurat_obj,
     clonecall = "strict",
     extra_filter = NULL,
     ...,
-    by_cluster = TRUE, # FIXME allow this arg to also be string indicating cluster. by default should be active ident
+    by_cluster = TRUE,
     sort_decreasing = NULL
 ) {
-    countCloneSizes_arg_checker()
+    countCloneSizes_arg_checker() # TODO check by_cluster with .theCall
 
     # setup variables
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
@@ -48,20 +51,24 @@ countCloneSizes <- function(
         metadata_filter = extra_filter, varargs_list = list(...)
     )
 
-    if (is_valid_filter_str(filter_string)) { # TODO probably use seurat's built-in version :P, also probably shoudl allow for symbolic filtering.
+    seurat_obj <- set_meta_ident_col(
+        seurat_obj, alt_ident = if_a_logical_convert_null(by_cluster)
+    )
+
+    if (is_valid_filter_str(filter_string)) {
         seurat_obj <- subsetSeuratMetaData(seurat_obj, filter_string)
     }
 
+    seurat_obj <- ident_into_seurat_clusters(seurat_obj)
+
     clustered_clone_sizes <- count_raw_clone_sizes(
         seurat_obj = seurat_obj,
-        ident_levels = get_ident_levels(seurat_obj),
+        ident_levels = get_ident_levels(seurat_obj, "seurat_clusters"),
         clonecall = clonecall,
         named = TRUE
     )
 
-    # TODO extract function for getting sorted internally from apotc
-
-    if (!by_cluster) {
+    if (is_false(by_cluster)) {
         return(mergeCloneSizes(clustered_clone_sizes, sort_decreasing))
     }
 
@@ -84,7 +91,7 @@ countCloneSizes_arg_checker <- function() {
     typecheck(args$clonecall, is_a_character)
     typecheck(args$extra_filter, is.null, is_a_character)
     check_filtering_conditions(as.list(environment()), frame_level = 2)
-    typecheck(args$by_cluster, is_a_logical)
+    typecheck(args$by_cluster, is_a_logical, is_a_character)
     typecheck(args$sort_decreasing, is_a_logical, is.null)
 }
 
@@ -160,7 +167,7 @@ count_raw_clone_sizes <- function(
 #' clustered_clone_sizes <- countCloneSizes(get(data("combined_pbmc")))
 #' mergeCloneSizes(clustered_clone_sizes)
 #'
-mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
+mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) { # FIXME
 
     typecheck(clustered_clone_sizes, is_output_of_countCloneSizes)
     typecheck(sort_decreasing, is_a_logical, is.null)
@@ -171,7 +178,7 @@ mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
     }
 
     clustered_clone_sizes %>%
-        aggregate_clone_sizes(sort_decreasing) %>% # TODO check edgecases
+        aggregate_clone_sizes(sort_decreasing) %>%
         convert_named_numeric_to_table()
 
 }

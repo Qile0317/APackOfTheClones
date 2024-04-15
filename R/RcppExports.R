@@ -25,6 +25,10 @@ rcppGetUniquePairsUpTo <- function(x, oneIndexed) {
     .Call(`_APackOfTheClones_rcppGetUniquePairsUpTo`, x, oneIndexed)
 }
 
+rcppUnionListOfNamedNumericsHelper <- function(listOfNamedNumerics) {
+    .Call(`_APackOfTheClones_rcppUnionListOfNamedNumericsHelper`, listOfNamedNumerics)
+}
+
 rcppFilterReductionCoords <- function(seuratBarcodes, reductionCoords) {
     .Call(`_APackOfTheClones_rcppFilterReductionCoords`, seuratBarcodes, reductionCoords)
 }

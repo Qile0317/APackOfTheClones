@@ -25,12 +25,26 @@ test_that("countCloneSizes works", {
 
 	expect_contains(
         object = combined_pbmc %>%
-			countCloneSizes(extra_filter = "clonalFrequency > 1L") %>%
+			countCloneSizes(extra_filter = "clonalFrequency > 1L") %>% # getSharedClones is not wrong
 			unlist() %>%
 			names() %>%
 			intersect(names(getSharedClones(combined_pbmc))),
         expected = names(getdata("ApotcClonalNetwork", "shared_clones"))
     )
+
+	# TODO FIXME test with by_cluster as arg
+
+	# the following are BOTH wrong
+
+	same_ident_pbmc <- combined_pbmc
+	same_ident_pbmc@active.ident <- "Foo" %>%
+		rep(length(combined_pbmc@active.ident)) %>%
+		as.factor()
+
+	expect_identical(
+		object = countCloneSizes(same_ident_pbmc, sort_decreasing = TRUE)[[1]],
+		expected = unname(countCloneSizes(combined_pbmc, by_cluster = FALSE, sort_decreasing = TRUE))
+	)
 
 })
 
@@ -56,6 +70,26 @@ quietly_test_that("get_top_clonotypes works", {
 		get_unique_clonotypes(getLastApotcData(RunAPOTC(get(data("combined_pbmc")))))
 	)
 	#TODO - not remotely a good test
+})
+
+test_that("aggregate_clone_sizes works", {
+
+	expect_identical(
+		object = aggregate_clone_sizes(list()), expected = numeric(0)
+	)
+
+	test_sizes <- getdata("get_clone_sizes", "raw_strict_clone_sizes")
+
+	expect_identical(
+		object = aggregate_clone_sizes(test_sizes[1]),
+		expected = convert_table_to_named_numeric(test_sizes[[1]])
+	)
+
+	expect_identical(
+		object = aggregate_clone_sizes(list(table(letters)), sort_decreasing = TRUE),
+		convert_table_to_named_numeric(table(letters))
+	)
+
 })
 
 # TODO other functions

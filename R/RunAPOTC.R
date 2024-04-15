@@ -155,9 +155,6 @@
 #'
 RunAPOTC <- function(
     seurat_obj,
-    # TODO! select ident to identify cluster by! should be based on ident - should also work if subsetted! so needs matching with hashmap with Rcpp after adding dataframe column. then add optional column for optional cluster. this column should be guaranteed to internally have diff name. probably should just rewrite countclonesizes to not use stats::aggregate
-    # TODO! Therefore cluster labels should also default the the name in the active.ident, and only be Cx if they are ints in asc order
-    # One test is to make it all one Ident and then see if the clone sizes are just the aggregated sizes
     reduction_base = "umap",
     clonecall = "strict",
     ...,

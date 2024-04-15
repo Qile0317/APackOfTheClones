@@ -261,5 +261,16 @@ test_that("circlepackClones packs right for the subset case", {
 })
 
 # TODO test the repulsion API
+
+test_that("match_index works", {
+
+	expect_identical(match_index(non_subset_apotc_data, 1:17), 1:17)
+
+	expect_identical(
+		match_index(non_subset_apotc_data, index = gen_labels(17)), 1:17
+	)
+
+})
+
 # TODO test getters and setters
 # TODO test edgecases
