@@ -114,7 +114,7 @@ count_raw_clone_sizes <- function(
     clone_sizes <- init_empty_table_list(ident_levels)
 
     # if no valid rows, return empty clone sizes
-    if(nrow(clonotype_cluster_df) == 0) return(clone_sizes |> unname_if(!named))
+    if(nrow(clonotype_cluster_df) == 0) return(clone_sizes %>% unname_if(!named))
 
     # aggregate the raw counts
     freq_df <- stats::aggregate(

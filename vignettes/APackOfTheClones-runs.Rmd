@@ -142,6 +142,7 @@ reduction_base = NULL,
 clonecall = NULL,
 ...,
 extra_filter = NULL,
+alt_ident = NULL
 ```
 
 And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:

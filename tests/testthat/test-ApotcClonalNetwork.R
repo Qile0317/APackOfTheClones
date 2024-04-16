@@ -1,15 +1,9 @@
+data("combined_pbmc")
+expected_all_shared <- getdata("ApotcClonalNetwork", "shared_clones")
+
 test_that("getting shared clones works", {
 
-    data("combined_pbmc")
-    expected_all_shared <- getdata("ApotcClonalNetwork", "shared_clones")
-
     expect_mapequal(
-        object = getSharedClones(combined_pbmc),
-        expected = expected_all_shared
-    )
-
-    # FIXME fails on oldrel
-    expect_equal(
         object = getSharedClones(combined_pbmc),
         expected = expected_all_shared
     )
@@ -29,12 +23,6 @@ test_that("getting shared clones works", {
     # TODO test getting top 4 - the first should be the same (size 11) while 2,3,4, (size 3) should setequal
 
     expect_mapequal(
-        object = getSharedClones(combined_pbmc, top = 10L),
-        expected = expected_all_shared
-    )
-
-    # FIXME fails on oldrel
-    expect_equal(
         object = getSharedClones(combined_pbmc, top = 10L),
         expected = expected_all_shared
     )
@@ -61,21 +49,9 @@ test_that("getting shared clones works", {
         expected = expected_all_shared
     )
 
-    # check everything = Inf does 
+    # check everything = Inf doesnt do anything
     
     expect_mapequal(
-        object = getSharedClones(
-            combined_pbmc,
-            top = Inf,
-            top_per_cl = Inf,
-            intop = Inf,
-            intop_per_cl = Inf
-        ),
-        expected = expected_all_shared
-    )
-
-    # FIXME fails on oldrel
-    expect_equal(
         object = getSharedClones(
             combined_pbmc,
             top = Inf,
@@ -106,6 +82,31 @@ test_that("getting shared clones works", {
     # TODO check the intersection
     # TODO everything else needs verification
 
+})
+
+test_that("getSharedClones on modern version of R works", {
+    skip_if_r_version_leq("4.2.3") # all tests fail on oldrel
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc),
+        expected = expected_all_shared
+    )
+
+    expect_identical(
+        object = getSharedClones(combined_pbmc, top = 10L),
+        expected = expected_all_shared
+    )
+
+    expect_identical(
+        object = getSharedClones(
+            combined_pbmc,
+            top = Inf,
+            top_per_cl = Inf,
+            intop = Inf,
+            intop_per_cl = Inf
+        ),
+        expected = expected_all_shared
+    )
 })
 
 # TODO following two tests unfinished

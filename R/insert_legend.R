@@ -73,7 +73,7 @@ removeLegend <- function(apotc_ggplot) {
 #' overlayLegend(apotc_plot, legend_position = "top right")
 #'
 #' # use different sizes and label - may be nice to use the pipe
-#' apotc_plot |> overlayLegend(
+#' apotc_plot %>% overlayLegend(
 #'     legend_sizes = c(1, 3, 7, 9),
 #'     legend_label = "odd sizes"
 #' )

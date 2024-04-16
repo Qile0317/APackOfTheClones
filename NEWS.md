@@ -7,7 +7,7 @@
     - `RunAPOTC`
     - `getSharedClones`
     - `countCloneSizes` (see section below in changes to incorporate identity functionality)
-    - updated vignettes to reflect the new argument.
+    - updated relevant vignettes to reflect the new argument.
 - Add `renameApotcRun` to rename APackOfTheClones runs.
 - Add argument `detail` in `APOTCPlot` and `vizAPOTC` to allow user to quickly plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in `vignette("APackOfTheClones-shared")`.
 - Add argument `publicity` in `getSharedClones` to filter the output shared clones by the number of clusters each clonotype is present in.
@@ -21,7 +21,7 @@
 - `countCloneSizes` now outputs a named list with each name being the cluster identity. Additionally, the argument `by_cluster` can now also take in single characters as arguments representing possible alternative cluster identities in the metadata.
 - Removed `mini_seurat_obj` from publicly exported data.
 - Several exported functions, including `AdjustAPOTC`, now have stricter argument checking of type and length.
-- Package can be be compiled again on compilers with C++14 standard on older releases of R.
+- Package can now be installed again on releases with C++14 compilation on older releases of R.
 
 # APackOfTheClones 1.1.0
 
