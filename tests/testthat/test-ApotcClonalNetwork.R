@@ -35,17 +35,17 @@ test_that("getting shared clones works", {
     )
 
     expect_identical(
-        object = getSharedClones(combined_pbmc, intop = 1 / 341),
-        expected = expected_all_shared[2]
+        object = getSharedClones(combined_pbmc, intop = 2),
+        expected = expected_all_shared[c(2, 5, 7)]
     )
 
-    expect_identical(
-        object = getSharedClones(combined_pbmc, intop = 2 / 341),
-        expected = expected_all_shared[c(2, 5)]
+    expect_mapequal(
+        object = getSharedClones(combined_pbmc, intop = 3),
+        expected = expected_all_shared
     )
 
-    expect_identical(
-        object = getSharedClones(combined_pbmc, intop = 3 / 341),
+    expect_mapequal(
+        object = getSharedClones(combined_pbmc, intop = Inf),
         expected = expected_all_shared
     )
 
@@ -74,12 +74,12 @@ test_that("getting shared clones works", {
         expected = list()
     )
 
-    # check the intersection
+    expect_identical(
+        object = getSharedClones(combined_pbmc, publicity = c(3, Inf)),
+        expected = expected_all_shared[5]
+    )
 
-    # getSharedClones(
-    #     combined_pbmc, intop = 1
-    # )
-
+    # TODO check the intersection
     # TODO everything else needs verification
 
 })

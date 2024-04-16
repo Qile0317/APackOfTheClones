@@ -98,6 +98,12 @@ create_empty_table <- function() {
     )
 }
 
+get_unique_table_values <- function(x, sort_decreasing = TRUE) {
+    x <- unique(as.numeric(x))
+    if (is.null(sort_decreasing)) return(x)
+    sort(x, decreasing = sort_decreasing, method = "radix")
+}
+
 convert_table_to_named_numeric <- function(x) {
     structure(as.numeric(x), names = names(x))
 }
@@ -209,6 +215,8 @@ hash_from_tablelist <- function(tablelist) {
 }
 
 # readability functions
+
+get_at_index <- function(x, index) x[index]
 
 sort_if_desc_arg_not_null <- function(x, desc) {
     if (is.null(desc)) return(x)

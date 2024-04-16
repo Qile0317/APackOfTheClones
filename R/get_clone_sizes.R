@@ -199,25 +199,33 @@ aggregate_clone_sizes <- function(
     clone_sizes, sort_decreasing = NULL, top_clones = NULL
 ) {
 
-    if (!is.null(top_clones)) sort_decreasing <- TRUE
+    if (!is.null(top_clones)) sort_decreasing <- TRUE # technically not needed
     union_clone_sizes <- union_list_of_tables(clone_sizes, sort_decreasing)
 
     if (is.null(top_clones) || is_empty(union_clone_sizes)) {
         return(union_clone_sizes)
     }
     
-    num_clones <- length(union_clone_sizes)
+    filter_top_clonesize(union_clone_sizes, top_clones)
+}
 
-    if (is_an_integer(top_clones)) {
-        return(union_clone_sizes[1:min(top_clones, num_clones)])
-    }
+# helper for filtering aggregate_clone_sizes
+filter_top_clonesize <- function(union_clone_sizes, top_clones) {
 
-    if (is_a_numeric_in_0_1(top_clones)) {
-        return(union_clone_sizes[1:round(num_clones * top_clones)])
-    }
+    unique_clone_sizes_desc <- union_clone_sizes %>%
+        get_unique_table_values()
 
-    # TODO more filtering
+    num_unique_sizes <- length(unique_clone_sizes_desc)
 
+    clonesize_lowerbound <- unique_clone_sizes_desc[
+        ifelse(
+            test = is_a_numeric_in_0_1(top_clones),
+            yes = round(num_unique_sizes * top_clones),
+            no = min(top_clones, num_unique_sizes)
+        )
+    ]
+    
+    union_clone_sizes[union_clone_sizes >= clonesize_lowerbound]
 }
 
 get_top_clonotypes <- function(clone_sizes, top_clones) {

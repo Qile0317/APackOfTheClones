@@ -15,7 +15,8 @@ getSharedClones(
   top = NULL,
   top_per_cl = NULL,
   intop = NULL,
-  intop_per_cl = NULL
+  intop_per_cl = NULL,
+  publicity = c(2L, Inf)
 )
 }
 \arguments{
@@ -93,6 +94,11 @@ which, its very likely that not all those clones end up being shared.}
 the raw \emph{clustered} clone sizes before computing shared clones, so that
 for every clone in a seurat cluster, the top \code{intop_per_cl} count /
 proportion (for numeric in (0, 1) input) clones are kept.}
+
+\item{publicity}{numeric pair. A simple filter range of
+\code{c(lowerbound, upperbound)} to retain only shared clones with their
+"publicity" - number of clusters they are present in - within this
+range.}
 }
 \value{
 a named list where each name is a clonotype, each element is a
