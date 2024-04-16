@@ -22,6 +22,7 @@
 - Removed `mini_seurat_obj` from publicly exported data.
 - Several exported functions, including `AdjustAPOTC`, now have stricter argument checking of type and length.
 - Package can now be installed again on releases with C++14 compilation on older releases of R.
+- The minimum required R version has been bumped from `4.0.0` to `4.1.0`.
 
 # APackOfTheClones 1.1.0
 

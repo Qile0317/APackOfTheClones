@@ -112,13 +112,17 @@ If no shared clones are present, the output is an empty list.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function is a convenience function for users to get a list of clonotypes
-which are shared between seurat clusters. If \code{run_id} is inputted, then the
-function will attempt to get the shared clonotypes from the corresponding
-APackOfTheClones run generated from \link{RunAPOTC}. Otherwise, it will use the
-filtering / subsetting parameters to generate the shared clones by
-internally running \link{RunAPOTC} with the same parameters and returning the
-shared clones.
+This function allows users to get a list of clonotypes that are shared
+between clusters based on the levels of the active cell identities / some
+custom identity based on the \code{alt_ident}. A list is returned with its
+\emph{\strong{names}} being the shared clonotypes, and the values are numeric vectors
+indicating the index of the clusters that clonotype is found in. The index
+corresponds to the index in the default levels of the factored identities.
+
+If \code{run_id} is inputted, then the function will attempt to get the shared
+clonotypes from the corresponding APackOfTheClones run generated from
+\link{RunAPOTC}. Otherwise, it will use the filtering / subsetting parameters
+to generate the shared clones.
 }
 \examples{
 data("combined_pbmc")

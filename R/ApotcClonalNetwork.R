@@ -6,13 +6,17 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function is a convenience function for users to get a list of clonotypes
-#' which are shared between seurat clusters. If `run_id` is inputted, then the
-#' function will attempt to get the shared clonotypes from the corresponding
-#' APackOfTheClones run generated from [RunAPOTC]. Otherwise, it will use the
-#' filtering / subsetting parameters to generate the shared clones by
-#' internally running [RunAPOTC] with the same parameters and returning the
-#' shared clones.
+#' This function allows users to get a list of clonotypes that are shared
+#' between clusters based on the levels of the active cell identities / some
+#' custom identity based on the `alt_ident`. A list is returned with its
+#' ***names*** being the shared clonotypes, and the values are numeric vectors
+#' indicating the index of the clusters that clonotype is found in. The index
+#' corresponds to the index in the default levels of the factored identities.
+#'
+#' If `run_id` is inputted, then the function will attempt to get the shared
+#' clonotypes from the corresponding APackOfTheClones run generated from
+#' [RunAPOTC]. Otherwise, it will use the filtering / subsetting parameters
+#' to generate the shared clones.
 #'
 #' @inheritParams RunAPOTC
 #' @param top integer or numeric in (0, 1) - if not null, filters the output
@@ -72,7 +76,7 @@
 #' combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "run1", verbose = FALSE)
 #' getSharedClones(combined_pbmc, run_id = "run1")
 #'
-getSharedClones <- function( # TODO FIXME output now can not longer just be numbers - but convert to numbers if the original factor levels are 1:num_clusters
+getSharedClones <- function(
     seurat_obj,
     reduction_base = "umap",
     clonecall = "strict",
