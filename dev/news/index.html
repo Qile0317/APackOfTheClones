@@ -80,7 +80,7 @@
 <li><code>getSharedClones</code></li>
 <li>
 <code>countCloneSizes</code> (see section below in changes to incorporate identity functionality)</li>
-<li>TODO vignette</li>
+<li>updated vignettes to reflect the new argument.</li>
 </ul></li>
 <li>Add <code>renameApotcRun</code> to rename APackOfTheClones runs.</li>
 <li>Add argument <code>detail</code> in <code>APOTCPlot</code> and <code>vizAPOTC</code> to allow user to quickly plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in <code><a href="../articles/APackOfTheClones-shared.html">vignette("APackOfTheClones-shared")</a></code>.</li>
@@ -97,6 +97,7 @@
 <code>countCloneSizes</code> now outputs a named list with each name being the cluster identity. Additionally, the argument <code>by_cluster</code> can now also take in single characters as arguments representing possible alternative cluster identities in the metadata.</li>
 <li>Removed <code>mini_seurat_obj</code> from publicly exported data.</li>
 <li>Several exported functions, including <code>AdjustAPOTC</code>, now have stricter argument checking of type and length.</li>
+<li>Package can be be compiled again on compilers with C++14 standard on older releases of R.</li>
 </ul></div>
 </div>
     <div class="section level2">
