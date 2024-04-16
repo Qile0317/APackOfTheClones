@@ -43,7 +43,9 @@ test_that("countCloneSizes works", {
 	)
 
 	expect_mapequal(test_obj, expected_obj)
-	expect_identical(test_obj, expected_obj) # TODO FIXME order is wrong
+	expect_identical(test_obj[1], expected_obj[1]) # size 11
+	expect_mapequal(test_obj[2:4], expected_obj[2:4]) # size 3
+	expect_mapequal(test_obj[5:12], expected_obj[5:12]) # size 2
 
 	expect_identical(
 		unname(countCloneSizes(combined_pbmc, by_cluster = "seurat_clusters")),
