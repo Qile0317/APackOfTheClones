@@ -143,13 +143,15 @@ clusters that the clonotype name at its index correspond to.</p>
 <span>    clonecall <span class="op">=</span> <span class="st">"strict"</span>,</span>
 <span>    <span class="va">...</span>,</span>
 <span>    extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    alt_ident <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    top <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    top_per_cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    intop <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    intop_per_cl <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>    intop_per_cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    publicity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The last four optional arguments allow additional filtering of the
+<p>The last five optional arguments allow additional filtering of the
 shared clonotypes. Most notably, <code>top</code> will filter the
 resulting shared clonotypes to only those ranked in the <code>top</code>
 frequencies, either as a proportion or number. More details can be found
