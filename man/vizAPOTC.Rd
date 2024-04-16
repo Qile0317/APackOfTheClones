@@ -118,13 +118,12 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
-\item{show_shared}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} The output of
-\link{getSharedClones} can be inputted here, and the resulting plot will overlay
-lines between clone circles if that clonotype is common between clusters.
-Note that the input \emph{\strong{must}} be generated from data in the correct
-\code{APackOfTheClones} run, and the behavior is undefined otherwise and will
-likely error. The next 4 arguments allow for aesthetic customization of these
-line links.}
+\item{show_shared}{The output of \link{getSharedClones} can be inputted here,
+and the resulting plot will overlay lines between clone circles if that
+clonotype is common between clusters. Note that the input \emph{\strong{must}} be
+generated from data in the correct \code{APackOfTheClones} run, and the behavior
+is undefined otherwise and will likely error. The next 4 arguments allow for
+aesthetic customization of these line links.}
 
 \item{only_link}{Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.}

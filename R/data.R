@@ -2,7 +2,7 @@
 #' Example Multi-sampled T-cell seurat object with integrated TCR library
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' Generated with `scRepertoire::combineExpression`. To construct this object
 #' from scratch, try:

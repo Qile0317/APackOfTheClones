@@ -21,13 +21,12 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
-#' @param show_shared `r lifecycle::badge("experimental")` The output of
-#' [getSharedClones] can be inputted here, and the resulting plot will overlay
-#' lines between clone circles if that clonotype is common between clusters.
-#' Note that the input ***must*** be generated from data in the correct
-#' `APackOfTheClones` run, and the behavior is undefined otherwise and will
-#' likely error. The next 4 arguments allow for aesthetic customization of these
-#' line links.
+#' @param show_shared The output of [getSharedClones] can be inputted here,
+#' and the resulting plot will overlay lines between clone circles if that
+#' clonotype is common between clusters. Note that the input ***must*** be
+#' generated from data in the correct `APackOfTheClones` run, and the behavior
+#' is undefined otherwise and will likely error. The next 4 arguments allow for
+#' aesthetic customization of these line links.
 #' @param only_link Optional integer indicating to only display clone
 #' links originating from this cluster if showing shared clones.
 #' @param clone_link_width numeric. The width of the lines that connect shared

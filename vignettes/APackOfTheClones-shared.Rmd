@@ -38,7 +38,7 @@ pbmc <- get(data("combined_pbmc"))
 
 ## Introduction
 
-A novel experimental feature in this package is the ability to get, filter, and visualize clonotypes that are common across seurat clusters. Potential applications include the ability to quickly and intuitively gauge the rough clonal heterogeneity of certain clusters. Note that in scRepertoire, the `scRepertoire::clonalNetwork` function does something similar for the original dimensional reductions using arrows, though those display the aggregated degree of commonality between each cluster.
+A novel feature in this package is the ability to get, filter, and visualize clonotypes that are common across seurat clusters. Potential applications include the ability to quickly and intuitively gauge the rough clonal heterogeneity of certain clusters. Note that in scRepertoire, the `scRepertoire::clonalNetwork` function does something similar for the original dimensional reductions using arrows, though those display the aggregated degree of commonality between each cluster.
 
 Please read `vignette("APackOfTheClones")` and ideally also `vignette("APackOfTheClones-runs")` before reading this vignette. One should then also see that although some of the visualizations in this vignette were produced with the `vizAPOTC` function, all visualizations can be replicated with `RunAPOTC` and `APOTCPlot` that both share parts of the arguments of `vizAPOTC`.
 

@@ -4,7 +4,7 @@
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' This function allows users to get a list of clonotypes that are shared
 #' between clusters based on the levels of the active cell identities / some
