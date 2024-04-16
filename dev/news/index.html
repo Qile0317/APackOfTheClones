@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,9 +71,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0.9000" id="apackoftheclones-1109000-development-version">APackOfTheClones 1.1.0.9000 (development version)<a class="anchor" aria-label="anchor" href="#apackoftheclones-1109000-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0.9000" id="apackoftheclones-1209000-development-version">APackOfTheClones 1.2.0.9000 (development version)<a class="anchor" aria-label="anchor" href="#apackoftheclones-1209000-development-version"></a></h2>
 <div class="section level3">
-<h3 id="additions-1-1-0-9000">Additions<a class="anchor" aria-label="anchor" href="#additions-1-1-0-9000"></a></h3>
+<h3 id="additions-1-2-0-9000">Additions<a class="anchor" aria-label="anchor" href="#additions-1-2-0-9000"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="changes-1-2-0-9000">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-0-9000"></a></h3>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="apackoftheclones-120">APackOfTheClones 1.2.0<a class="anchor" aria-label="anchor" href="#apackoftheclones-120"></a></h2>
+<div class="section level3">
+<h3 id="additions-1-2-0">Additions<a class="anchor" aria-label="anchor" href="#additions-1-2-0"></a></h3>
 <ul><li>Functionality around defining “clusters”/“Idents” has been revamped but backwards compatible. Added argument <code>alt_ident</code> in many functions including <code>vizAPOTC</code> and <code>RunAPOTC</code> to allow for counting clusters based on different cell identities or the current active identity if <code>NULL</code>, and it is now part of the subsetting arguments for all functions that work with APackOfTheClones runs /data. This includes:
 <ul><li><code>vizAPOTC</code></li>
 <li><code>RunAPOTC</code></li>
@@ -87,7 +96,7 @@
 <li>Add argument <code>publicity</code> in <code>getSharedClones</code> to filter the output shared clones by the number of clusters each clonotype is present in.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="changes-1-1-0-9000">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-0-9000"></a></h3>
+<h3 id="changes-1-2-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-0"></a></h3>
 <ul><li>
 <code>vizAPOTC</code> and <code>RunAPOTC</code> now defaults to aggregating clustered clonotype frequencies based on active ident of the seurat object. Additionally, if using an ident where its levels are not ordered integers, then the cluster labels for each APackOfTheClones run that is stored in the seurat object will no longer just be “C1”, “C2”, … and will be the names of the idents.</li>
 <li>Fixed the output for arguments <code>intop</code> and <code>intop_per_cl</code> in <code>getSharedClones</code> so they actually filters for all clones with clone sizes in the top range.</li>
