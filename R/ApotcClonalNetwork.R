@@ -17,12 +17,16 @@
 #' @inheritParams RunAPOTC
 #' @param top integer or numeric in (0, 1) - if not null, filters the output
 #' clones so that only the shared clonotypes with counts the top `top` count /
-#' proportion (for numeric in (0, 1) input) shared clones are kept.
+#' proportion (for numeric in (0, 1) input) shared clones are kept. For cases
+#' where several clonotypes tie in size, the clonotype(s) added are not
+#' guaranteed but deterministic given the other arguments are identical.
 #' @param top_per_cl integer or numeric in (0, 1) - if not null, filters the
 #' output clones so that for each seurat cluster, only the clonotypes with the
 #' `top_per_cl` frequency/count is preserved when aggregating shared clones,
 #' in the same way as the above. Note that if inputted in conjunction with
 #' `top`, it will get the *intersection* of the clonotypes filtered each way.
+#' For cases where several clonotypes tie in size, the clonotype(s) added are
+#' not guaranteed but deterministic given the other arguments are identical.
 #' @param intop integer or numeric in (0, 1) - if not null, filters the raw
 #' clone sizes before computing the shared clonotypes so that only the
 #' clonotypes that have their overall size in the top `intop` largest sizes

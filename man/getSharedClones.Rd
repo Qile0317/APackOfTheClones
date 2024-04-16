@@ -74,13 +74,17 @@ there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{top}{integer or numeric in (0, 1) - if not null, filters the output
 clones so that only the shared clonotypes with counts the top \code{top} count /
-proportion (for numeric in (0, 1) input) shared clones are kept.}
+proportion (for numeric in (0, 1) input) shared clones are kept. For cases
+where several clonotypes tie in size, the clonotype(s) added are not
+guaranteed but deterministic given the other arguments are identical.}
 
 \item{top_per_cl}{integer or numeric in (0, 1) - if not null, filters the
 output clones so that for each seurat cluster, only the clonotypes with the
 \code{top_per_cl} frequency/count is preserved when aggregating shared clones,
 in the same way as the above. Note that if inputted in conjunction with
-\code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.}
+\code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.
+For cases where several clonotypes tie in size, the clonotype(s) added are
+not guaranteed but deterministic given the other arguments are identical.}
 
 \item{intop}{integer or numeric in (0, 1) - if not null, filters the raw
 clone sizes before computing the shared clonotypes so that only the

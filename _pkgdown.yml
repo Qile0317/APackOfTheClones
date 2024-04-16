@@ -54,7 +54,7 @@ reference:
   - getApotcDataIds
   - getLastApotcDataId
   - containsApotcRun
-  - renameAopotcRun
+  - renameApotcRun
   - deleteApotcData
 - title: Further Customization of Clonal Expansion Plots
 - contents:
