@@ -91,16 +91,13 @@
     <loc>https://qile0317.github.io/APackOfTheClones/reference/mergeCloneSizes.html</loc>
   </url>
   <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/reference/mini_clonotype_data.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/reference/mini_seurat_obj.html</loc>
-  </url>
-  <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/overlayLegend.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/removeLegend.html</loc>
+  </url>
+  <url>
+    <loc>https://qile0317.github.io/APackOfTheClones/reference/renameApotcRun.html</loc>
   </url>
   <url>
     <loc>https://qile0317.github.io/APackOfTheClones/reference/showCloneHighlight.html</loc>

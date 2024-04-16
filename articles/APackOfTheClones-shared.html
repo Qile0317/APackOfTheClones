@@ -35,11 +35,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,10 +110,10 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>A novel experimental feature in this package is the ability to get,
-filter, and visualize clonotypes that are common across seurat clusters.
-Potential applications include the ability to quickly and intuitively
-gauge the rough clonal heterogeneity of certain clusters. Note that in
+<p>A novel feature in this package is the ability to get, filter, and
+visualize clonotypes that are common across seurat clusters. Potential
+applications include the ability to quickly and intuitively gauge the
+rough clonal heterogeneity of certain clusters. Note that in
 scRepertoire, the <code>scRepertoire::clonalNetwork</code> function does
 something similar for the original dimensional reductions using arrows,
 though those display the aggregated degree of commonality between each
@@ -142,13 +142,15 @@ clusters that the clonotype name at its index correspond to.</p>
 <span>    clonecall <span class="op">=</span> <span class="st">"strict"</span>,</span>
 <span>    <span class="va">...</span>,</span>
 <span>    extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    alt_ident <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    run_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    top <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    top_per_cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    intop <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    intop_per_cl <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>    intop_per_cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    publicity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The last four optional arguments allow additional filtering of the
+<p>The last five optional arguments allow additional filtering of the
 shared clonotypes. Most notably, <code>top</code> will filter the
 resulting shared clonotypes to only those ranked in the <code>top</code>
 frequencies, either as a proportion or number. More details can be found
@@ -262,7 +264,7 @@ highlighting and linking the top 4 most expanded clonotypes in
 <span><span class="fu"><a href="../reference/showCloneHighlight.html">showCloneHighlight</a></span><span class="op">(</span></span>
 <span>    <span class="va">linked_apotc_plot</span>,</span>
 <span>    clonotype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">shared_clones_aa_top4</span><span class="op">)</span>,</span>
-<span>    color_each <span class="op">=</span> <span class="fu">viridis</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>    color_each <span class="op">=</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>    default_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    scale_bg <span class="op">=</span> <span class="fl">0.95</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -285,7 +287,7 @@ can use the <code>countCloneSizes</code> function.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>

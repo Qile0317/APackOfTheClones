@@ -22,11 +22,11 @@ ggplot2 object of the clonal expansion plot with a circle size legend
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,6 +98,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  clonecall <span class="op">=</span> <span class="st">"strict"</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  extra_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alt_ident <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  clone_scale_factor <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  rad_scale_factor <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  order_clones <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -128,6 +129,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
 <span>  legend_text_size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  add_legend_background <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_legend_centerspace <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  detail <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -136,7 +138,7 @@ ggplot2 object of the clonal expansion plot with a circle size legend
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>seurat_obj</dt>
 <dd><p>A seurat object that has been integrated with clonotype
-data.</p></dd>
+data with <code>scRepertoire::combineExpression</code>.</p></dd>
 
 
 <dt>reduction_base</dt>
@@ -177,6 +179,14 @@ alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like <code>extra_filter = "nchar(CTaa) - 1 &gt; 10"</code>. When
 involving characters, ensure to enclose with single quotes.</p></dd>
+
+
+<dt>alt_ident</dt>
+<dd><p>character. By default, cluster identity is assumed to be
+whatever is in <code>Idents(seurat_obj)</code>, and clones will be grouped by the active
+ident. However, <code>alt_ident</code> could be set as the name of some column in the
+meta data of the seurat object to be grouped by. This column is meant to have
+been a product of <code><a href="https://rdrr.io/pkg/SeuratObject/man/Idents.html" class="external-link">Seurat::StashIdent</a></code> or manually added.</p></dd>
 
 
 <dt>clone_scale_factor</dt>
@@ -227,13 +237,12 @@ clusters repulse each other per iteration, and vice versa.</p></dd>
 
 
 <dt>show_shared</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> The output of
-<a href="getSharedClones.html">getSharedClones</a> can be inputted here, and the resulting plot will overlay
-lines between clone circles if that clonotype is common between clusters.
-Note that the input <em><strong>must</strong></em> be generated from data in the correct
-<code>APackOfTheClones</code> run, and the behavior is undefined otherwise and will
-likely error. The next 4 arguments allow for aesthetic customization of these
-line links.</p></dd>
+<dd><p>The output of <a href="getSharedClones.html">getSharedClones</a> can be inputted here,
+and the resulting plot will overlay lines between clone circles if that
+clonotype is common between clusters. Note that the input <em><strong>must</strong></em> be
+generated from data in the correct <code>APackOfTheClones</code> run, and the behavior
+is undefined otherwise and will likely error. The next 4 arguments allow for
+aesthetic customization of these line links.</p></dd>
 
 
 <dt>only_link</dt>
@@ -357,6 +366,15 @@ numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.</p></dd>
 
 
+<dt>detail</dt>
+<dd><p>logical. If <code>FALSE</code>, will only plot entire clusters as one
+large circle, which may be useful in cases where there are a high number
+of clones resulting in a large number of circles on the resulting ggplot,
+which has increased plotting times, and certain aspects of the plot needs
+to be finely adjusted with <a href="AdjustAPOTC.html">AdjustAPOTC</a> or simply inspected. This should
+not be set to <code>FALSE</code> for the actual clonal expansion plot.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical. Decides if visual cues are displayed to the R console
 of the progress.</p></dd>
@@ -370,6 +388,25 @@ of the progress.</p></dd>
 seurat object. There is an additional 10th element in the object named
 <code>"APackOfTheClones"</code> used by other functions in this package and shouldn't
 interfere with any other ggplot functionality. (As far as currently known)</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Note that the subsetting arguments <code>...</code> and <code>extra_filter</code> are only a
+quick convenience to subset based on metadata, and the <code>subset</code> S3 method
+defined in <code>Seurat</code> is much more mature are has more features. Additionally,
+users need to work with data subsets are recommended to and likely already
+are working with seurat objects subsetted/split with <code><a href="https://satijalab.org/seurat/reference/SplitObject.html" class="external-link">Seurat::SplitObject</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="cluster-labelling">Cluster labelling<a class="anchor" aria-label="anchor" href="#cluster-labelling"></a></h2>
+    
+
+<p>For the ident that was used to cluster the clones, labels for each cluster
+are inferred and stored in the run so that they can be used by other
+functions and optionally overlaid on the plot over clusters. If the levels
+of the ident used is a naturally ordered integer sequence, then the labels
+generated would be <code>"C1", "C2", "C3" ... </code>, else they would be the actual
+ident levels themselves.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -401,7 +438,7 @@ interfere with any other ggplot functionality. (As far as currently known)</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
