@@ -36,7 +36,6 @@ private:
     int numClusters;
 
     std::vector<std::unordered_map<std::string, int>> clusteredClonotypeIndex;
-    int numClusteredClonotypes;
 
     std::vector<double> x1, x2, y1, y2;
     std::vector<int> cluster1, cluster2;
