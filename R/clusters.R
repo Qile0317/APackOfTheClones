@@ -69,7 +69,6 @@ update_clusterlist_df <- function(df, clusterlist) {
 
 }
 
-# FIXME
 # centroid finder for a matrix of [x, y, cluster]
 find_centroids <- function(xyc_df, ident_levels) {
 

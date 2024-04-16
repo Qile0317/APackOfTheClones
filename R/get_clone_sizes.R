@@ -41,7 +41,7 @@
 #' countCloneSizes(combined_pbmc, "aa")
 #' countCloneSizes(combined_pbmc, "nt", orig.ident = c("P17B", "P17L"))
 #'
-countCloneSizes <- function( # FIXME
+countCloneSizes <- function(
     seurat_obj,
     clonecall = "strict",
     extra_filter = NULL,
@@ -173,7 +173,7 @@ count_raw_clone_sizes <- function(
 #' clustered_clone_sizes <- countCloneSizes(get(data("combined_pbmc")))
 #' mergeCloneSizes(clustered_clone_sizes)
 #'
-mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) { # FIXME
+mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) { 
 
     typecheck(clustered_clone_sizes, is_output_of_countCloneSizes)
     typecheck(sort_decreasing, is_a_logical, is.null)
