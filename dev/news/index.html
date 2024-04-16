@@ -74,13 +74,29 @@
 <h2 class="pkg-version" data-toc-text="1.1.0.9000" id="apackoftheclones-1109000-development-version">APackOfTheClones 1.1.0.9000 (development version)<a class="anchor" aria-label="anchor" href="#apackoftheclones-1109000-development-version"></a></h2>
 <div class="section level3">
 <h3 id="additions-1-1-0-9000">Additions<a class="anchor" aria-label="anchor" href="#additions-1-1-0-9000"></a></h3>
-<ul><li>Add argument <code>detail</code> in <code>APOTCPlot</code> and <code>vizAPOTC</code> to allow user to plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in <code><a href="../articles/APackOfTheClones-shared.html">vignette("APackOfTheClones-shared")</a></code>.</li>
+<ul><li>Functionality around defining “clusters”/“Idents” has been revamped but backwards compatible. Added argument <code>alt_ident</code> in many functions including <code>vizAPOTC</code> and <code>RunAPOTC</code> to allow for counting clusters based on different cell identities or the current active identity if <code>NULL</code>, and it is now part of the subsetting arguments for all functions that work with APackOfTheClones runs /data. This includes:
+<ul><li><code>vizAPOTC</code></li>
+<li><code>RunAPOTC</code></li>
+<li><code>getSharedClones</code></li>
+<li>
+<code>countCloneSizes</code> (see section below in changes to incorporate identity functionality)</li>
+<li>TODO vignette</li>
+</ul></li>
+<li>Add <code>renameApotcRun</code> to rename APackOfTheClones runs.</li>
+<li>Add argument <code>detail</code> in <code>APOTCPlot</code> and <code>vizAPOTC</code> to allow user to quickly plot a version of the clonal expansion plot where each cluster is just one large circle. Correspondingly added a subsection in <code><a href="../articles/APackOfTheClones-shared.html">vignette("APackOfTheClones-shared")</a></code>.</li>
+<li>Add argument <code>publicity</code> in <code>getSharedClones</code> to filter the output shared clones by the number of clusters each clonotype is present in.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-1-1-0-9000">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-0-9000"></a></h3>
-<ul><li>All arguments in <code>AdjustAPOTC</code> that asks for cluster indices as input now also accept characters representing their respective labels in the APackOfTheClones runs.</li>
+<ul><li>
+<code>vizAPOTC</code> and <code>RunAPOTC</code> now defaults to aggregating clustered clonotype frequencies based on active ident of the seurat object. Additionally, if using an ident where its levels are not ordered integers, then the cluster labels for each APackOfTheClones run that is stored in the seurat object will no longer just be “C1”, “C2”, … and will be the names of the idents.</li>
+<li>Fixed the output for arguments <code>intop</code> and <code>intop_per_cl</code> in <code>getSharedClones</code> so they actually filters for all clones with clone sizes in the top range.</li>
+<li>All arguments in <code>AdjustAPOTC</code> that asks for cluster indices as input now also accept characters representing their respective labels in the APackOfTheClones runs.</li>
 <li>The argument <code>recolor_indicies</code> has been renamed to <code>recolor_indices</code> in <code>AdjustAPOTC</code>.</li>
-<li>Several exported functions now have stricter argument checking of type and length.</li>
+<li>
+<code>countCloneSizes</code> now outputs a named list with each name being the cluster identity. Additionally, the argument <code>by_cluster</code> can now also take in single characters as arguments representing possible alternative cluster identities in the metadata.</li>
+<li>Removed <code>mini_seurat_obj</code> from publicly exported data.</li>
+<li>Several exported functions, including <code>AdjustAPOTC</code>, now have stricter argument checking of type and length.</li>
 </ul></div>
 </div>
     <div class="section level2">

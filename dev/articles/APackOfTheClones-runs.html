@@ -205,13 +205,13 @@ set. Here’s it ran again but with more optional arguments and a custom
 <div class="section level3">
 <h3 id="important-note">Important Note<a class="anchor" aria-label="anchor" href="#important-note"></a>
 </h3>
-<p>In a lot of real world applications, the user may only really need to
-ever work with visualizations from one run and mainly want to just
-adjust its parameters or the aesthetics of the plot. In these cases,
-feel free to completely ignore any of the parameters related to
-<code>run_id</code> or any other filtering parameter, as all functions
-default to using the latest run if no identifying parameters are passed
-in.</p>
+<p>Practically speaking, most users probably only really need to ever
+work with visualizations from one run and mainly want to just adjust its
+parameters or the aesthetics of the plot - or they already will have
+several subsetted seurat objects. In these cases, feel free to
+completely ignore any of the parameters related to <code>run_id</code>
+or any other filtering parameter, as all functions default to using the
+latest run if no identifying parameters are passed in.</p>
 </div>
 <div class="section level3">
 <h3 id="utilities-for-managing-apackoftheclones-runs">Utilities for Managing APackOfTheClones Runs<a class="anchor" aria-label="anchor" href="#utilities-for-managing-apackoftheclones-runs"></a>
@@ -231,6 +231,9 @@ Instead, here is a collection of functions that may be useful:</p>
 <li>
 <code>containsApotcRun(pbmc, run_id = "foo")</code> returns whether
 a <code>run_id</code> exists in the seurat object.</li>
+<li>
+<code>renameApotcRun(pbmc, old_run_id = "foo", new_run_id = "bar")</code>
+renames runs.</li>
 <li>
 <code>deleteApotcData(pbmc, run_id = "foo")</code> deletes <em>all
 data</em> associated with a certain <code>run_id</code>.</li>
