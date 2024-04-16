@@ -66,6 +66,8 @@ removeLegend <- function(apotc_ggplot) {
 #' @seealso [removeLegend]
 #'
 #' @examples
+#' library(magrittr)
+#'
 #' # create a plot with a legend
 #' apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 #'

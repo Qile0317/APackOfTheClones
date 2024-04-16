@@ -93,6 +93,8 @@ that comprise the annotation layers of the legend should be named whatever
 an implementation detail that the user should not interfere with.
 }
 \examples{
+library(magrittr)
+
 # create a plot with a legend
 apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 

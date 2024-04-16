@@ -51,6 +51,7 @@
 #' @export
 #'
 #' @examples
+#' library(magrittr)
 #' data("combined_pbmc")
 #'
 #' # piping the plot can be nice to read syntatically -

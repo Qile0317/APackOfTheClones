@@ -69,6 +69,7 @@ Note that if \code{color_each = FALSE} and \code{default_color = NULL}, this is
 equivalent to simply not highlighting anything and a warning will be shown.
 }
 \examples{
+library(magrittr)
 data("combined_pbmc")
 
 # piping the plot can be nice to read syntatically -
