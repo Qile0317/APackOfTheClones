@@ -38,7 +38,7 @@ pbmc <- get(data("combined_pbmc"))
 
 ## Introduction
 
-A novel experimental feature in this package is the ability to get, filter, and visualize clonotypes that are common across seurat clusters. Potential applications include the ability to quickly and intuitively gauge the rough clonal heterogeneity of certain clusters. Note that in scRepertoire, the `scRepertoire::clonalNetwork` function does something similar for the original dimensional reductions using arrows, though those display the aggregated degree of commonality between each cluster.
+A novel feature in this package is the ability to get, filter, and visualize clonotypes that are common across seurat clusters. Potential applications include the ability to quickly and intuitively gauge the rough clonal heterogeneity of certain clusters. Note that in scRepertoire, the `scRepertoire::clonalNetwork` function does something similar for the original dimensional reductions using arrows, though those display the aggregated degree of commonality between each cluster.
 
 Please read `vignette("APackOfTheClones")` and ideally also `vignette("APackOfTheClones-runs")` before reading this vignette. One should then also see that although some of the visualizations in this vignette were produced with the `vizAPOTC` function, all visualizations can be replicated with `RunAPOTC` and `APOTCPlot` that both share parts of the arguments of `vizAPOTC`.
 
@@ -53,15 +53,17 @@ getSharedClones(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL,
     run_id = NULL,
     top = NULL,
     top_per_cl = NULL,
     intop = NULL,
-    intop_per_cl = NULL
+    intop_per_cl = NULL,
+    publicity = c(2L, Inf)
 )
 ```
 
-The last four optional arguments allow additional filtering of the shared clonotypes. Most notably, `top` will filter the resulting shared clonotypes to only those ranked in the `top` frequencies, either as a proportion or number. More details can be found in the function level documentation for the other arguments. They are especially useful when an experiment has a really high number of single-cells, and the only clonotypes of interest are the most expanded ones.
+The last five optional arguments allow additional filtering of the shared clonotypes. Most notably, `top` will filter the resulting shared clonotypes to only those ranked in the `top` frequencies, either as a proportion or number. More details can be found in the function level documentation for the other arguments. They are especially useful when an experiment has a really high number of single-cells, and the only clonotypes of interest are the most expanded ones.
 
 Here is an example of the function in action, where a combined seurat object is loaded with the variable name `pbmc`:
 

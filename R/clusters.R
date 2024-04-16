@@ -14,6 +14,8 @@ get_x_coords <- function(l) l[[1]]
 get_y_coords <- function(l) l[[2]]
 get_radii <- function(l) l[[3]]
 get_centroid <- function(l) l[[4]]
+get_centroid_x <- function(l) get_centroid(l)[1]
+get_centroid_y <- function(l) get_centroid(l)[2]
 get_cluster_radius <- function(l) l[[5]]
 get_clonotypes <- function(l) l$clonotype # not index due to legacy clusterlists
 
@@ -29,9 +31,19 @@ set_centroid <- function(l, v) {l$centroid <- v; l}
 set_cluster_radius <- function(l, v) {l$clRad <- v; l}
 set_clonotypes <- function(l, v) {l$clonotype <- v; l}
 
-# convert clusterlist to dataframe, assuming its valid
-# TODO allow get_abstract option to just get 1 large circle
-convert_to_dataframe <- function(clstr_list, seurat_cluster_index) {
+# convert clusterlist to dataframe, assuming its ***valid***
+convert_to_dataframe <- function(
+    clstr_list, seurat_cluster_index, detail = TRUE
+) {
+    if (!detail) {
+      return(data.frame(
+        "label" = paste("cluster", seurat_cluster_index),
+        "x" = get_centroid_x(clstr_list),
+        "y" = get_centroid_y(clstr_list),
+        "r" = get_cluster_radius(clstr_list)
+      ))
+    }
+
     data.frame(
         "label" = rep(
             paste("cluster", seurat_cluster_index),
@@ -58,49 +70,41 @@ update_clusterlist_df <- function(df, clusterlist) {
 }
 
 # centroid finder for a matrix of [x, y, cluster]
-find_centroids <- function(df, total_clusters) {
-  cll <- split(df, factor(df[, 3])) #the last cluster column becomes redundant
-  l <- length(cll)
+find_centroids <- function(xyc_df, ident_levels) {
 
-  nameset <- rep(c(""), times = l)
-  xset <- rep(c(0), times = l)
-  yset <- xset
+  cll <- split(xyc_df, factor(xyc_df[, 3])) %>%
+    lapply(function(x) c(mean(x[, 1]), mean(x[, 2])))
+    
+  list_output <- init_list(ident_levels, list())
 
-  for (i in 1:l){
-    nameset[i] <- cll[[i]][,3][1]
-    xset[i] <- sum(cll[[i]][, 1]) / length(cll[[i]][, 1])
-    yset[i] <- sum(cll[[i]][, 2]) / length(cll[[i]][, 2])
+  for (ident_level in ident_levels) {
+    if (is.null(cll[[ident_level]])) next
+    list_output[[ident_level]] <- cll[[ident_level]]
   }
-  
-  list_output <- init_list(num_elements = total_clusters, init_val = list())
-  for (i in 1:l) {
-    list_output[[as.integer(nameset[i])]] <- c(xset[i], yset[i])
-  }
-  return(list_output)
+
+  unname(list_output)
 }
 
 # get reduction centroids from seurat obj, where the barcodes in the reduction
 # cell embeddings will be filtered to be exactly the same as those left in the
 # metadata incase it was additionally filtered.
-get_cluster_centroids <- function(
-  seurat_obj, reduction = "umap", passed_in_reduc_obj = FALSE
-) {
+get_cluster_centroids <- function(seurat_obj, reduction, ident_levels) {
 
-  if (passed_in_reduc_obj) {
+  if (!is_a_character(reduction)) {
     reduc_coords <- reduction@cell.embeddings[, 1:2]
   } else {
     reduc_coords <- get_2d_embedding(seurat_obj, reduction)
   }
 
   find_centroids(
-    df = data.frame(
+    xyc_df = data.frame(
       rcppFilterReductionCoords(
         seuratBarcodes = rownames(seurat_obj@meta.data),
         reductionCoords = reduc_coords
       ),
-      seurat_obj@meta.data[["seurat_clusters"]]
+      "ident" = seurat_obj@meta.data[["seurat_clusters"]]
     ),
-    total_clusters = get_num_total_clusters(seurat_obj)
+    ident_levels
   )
 }
 

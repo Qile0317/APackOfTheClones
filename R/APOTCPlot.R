@@ -21,13 +21,12 @@
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
 #' data and has had a valid run of [RunAPOTC].
-#' @param show_shared `r lifecycle::badge("experimental")` The output of
-#' [getSharedClones] can be inputted here, and the resulting plot will overlay
-#' lines between clone circles if that clonotype is common between clusters.
-#' Note that the input ***must*** be generated from data in the correct
-#' `APackOfTheClones` run, and the behavior is undefined otherwise and will
-#' likely error. The next 4 arguments allow for aesthetic customization of these
-#' line links.
+#' @param show_shared The output of [getSharedClones] can be inputted here,
+#' and the resulting plot will overlay lines between clone circles if that
+#' clonotype is common between clusters. Note that the input ***must*** be
+#' generated from data in the correct `APackOfTheClones` run, and the behavior
+#' is undefined otherwise and will likely error. The next 4 arguments allow for
+#' aesthetic customization of these line links.
 #' @param only_link Optional integer indicating to only display clone
 #' links originating from this cluster if showing shared clones.
 #' @param clone_link_width numeric. The width of the lines that connect shared
@@ -86,6 +85,12 @@
 #' changed between the circle sizes on the left side of the legend and the
 #' numbers on the right. Useful to set to around 0.5 (or more / less) when there
 #' are particularly large clone sizes that may cover the numbers.
+#' @param detail logical. If `FALSE`, will only plot entire clusters as one
+#' large circle, which may be useful in cases where there are a high number
+#' of clones resulting in a large number of circles on the resulting ggplot,
+#' which has increased plotting times, and certain aspects of the plot needs
+#' to be finely adjusted with [AdjustAPOTC] or simply inspected. This should
+#' not be set to `FALSE` for the actual clonal expansion plot.
 #'
 #' @return A ggplot object of the APackOfTheClones clonal expansion plot of the
 #' seurat object. There is an additional 10th element in the object named
@@ -139,11 +144,13 @@ APOTCPlot <- function(
 	add_legend_background = TRUE,
 	add_legend_centerspace = 0,
 
+	detail = TRUE,
+
 	verbose = TRUE
 ) {
 	# handle varargs, run_id, and typecheck
 	varargs_list <- list(...)
-	args <- hash::hash(as.list(environment()))
+	args <- environment()
 	args$run_id <- infer_object_id_if_needed(args, varargs_list)
 	APOTCPlot_error_handler(args)
 
@@ -151,7 +158,9 @@ APOTCPlot <- function(
 	apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
 	# initialize plot
-	result_plot <- create_initial_apotc_plot(apotc_obj, res, linetype, alpha)
+	result_plot <- create_initial_apotc_plot(
+		apotc_obj, res, linetype, alpha, detail
+	)
 	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
 
 	#set theme
@@ -180,7 +189,7 @@ APOTCPlot <- function(
 	}
 
 	if (isnt_empty(show_shared)) {
-		
+
 		# check only_link indexing
 		if (!is.null(only_link) &&
 			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
@@ -234,7 +243,7 @@ APOTCPlot <- function(
 }
 
 APOTCPlot_error_handler <- function(args) {
-	
+
 	check_apotc_identifiers(args)
 	check_filtering_conditions(args)
 
@@ -266,6 +275,8 @@ APOTCPlot_error_handler <- function(args) {
 	typecheck(args$add_size_legend, is_a_logical)
 	check_legend_params(args)
 
+	typecheck(args$detail, is_a_logical)
+
 }
 
 # helpers for getting plot dimensions quickly
@@ -284,7 +295,7 @@ get_apotc_plot_dims_from_df <- function(plot_dataframe) {
 }
 
 subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
-	apotc_plot_dataframe[unique(rcppGetEdgeCircleIndicies(apotc_plot_dataframe)), ]
+	apotc_plot_dataframe[unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)), ]
 }
 
 # Produce modified ggplot object of an APackOfTheClones plot with an extra slot
@@ -310,5 +321,3 @@ get_estimated_legend_sizes <- function(apotc_ggplot_obj) {
 	get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
 }
 
-# TODO may need an updater function for the plot object since old versions wont have them.
-# alternatively can have the user in a warning function to update their object.

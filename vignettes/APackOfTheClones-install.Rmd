@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 ```
 
-To install APackOfTheClones, R version 4.0.0 is required. The free IDE Rstudio is also highly recommended for convenient visualizations and interactions with related objects.
+To install APackOfTheClones, R version 4.1.0 or above is required. The free IDE Rstudio is also highly recommended for convenient visualizations and interactions with related objects.
 
 ## Dependencies
 
@@ -44,11 +44,20 @@ install.packages("Seurat")
 install.packages("APackOfTheClones")
 ```
 
-If there are any issues with the CRAN installation, try
+If there are any issues with the CRAN installation itself, try installing from the `cran` branch of the github repository:
 
 ```R
 # ensure the devtools package is installed via install.packages("devtools")
 devtools::install_github("Qile0317/APackOfTheClones@cran")
+```
+
+More alternatives are also available on the [r-universe](https://qile0317.r-universe.dev/APackOfTheClones) page:
+
+```R
+install.packages(
+    "APackOfTheClones", 
+    repos = c("https://qile0317.r-universe.dev", "https://cloud.r-project.org")
+)
 ```
 
 ## Installation of Development Editions

@@ -1,11 +1,12 @@
 sourcedata("v0", "cluster_lists")
-sourcedata("v0", "SCIP")
+test_pbmc <- getdata("v0", "mini_seurat_obj")
+test_tcr <- getdata("v0", "mini_clonotype_data")
 
 # TODO find_centroids
 
 test_that("get_cluster_centroids() works", {
   expect_equal(
-    get_cluster_centroids(test_pbmc),
+    get_cluster_centroids(test_pbmc, "umap", ident_levels = c("0", "1")),
     list(
       c(5.72926706448197, 8.48345941543579),
       c(-9.54877844080329, -14.1390990257263)
@@ -14,7 +15,7 @@ test_that("get_cluster_centroids() works", {
   )
   
   expect_equal(
-    get_cluster_centroids(test_pbmc, "tsne"),
+    get_cluster_centroids(test_pbmc, "tsne", ident_levels = c("0", "1")),
     list(
       c(-7.762187, 13.409124),
       c(12.93698, -22.34854)

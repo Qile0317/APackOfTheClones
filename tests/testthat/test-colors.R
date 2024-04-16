@@ -1,8 +1,5 @@
-sourcedata("v0", "SCIP")
-
-test_that("count_umap_clusters() works", {
-  expect_equal(count_umap_clusters(test_pbmc), 2)
-})
+test_pbmc <- getdata("v0", "mini_seurat_obj")
+test_tcr <- getdata("v0", "mini_clonotype_data")
 
 test_that("gg_color_hue() works", {
   expect_identical(gg_color_hue(1), "#F8766D")
@@ -26,7 +23,7 @@ test_that("insert_colors() works", {
   
   expect_identical(
     new_df %>% dplyr::select(color),
-    test_cluster_df %>% 
+    test_cluster_df %>%
       dplyr::mutate(
         color = c(
           "#F8766D", "#F8766D", "#F8766D", "#F8766D",

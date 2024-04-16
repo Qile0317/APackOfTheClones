@@ -1,8 +1,8 @@
-# TODO could make a currying function for length checking
-
 # typechecker with a specific formatting requirement below
-# `x` is to be checked and `...` is a list of functions
-typecheck <- function(x, ...) {
+# `x` is to be checked
+# `...` is a list of functions
+# `var_name` is an optional character for variable name in the err msg
+typecheck <- function(x, ..., name = NULL) {
 
     typechecker_list <- list(...)
     if (any(sapply(typechecker_list, function(f) f(x)))) return()
@@ -13,7 +13,11 @@ typecheck <- function(x, ...) {
 
     stop(call. = FALSE,
         "`",
-        deparse(substitute(x)) %>% get_right_of_dollarsign(),
+        ifelse(
+            is.null(name),
+            get_right_of_dollarsign(deparse(substitute(x))),
+            name
+        ),
         "` ",
         create_err_msg(typechecker_str_vec)
     )
@@ -44,6 +48,7 @@ get_error_strings <- function(funcstrs) {
 get_err_type_str <- function(function_name_str) {
 
     if (function_name_str == "is.null") return("NULL")
+    if (function_name_str == "is_vector") return("vector")
 
     type <- gsub(
         "_", " ",
@@ -224,4 +229,50 @@ is_output_of_getSharedClones <- function(x) {
 is_output_of_countCloneSizes <- function(x) {
     if (is_empty(x)) return(TRUE)
     check_is_list_and_elements(x, is.table)
+}
+
+# lengthchecing stuff to be used after typechecking
+
+lengthcheck <- function(a, b, except_func = NULL, varnames = NULL) {
+
+    if (!is.null(except_func)) if (except_func(a, b)) return()
+    if (length(a) == length(b)) return()
+
+    if (is.null(varnames)) varnames <- c(
+        get_right_of_dollarsign(deparse(substitute(a))),
+        get_right_of_dollarsign(deparse(substitute(b)))
+    )
+
+    stop(call. = FALSE,
+        "`", varnames[1], "` and `", varnames[2], "` ",
+        "have an unequal number of elements ", length(a), " and ", length(b)
+    )
+}
+
+lengthcheck_ifnotnull <- function(a, b, except_func = NULL, varnames = NULL) {
+    if (is.null(a) && is.null(b)) return()
+    lengthcheck(a, b, except_func, varnames)
+}
+
+lengthcheck_coord_args <- function(inds, coords, varnames = NULL) {
+    lengthcheck_ifnotnull(
+        inds, coords, varnames = varnames, except_func = function(i, crd) {
+            is_numeric_pair(crd)
+        }
+    )
+}
+
+check_coord_args <- function(indices, coords) {
+
+    if (is.null(indices) && is.null(coords)) return()
+
+    varnames <- c(
+        get_right_of_dollarsign(deparse(substitute(indices))),
+        get_right_of_dollarsign(deparse(substitute(coords)))
+    )
+
+    typecheck(indices, is_integer, is_character, is.null, name = varnames[1])
+    typecheck(coords,
+        is_numeric_pair, is_list_of_numeric_pair, is.null, name = varnames[2])
+    lengthcheck_coord_args(indices, coords, varnames)
 }

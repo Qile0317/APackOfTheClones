@@ -93,6 +93,8 @@ that comprise the annotation layers of the legend should be named whatever
 an implementation detail that the user should not interfere with.
 }
 \examples{
+library(magrittr)
+
 # create a plot with a legend
 apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 
@@ -100,7 +102,7 @@ apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
 overlayLegend(apotc_plot, legend_position = "top right")
 
 # use different sizes and label - may be nice to use the pipe
-apotc_plot |> overlayLegend(
+apotc_plot \%>\% overlayLegend(
     legend_sizes = c(1, 3, 7, 9),
     legend_label = "odd sizes"
 )

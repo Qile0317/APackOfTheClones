@@ -13,7 +13,16 @@
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
 #' @param seurat_obj A seurat object that has been integrated with clonotype
-#' data.
+#' data with `scRepertoire::combineExpression`.
+#'
+#' @details
+#' Note that the subsetting arguments `...` and `extra_filter` are only a
+#' quick convenience to subset based on metadata, and the `subset` S3 method
+#' defined in `Seurat` is much more mature are has more features. Additionally,
+#' users need to work with data subsets are recommended to and likely already
+#' are working with seurat objects subsetted/split with `Seurat::SplitObject`.
+#'
+#' @inheritSection RunAPOTC Cluster labelling
 #'
 #' @inherit APOTCPlot return
 #' @export
@@ -37,6 +46,7 @@ vizAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL,
 
     clone_scale_factor = "auto",
     rad_scale_factor = 0.95,
@@ -74,6 +84,8 @@ vizAPOTC <- function(
     add_legend_background = TRUE,
     add_legend_centerspace = 0,
 
+    detail = TRUE,
+
     verbose = TRUE
 ) {
     seurat_obj <- RunAPOTC(
@@ -82,6 +94,7 @@ vizAPOTC <- function(
         clonecall = clonecall,
         ...,
         extra_filter = extra_filter,
+        alt_ident = alt_ident,
         run_id = "vizAPOTC",
         clone_scale_factor = clone_scale_factor,
         rad_scale_factor = rad_scale_factor,
@@ -123,6 +136,7 @@ vizAPOTC <- function(
         legend_text_size = legend_text_size,
         add_legend_background = add_legend_background,
         add_legend_centerspace = add_legend_centerspace,
+        detail = detail,
         verbose = verbose
     )
 }

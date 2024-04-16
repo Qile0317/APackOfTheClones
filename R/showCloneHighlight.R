@@ -51,17 +51,18 @@
 #' @export
 #'
 #' @examples
+#' library(magrittr)
 #' data("combined_pbmc")
 #'
 #' # piping the plot can be nice to read syntatically -
 #' # By default, assigns unique colors to highlights and everything else is gray
-#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) |>
+#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
 #'     showCloneHighlight("CASLSGSARQLTF_CASSSTVAGEQYF")
 #'
 #' # one useful application is to highlight shared clones - beware that the
 #' # clonotype sequences may get extremely long in the legend
 #' shared_aa_clones <- names(getSharedClones(combined_pbmc, clonecall = "aa"))
-#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) |>
+#' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
 #'     showCloneHighlight(shared_aa_clones)
 #'
 showCloneHighlight <- function(
@@ -96,7 +97,7 @@ showCloneHighlight <- function(
 
     clone_color_vector <- gen_clone_color_vector(
         color_each, clonotype, highlighted_ggplot_data
-    )
+    ) # TODO be able to color by individual clone (not clonotype) for stuff like other parameters in the metadata
 
     num_matches <- 0
 
@@ -143,8 +144,16 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function() {
+    
     args <- get_parent_func_args()
+
     check_is_apotc_ggplot(args$apotc_ggplot)
+    if (is_undetailed(args$apotc_ggplot)) {
+        stop(call. = FALSE,
+            "`apotc_ggplot` must be generated with `detail = TRUE`"
+        )
+    }
+
     typecheck(args$clonotype, is_character)
     typecheck(args$color_each, is_a_logical, is_a_character, is_character)
     typecheck(args$default_color, is_a_character, is.null)

@@ -10,11 +10,13 @@ getSharedClones(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
+  alt_ident = NULL,
   run_id = NULL,
   top = NULL,
   top_per_cl = NULL,
   intop = NULL,
-  intop_per_cl = NULL
+  intop_per_cl = NULL,
+  publicity = c(2L, Inf)
 )
 }
 \arguments{
@@ -54,6 +56,12 @@ one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
 
+\item{alt_ident}{character. By default, cluster identity is assumed to be
+whatever is in \code{Idents(seurat_obj)}, and clones will be grouped by the active
+ident. However, \code{alt_ident} could be set as the name of some column in the
+meta data of the seurat object to be grouped by. This column is meant to have
+been a product of \code{Seurat::StashIdent} or manually added.}
+
 \item{run_id}{character. This will be the ID associated with the data of a
 run, and will be used by other important functions like \link{APOTCPlot} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
@@ -66,13 +74,17 @@ there was no input for the \code{...} and \code{extra_filter} parameters.}
 
 \item{top}{integer or numeric in (0, 1) - if not null, filters the output
 clones so that only the shared clonotypes with counts the top \code{top} count /
-proportion (for numeric in (0, 1) input) shared clones are kept.}
+proportion (for numeric in (0, 1) input) shared clones are kept. For cases
+where several clonotypes tie in size, the clonotype(s) added are not
+guaranteed but deterministic given the other arguments are identical.}
 
 \item{top_per_cl}{integer or numeric in (0, 1) - if not null, filters the
 output clones so that for each seurat cluster, only the clonotypes with the
 \code{top_per_cl} frequency/count is preserved when aggregating shared clones,
 in the same way as the above. Note that if inputted in conjunction with
-\code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.}
+\code{top}, it will get the \emph{intersection} of the clonotypes filtered each way.
+For cases where several clonotypes tie in size, the clonotype(s) added are
+not guaranteed but deterministic given the other arguments are identical.}
 
 \item{intop}{integer or numeric in (0, 1) - if not null, filters the raw
 clone sizes before computing the shared clonotypes so that only the
@@ -86,6 +98,11 @@ which, its very likely that not all those clones end up being shared.}
 the raw \emph{clustered} clone sizes before computing shared clones, so that
 for every clone in a seurat cluster, the top \code{intop_per_cl} count /
 proportion (for numeric in (0, 1) input) clones are kept.}
+
+\item{publicity}{numeric pair. A simple filter range of
+\code{c(lowerbound, upperbound)} to retain only shared clones with their
+"publicity" - number of clusters they are present in - within this
+range.}
 }
 \value{
 a named list where each name is a clonotype, each element is a
@@ -93,15 +110,19 @@ numeric indicating which seurat cluster(s) its in, in no particular order.
 If no shared clones are present, the output is an empty list.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This function is a convenience function for users to get a list of clonotypes
-which are shared between seurat clusters. If \code{run_id} is inputted, then the
-function will attempt to get the shared clonotypes from the corresponding
-APackOfTheClones run generated from \link{RunAPOTC}. Otherwise, it will use the
-filtering / subsetting parameters to generate the shared clones by
-internally running \link{RunAPOTC} with the same parameters and returning the
-shared clones.
+This function allows users to get a list of clonotypes that are shared
+between clusters based on the levels of the active cell identities / some
+custom identity based on the \code{alt_ident}. A list is returned with its
+\emph{\strong{names}} being the shared clonotypes, and the values are numeric vectors
+indicating the index of the clusters that clonotype is found in. The index
+corresponds to the index in the default levels of the factored identities.
+
+If \code{run_id} is inputted, then the function will attempt to get the shared
+clonotypes from the corresponding APackOfTheClones run generated from
+\link{RunAPOTC}. Otherwise, it will use the filtering / subsetting parameters
+to generate the shared clones.
 }
 \examples{
 data("combined_pbmc")

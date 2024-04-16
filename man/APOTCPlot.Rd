@@ -33,6 +33,7 @@ APOTCPlot(
   legend_text_size = 5,
   add_legend_background = TRUE,
   add_legend_centerspace = 0,
+  detail = TRUE,
   verbose = TRUE
 )
 }
@@ -82,13 +83,12 @@ in the following format:
 where if keyword arguments and extra_filter are underscore characters if
 there was no input for the \code{...} and \code{extra_filter} parameters.}
 
-\item{show_shared}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} The output of
-\link{getSharedClones} can be inputted here, and the resulting plot will overlay
-lines between clone circles if that clonotype is common between clusters.
-Note that the input \emph{\strong{must}} be generated from data in the correct
-\code{APackOfTheClones} run, and the behavior is undefined otherwise and will
-likely error. The next 4 arguments allow for aesthetic customization of these
-line links.}
+\item{show_shared}{The output of \link{getSharedClones} can be inputted here,
+and the resulting plot will overlay lines between clone circles if that
+clonotype is common between clusters. Note that the input \emph{\strong{must}} be
+generated from data in the correct \code{APackOfTheClones} run, and the behavior
+is undefined otherwise and will likely error. The next 4 arguments allow for
+aesthetic customization of these line links.}
 
 \item{only_link}{Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.}
@@ -168,6 +168,13 @@ legend and fill the background to be white, overlaying anything else.}
 changed between the circle sizes on the left side of the legend and the
 numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.}
+
+\item{detail}{logical. If \code{FALSE}, will only plot entire clusters as one
+large circle, which may be useful in cases where there are a high number
+of clones resulting in a large number of circles on the resulting ggplot,
+which has increased plotting times, and certain aspects of the plot needs
+to be finely adjusted with \link{AdjustAPOTC} or simply inspected. This should
+not be set to \code{FALSE} for the actual clonal expansion plot.}
 
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress.}

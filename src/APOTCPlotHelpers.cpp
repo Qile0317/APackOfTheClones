@@ -2,9 +2,9 @@
 #include <vector>
 
 // [[Rcpp::export]]
-std::vector<int> rcppGetEdgeCircleIndicies(Rcpp::DataFrame apotcPlotDataFrame) {
+std::vector<int> rcppGetEdgeCircleindices(Rcpp::DataFrame apotcPlotDataFrame) {
 
-    // target indicies
+    // target indices
     int xmin = 0, xmax = 0, ymin = 0, ymax = 0;
 
     // get relevant dataframe column references

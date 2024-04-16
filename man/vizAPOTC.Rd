@@ -10,6 +10,7 @@ vizAPOTC(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
+  alt_ident = NULL,
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
   order_clones = TRUE,
@@ -40,12 +41,13 @@ vizAPOTC(
   legend_text_size = 5,
   add_legend_background = TRUE,
   add_legend_centerspace = 0,
+  detail = TRUE,
   verbose = TRUE
 )
 }
 \arguments{
 \item{seurat_obj}{A seurat object that has been integrated with clonotype
-data.}
+data with \code{scRepertoire::combineExpression}.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can be any reduction present
@@ -79,6 +81,12 @@ one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
 
+\item{alt_ident}{character. By default, cluster identity is assumed to be
+whatever is in \code{Idents(seurat_obj)}, and clones will be grouped by the active
+ident. However, \code{alt_ident} could be set as the name of some column in the
+meta data of the seurat object to be grouped by. This column is meant to have
+been a product of \code{Seurat::StashIdent} or manually added.}
+
 \item{clone_scale_factor}{Dictates how much to scale each circle(between 0,1)
 radius when converting from clonotype counts into circles that represent
 individual clonotypes. The argument defaults to the character \code{"auto"}, and
@@ -110,13 +118,12 @@ clusters repulse each other per iteration, and vice versa.}
 
 \item{max_repulsion_iter}{integer. The number of repulsion iterations.}
 
-\item{show_shared}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} The output of
-\link{getSharedClones} can be inputted here, and the resulting plot will overlay
-lines between clone circles if that clonotype is common between clusters.
-Note that the input \emph{\strong{must}} be generated from data in the correct
-\code{APackOfTheClones} run, and the behavior is undefined otherwise and will
-likely error. The next 4 arguments allow for aesthetic customization of these
-line links.}
+\item{show_shared}{The output of \link{getSharedClones} can be inputted here,
+and the resulting plot will overlay lines between clone circles if that
+clonotype is common between clusters. Note that the input \emph{\strong{must}} be
+generated from data in the correct \code{APackOfTheClones} run, and the behavior
+is undefined otherwise and will likely error. The next 4 arguments allow for
+aesthetic customization of these line links.}
 
 \item{only_link}{Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.}
@@ -197,6 +204,13 @@ changed between the circle sizes on the left side of the legend and the
 numbers on the right. Useful to set to around 0.5 (or more / less) when there
 are particularly large clone sizes that may cover the numbers.}
 
+\item{detail}{logical. If \code{FALSE}, will only plot entire clusters as one
+large circle, which may be useful in cases where there are a high number
+of clones resulting in a large number of circles on the resulting ggplot,
+which has increased plotting times, and certain aspects of the plot needs
+to be finely adjusted with \link{AdjustAPOTC} or simply inspected. This should
+not be set to \code{FALSE} for the actual clonal expansion plot.}
+
 \item{verbose}{logical. Decides if visual cues are displayed to the R console
 of the progress.}
 }
@@ -215,6 +229,23 @@ to compute clonal expansion information, and then generates a customizable
 ggplot2 object of the clonal expansion plot with a circle size legend
 (\link{APOTCPlot}).
 }
+\details{
+Note that the subsetting arguments \code{...} and \code{extra_filter} are only a
+quick convenience to subset based on metadata, and the \code{subset} S3 method
+defined in \code{Seurat} is much more mature are has more features. Additionally,
+users need to work with data subsets are recommended to and likely already
+are working with seurat objects subsetted/split with \code{Seurat::SplitObject}.
+}
+\section{Cluster labelling}{
+
+For the ident that was used to cluster the clones, labels for each cluster
+are inferred and stored in the run so that they can be used by other
+functions and optionally overlaid on the plot over clusters. If the levels
+of the ident used is a naturally ordered integer sequence, then the labels
+generated would be \verb{"C1", "C2", "C3" ... }, else they would be the actual
+ident levels themselves.
+}
+
 \examples{
 data("combined_pbmc")
 

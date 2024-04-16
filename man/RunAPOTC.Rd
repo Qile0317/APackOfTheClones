@@ -11,6 +11,7 @@ RunAPOTC(
   clonecall = "strict",
   ...,
   extra_filter = NULL,
+  alt_ident = NULL,
   run_id = NULL,
   clone_scale_factor = "auto",
   rad_scale_factor = 0.95,
@@ -60,6 +61,12 @@ alternative / addition to the filtering keyword arguments. For example, if
 one wanted to filter by the length of the amino acid sequence of TCRs, one
 could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
+
+\item{alt_ident}{character. By default, cluster identity is assumed to be
+whatever is in \code{Idents(seurat_obj)}, and clones will be grouped by the active
+ident. However, \code{alt_ident} could be set as the name of some column in the
+meta data of the seurat object to be grouped by. This column is meant to have
+been a product of \code{Seurat::StashIdent} or manually added.}
 
 \item{run_id}{character. This will be the ID associated with the data of a
 run, and will be used by other important functions like \link{APOTCPlot} and
@@ -121,7 +128,8 @@ Computes necessary information for an APackOfTheClones
 clonal expansion plot (\link{APOTCPlot}) and stores it in the seurat object.
 Gets sizes of unique clones and utilizes a circle-packing algorithm to
 pack circles representing individual clones in approximately the same
-dimensional reduction (\code{reduction_base}) coordinates.
+dimensional reduction (\code{reduction_base}) coordinates based on some cell
+ident (defaults to the active ident).
 
 The parameter \code{extra_filter} along with an unlimited number of additional
 keyword arguments can be used to filter the cells by certain conditions
@@ -143,6 +151,12 @@ generated, the circular packing information can be modified
 with the \link{AdjustAPOTC} function.
 }
 \details{
+Note that the subsetting arguments \code{...} and \code{extra_filter} are only a
+quick convenience to subset based on metadata, and the \code{subset} S3 method
+defined in \code{Seurat} is much more mature are has more features. Additionally,
+users need to work with data subsets are recommended to and likely already
+are working with seurat objects subsetted/split with \code{Seurat::SplitObject}.
+
 All APackOfTheClones run data is stored in the Seurat object under
 \code{seurat_object@misc$APackOfTheClones}, which is a list of S4 objects of the
 type "ApotcData", with each element corresponding to a unique run. The id of
@@ -150,12 +164,20 @@ each run is the name of each element in the list. The user
 \emph{\strong{really shouldn't}} manually modify anything in the list as it may cause
 unexpected behavior with many other functions.
 
-Additionally, it also logs a seurat command associated with the run in the
+Additionally, it logs a seurat command associated with the run in the
 \code{seurat_object@commands} slot as a "SeuratCommand" object (from Seurat),
 where the name of the object in the list is formatted as \code{RunAPOTC.run_id}.
-Again, the user should not modify anything in these objects as they are used
-by some related functions, mainly \link{AdjustAPOTC}.
 }
+\section{Cluster labelling}{
+
+For the ident that was used to cluster the clones, labels for each cluster
+are inferred and stored in the run so that they can be used by other
+functions and optionally overlaid on the plot over clusters. If the levels
+of the ident used is a naturally ordered integer sequence, then the labels
+generated would be \verb{"C1", "C2", "C3" ... }, else they would be the actual
+ident levels themselves.
+}
+
 \examples{
 data("combined_pbmc")
 

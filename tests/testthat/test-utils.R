@@ -1,5 +1,3 @@
-data("mini_seurat_obj", "mini_clonotype_data")
-
 test_that("getReductionCentroids works", {
     expect_equal(
         getReductionCentroids(get(data("combined_pbmc")), "umap"),
@@ -50,10 +48,22 @@ test_that("convert_named_numeric_to_table works", {
 })
 
 test_that("union_list_of_tables works", {
-    expect_equal(
+
+    expect_identical(
         union_list_of_tables(list(table(letters[1:5]), table(letters[1:5]))),
-        strip_to_numeric(table(rep(letters[1:5], 2)))
+        expected = strip_to_numeric(table(rep(letters[1:5], 2)))
     )
+
+    expect_identical(
+        union_list_of_tables(list(table(letters))),
+        expected = init_numeric(letters, 1)
+    )
+
+    expect_identical(
+        union_list_of_tables(init_list(5, table(letters))),
+        expected = init_numeric(letters, 5)
+    )
+
 })
 
 # test readability
@@ -205,6 +215,37 @@ test_that("strip_unquoted_spaces works", {
         strip_unquoted_spaces(c(" f f ' o o ' ", " bb b ' a r ' rr r ")),
         c("ff' o o '", "bbb' a r 'rrr")
     )
+})
+
+test_that("get_ident_levels works", {
+    data("combined_pbmc")
+
+    expect_identical(
+        object = get_ident_levels(combined_pbmc, custom_ident = NULL),
+        expected = get_idents(ApotcData(
+            seurat_obj = combined_pbmc,
+            alt_ident = NULL,
+            metadata_filter_condition = "",
+            clonecall = "CTstrict",
+            reduction_base = "umap",
+            clone_scale_factor = 0.300051,
+            rad_scale_factor = 0.95
+        ))
+    )
+
+    expect_identical(
+        object = get_ident_levels(combined_pbmc, custom_ident = "orig.ident"),
+        expected = get_idents(ApotcData(
+            seurat_obj = combined_pbmc,
+            alt_ident = "orig.ident",
+            metadata_filter_condition = "",
+            clonecall = "CTstrict",
+            reduction_base = "umap",
+            clone_scale_factor = 0.300051,
+            rad_scale_factor = 0.95
+        ))
+    )
+
 })
 
 # TODO more testcases

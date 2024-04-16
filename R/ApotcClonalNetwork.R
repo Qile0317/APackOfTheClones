@@ -4,25 +4,33 @@
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
-#' This function is a convenience function for users to get a list of clonotypes
-#' which are shared between seurat clusters. If `run_id` is inputted, then the
-#' function will attempt to get the shared clonotypes from the corresponding
-#' APackOfTheClones run generated from [RunAPOTC]. Otherwise, it will use the
-#' filtering / subsetting parameters to generate the shared clones by
-#' internally running [RunAPOTC] with the same parameters and returning the
-#' shared clones.
+#' This function allows users to get a list of clonotypes that are shared
+#' between clusters based on the levels of the active cell identities / some
+#' custom identity based on the `alt_ident`. A list is returned with its
+#' ***names*** being the shared clonotypes, and the values are numeric vectors
+#' indicating the index of the clusters that clonotype is found in. The index
+#' corresponds to the index in the default levels of the factored identities.
+#'
+#' If `run_id` is inputted, then the function will attempt to get the shared
+#' clonotypes from the corresponding APackOfTheClones run generated from
+#' [RunAPOTC]. Otherwise, it will use the filtering / subsetting parameters
+#' to generate the shared clones.
 #'
 #' @inheritParams RunAPOTC
 #' @param top integer or numeric in (0, 1) - if not null, filters the output
 #' clones so that only the shared clonotypes with counts the top `top` count /
-#' proportion (for numeric in (0, 1) input) shared clones are kept.
+#' proportion (for numeric in (0, 1) input) shared clones are kept. For cases
+#' where several clonotypes tie in size, the clonotype(s) added are not
+#' guaranteed but deterministic given the other arguments are identical.
 #' @param top_per_cl integer or numeric in (0, 1) - if not null, filters the
 #' output clones so that for each seurat cluster, only the clonotypes with the
 #' `top_per_cl` frequency/count is preserved when aggregating shared clones,
 #' in the same way as the above. Note that if inputted in conjunction with
 #' `top`, it will get the *intersection* of the clonotypes filtered each way.
+#' For cases where several clonotypes tie in size, the clonotype(s) added are
+#' not guaranteed but deterministic given the other arguments are identical.
 #' @param intop integer or numeric in (0, 1) - if not null, filters the raw
 #' clone sizes before computing the shared clonotypes so that only the
 #' clonotypes that have their overall size in the top `intop` largest sizes
@@ -34,6 +42,10 @@
 #' the raw *clustered* clone sizes before computing shared clones, so that
 #' for every clone in a seurat cluster, the top `intop_per_cl` count /
 #' proportion (for numeric in (0, 1) input) clones are kept.
+#' @param publicity numeric pair. A simple filter range of
+#' `c(lowerbound, upperbound)` to retain only shared clones with their
+#' "publicity" - number of clusters they are present in - within this
+#' range.
 #'
 #' @return a named list where each name is a clonotype, each element is a
 #' numeric indicating which seurat cluster(s) its in, in no particular order.
@@ -70,32 +82,32 @@ getSharedClones <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
+    alt_ident = NULL,
     run_id = NULL,
 
     top = NULL,
     top_per_cl = NULL,
 
     intop = NULL,
-    intop_per_cl = NULL
+    intop_per_cl = NULL,
+
+    publicity = c(2L, Inf)
 ) {
     # handle inputs
     varargs_list <- list(...)
-	args <- hash::hash(as.list(environment()))
     getSharedClones_error_handler()
 
-    # get the apotcdata
-    apotc_obj <- getApotcDataIfExistsElseCreate(
-        seurat_obj, infer_object_id_if_needed(args, varargs_list)
-    )
-
     get_shared_clones(
-        apotc_obj,
+        apotc_obj = getApotcDataIfExistsElseCreate(
+            seurat_obj, run_id, environment(), ...
+        ),
         zero_indexed = FALSE,
         exclude_unique_clones = TRUE,
         in_top_clones = intop,
         in_top_per_cluster = intop_per_cl,
         top_shared = top,
-        top_shared_per_cluster = top_per_cl
+        top_shared_per_cluster = top_per_cl,
+        publicity_range = publicity
     )
 }
 
@@ -110,13 +122,13 @@ getSharedClones_error_handler <- function() {
         is_a_positive_integer, is_a_numeric_in_0_1, is.null)
     typecheck(args$top_per_cl,
         is_a_positive_integer, is_a_numeric_in_0_1, is.null)
+    typecheck(args$publicity, is_numeric_pair)
 }
 
 # input: an ApotcData object
 # output: a named list where each name is a clonotype, each element is a
 # numeric indicating which seurat cluster(s) its in. If exclude_unique_clones,
 # will filter out any clonotype with only length one. (not shared)
-# TODO - allow filtering based on original clone size
 get_shared_clones <- function(
     apotc_obj,
     zero_indexed = FALSE,
@@ -124,22 +136,20 @@ get_shared_clones <- function(
     in_top_clones = NULL,
     in_top_per_cluster = NULL,
     top_shared = NULL,
-    top_shared_per_cluster = NULL
-    # min_size = NULL,
-    # min_size_per_cluster = NULL
-    # TODO have heterogeneity bounds?
+    top_shared_per_cluster = NULL,
+    publicity_range = c(-Inf, Inf)
 ) {
 
     raw_clone_sizes <- get_raw_clone_sizes(apotc_obj)
 
     raw_clone_sizes %>%
         filter_top_sizes_if_needed(in_top_clones, in_top_per_cluster) %>%
-        # filter_min_clones_if_needed(min_size, min_size_per_cluster) %>% # again need to union
         get_raw_shared_clones(zero_indexed) %>%
         remove_unique_clones_if(exclude_unique_clones) %>%
         filter_shared_if_needed(
             raw_clone_sizes, top_shared, top_shared_per_cluster
         ) %>%
+        filter_publicity(publicity_range) %>%
         unname_if_empty()
 }
 
@@ -159,32 +169,35 @@ filter_top_clones <- function(clone_sizes, top_clones) {
     })
 }
 
-# will sort clones - could make it not sort but shouldnt matter
 filter_top_by_cluster <- function(clone_sizes, top_clones) {
 
     if (is_list_of_empty_tables(clone_sizes)) return(clone_sizes)
-
-    clone_sizes <- sort_each_table(clone_sizes, desc = TRUE)
+    clone_sizes <- sort_each_clone_size_table(
+        clone_sizes, decreasing = TRUE
+    )
 
     if (is_an_integer(top_clones)) {
-        clone_table_handler <- function(x) {
-            as_table(x[1:min(top_clones, length(x))])
+        calc_top_clonesize_index <- function(desc_tbl_vals) {
+            min(top_clones, length(desc_tbl_vals))
         }
     }
     else if (is_a_numeric_in_0_1(top_clones)) {
-        clone_table_handler <- function(x) {
-            top_index <- round(length(x) * top_clones)
-            if (top_index == 0) return(create_empty_table())
-            as_table(x[1:top_index])
+        calc_top_clonesize_index <- function(desc_tbl_vals) {
+            round(length(desc_tbl_vals) * top_clones)
         }
     }
 
-    lapply(
-        clone_sizes, function(x) if (is_empty(x)) x else clone_table_handler(x)
-    )
+    clone_sizes %>% lapply(function(x) {
+        if (is_empty(x)) return(x)
+        desc_table_vals <- get_unique_table_values(x, sort_decreasing = TRUE)
+        clonesize_lowerbound <- desc_table_vals[
+            calc_top_clonesize_index(desc_table_vals)
+        ]
+        as_table(x[x >= clonesize_lowerbound])
+    })
 }
 
-# # TODO
+# # TODO - there needs to be a 4 way intersection
 # filter_min_clones_if_needed <- function(
 #     clone_sizes, min_size, min_size_per_cluster
 # ) {
@@ -303,19 +316,26 @@ filter_top_shared_per_cl <- function(shared_clones, clone_sizes, top) {
 }
 
 filter_shared_that_contain <- function(shared_clones, filter_clonotypes) {
-    # TODO maybe use rcpp
     shared_clones[names(shared_clones) %in% filter_clonotypes]
+}
+
+filter_publicity <- function(shared_clones, publicity_range) {
+    if (is_empty(shared_clones)) return(shared_clones)
+    shared_clones[
+        shared_clones %>% sapply(function(x) {
+            is_bound_between(length(x), publicity_range[1], publicity_range[2])
+        })
+    ]
 }
 
 # overlay clone links on an APackOfTheClones plot
 # maybe also make method to take in the plot directly?
-# TODO - do some matrix visualization too, maybe use heatmap for clone sizes
 overlay_shared_clone_links <- function(
     apotc_obj,
     shared_clones,
     result_plot,
-    only_cluster, # if length 1, radiate from that cl. In future ver, between pairs
-    link_type = "line", # TODO implement geom_ploygon link, also discuss way to make to better account for clonesize
+    only_cluster, # TODO allow between pairs
+    link_type = "line",
     link_color_mode = "blend",
     link_alpha = 1,
     link_width = "auto",
@@ -419,8 +439,6 @@ estimate_link_width <- function(apotc_obj) {
 }
 
 # internal dispatch function to get a dataframe of line connections
-# TODO should have exportable version with identifiers so user can get it and do their own thing
-
 overlay_links <- function(
     result_plot, link_type, link_dataframe, link_alpha, link_width
 ) {

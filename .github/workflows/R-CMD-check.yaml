@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [main, dev, unstable, cran]
+    branches: [main, dev, unstable]
   pull_request:
-    branches: [main, dev, unstable, cran]
+    branches: [main, dev, unstable]
 
 name: R-CMD-check
 
@@ -16,9 +16,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
+
+          # check latest release on all platforms
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
+          
+          # check compatibility with older releases
+          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest,   r: 'oldrel-2'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

@@ -43,16 +43,20 @@ column named \code{reduction} is a prefix of the \code{reduction_base} argument)
 R will interpret it as the same argument unless \emph{both} arguments
 are named. Additionally, this means any subsequent arguments \emph{must} be named.}
 
-\item{by_cluster}{If \code{TRUE}, will output a list of table objects, with the
-table at each index corresponding to each seurat cluster index. Each table's
-names are the clonotype name indicated by \code{clonecall} after filtering, while
-the values are the actual clone sizes. Else, outputs just the aggregate clone
-sizes for all cells. Note that if \code{FALSE}, the output should be identical to
-that produced by \code{mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))}}
+\item{by_cluster}{Logical or Character. If \code{TRUE}, will output a list of
+table objects, with the table at each index corresponding to level in
+Idents(). Each table's names are the clonotype name indicated by \code{clonecall}
+after filtering, while the values are the actual clone sizes. If \code{FALSE},
+outputs just the aggregate clone sizes for all cells. Note that if \code{FALSE},
+the output should be identical to that produced by
+\code{mergeCloneSizes(countCloneSizes(..., by_cluster = TRUE))}. Otherwise, this
+argument can also be a character indicating some column in the seurat object
+metadata to use a cell identity guiding (e.g. \code{"seurat_clusters"}).}
 
 \item{sort_decreasing}{a logical or NULL. If \code{TRUE}/\code{FALSE}, sorts each/the
-table by clonotype frequency with largest/smallest clones first, and if
-NULL, no order is guaranteed but the output is deterministic.}
+table by clonotype frequency with largest/smallest clones first with a stable
+sorting algorithm, and if NULL, no order is guaranteed but the output is
+deterministic.}
 }
 \value{
 A list of tables or a single table depending on \code{by_cluster}
@@ -60,7 +64,12 @@ A list of tables or a single table depending on \code{by_cluster}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Get clonotype frequencies from a seurat object's meta.data slot.
+Get clonotype frequencies from a seurat object's metadata, either as one
+whole table, or in a list of tables, based on the current / some custom
+ident of each cell. Note that depending on the ident (indicated by the
+\code{by_cluster} argument) there may be more or less clonotypes counted based
+on the number of rows containing NA for that column of that ident if it
+isn't the active ident.
 }
 \examples{
 data("combined_pbmc")

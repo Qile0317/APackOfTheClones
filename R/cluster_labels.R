@@ -8,7 +8,7 @@ gen_labels <- function(num_clusters) {
 
 # show the labels on the plot
 insert_labels <- function(plt, apotc_obj, size) {
-	for (i in 1:apotc_obj@num_clusters) {
+	for (i in seq_len(get_num_clusters(apotc_obj))) {
 		if (!isnt_empty(apotc_obj@clusters[[i]])) {
 			next
 		}

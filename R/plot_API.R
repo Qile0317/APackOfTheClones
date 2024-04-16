@@ -1,12 +1,43 @@
 # main apotc plot initializer
-create_initial_apotc_plot <- function(apotc_obj, res, linetype, alpha) {
-    plot_clusters(
-        clusters = get_plottable_df_with_color(apotc_obj),
-        num_total_clusters = get_num_clusters(apotc_obj),
-        n = res,
-        linetype = linetype,
-        alpha = alpha
-    )
+create_initial_apotc_plot <- function(
+	apotc_obj, res, linetype, alpha, detail = TRUE
+) {
+  
+  if (!detail) {
+    plt_df <- make_undetailed_df(apotc_obj)
+  } else {
+    plt_df <- get_plottable_df_with_color(apotc_obj)
+  }
+
+	plot_clusters(
+    clusters = plt_df,
+    n = res,
+    linetype = linetype,
+    alpha = alpha
+  )
+}
+
+plot_clusters <- function(
+	clusters, # is a df
+	n = 360,
+	linetype = "blank",
+	alpha = 1
+) {
+	clusters %>%
+		ggplot2::ggplot() +
+		ggforce::geom_circle(
+			apotc_aes_string(
+				x0 = "x",
+				y0 = "y",
+				r = "r",
+				fill = "color"
+			),
+			n = n,
+			linetype = linetype,
+			alpha = alpha
+		) +
+		ggplot2::coord_fixed() +
+		ggplot2::scale_fill_identity()
 }
 
 get_plottable_df_with_color <- function(apotc_data) {
@@ -18,7 +49,7 @@ get_plottable_df_with_color <- function(apotc_data) {
 
 # full join a list of clusterlists vectors into a dataframe with
 # generated labels.
-df_full_join <- function(clstr_list) {
+df_full_join <- function(clstr_list, detail = TRUE) {
 
     df <- data.frame(
         "label" = character(0),
@@ -27,7 +58,7 @@ df_full_join <- function(clstr_list) {
         "r" = numeric(0)
     ) %>%
         update_clusterlist_df(get_first_nonempty(clstr_list))
-    
+
     if (contains_clonotypes(get_first_nonempty(clstr_list))) {
         cols_to_join_by <- dplyr::join_by("label", "x", "y", "r", "clonotype")
     } else {
@@ -50,28 +81,36 @@ df_full_join <- function(clstr_list) {
     df
 }
 
-plot_clusters <- function(
-  clusters,
-  num_total_clusters,
-  n = 360,
-  linetype = "blank",
-  alpha = 1
-) {
-  clusters %>%
-    ggplot2::ggplot() +
-    ggforce::geom_circle(
-      apotc_aes_string(
-        x0 = "x",
-        y0 = "y",
-        r = "r",
-        fill = "color"
-      ),
-      n = n,
-      linetype = linetype,
-      alpha = alpha
-    ) +
-    ggplot2::coord_fixed() +
-    ggplot2::scale_fill_identity()
+make_undetailed_df <- function(apotc_obj) {
+
+	df <- data.frame(
+		label = character(0),
+    x = numeric(0),
+    y = numeric(0),
+    r = numeric(0),
+    color = character(0),
+    clonotype = character(0)
+	)
+
+	for (el in enumerate(get_clusterlists(apotc_obj))) {
+    if (is_empty(val1(el))) next
+    df <- df %>% dplyr::full_join(
+      convert_to_dataframe(val1(el), ind(el) - 1, detail = FALSE) %>%
+        dplyr::mutate(
+          "clonotype" = "df_generated_with_detail=FALSE",
+          "color" = get_cluster_colors(apotc_obj)[[ind(el)]]
+        ),
+      by = dplyr::join_by("label", "x", "y", "r", "clonotype", "color")
+    )
+	}
+
+  df
+}
+
+# check if plot was made with detail
+is_undetailed <- function(apotc_ggplot) {
+  clonotypes <- get_ggplot_data(apotc_ggplot)$clonotype
+  is.null(clonotypes) || (clonotypes[1] == "df_generated_with_detail=FALSE")
 }
 
 add_default_theme <- function(plt, reduction) {
@@ -111,9 +150,6 @@ get_retain_scale_dims <- function(
   list("xr" = c(min_xr, max_xr), "yr" = c(min_yr, max_yr))
 
 }
-
-# TODO: make a function so that only a single large circle for each
-# cluster is plotted to help speedup
 
 check_is_apotc_ggplot <- function(x) {
   if (!isApotcGGPlot(x)) {

@@ -50,7 +50,6 @@ As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat &
   </summary>
 
 ```{r, load_data, eval = TRUE, echo = FALSE, include = FALSE}
-# TODO use a nicer looking dataset
 pbmc <- get(data("combined_pbmc"))
 ```
 
@@ -122,7 +121,7 @@ pbmc <- RunAPOTC(
 
 ### Important Note
 
-In a lot of real world applications, the user may only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
+Practically speaking, most users probably only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot - or they already will have several subsetted seurat objects. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
 
 ### Utilities for Managing APackOfTheClones Runs
 
@@ -131,6 +130,7 @@ It is to note that the data abstraction here with a `run_id` is intentional, and
 - `getApotcDataIds(pbmc)` gets all current `run_id`'s, if any.
 - `getLastApotcDataId(pbmc)` gets the latest `run_id`, if any.
 - `containsApotcRun(pbmc, run_id = "foo")` returns whether a `run_id` exists in the seurat object.
+- `renameApotcRun(pbmc, old_run_id = "foo", new_run_id = "bar")` renames runs.
 - `deleteApotcData(pbmc, run_id = "foo")` deletes *all data* associated with a certain `run_id`.
 
 ## APOTCPlot
@@ -142,6 +142,7 @@ reduction_base = NULL,
 clonecall = NULL,
 ...,
 extra_filter = NULL,
+alt_ident = NULL
 ```
 
 And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:
@@ -198,9 +199,15 @@ label_nudge_vector = NULL,
 verbose = TRUE
 ```
 
-The following sections are some example usecases
+### Tip to Speeding up Adjustments
 
-### Renaming Cluster Labels
+While the `vizAPOTC` and `RunAPOTC` / `APOTCPlot` functions to do APackOfTheClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if necessary, and repeat - the long plot display times may pose as a large inconvenience.
+
+Setting the argument `detail` to `FALSE` when using `APOTCPlot` or `vizAPOTC` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more pleasant process.
+
+### Usage Examples
+
+#### Renaming Cluster Labels
 
 After identification of the cell identity of each seurat cluster, it may be useful to rename each cluster label to the actual identity of the cells of each cluster. here is a minimal example of how this process is intended to be done:
 
@@ -229,7 +236,7 @@ APOTCPlot(
 )
 ```
 
-### Extra Cluster Repulsion
+#### Extra Cluster Repulsion
 
 Another possibility is that the default repulsion may have left the clusters too close - here this is corrected - and the labels are moved as well. Note the use of the pipe operator may also be useful.
 

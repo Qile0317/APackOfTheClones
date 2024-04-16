@@ -34,7 +34,7 @@ insert_colors <- function(cluster_dataframe, num_clusters) {
 pair_colors_to_hash <- function(apotc_obj) {
   color_vec <- apotc_obj@cluster_colors
   output <- hash::hash()
-  for (i in 1:apotc_obj@num_clusters) {
+  for (i in seq_len(get_num_clusters(apotc_obj))) {
     cluster_str <- paste("cluster", as.character(i - 1))
     output[cluster_str] <- color_vec[i]
   }
