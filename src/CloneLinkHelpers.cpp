@@ -99,11 +99,14 @@ private:
     }
 
     std::vector<ClusterList> createCppClusterListVector(Rcpp::List clusterLists) {
-        numClusters = clusterLists.size(); // assume non-zero
-        std::vector<ClusterList> outputClusterListVector (numClusters);
+
+        numClusters = clusterLists.size();
+        std::vector<ClusterList> outputClusterListVector;
+        outputClusterListVector.reserve(numClusters);
+
         for (int i = 0; i < numClusters; i++) {
             Rcpp::List currRClusterList = clusterLists[i];
-            outputClusterListVector[i] = ClusterList(currRClusterList);
+            outputClusterListVector.push_back(ClusterList(currRClusterList));
         }
         return outputClusterListVector;
     }

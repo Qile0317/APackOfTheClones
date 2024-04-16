@@ -19,11 +19,7 @@ protected: // variables
     int numClones;
     bool isEmpty;
 
-public: // constructors
-
-    ClusterList() {
-        isEmpty = true;
-    }
+public: // constructor
 
     ClusterList(const Rcpp::List rClusterList) {
         
@@ -196,8 +192,8 @@ public: // getters
 
     std::vector<std::string> getClonotypeVector() {
         std::vector<std::string> clonotypes(numClones);
-        for (auto& [clonotype, index]: clonotypeIndex) {
-            clonotypes[index] = clonotype;
+        for (auto keyValuePair : clonotypeIndex) {
+            clonotypes[keyValuePair.second] = keyValuePair.first;
         }
         return clonotypes;
     }
