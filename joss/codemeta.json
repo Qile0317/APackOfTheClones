@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "0009-0005-0148-2499",
+      "@type": "Person",
+      "email": "qile.yang@berkeley.edu",
+      "name": "Qile0317",
+      "affiliation": "University of California, Berkeley"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/Qile0317/APackOfTheClones",
+  "datePublished": "2024-04-17",
+  "dateModified": "2024-04-17",
+  "dateCreated": "2024-04-17",
+  "description": "Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles.",
+  "keywords": "R, dimensional reduction, clonal exansion, immmunology, immunoinformatics, bioinformatics, computational biology, seurat, single cell",
+  "license": "MIT",
+  "title": "APackOfTheClones",
+  "version": "v1.2.0"
+}
