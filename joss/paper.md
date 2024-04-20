@@ -17,45 +17,49 @@ authors:
 affiliations:
   - name: University of California, Berkeley, Berkeley, CA 94720, USA
     index: 1
-date: 10 April 2024
+date: 19 April 2024
 bibliography: paper.bib
 ---
 
 # Summary
 
-T and B lymphocytes are critical immune cells which express surface receptors that interact with foreign antigens to protect the body. [@den2014activation] There exist a variety of methods to experimentally characterize these receptors at a single-cell resolution, conventionally known as "scTCR-seq / scBCR-seq". Combined with single-cell RNA sequencing ("scRNA-seq"), most cell types and clonotypes (cells proliferated from a common ancestor) can be computationally analyzed to form an immune profile. scRNA-seq generates high-dimensional data where the expression level of each RNA transcript is an additional dimension - which involves using dimensional reduction techniques to (basically section about why and how its commonly used in visualizations for each cell) (TODO refer to paper)
+T and B lymphocytes exhibit diverse surface receptor repertoires that interact with antigens to communicate and protect the body from foreign invaders. [@den2014activation] Modern methods allows the experimental characterization of the collective identity of the immune cells in tissue samples by sequencing RNA transcripts and cell receptors with scRNA-seq and scTCR-seq / scBCR-seq. Such methods generate high-dimensional data which are analyzed with the aid of dimensional reduction techniques to allow annotation of cell subsets. [@huang2022role]
 
-[@huang2022role] The clonal expansion (observed frequency) of each clonotype can be additionally inferred from downstream analysis of any profile and is useful in many studies. [@adams2020clonal] The R [@r2023r] package APackOfTheClones implements and *extends* a novel method to visualize clonal expansion at a single-cell resolution using circle packing, that is easily integratable into existing analysis pipelines using the R packages Seurat [@hao2023dictionary] and scRepertoire [@borcherding2020screpertoire]. Its genesis was done in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and utilized in two papers. [@ma2021single; @stark2022recombinant]
+Cellular subset identity assignment, after being manually and/or classified with unsupervised clustering, is conventionally visualized as a reduction scatterplot where each point represents a cell after all its features have been projected into two dimensions. The points can be colored by different factors to display useful information, including cellular identity. [@andrews2021tutorial] Understanding the role of specific cells in various contexts requires understanding of relationships between cell populations and their behaviors, including clonal expansion dynamics which are inferred from downstream analyses. [@adams2020clonal] Overlaying clonal expansion information on a clonotype basis onto these visualizations adds an additional layer of insight, allowing for a swift, intuitive understanding how clonal dynamics relate to the identified cellular subsets. For example, it can help gague the presence of hyperexpanded clones for each cell type; compare potential changes in frequencies after certain theraputic treatments, etc.
+
+The R [@r2023r] package APackOfTheClones implements and *extends* a novel method to visualize clonal expansion at a single-cell resolution using circle packing, along with many clonal analysis utilities. Clonotype frequencies for each cell subset is counted and the values are used as radii and packed into one circular cluster with the largest circles near the center, and overlaid onto a the centroids of each cell subset on the corresponding 2D dimensional reduction plot. The package easily integrates into existing analysis pipelines using the *Seurat* [@hao2023dictionary] and *scRepertoire* [@borcherding2020screpertoire] packages. A primitive version was created in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and successfully utilized in two immunology papers. [@ma2021single; @stark2022recombinant]
 
 # Statement of need
 
-scRNA-seq naturally generate high-dimensional data for each cell where the expression level of each RNA transcript
+There is no standardized convention to visualize this single cell level clonotype data on the dimensional reduction. Some of the current approaches include 1. Using a color gradient corresponding to each frequency to highlight each individual point by the clonal expansion, implpemented in *scRepertoire* and *scirpy* [sturm2020scirpy] 2. Overlaying a 2D countour where points representing clones with higher frequencies have elevated levels [@andreatta2023tcell] 3. Increasing sizes of points based on clonal frequency, used in figure 2c of @wang2021single. These approaches capture general TODO
 
-One common necessity of many single-cell experiments is to assign identities manually and/or via unsupervised to each cell based on significant transcript features, which frequently involves using some dimensionality reduction technique. This is then conventionally visualized as a reduction scatterplot where each point represents a cell after all its features have been projected into two dimensions. The scatterplot is usually then colored by certain factors and/or annotated on to present more useful information, such as the cell cluster. [@andrews2021tutorial] One such information that is ... (maybe put into summary)
+- say how they dont give exact representation
+- apotc solves the issue by giving exact sizes of each clonotype. 
 
-- need to prove why this is truly useful - e.g. can be used to identiy cell type - hyperexpanded cells are more likely to be certian types - can get quick intuition on how certain 
-
-There is no standard method to produce this visualization. Some of the current approaches include 1. Using a color gradient corresponding to each frequency to highlight each individual point by the clonal expansion 2. Overlaying a 2D countour where points representing clones with higher frequencies have elevated levels, created in @andreatta2023tcell 3. Increasing sizes of points based on clonal frequency, used in figure 2c of @wang2021single. TODO state improvement
-
-- https://scirpy.scverse.org/en/latest/generated/scirpy.pl.clonal_expansion.html
-- https://www.sciencedirect.com/science/article/pii/S0923753419353852 (evolution of clonotypes too)
+- no simple interface in julia version. The R version is quick
+- also gives extensions
 
 APackOfTheClones also makes it simple for anyone to produce the visualization - many single cell pipelines are reliant on the Seurat package, and users only need to add one or two functions in the pipeline that act on the seurat object to produce the plot, with plentiful optional customizations.
 
+TODO persuade people to slot this into their paper.
+
 # Results
 
-- integrates in seurat pipeline
+The main clonal expansion visualization that APackOfTheClones implements is shown in the following figure \autoref{fig:example}, using scRNA-seq + scTCR-seq data from @borcherding2021mapping.
 
-![A single-cell experiment's UMAP projection and its corresponding APackOfTheClones clonal expansion plot. \label{fig:example}](figures/example.svg)
+![A single-cell experiment's dimensional reduction projection and its corresponding APackOfTheClones clonal expansion plot. The plot on the right is the projection of all cells of its *Seurat* object based on Uniform Manifold Approximation and Projection (UMAP), colored by unknown identities 1 through 17. On the left is the clonal expansion plot generated by APackOfTheClones on the same data. Each cell identity on the seurat object corresponds to a cluster of circles with a similar geometric placement, and the size of each individual circle is the clonotype frequency of some clonotype within that cell subset. Note that the largest clones are packed near the origins of each cluster to accentuate their difference with the rest of all clonotypes. \label{fig:example}](figures/main_example.svg)
 
-<!---
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
+The visualization gives the immediate insight that certain cell subsets such as those in cluster four contains many more expanded clones both by quantity and frequency.
 
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
--->
+**Usage example.** The package extends objects and the functionality of the *Seurat* and *scRepertoire* package, and given a correctly processed seurat object of scRNA-seq data that was combined with paired TCR/BCRs, only a few functions need to be used to as little or as much customization of function arguments as needed to produce a ggplot object [@wickham2016ggplot2] that fits into the conventional plotting ecosystem of R. Functions are accelerated with a `c++` layer via the *Rcpp* package [@eddelbuettel2011rcpp] to deliver all plots and R objects quickly in time complexity linearly proportional to the number of cells, with the time bottleneck being the plot display time.
+
+TODO other novelty features - customizing, highlighting, clone links.
+
+The package also contain clonal analysis utilities such as functions to get and filter clonotypes by cell identity outlined in the documentation.
+
+# Conclusion
+
+APackOfTheClones offers a fast, and simple interface to produce an intuitive, easily extendible, and *publication ready* visualization of clonal expansion on a cell-by-cell basis, and slots seamlessly into existing analysis pipelines. It can be a useful subfigure in any immunological/theraputic study involving single cell omics and immune repertoire to provide an additional degree of understanding for readers and researchers like. However, it should be noted that prescise statistical/biological statements about clonal dynamics still obiouvsly require rigorous analysis.
 
 # Acknowledgements
 
