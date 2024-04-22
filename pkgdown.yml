@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.0.8
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   APackOfTheClones-install: APackOfTheClones-install.html
@@ -8,7 +8,7 @@ articles:
   APackOfTheClones-utils: APackOfTheClones-utils.html
   APackOfTheClones: APackOfTheClones.html
   v0-main: archive/v0-main.html
-last_built: 2024-04-16T10:05Z
+last_built: 2024-04-22T05:31Z
 urls:
   reference: https://qile0317.github.io/APackOfTheClones/reference
   article: https://qile0317.github.io/APackOfTheClones/articles
