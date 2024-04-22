@@ -27,17 +27,17 @@ T and B lymphocytes exhibit diverse surface receptor repertoires that interact w
 
 The R [@r2023r] package APackOfTheClones implements and *extends* a novel method to visualize clonal expansion at a single-cell resolution using circle packing, along with many clonal analysis utilities. Clonotype frequencies for each cell subset is counted and the values are used as radii and packed into one circular cluster with the largest circles near the center, and overlaid onto a the centroids of each cell subset on the corresponding 2D dimensional reduction plot. The package easily integrates into existing analysis pipelines using the *Seurat* [@hao2023dictionary] and *scRepertoire* [@borcherding2020screpertoire] packages. The original implementation was created in the julia language [@Julia-2017] by Christian Murray and Ben Murrell and successfully utilized in two immunology papers. [@ma2021single; @stark2022recombinant]
 
-<!-- should the last two sentences be here? -->
+<!-- should those last two sentences be here or in statement of need? -->
 
 # Statement of need
 
 Cellular subset identity assignment, after being manually and/or classified with unsupervised clustering, is conventionally visualized as a reduction scatterplot where each point represents a cell after all its features have been projected into two dimensions. The points can be colored by different factors to display useful information, including cellular identity. [@andrews2021tutorial]
 
-Understanding the role of specific cells in various contexts requires understanding of relationships between cell populations and their behaviors, including clonal expansion dynamics which are inferred from downstream analyses. [@adams2020clonal] Overlaying clonal expansion information on a clonotype basis onto these visualizations adds an additional layer of insight, allowing for a swift, intuitive understanding how clonal dynamics relate to the identified cellular subsets. For example, it can help gague the presence of hyperexpanded clones for each cell type; compare potential changes in frequencies after certain theraputic treatments, etc.
+Understanding the role of specific cells in various contexts requires understanding of relationships between cell populations and their behaviors. One attribute is the clonal expansion dynamics, which are inferred from downstream analyses. [@adams2020clonal] Overlaying clonal expansion information on a by-clonotype basis onto the reduction scatterplot of the cells of an experiment aids in adding an additional layer of insight, allowing for a swift, intuitive understanding of how clonal dynamics relate to the identified cellular subsets. For example, it can help gauge the presence of hyperexpanded clones for each cell type; compare potential changes in frequencies after certain theraputic treatments, etc.
 
 There is no standardized convention to visualize this single cell level clonotype data on the dimensional reduction. Some of the current approaches include 1. Using a color gradient corresponding to each frequency to highlight each individual point by the clonal expansion, implpemented in *scRepertoire* and *scirpy* [sturm2020scirpy] 2. Overlaying a 2D contour where points representing clones with higher frequencies have elevated levels [@andreatta2023tcell] 3. Increasing sizes of points based on clonal frequency, used in figure 2c of @wang2021single.
 
-These approaches capture approximate, global trends but do not provide an exact representation of clonal dynamics. While they offer valuable insights into the overall distribution of clonotypes within cellular subsets, they often lack precision in depicting the true diversity and abundance of clonal populations. From a visual standpoint, This limitation can hinder our ability to discern subtle variations in clonal expansion patterns. APackOfTheClones solves this issue by representing exact sizes of each clonotype, in a manner that corresponds exactly to the relevant cell subset. This level of granularity is helpful uncovering hidden patterns, identifying rare clonal populations, and precisely quantifying the impact of therapeutic interventions on immune responses.
+These approaches capture approximate, global trends but do not provide an exact representation. They lack precision in depicting the true diversity and abundance of clonal populations for every cell subset. From a visual standpoint, This limitation can hinder our ability to discern subtle variations in clonal expansion patterns. APackOfTheClones solves this issue by representing exact sizes of each clonotype, in a manner that corresponds exactly to the relevant cell subset. This level of granularity is helpful uncovering hidden patterns, identifying rare clonal populations, and precisely quantifying the impact of therapeutic interventions on immune responses.
 
 APackOfTheClones also offers a suite of methods for visualizing and analyzing single-cell clonal data. Novelty features include functions for highlighting certain clones, and the filtering and visualization of clonotypes shared between subsets by linking circles on the APackOfTheClones clonal expansion plot.
 
@@ -51,9 +51,10 @@ The visualization gives the immediate insight that certain cell subsets such as 
 
 The package extends objects and the functionality of the *Seurat* and *scRepertoire* package, and given a correctly processed seurat object of scRNA-seq data that was combined with paired TCR/BCRs, only a few functions need to be used to as little or as much customization of function arguments as needed to produce a ggplot object [@wickham2016ggplot2] that fits into the conventional plotting ecosystem of R. Functions are accelerated with a `c++` layer via the *Rcpp* package [@eddelbuettel2011rcpp] to deliver all plots and R objects quickly in time complexity linearly proportional to the number of cells, with the main time bottleneck being the plot display time.
 
-<!-- TODO other novelty features - customizing, highlighting, clone links.
-
-The package also contain clonal analysis utilities such as functions to get and filter clonotypes by cell identity outlined in the documentation. -->
+<!--
+- I should probably write about other novelty features - customizing, highlighting, clone links?
+- maybe an "implementation details" section about how the user can store "runs" of this plot with different parameters and manually customize them?
+-->
 
 # Conclusion
 
