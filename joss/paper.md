@@ -31,7 +31,7 @@ The R [@r2023r] package APackOfTheClones implements and *extends* a novel method
 
 # Statement of need
 
-Cellular subset identity assignment, after being manually and/or classified with unsupervised clustering, is conventionally visualized as a reduction scatterplot where each point represents a cell after all its features have been projected into two dimensions. The points can be colored by different factors to display useful information, including cellular identity. [@andrews2021tutorial]
+Cells in single-cell experiments are conventionally visualized on a reduction scatterplot where each point represents a cell after all its features have been projected into two dimensions. The points can be colored by different factors to display useful information, including its asssigned identity. [@andrews2021tutorial]
 
 Understanding the role of specific cells in various contexts requires understanding of relationships between cell populations and their behaviors. One attribute is the clonal expansion dynamics, which are inferred from downstream analyses. [@adams2020clonal] Overlaying clonal expansion information on a by-clonotype basis onto the reduction scatterplot of the cells of an experiment aids in adding an additional layer of insight, allowing for a swift, intuitive understanding of how clonal dynamics relate to the identified cellular subsets. For example, it can help gauge the presence of hyperexpanded clones for each cell type; compare potential changes in frequencies after certain theraputic treatments, etc.
 
