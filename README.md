@@ -6,8 +6,9 @@
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
+[![JOSS status](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71/status.svg)](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71)
 [![Developmental Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://qile0317.github.io/APackOfTheClones/dev/)
-[![APackOfTheClones status badge](https://qile0317.r-universe.dev/badges/APackOfTheClones)](https://qile0317.r-universe.dev/APackOfTheClones)
+[![R Universe APackOfTheClones status badge](https://qile0317.r-universe.dev/badges/APackOfTheClones)](https://qile0317.r-universe.dev/APackOfTheClones)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md)
 <!-- badges: end -->
 
