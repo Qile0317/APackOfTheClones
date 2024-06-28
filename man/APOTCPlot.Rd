@@ -39,7 +39,7 @@ APOTCPlot(
 }
 \arguments{
 \item{seurat_obj}{A seurat object that has been integrated with clonotype
-data and has had a valid run of \link{RunAPOTC}.}
+data and has had a valid run of \code{\link[=RunAPOTC]{RunAPOTC()}}.}
 
 \item{reduction_base}{character. The seurat reduction to base the clonal
 expansion plotting on. Defaults to \code{'umap'} but can be any reduction present
@@ -74,7 +74,7 @@ could pass in something like \code{extra_filter = "nchar(CTaa) - 1 > 10"}. When
 involving characters, ensure to enclose with single quotes.}
 
 \item{run_id}{character. This will be the ID associated with the data of a
-run, and will be used by other important functions like \link{APOTCPlot} and
+run, and will be used by other important functions like \code{\link[=APOTCPlot]{APOTCPlot()}} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
 
@@ -189,14 +189,14 @@ interfere with any other ggplot functionality. (As far as currently known)
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 Given a seurat object with an 'apotc' (APackOfTheClones) object
-from running \link{RunAPOTC}, this function will read the information and return
+from running \code{\link[=RunAPOTC]{RunAPOTC()}}, this function will read the information and return
 a customizable ggplot2 object of the clonal expansion with a circle size
 legend. If the user is unhappy about certain aspects of the plot, many
 parameters can be adjusted with the \link{AdjustAPOTC} function.
 
 The specific APackOfTheClones run to be plotted can be identified in two
 ways: either by inputting the \code{run_id} associated with the run that was
-either defined / auto-generated during \link{RunAPOTC}, or by inputting the
+either defined / auto-generated during \code{\link[=RunAPOTC]{RunAPOTC()}}, or by inputting the
 \code{reduction_base}, \code{clonecall}, \code{extra_filter} and any other keyword arguments
 that corresponded to the run. Its heavily recommended to use the \code{run_id}.
 If none of these parameters are inputted, the function defaults to returning

@@ -40,15 +40,15 @@ removeLegend <- function(apotc_ggplot) {
 #' `r lifecycle::badge("stable")`
 #'
 #' This function has most of the parameters related to legend in
-#' [APOTCPlot], and can plot a new / override the current legend.
+#' [APOTCPlot()], and can plot a new / override the current legend.
 #' However, it is very important that the input plot to the function
-#' is a plot generated solely by [APOTCPlot] or [vizAPOTC] due to it
+#' is a plot generated solely by [APOTCPlot()] or [vizAPOTC()] due to it
 #' being a custom ggplot object. It will not override or erase any
 #' additional layers that the user/other functions have added. To just
 #' remove the legend, see [removeLegend].
 #'
-#' @param apotc_ggplot a ggplot object that is the output of [APOTCPlot] or
-#' [vizAPOTC]
+#' @param apotc_ggplot a ggplot object that is the output of [APOTCPlot()] or
+#' [vizAPOTC()]
 #' @inheritParams APOTCPlot
 #'
 #' @details
@@ -66,7 +66,7 @@ removeLegend <- function(apotc_ggplot) {
 #' @seealso [removeLegend]
 #'
 #' @examples
-#' library(magrittr)
+#' library(dplyr)
 #'
 #' # create a plot with a legend
 #' apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)

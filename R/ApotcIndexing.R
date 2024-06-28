@@ -50,7 +50,7 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #' a Seurat object.
 #'
 #' @param seurat_obj A Seurat object containing APackOfTheClones data - the
-#' output of [RunAPOTC]
+#' output of [RunAPOTC()]
 #' @param old_run_id Character. The current id of the APackOfTheClones run to
 #' be renamed.
 #' @param new_run_id Character. The new id to assign to the APackOfTheClones
@@ -188,12 +188,12 @@ getApotcDataIds <- function(seurat_obj) {
 #' `r lifecycle::badge("stable")`
 #'
 #' A convenience function to get the object id of the most recent valid
-#' [RunAPOTC] run, to be used by [APOTCPlot] and [AdjustAPOTC]
+#' [RunAPOTC()] run, to be used by [APOTCPlot()] and [AdjustAPOTC]
 #'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
 #' order of the functions being called.
 #'
-#' @return a character of the object id of the last [RunAPOTC] call
+#' @return a character of the object id of the last [RunAPOTC()] call
 #' @export
 #'
 #' @examples

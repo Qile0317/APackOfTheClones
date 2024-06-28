@@ -4,14 +4,14 @@
 #' `r lifecycle::badge("stable")`
 #'
 #' Given a seurat object with an 'apotc' (APackOfTheClones) object
-#' from running [RunAPOTC], this function will read the information and return
+#' from running [RunAPOTC()], this function will read the information and return
 #' a customizable ggplot2 object of the clonal expansion with a circle size
 #' legend. If the user is unhappy about certain aspects of the plot, many
 #' parameters can be adjusted with the [AdjustAPOTC] function.
 #'
 #' The specific APackOfTheClones run to be plotted can be identified in two
 #' ways: either by inputting the `run_id` associated with the run that was
-#' either defined / auto-generated during [RunAPOTC], or by inputting the
+#' either defined / auto-generated during [RunAPOTC()], or by inputting the
 #' `reduction_base`, `clonecall`, `extra_filter` and any other keyword arguments
 #' that corresponded to the run. Its heavily recommended to use the `run_id`.
 #' If none of these parameters are inputted, the function defaults to returning
@@ -20,7 +20,7 @@
 #' @inheritParams RunAPOTC
 #'
 #' @param seurat_obj A seurat object that has been integrated with clonotype
-#' data and has had a valid run of [RunAPOTC].
+#' data and has had a valid run of [RunAPOTC()].
 #' @param show_shared The output of [getSharedClones] can be inputted here,
 #' and the resulting plot will overlay lines between clone circles if that
 #' clonotype is common between clusters. Note that the input ***must*** be

@@ -6,7 +6,7 @@
 #' `r lifecycle::badge("stable")`
 #'
 #' Computes necessary information for an APackOfTheClones
-#' clonal expansion plot ([APOTCPlot]) and stores it in the seurat object.
+#' clonal expansion plot ([APOTCPlot()]) and stores it in the seurat object.
 #' Gets sizes of unique clones and utilizes a circle-packing algorithm to
 #' pack circles representing individual clones in approximately the same
 #' dimensional reduction (`reduction_base`) coordinates based on some cell 
@@ -68,7 +68,7 @@
 #' meta data of the seurat object to be grouped by. This column is meant to have
 #' been a product of `Seurat::StashIdent` or manually added.
 #' @param run_id character. This will be the ID associated with the data of a
-#' run, and will be used by other important functions like [APOTCPlot] and
+#' run, and will be used by other important functions like [APOTCPlot()] and
 #' [AdjustAPOTC]. Defaults to `NULL`, in which case the ID will be generated
 #' in the following format:
 #'
@@ -131,12 +131,12 @@
 #' ident levels themselves.
 #'
 #' @return A modified version of the input seurat object, which harbors data
-#' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
+#' necessary for visualizing the clonal expansion of the cells with [APOTCPlot()]
 #' and has a friendly user interface to modify certain attributes with
 #' [AdjustAPOTC].
 #' @export
 #'
-#' @seealso [APOTCPlot], [AdjustAPOTC], [getApotcDataIds]
+#' @seealso [APOTCPlot()], [AdjustAPOTC], [getApotcDataIds]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -146,7 +146,7 @@
 #'
 #' # here's a seperate run with some filters to the meta data, where
 #' # `orig.ident` is a custom column in the example data. Notice that it is not
-#' # a `RunAPOTC` parameter but a user keyword argument
+#' # a `RunAPOTC()` parameter but a user keyword argument
 #' combined_pbmc <- RunAPOTC(
 #'     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"),
 #'     verbose = FALSE
