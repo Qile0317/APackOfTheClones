@@ -108,7 +108,7 @@ pbmc_umap_plot + coord_fixed()
 
 ## Simple ball packing visualization
 
-```vizAPOTC``` (short for "visualize APackOfTheClones") is the main convenience function of the package to directly produce the ball packing clonal expansion plot. It takes in a main argument of a combined seurat object (with a long list of optional arguments which will be covered in later sections), and outputs a ggplot object:
+```vizAPOTC()``` (short for "visualize APackOfTheClones") is the main convenience function of the package to directly produce the ball packing clonal expansion plot. It takes in a main argument of a combined seurat object (with a long list of optional arguments which will be covered in later sections), and outputs a ggplot object:
 
 ```{r, initial_vizapotc, echo = TRUE}
 default_apotc_plot <- vizAPOTC(pbmc, verbose = FALSE)
@@ -214,7 +214,7 @@ $$
 r_{ij} = C \cdot (\sqrt{s_{ij}} - (1 - R))
 $$
 
-Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
+Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC()`.
 
 ### Cluster Repulsion
 

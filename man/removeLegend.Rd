@@ -7,8 +7,8 @@
 removeLegend(apotc_ggplot)
 }
 \arguments{
-\item{apotc_ggplot}{a ggplot object that is the output of \link{APOTCPlot} or
-\link{vizAPOTC}}
+\item{apotc_ggplot}{a ggplot object that is the output of \code{\link[=APOTCPlot]{APOTCPlot()}} or
+\code{\link[=vizAPOTC]{vizAPOTC()}}}
 }
 \value{
 A ggplot object of the APackOfTheClones clonal expansion plot of the

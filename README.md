@@ -57,7 +57,7 @@ vizAPOTC(pbmc)
 vizAPOTC(pbmc, orig.ident = c("P17B", "P17L"), seurat_clusters = c(1, 3, 4))
 ```
 
-For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot```, like so:
+For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC()``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot()```, like so:
 
 ```R
 # using the same seurat object as before, run and store associated data,

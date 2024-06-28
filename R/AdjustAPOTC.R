@@ -6,9 +6,9 @@
 #' `r lifecycle::badge("stable")`
 #'
 #' If the user is unsatisfied with the clonal expansion plot that
-#' was generated from `RunAPOTC` and `APOTCPlot`, this function has a range of
+#' was generated from [RunAPOTC()] and [APOTCPlot()], this function has a range of
 #' arguments to modify the data and/or parameters of the visualization. Note
-#' that some of the arguments may conflict with eachother.
+#' that some of the arguments may conflict with each other.
 #'
 #' @inheritParams RunAPOTC
 #'

@@ -58,7 +58,7 @@ The package extends objects and the functionality of the *Seurat* and *scReperto
 
 # Conclusion
 
-APackOfTheClones offers a fast, and simple interface to produce an intuitive, easily extendible, and *publication ready* visualization of clonal expansion on a cell-by-cell basis, and slots seamlessly into existing analysis pipelines. It can be a useful sub-figure in any immunological/therapeutic study involving single cell omics and immune repertoire to provide an additional degree of understanding for readers and researchers like. However, it should be noted that prescise statistical/biological statements about clonal dynamics still obiouvsly require rigorous analysis.
+APackOfTheClones offers a fast, and simple interface to produce an intuitive, easily extendible, and *publication ready* visualization of clonal expansion on a cell-by-cell basis, and slots seamlessly into existing analysis pipelines. It can be a useful sub-figure in any immunological/therapeutic study involving single cell omics and immune repertoire to provide an additional degree of understanding for readers and researchers like. However, it should be noted that precise statistical/biological statements about clonal dynamics still obviously require rigorous analysis.
 
 # Acknowledgements
 

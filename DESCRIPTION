@@ -9,8 +9,7 @@ Authors@R: c(
         email = "qile.yang@berkeley.edu",
         role = c("cre","aut","cph"),
         comment = c(ORCID = "0009-0005-0148-2499")
-    )
-)
+    ))
 Maintainer: Qile Yang <qile.yang@berkeley.edu>
 Description: Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
 BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
@@ -37,7 +36,6 @@ Imports:
     grDevices,
     hash,
     lifecycle,
-    magrittr,
     methods,
     Rcpp,
     rlang,

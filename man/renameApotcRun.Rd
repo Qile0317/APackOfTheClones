@@ -8,7 +8,7 @@ renameApotcRun(seurat_obj, old_run_id, new_run_id)
 }
 \arguments{
 \item{seurat_obj}{A Seurat object containing APackOfTheClones data - the
-output of \link{RunAPOTC}}
+output of \code{\link[=RunAPOTC]{RunAPOTC()}}}
 
 \item{old_run_id}{Character. The current id of the APackOfTheClones run to
 be renamed.}

@@ -20,8 +20,8 @@ overlayLegend(
 )
 }
 \arguments{
-\item{apotc_ggplot}{a ggplot object that is the output of \link{APOTCPlot} or
-\link{vizAPOTC}}
+\item{apotc_ggplot}{a ggplot object that is the output of \code{\link[=APOTCPlot]{APOTCPlot()}} or
+\code{\link[=vizAPOTC]{vizAPOTC()}}}
 
 \item{legend_sizes}{numeric vector. Indicates the circle sizes to be
 displayed on the legend, and will always be sorted from smallest to greatest.
@@ -76,9 +76,9 @@ interfere with any other ggplot functionality. (As far as currently known)
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 This function has most of the parameters related to legend in
-\link{APOTCPlot}, and can plot a new / override the current legend.
+\code{\link[=APOTCPlot]{APOTCPlot()}}, and can plot a new / override the current legend.
 However, it is very important that the input plot to the function
-is a plot generated solely by \link{APOTCPlot} or \link{vizAPOTC} due to it
+is a plot generated solely by \code{\link[=APOTCPlot]{APOTCPlot()}} or \code{\link[=vizAPOTC]{vizAPOTC()}} due to it
 being a custom ggplot object. It will not override or erase any
 additional layers that the user/other functions have added. To just
 remove the legend, see \link{removeLegend}.
@@ -93,7 +93,7 @@ that comprise the annotation layers of the legend should be named whatever
 an implementation detail that the user should not interfere with.
 }
 \examples{
-library(magrittr)
+library(dplyr)
 
 # create a plot with a legend
 apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)

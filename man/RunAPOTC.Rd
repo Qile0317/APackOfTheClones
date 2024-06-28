@@ -69,7 +69,7 @@ meta data of the seurat object to be grouped by. This column is meant to have
 been a product of \code{Seurat::StashIdent} or manually added.}
 
 \item{run_id}{character. This will be the ID associated with the data of a
-run, and will be used by other important functions like \link{APOTCPlot} and
+run, and will be used by other important functions like \code{\link[=APOTCPlot]{APOTCPlot()}} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
 
@@ -117,7 +117,7 @@ of the progress.}
 }
 \value{
 A modified version of the input seurat object, which harbors data
-necessary for visualizing the clonal expansion of the cells with \link{APOTCPlot}
+necessary for visualizing the clonal expansion of the cells with \code{\link[=APOTCPlot]{APOTCPlot()}}
 and has a friendly user interface to modify certain attributes with
 \link{AdjustAPOTC}.
 }
@@ -125,7 +125,7 @@ and has a friendly user interface to modify certain attributes with
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 Computes necessary information for an APackOfTheClones
-clonal expansion plot (\link{APOTCPlot}) and stores it in the seurat object.
+clonal expansion plot (\code{\link[=APOTCPlot]{APOTCPlot()}}) and stores it in the seurat object.
 Gets sizes of unique clones and utilizes a circle-packing algorithm to
 pack circles representing individual clones in approximately the same
 dimensional reduction (\code{reduction_base}) coordinates based on some cell
@@ -186,7 +186,7 @@ combined_pbmc <- RunAPOTC(combined_pbmc, run_id = "default", verbose = FALSE)
 
 # here's a seperate run with some filters to the meta data, where
 # `orig.ident` is a custom column in the example data. Notice that it is not
-# a `RunAPOTC` parameter but a user keyword argument
+# a `RunAPOTC()` parameter but a user keyword argument
 combined_pbmc <- RunAPOTC(
     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"),
     verbose = FALSE
@@ -203,5 +203,5 @@ combined_pbmc <- RunAPOTC(
 
 }
 \seealso{
-\link{APOTCPlot}, \link{AdjustAPOTC}, \link{getApotcDataIds}
+\code{\link[=APOTCPlot]{APOTCPlot()}}, \link{AdjustAPOTC}, \link{getApotcDataIds}
 }

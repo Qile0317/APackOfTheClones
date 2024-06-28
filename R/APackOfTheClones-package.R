@@ -2,7 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib APackOfTheClones, .registration = TRUE
 ## usethis namespace: end
