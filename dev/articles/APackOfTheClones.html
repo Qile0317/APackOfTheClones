@@ -202,11 +202,11 @@ object</p>
 <div class="section level2">
 <h2 id="simple-ball-packing-visualization">Simple ball packing visualization<a class="anchor" aria-label="anchor" href="#simple-ball-packing-visualization"></a>
 </h2>
-<p><code>vizAPOTC</code> (short for “visualize APackOfTheClones”) is the
-main convenience function of the package to directly produce the ball
-packing clonal expansion plot. It takes in a main argument of a combined
-seurat object (with a long list of optional arguments which will be
-covered in later sections), and outputs a ggplot object:</p>
+<p><code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> (short for “visualize APackOfTheClones”) is
+the main convenience function of the package to directly produce the
+ball packing clonal expansion plot. It takes in a main argument of a
+combined seurat object (with a long list of optional arguments which
+will be covered in later sections), and outputs a ggplot object:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">default_apotc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">default_apotc_plot</span></span></code></pre></div>
@@ -265,7 +265,7 @@ clone for B-cells isn’t as clear as it is for TCRs</a>.</p>
 current active identity of all cells (<code>Idents(pbmc)</code>) which
 is the case when <code>alt_ident = NULL</code>. However, to work with
 some alternative ident that was added to the seurat metadata either
-manually or via <code><a href="https://rdrr.io/pkg/SeuratObject/man/Idents.html" class="external-link">Seurat::StashIdent</a></code>, simply set
+manually or via <code><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Seurat::StashIdent</a></code>, simply set
 <code>alt_ident</code> to a character representing the name of that
 column.</p>
 </div>
@@ -367,7 +367,7 @@ scaled size of the smallest clone’s radius, and all circles will have
 their radii decreased by that amount. <span class="math inline">\(R\)</span> defaults to 0.95, whereas <span class="math inline">\(C\)</span> defaults to an approximated factor
 based on the number of clones that the package computes. The
 corresponding arguments are <code>clone_scale_factor</code> and
-<code>rad_scale_factor</code> in <code>vizAPOTC</code>.</p>
+<code>rad_scale_factor</code> in <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="cluster-repulsion">Cluster Repulsion<a class="anchor" aria-label="anchor" href="#cluster-repulsion"></a>

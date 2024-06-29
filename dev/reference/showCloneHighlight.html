@@ -102,8 +102,8 @@ right side that correspond to each (existing) clonotype.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>apotc_ggplot</dt>
-<dd><p>A ggplot object that is the output of <a href="APOTCPlot.html">APOTCPlot</a> or
-<a href="vizAPOTC.html">vizAPOTC</a> of an APackOfTheClones plot to be highlighted on.</p></dd>
+<dd><p>A ggplot object that is the output of <code><a href="APOTCPlot.html">APOTCPlot()</a></code> or
+<code><a href="vizAPOTC.html">vizAPOTC()</a></code> of an APackOfTheClones plot to be highlighted on.</p></dd>
 
 
 <dt>clonotype</dt>
@@ -132,7 +132,7 @@ ensure <code>clonotype</code> contains only unique characters.</p></dd>
 of non-highlighted clones. If <code>NULL</code>, all un-highlighted sequences will
 retain their original color in <code>sc.data</code>. Else, if it is a character, it
 should be a valid color that all un-highlighted clones are. Defaults to the
-hexcode for gray.</p></dd>
+hex code for gray.</p></dd>
 
 
 <dt>scale_bg</dt>
@@ -157,7 +157,7 @@ of each clonotype should be displayed.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Under the hood, this function simply mutates the plotting dataframe under
+    <p>Under the hood, this function simply mutates the plotting data.frame under
 <code>$data</code> in the ggplot object, and operates on a column named <code>color</code>.</p>
 <p>Note that if <code>color_each = FALSE</code> and <code>default_color = NULL</code>, this is
 equivalent to simply not highlighting anything and a warning will be shown.</p>
@@ -165,10 +165,10 @@ equivalent to simply not highlighting anything and a warning will be shown.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"combined_pbmc"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># piping the plot can be nice to read syntatically -</span></span></span>
+<span class="r-in"><span><span class="co"># piping the plot can be nice to read syntactically -</span></span></span>
 <span class="r-in"><span><span class="co"># By default, assigns unique colors to highlights and everything else is gray</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">combined_pbmc</span>, clonecall <span class="op">=</span> <span class="st">"aa"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu">showCloneHighlight</span><span class="op">(</span><span class="st">"CASLSGSARQLTF_CASSSTVAGEQYF"</span><span class="op">)</span></span></span>

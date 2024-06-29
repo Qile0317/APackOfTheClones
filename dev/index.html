@@ -101,7 +101,7 @@
 </div>
 <!-- badges: start -->
 
-<p><code>APackOfTheClones</code> is an R package that extends the bioconductor <code>scRepertoire</code> package to produce easily customizable “ball-packing” visualizations of the clonal expansion of T-cells/B-cells in a <code>Seurat</code> object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics’ single-cell immune profiling).</p>
+<p><code>APackOfTheClones</code> is an R package that extends the Bioconductor <code>scRepertoire</code> package to produce easily customizable “ball-packing” visualizations of the clonal expansion of T-cells/B-cells in a <code>Seurat</code> object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics’ single-cell immune profiling).</p>
 <p>The baseline concept was first implemented in a study Ma et al.<a href="#id_1">[1]</a> by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp <span class="math inline"><em>T</em><sub><em>H</em></sub></span> cells. <code>APackOfTheClones</code> counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of <code>APackOfTheClones</code> being used on an <a href="https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link" class="external-link">example seurat object for scRepertoire</a> with its corresponding VDJ library:</p>
 <p><img src="reference/figures/example.png" width="100%" align="center" alt="An example APackOfTheClones plot"></p>
 <div class="section level2">
@@ -116,7 +116,7 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The package extends the functionality of <code>scRepertoire</code> <strong><em>v2</em></strong> by working with a seurat object’s corresponding T/B cell receptor library. To do this, read the <a href="borch.dev/uploads/screpertoire">scRepertoire vignette</a>. Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with <code>scRepertoire::combineTCR</code> / <code>scRepertoire::combineBCR</code> first. Then, it should be integrated into the corresponding seurat object either with <code>scRepertoire::combineExpression</code>.</p>
-<p>To quickly produce the visualization, the <code>vizAPOTC(your_combined_seurat_object)</code> should give a reasonable visualization. There is an example seurat object included in the package which can be used with <code>data("combined_pbmc")</code>. The following codechunk is an example of how it can be done:</p>
+<p>To quickly produce the visualization, the <code>vizAPOTC(your_combined_seurat_object)</code> should give a reasonable visualization. There is an example seurat object included in the package which can be used with <code>data("combined_pbmc")</code>. The following code chunk is an example of how it can be done:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRepertoire</span><span class="op">)</span> <span class="co"># ensure v2 is installed: devtools::install_github("ncborcherding/scRepertoire")</span></span>
@@ -138,7 +138,7 @@
 <span><span class="co"># only the clones of the sample "P17" in a column named "orig.ident" that are only</span></span>
 <span><span class="co"># in seurat clusters 1, 3, and 4.</span></span>
 <span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, seurat_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code>RunAPOTC</code> and <code>AdjustAPOTC</code>, then visualized with <code>APOTCPlot</code>, like so:</p>
+<p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code><a href="reference/RunAPOTC.html">RunAPOTC()</a></code> and <code>AdjustAPOTC</code>, then visualized with <code><a href="reference/APOTCPlot.html">APOTCPlot()</a></code>, like so:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># using the same seurat object as before, run and store associated data,</span></span>
 <span><span class="co"># identifying it with a run id. If not, one will be generated.</span></span>
@@ -240,7 +240,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Qile Yang <br><small class="roles"> Maintainer, author, copyright holder </small>  </li>
+<li>Qile Yang <br><small class="roles"> Maintainer, author, copyright holder </small> <a href="https://orcid.org/0009-0005-0148-2499" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -252,8 +252,9 @@
 <li><a href="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main" class="external-link"><img src="https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation"></a></li>
+<li><a href="https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71" class="external-link"><img src="https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71/status.svg" alt="JOSS status"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Developmental Documentation"></a></li>
-<li><a href="https://qile0317.r-universe.dev/APackOfTheClones" class="external-link"><img src="https://qile0317.r-universe.dev/badges/APackOfTheClones" alt="APackOfTheClones status badge"></a></li>
+<li><a href="https://qile0317.r-universe.dev/APackOfTheClones" class="external-link"><img src="https://qile0317.r-universe.dev/badges/APackOfTheClones" alt="R Universe APackOfTheClones status badge"></a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md" class="external-link"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license"></a></li>
 </ul>
 </div>

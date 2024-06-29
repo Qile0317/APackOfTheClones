@@ -113,12 +113,12 @@
 </h2>
 <p>As demonstrated in <code><a href="../articles/APackOfTheClones.html">vignette("APackOfTheClones")</a></code>, after
 processing the seurat &amp; clonotype data properly with
-<code>scRepertoire</code>, <code>vizAPOTC</code> provides a direct way
+<code>scRepertoire</code>, <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> provides a direct way
 to produce the ball-packing clonal expansion visualization, though for
 select users it may be somewhat clunky, if certain parameters need to be
 readjusted constantly. In this vignette, more details about how
 APackOfTheClones runs can be stored and re-adjusted will be covered -
-mainly through <code>RunAPOTC</code>, <code>APOTCPlot</code>, and
+mainly through <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code>, <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>, and
 <code>AdjustAPOTC</code>. Ensure to read the aforementioned vignette
 before this one.</p>
 <details><summary><strong>As a reminder, here’s how to set up the seurat object and
@@ -149,28 +149,28 @@ clonotype data</strong>
 </details><div class="section level3">
 <h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h3>
-<p>All of <code>vizAPOTC</code>’s arguments are actually derived from
-<code>RunAPOTC</code> and <code>APOTCPlot</code>. The former is
+<p>All of <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>’s arguments are actually derived from
+<code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> and <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>. The former is
 responsible for storing data of the S4 class <code>ApotcData</code> in
 the seurat object under a named list in
 <code>@misc$APackOfTheClones</code> under some character run ID, and the
 latter allows the visualization of these data objects with some
 customization. <code>AdjustAPOTC</code> has many arguments for adjusting
 the data associated with some APackOfTheClones run stored by
-<code>RunAPOTC</code>, including adjusting cluster positions, colors,
+<code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code>, including adjusting cluster positions, colors,
 repulsion, etc. which can be visualized again with
-<code>APOTCPlot</code>.</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="managing-apackoftheclones-run-data">Managing APackOfTheClones run data<a class="anchor" aria-label="anchor" href="#managing-apackoftheclones-run-data"></a>
 </h2>
-<p><code>RunAPOTC</code> has approximate the first half of
-<code>vizAPOTC</code>’s arguments until <code>max_repulsion_iter</code>,
-meaning it has all the data subsetting, circle size scaling, and cluster
-repulsion capabilities covered in the previous vignette. The most
-essential difference is the presence of the argument
-<code>run_id</code>, which corresponds to an id for the
+<p><code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> has approximate the first half of
+<code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>’s arguments until
+<code>max_repulsion_iter</code>, meaning it has all the data subsetting,
+circle size scaling, and cluster repulsion capabilities covered in the
+previous vignette. The most essential difference is the presence of the
+argument <code>run_id</code>, which corresponds to an id for the
 <code>ApotcData</code> object associated with some run. If left blank,
 one will be automatically generated in the following format:</p>
 <blockquote>
@@ -243,17 +243,17 @@ data</em> associated with a certain <code>run_id</code>.</li>
 <div class="section level2">
 <h2 id="apotcplot">APOTCPlot<a class="anchor" aria-label="anchor" href="#apotcplot"></a>
 </h2>
-<p>To visualize stored APackOfTheClones runs, <code>APOTCPlot</code>
+<p>To visualize stored APackOfTheClones runs, <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>
 takes in a seurat object and the <code>run_id</code>. If no
 <code>run_id</code> is provided, it defaults to using the latest run.
 All other parameters are same as in the second half of
-<code>vizAPOTC</code>. Although it is noteworthy that if the user had
+<code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>. Although it is noteworthy that if the user had
 always relied on auto-generated <code>run_id</code>’s then
-<code>APOTCPlot</code> also has these subsetting arguments:</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> also has these subsetting arguments:</p>
 <p>And putting in identical arguments to generate the original
 <code>ApotcData</code> would work too, but this approach is less
 recommended as its a lot more (unnecessarily) verbose. Here is
-<code>APOTCPlot</code> in action:</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> in action:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, plots for samples 17 - 20 as seen in the previous vignette are made, where</span></span>
 <span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
@@ -294,11 +294,11 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 </h2>
 <p>This function’s parameters help modify certain attributes about
 APackOfTheClones runs, and has the exact same first six parameters as
-<code>APOTCPlot</code> for managing which run to modify. It also
-possesses the same four repulsion arguments in <code>vizAPOTC</code> and
-<code>RunAPOTC</code> if a run is to be repulsed again. See the function
-level documentation for the following parameters that can modify cluster
-locations, colors, and the adjustment of the
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> for managing which run to modify. It also
+possesses the same four repulsion arguments in <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>
+and <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> if a run is to be repulsed again. See the
+function level documentation for the following parameters that can
+modify cluster locations, colors, and the adjustment of the
 <code>clone_scale_factor</code> and <code>rad_scale_factor</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>new_rad_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>new_clone_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
@@ -318,8 +318,8 @@ locations, colors, and the adjustment of the
 <div class="section level3">
 <h3 id="tip-to-speeding-up-adjustments">Tip to Speeding up Adjustments<a class="anchor" aria-label="anchor" href="#tip-to-speeding-up-adjustments"></a>
 </h3>
-<p>While the <code>vizAPOTC</code> and <code>RunAPOTC</code> /
-<code>APOTCPlot</code> functions to do APackOfTheClones runs and
+<p>While the <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> and <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> /
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> functions to do APackOfTheClones runs and
 generate the ggplot object are relatively fast even for very large
 seurat objects, plot display times can get quite long the more circles
 there are. <code>AdjustAPOTC</code> is meant to be used in an
@@ -327,11 +327,11 @@ incremental/iterative manner, where the user can adjust one aspect,
 inspect the plot, and adjust again if necessary, and repeat - the long
 plot display times may pose as a large inconvenience.</p>
 <p>Setting the argument <code>detail</code> to <code>FALSE</code> when
-using <code>APOTCPlot</code> or <code>vizAPOTC</code> can help - this
-will plot entire clusters as one large circle - speeding up plotting
-times significantly. The details of the individual clonotype circles
-will be lost but the inspection of other aspects like label locations
-will be a much more pleasant process.</p>
+using <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> or <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> can help -
+this will plot entire clusters as one large circle - speeding up
+plotting times significantly. The details of the individual clonotype
+circles will be lost but the inspection of other aspects like label
+locations will be a much more pleasant process.</p>
 </div>
 <div class="section level3">
 <h3 id="usage-examples">Usage Examples<a class="anchor" aria-label="anchor" href="#usage-examples"></a>

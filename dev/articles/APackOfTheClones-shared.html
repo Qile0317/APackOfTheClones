@@ -123,9 +123,9 @@ cluster.</p>
 also <code><a href="../articles/APackOfTheClones-runs.html">vignette("APackOfTheClones-runs")</a></code> before reading this
 vignette. One should then also see that although some of the
 visualizations in this vignette were produced with the
-<code>vizAPOTC</code> function, all visualizations can be replicated
-with <code>RunAPOTC</code> and <code>APOTCPlot</code> that both share
-parts of the arguments of <code>vizAPOTC</code>.</p>
+<code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> function, all visualizations can be replicated
+with <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> and <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> that both
+share parts of the arguments of <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-clonotypes-common-across-seurat-clusters">Getting Clonotypes Common Across Seurat Clusters<a class="anchor" aria-label="anchor" href="#getting-clonotypes-common-across-seurat-clusters"></a>
@@ -265,7 +265,7 @@ highlighting and linking the top 4 most expanded clonotypes in
 <span><span class="fu"><a href="../reference/showCloneHighlight.html">showCloneHighlight</a></span><span class="op">(</span></span>
 <span>    <span class="va">linked_apotc_plot</span>,</span>
 <span>    clonotype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">shared_clones_aa_top4</span><span class="op">)</span>,</span>
-<span>    color_each <span class="op">=</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>    color_each <span class="op">=</span> <span class="fu">viridis</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>    default_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    scale_bg <span class="op">=</span> <span class="fl">0.95</span></span>
 <span><span class="op">)</span></span></code></pre></div>
