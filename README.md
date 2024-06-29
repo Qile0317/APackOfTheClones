@@ -12,7 +12,7 @@
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md)
 <!-- badges: end -->
 
-```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
+```APackOfTheClones``` is an R package that extends the Bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
 
 The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of `APackOfTheClones` being used on an [example seurat object for scRepertoire](https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link) with its corresponding VDJ library:
 
@@ -32,7 +32,7 @@ For more details on installation methods and information on alternative/developm
 
 The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```scRepertoire::combineExpression```.
 
-To quickly produce the visualization, the ```vizAPOTC(your_combined_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following codechunk is an example of how it can be done:
+To quickly produce the visualization, the ```vizAPOTC(your_combined_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following code chunk is an example of how it can be done:
 
 ```R
 library(Seurat)
