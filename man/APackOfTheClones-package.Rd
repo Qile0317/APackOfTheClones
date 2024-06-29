@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Qile Yang \email{qile.yang@berkeley.edu} [copyright holder]
+\strong{Maintainer}: Qile Yang \email{qile.yang@berkeley.edu} (\href{https://orcid.org/0009-0005-0148-2499}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}

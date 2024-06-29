@@ -11,13 +11,13 @@ getLastApotcDataId(seurat_obj)
 order of the functions being called.}
 }
 \value{
-a character of the object id of the last \link{RunAPOTC} call
+a character of the object id of the last \code{\link[=RunAPOTC]{RunAPOTC()}} call
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 A convenience function to get the object id of the most recent valid
-\link{RunAPOTC} run, to be used by \link{APOTCPlot} and \link{AdjustAPOTC}
+\code{\link[=RunAPOTC]{RunAPOTC()}} run, to be used by \code{\link[=APOTCPlot]{APOTCPlot()}} and \link{AdjustAPOTC}
 }
 \examples{
 # first run

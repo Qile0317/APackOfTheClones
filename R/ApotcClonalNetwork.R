@@ -15,7 +15,7 @@
 #'
 #' If `run_id` is inputted, then the function will attempt to get the shared
 #' clonotypes from the corresponding APackOfTheClones run generated from
-#' [RunAPOTC]. Otherwise, it will use the filtering / subsetting parameters
+#' [RunAPOTC()]. Otherwise, it will use the filtering / subsetting parameters
 #' to generate the shared clones.
 #'
 #' @inheritParams RunAPOTC

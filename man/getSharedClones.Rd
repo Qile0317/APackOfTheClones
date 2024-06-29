@@ -63,7 +63,7 @@ meta data of the seurat object to be grouped by. This column is meant to have
 been a product of \code{Seurat::StashIdent} or manually added.}
 
 \item{run_id}{character. This will be the ID associated with the data of a
-run, and will be used by other important functions like \link{APOTCPlot} and
+run, and will be used by other important functions like \code{\link[=APOTCPlot]{APOTCPlot()}} and
 \link{AdjustAPOTC}. Defaults to \code{NULL}, in which case the ID will be generated
 in the following format:
 
@@ -121,7 +121,7 @@ corresponds to the index in the default levels of the factored identities.
 
 If \code{run_id} is inputted, then the function will attempt to get the shared
 clonotypes from the corresponding APackOfTheClones run generated from
-\link{RunAPOTC}. Otherwise, it will use the filtering / subsetting parameters
+\code{\link[=RunAPOTC]{RunAPOTC()}}. Otherwise, it will use the filtering / subsetting parameters
 to generate the shared clones.
 }
 \examples{

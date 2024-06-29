@@ -4,11 +4,11 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' This function combines the functionality of both [RunAPOTC] and [APOTCPlot].
-#' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC])
+#' This function combines the functionality of both [RunAPOTC()] and [APOTCPlot()].
+#' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC()])
 #' to compute clonal expansion information, and then generates a customizable
 #' ggplot2 object of the clonal expansion plot with a circle size legend
-#' ([APOTCPlot]).
+#' ([APOTCPlot()]).
 #'
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
