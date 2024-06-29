@@ -2,7 +2,13 @@
 
 ## Additions
 
+<!-- - A JOSS paper for this package has now been published - the corresponding README badge and citation information (`citation("APackOfTheClones")`) have been added. -->
+
 ## Changes
+
+- Spelling fixes to function documentation and vignettes.
+- Removed package startup deprecation message for returning users of version `0.1.x`.
+- Removed `magrittr` from `imports` in `DESCRIPTION`.
 
 # APackOfTheClones 1.2.0
 
