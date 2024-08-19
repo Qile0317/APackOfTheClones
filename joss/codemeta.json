@@ -16,7 +16,7 @@
   "dateModified": "2024-04-17",
   "dateCreated": "2024-04-17",
   "description": "Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles.",
-  "keywords": "R, dimensional reduction, clonal exansion, immmunology, immunoinformatics, bioinformatics, computational biology, seurat, single cell",
+  "keywords": "R, dimensional reduction, clonal expansion, immunology, immunoinformatics, bioinformatics, computational biology, seurat, single cell",
   "license": "MIT",
   "title": "APackOfTheClones",
   "version": "v1.2.0"
