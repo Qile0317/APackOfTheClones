@@ -69,4 +69,6 @@ Thanks to Ben Murrell for introducing the idea, implementing the original julia 
 
 # Supplemental Materials
 
+[Supplemental information repository](https://github.com/Qile0317/APackOfTheClonesSupplemental)
+
 # References
