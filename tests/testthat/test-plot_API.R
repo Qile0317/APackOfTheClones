@@ -32,5 +32,5 @@ test_that("df_full_join() works", {
 
 })
 
-# TODO plot_clusters by itself
-# TODO more tests
+
+

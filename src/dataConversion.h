@@ -13,7 +13,7 @@ std::unordered_map<std::string, int> namedIntListToHashMap(Rcpp::List l) {
 
     std::unordered_map<std::string, int> outputHashMap (n);
     Rcpp::CharacterVector listNames = l.names();
-    
+   
     for (int i = 0; i < n; i++) {
         outputHashMap[listNames[i]] = Rcpp::as<int>(l[i]);
     }

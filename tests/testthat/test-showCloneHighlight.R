@@ -45,9 +45,9 @@ test_that("showCloneHighlight works", {
         )
     )
 
-    # TODO test S4 also present in scRepertoire
 
-    # TODO test missing clonotypes
+
+
 
     expect_warning(
         vizAPOTC(

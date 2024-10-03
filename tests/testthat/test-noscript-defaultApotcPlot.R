@@ -54,5 +54,5 @@ quietly_test_that("the default plot for all methods", {
   expect_doppelganger(
     .defaultApotcPlot, vizAPOTC(combined_pbmc, show_shared = list())
   )
-  
+ 
 })

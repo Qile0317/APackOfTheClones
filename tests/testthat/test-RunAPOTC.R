@@ -1,4 +1,4 @@
-# TODO RunAPOTC tests
+
 
 quietly_test_that("exception handling in RunAPOTC works", {
     data("combined_pbmc")
@@ -29,6 +29,6 @@ quietly_test_that("exception handling in RunAPOTC works", {
         fixed = TRUE
     )
 
-    # TODO more tests
+
 
 })

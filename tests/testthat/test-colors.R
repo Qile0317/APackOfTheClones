@@ -8,19 +8,19 @@ test_that("gg_color_hue() works", {
 })
 
 test_that("gen_cluster_color_hashmap() works", {
-  
+ 
   test_hashmap <- hash::hash()
   test_hashmap["cluster 0"] <- "#F8766D"
   test_hashmap["cluster 1"] <- "#00BA38"
   test_hashmap["cluster 2"] <- "#619CFF"
-  
+ 
   expect_identical(gen_cluster_color_hashmap(3), test_hashmap)
 })
 
 test_that("insert_colors() works", {
   test_cluster_df <- df_full_join(test_cluster_lists)
   new_df <- insert_colors(test_cluster_df, 5)
-  
+ 
   expect_identical(
     new_df %>% dplyr::select(color),
     test_cluster_df %>%
@@ -28,13 +28,13 @@ test_that("insert_colors() works", {
         color = c(
           "#F8766D", "#F8766D", "#F8766D", "#F8766D",
           "#F8766D", "#F8766D", "#F8766D", "#F8766D",
-          "#F8766D", "#A3A500", "#A3A500", "#A3A500", 
+          "#F8766D", "#A3A500", "#A3A500", "#A3A500",
           "#A3A500", "#A3A500", "#A3A500", "#A3A500",
-          "#A3A500", "#A3A500", "#00BF7D", "#00BF7D", 
-          "#00BF7D", "#00BF7D", "#00BF7D", "#00BF7D", 
+          "#A3A500", "#A3A500", "#00BF7D", "#00BF7D",
+          "#00BF7D", "#00BF7D", "#00BF7D", "#00BF7D",
           "#00BF7D", "#00BF7D", "#00BF7D", "#00B0F6",
-          "#00B0F6", "#00B0F6", "#00B0F6", "#00B0F6", 
-          "#00B0F6", "#E76BF3", "#E76BF3", "#E76BF3", 
+          "#00B0F6", "#00B0F6", "#00B0F6", "#00B0F6",
+          "#00B0F6", "#E76BF3", "#E76BF3", "#E76BF3",
           "#E76BF3", "#E76BF3"
         )
       ) %>%

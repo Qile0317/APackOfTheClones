@@ -176,7 +176,7 @@ sort_each_table <- function(x, desc = FALSE) {
 
 init_empty_table_list <- function(x) {
     init_list(x, create_empty_table())
-} 
+}
 
 is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
 
@@ -446,7 +446,7 @@ user_attempt_correction <- function(
             return(potential_unique_similar_word)
         }
     }
-    
+   
     stop(
         stop_msg_start, " `", s, "`, did you mean: `",
         closest_word(s, strset), "`?",
@@ -586,7 +586,7 @@ count_clones <- function(seurat_obj, clonecall) {
   sum(!is.na(seurat_obj@meta.data[[clonecall]]))
 }
 
-# TODO check if identical with ApotcData order
+
 get_ident_levels <- function(seurat_obj, custom_ident = NULL) {
 
     if (is.null(custom_ident)) {

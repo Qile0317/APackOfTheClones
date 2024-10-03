@@ -45,7 +45,7 @@ public:
 };
 
 class CirclePacker {
-private: 
+private:
     // class variables
     std::vector<CircleNode> data;
     int num_nodes;

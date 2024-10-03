@@ -1,4 +1,4 @@
-# TODO
+
 # sourcedata("v0", "cluster_lists")
 
 # # assume correct
@@ -30,7 +30,7 @@ quietly_test_that("removeLegend works", {
         removeLegend(vizAPOTC(combined_pbmc))$layers
     )
 
-    # TODO test if add layer
+
 })
 
 # quietly_test_that("overlayLegend works", {
@@ -40,5 +40,5 @@ quietly_test_that("removeLegend works", {
 #         unname(overlayLegend(vizAPOTC(combined_pbmc))$layers)
 #     )
 
-#     # TODO test if add layer
+#
 # })

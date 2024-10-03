@@ -100,7 +100,7 @@ test_that("get_xr and get_yr works", {
 
     expect_equal(get_xr(plt), c(1, 2))
     expect_equal(get_yr(plt), c(3, 4))
-    # TODO more tests
+
 })
 
 test_that("prepend_indefinite_article works", {
@@ -110,7 +110,7 @@ test_that("prepend_indefinite_article works", {
 })
 
 test_that("subsetSeuratMetaData works", {
-    # TODO more tests
+
 
     expect_error(
         subsetSeuratMetaData(get(data("combined_pbmc")), "seurat_clusters==18"),
@@ -148,7 +148,7 @@ quietly_test_that("attempt_correction works", {
         attempt_correction(combined_pbmc, "foo' b  a r 'baz")
     )
 
-    # TODO more tests
+
 })
 
 test_that("closest_word works", {
@@ -248,4 +248,3 @@ test_that("get_ident_levels works", {
 
 })
 
-# TODO more testcases

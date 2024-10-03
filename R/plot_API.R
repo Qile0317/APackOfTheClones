@@ -2,7 +2,7 @@
 create_initial_apotc_plot <- function(
 	apotc_obj, res, linetype, alpha, detail = TRUE
 ) {
-  
+ 
   if (!detail) {
     plt_df <- make_undetailed_df(apotc_obj)
   } else {

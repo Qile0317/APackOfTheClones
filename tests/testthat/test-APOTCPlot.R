@@ -6,4 +6,3 @@ test_that("add_default_theme works", {
 	expect_doppelganger("add_default_theme_plot", add_default_theme(plt, "pca"))
 })
 
-# TODO more tests

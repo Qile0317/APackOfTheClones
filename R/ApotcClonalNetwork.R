@@ -1,6 +1,3 @@
-# TODO matrix/heatmap visualization for number of shared clones
-# TODO somehow take into account sizes of shared clones
-
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
@@ -197,19 +194,6 @@ filter_top_by_cluster <- function(clone_sizes, top_clones) {
     })
 }
 
-# # TODO - there needs to be a 4 way intersection
-# filter_min_clones_if_needed <- function(
-#     clone_sizes, min_size, min_size_per_cluster
-# ) {
-#     clone_sizes %>% filter_clonesize_2way_if_need(
-
-#     )
-# }
-
-# filter_min_clones <- function(clone_sizes, min_size) { # integer or float in (0,1)
-
-# }
-
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 
     if (is_list_of_empty_tables(clustered_clone_sizes)) return(list())
@@ -232,7 +216,7 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
         }
     }
 
-    # FIXME if some keys are too long, it becomes ...
+
     as.list(shared_clonotype_map)
 }
 
@@ -263,7 +247,7 @@ filter_shared_if_needed <- function(
 }
 
 filter_top_shared <- function(shared_clones, raw_clone_sizes, top) {
-    
+   
     if (is.null(top) || is_empty(shared_clones)) return(shared_clones)
 
     filter_top_shared_w_clone_table(
@@ -334,7 +318,7 @@ overlay_shared_clone_links <- function(
     apotc_obj,
     shared_clones,
     result_plot,
-    only_cluster, # TODO allow between pairs
+    only_cluster,
     link_type = "line",
     link_color_mode = "blend",
     link_alpha = 1,
@@ -374,7 +358,7 @@ compute_line_link_df <- function(
     }
 
     if (should_estimate(extra_spacing)) {
-        extra_spacing <- 0 # TODO make better in future
+        extra_spacing <- 0
     }
 
     rcppConstructLineLinkDf(
@@ -421,7 +405,7 @@ process_link_alpha <- function(apotc_obj, link_alpha, verbose) {
 }
 
 estimate_link_alpha <- function(apotc_obj) {
-    0.75 # TODO make better in the future
+    0.75
 }
 
 process_link_width <- function(apotc_obj, link_width, verbose) {
@@ -435,7 +419,7 @@ process_link_width <- function(apotc_obj, link_width, verbose) {
 }
 
 estimate_link_width <- function(apotc_obj) {
-    3 * get_clone_scale_factor(apotc_obj) #TODO improve
+    3 * get_clone_scale_factor(apotc_obj)
 }
 
 # internal dispatch function to get a dataframe of line connections

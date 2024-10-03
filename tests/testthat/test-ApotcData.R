@@ -87,7 +87,7 @@ test_that("changing active ident affects clustering", {
 
 	expect_common_apotc_els_equal(test_apotc)
 
-	# TODO more tests on custom ident
+
 })
 
 test_that("The subset case ApotcData constructor works", {
@@ -256,7 +256,7 @@ test_that("circlepackClones packs right for the subset case", {
 	expect_equal(test_apotc_data@clusters, expected_clusterlists)
 })
 
-# TODO test the repulsion API
+
 
 test_that("match_clonotypes_to_sizes works", {
 
@@ -278,5 +278,5 @@ test_that("match_index works", {
 
 })
 
-# TODO test getters and setters
-# TODO test edgecases
+
+

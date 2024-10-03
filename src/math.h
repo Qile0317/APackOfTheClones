@@ -40,9 +40,9 @@ public:
     // constructors
 
     TwoDVector() : magnitude(0), direction(0) {}
-    
+   
     TwoDVector(double mag, double dir) : magnitude(mag), direction(dir) {}
-    
+   
     TwoDVector(const TwoDVector& v) :
         magnitude(v.getMagnitude()), direction(v.getDirection()) {}
 
@@ -118,7 +118,7 @@ public:
     TwoDVector& scaleMagnitude(double val) {
         return setMagnitude(getMagnitude() * val);
     }
- 
+
     TwoDVector& reverseDirection() {
         return setDirection(direction + M_PI);
     }

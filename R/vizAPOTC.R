@@ -52,7 +52,7 @@ vizAPOTC <- function(
     rad_scale_factor = 0.95,
     order_clones = TRUE,
     try_place = FALSE,
-    
+   
     repulse = TRUE,
     repulsion_threshold = 1,
     repulsion_strength = 1,

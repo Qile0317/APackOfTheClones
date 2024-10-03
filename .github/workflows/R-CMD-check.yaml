@@ -21,7 +21,7 @@ jobs:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
-          
+         
           # check compatibility with older releases
           - {os: ubuntu-latest,   r: 'oldrel-1'}
           - {os: ubuntu-latest,   r: 'oldrel-2'}

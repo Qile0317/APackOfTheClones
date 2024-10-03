@@ -1,4 +1,4 @@
-# TODO need to redo everything here, based on filtering confition
+
 # NOT COMPREHENSIVE
 
 data("combined_pbmc")
@@ -52,7 +52,7 @@ test_that("countCloneSizes works", {
 		expected_clone_sizes
 	)
 
-	# TODO test with custom by_cluster as arg
+
 
 })
 
@@ -79,7 +79,7 @@ quietly_test_that("get_top_clonotypes works", {
 		get_unique_clonotypes(getLastApotcData(RunAPOTC(combined_pbmc)))
 	)
 
-	# TODO more tests
+
 })
 
 test_that("aggregate_clone_sizes works", {
@@ -102,4 +102,4 @@ test_that("aggregate_clone_sizes works", {
 
 })
 
-# TODO other functions
+

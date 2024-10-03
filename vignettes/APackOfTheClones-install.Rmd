@@ -55,7 +55,7 @@ More alternatives are also available on the [r-universe](https://qile0317.r-univ
 
 ```R
 install.packages(
-    "APackOfTheClones", 
+    "APackOfTheClones",
     repos = c("https://qile0317.r-universe.dev", "https://cloud.r-project.org")
 )
 ```

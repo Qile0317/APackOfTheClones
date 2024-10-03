@@ -209,7 +209,7 @@ APOTCPlot <- function(
 			link_width = clone_link_width,
 			link_alpha = clone_link_alpha,
 			verbose = verbose
-			# TODO other params in the future
+
 		)
 	}
 

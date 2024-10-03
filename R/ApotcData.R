@@ -20,7 +20,7 @@ methods::setClass(
 )
 
 # initialize the ApotcData object with all slots except clusters done
-# TODO a subsetted seurat object will probably have wrong colors
+
 ApotcData <- function(
 	seurat_obj,
 	alt_ident,
@@ -241,7 +241,7 @@ match_index <- function(apotc_obj, index) {
 			return(index)
 		}
 		stop(call. = FALSE,
-			"Some or all indices in `", varname, "` ", #FIXME likely wrong varname
+			"Some or all indices in `", varname, "` ",
 			"are out of bounds of the APackOfTheClones Run."
 		)
 	}
@@ -252,7 +252,7 @@ match_index <- function(apotc_obj, index) {
 
 	for (i in seq_along(index)) {
 
-		location <- which(labels == index[i]) # TODO check invalid labels
+		location <- which(labels == index[i])
 
 		if (length(location) == 0) {
 			stop(call. = FALSE,

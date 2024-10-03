@@ -60,7 +60,7 @@ get_average_hex <- function(hex1, hex2) {
 }
 
 scale_hex_brightness <- function(hex, scaling_factor) {
-  
+ 
   if (all(scaling_factor == 1)) return(hex)
 
   hsv_color <- hex %>%
@@ -68,6 +68,6 @@ scale_hex_brightness <- function(hex, scaling_factor) {
     grDevices::rgb2hsv()
 
   hsv_color["v", ] <- bound_num(hsv_color["v", ] * scaling_factor, 0, 1)
-  
+ 
   grDevices::hsv(hsv_color["h", ], hsv_color["s", ], hsv_color["v", ])
 }

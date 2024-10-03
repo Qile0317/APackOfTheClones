@@ -12,7 +12,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: false
-Suggests: 
+Suggests:
     cowplot,
     covr,
     knitr,
@@ -35,9 +35,9 @@ Imports:
     rlang,
     Seurat,
     SeuratObject
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 URL: https://qile0317.github.io/APackOfTheClones/
-LinkingTo: 
+LinkingTo:
     Rcpp
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

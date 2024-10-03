@@ -13,14 +13,14 @@ test_that("getting shared clones works", {
     expect_equal(
         object = getSharedClones(combined_pbmc, top = 1L),
         expected = expected_all_shared[2]
-    ) # TODO verify
+    )
 
     expect_equal(
         object = getSharedClones(combined_pbmc, top = 1 / 9),
         expected = expected_all_shared[2]
     )
 
-    # TODO test getting top 4 - the first should be the same (size 11) while 2,3,4, (size 3) should setequal
+
 
     expect_mapequal(
         object = getSharedClones(combined_pbmc, top = 10L),
@@ -50,7 +50,7 @@ test_that("getting shared clones works", {
     )
 
     # check everything = Inf doesnt do anything
-    
+   
     expect_mapequal(
         object = getSharedClones(
             combined_pbmc,
@@ -79,8 +79,8 @@ test_that("getting shared clones works", {
         expected = expected_all_shared[5]
     )
 
-    # TODO check the intersection
-    # TODO everything else needs verification
+
+
 
 })
 
@@ -109,7 +109,7 @@ test_that("getSharedClones on modern version of R works", {
     )
 })
 
-# TODO following two tests unfinished
+
 
 test_that("filter_top_clones works", {
     clone_sizes <- getdata("get_clone_sizes", "raw_strict_clone_sizes")
