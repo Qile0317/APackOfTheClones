@@ -7,10 +7,11 @@
 ## Changes
 
 - updated citation information upon calling `citation("APackOfTheClones")`: the package as of this patch version is undergoing review in the [journal of open source software](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71).
+- Updated the `combined_pbmc` dataset to be up-to-date with the latest version of `Seurat`.
 - Added a check within an internal function to ensure that certain columns are not present in the metadata of the seurat object before proceeding with the clonal expansion plot.
-- Spelling fixes to function documentation and vignettes.
+- Spelling & minor fixes / updates to functions, documentation.
 - Removed package startup deprecation message for returning users of version `0.1.x`.
-- Removed `magrittr` from `imports` in `DESCRIPTION`.
+- Removed the explicit `magrittr` dependency.
 
 # APackOfTheClones 1.2.0
 

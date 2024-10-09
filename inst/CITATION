@@ -6,8 +6,9 @@ bibentry(
   author   = "Qile Yang",
   year     = 2023,
   url      = "https://github.com/Qile0317/APackOfTheClones",
+  doi      = "10.32614/CRAN.package.APackOfTheClones",
   textVersion = paste(
     "Yang, Qile. 2023. APackOfTheClones: Visualization of clonal expansion with circle packing. ",
-    "URL https://github.com/Qile0317/APackOfTheClones"
+    "URL https://github.com/Qile0317/APackOfTheClones, DOI 10.32614/CRAN.package.APackOfTheClones"
   )
 )
