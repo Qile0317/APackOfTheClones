@@ -263,7 +263,7 @@ filter_shared_if_needed <- function(
 }
 
 filter_top_shared <- function(shared_clones, raw_clone_sizes, top) {
-    
+   
     if (is.null(top) || is_empty(shared_clones)) return(shared_clones)
 
     filter_top_shared_w_clone_table(

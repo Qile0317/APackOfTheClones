@@ -160,7 +160,7 @@ test_that("pack_into_clusterlists works", {
 
 test_that("pack_into_clusterlists handles NULLS", {
     skip_on_cran()
-    
+   
     expect_equal(
         pack_into_clusterlists(
             list(NULL, c1[[3]]),

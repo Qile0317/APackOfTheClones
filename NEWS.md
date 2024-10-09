@@ -9,6 +9,7 @@
 - Spelling fixes to function documentation and vignettes.
 - Removed package startup deprecation message for returning users of version `0.1.x`.
 - Removed `magrittr` from `imports` in `DESCRIPTION`.
+- General internal code cleanup and conformity to `lintr` standards.
 
 # APackOfTheClones 1.2.0
 

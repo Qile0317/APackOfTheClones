@@ -9,7 +9,7 @@
 #' clonal expansion plot ([APOTCPlot()]) and stores it in the seurat object.
 #' Gets sizes of unique clones and utilizes a circle-packing algorithm to
 #' pack circles representing individual clones in approximately the same
-#' dimensional reduction (`reduction_base`) coordinates based on some cell 
+#' dimensional reduction (`reduction_base`) coordinates based on some cell
 #' ident (defaults to the active ident).
 #'
 #' The parameter `extra_filter` along with an unlimited number of additional
@@ -193,7 +193,7 @@ RunAPOTC <- function(
     reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
     # TODO check alt_ident
-    
+   
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
         if (verbose) message(paste(
@@ -265,7 +265,7 @@ RunAPOTC <- function(
 
 # # a super simple regression of manually determined clone scale based on cell
 # # count a much more complicated model can use other facts about the seurat
-# # obj to improve how visually plesant is it. Some overlap factor could 
+# # obj to improve how visually plesant is it. Some overlap factor could
 # # probably be eestimated with the raw clone counts
 # cell_count <- c(80, 365, 2500)
 # desirable_factor <- c(1, 0.3, 0.2)

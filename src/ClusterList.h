@@ -22,7 +22,7 @@ protected: // variables
 public: // constructor
 
     ClusterList(const Rcpp::List rClusterList) {
-        
+       
         if (rClusterList.size() == 0) {
             isEmpty = true;
             return;

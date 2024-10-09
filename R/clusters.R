@@ -59,7 +59,7 @@ convert_to_dataframe <- function(
 update_clusterlist_df <- function(df, clusterlist) {
 
     if (contains_clonotypes(df) || !contains_clonotypes(clusterlist)) return(df)
-    
+   
     if (nrow(df) == 0) {
         df$clonotype <- character(0)
         return(df)
@@ -74,7 +74,7 @@ find_centroids <- function(xyc_df, ident_levels) {
 
   cll <- split(xyc_df, factor(xyc_df[, 3])) %>%
     lapply(function(x) c(mean(x[, 1]), mean(x[, 2])))
-    
+   
   list_output <- init_list(ident_levels, list())
 
   for (ident_level in ident_levels) {

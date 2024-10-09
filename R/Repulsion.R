@@ -70,7 +70,7 @@ repulse_cluster <- function(
 
     if (verbose) progress_bar(curr_iteration, max_iter)
   }
-  
+ 
   end_progress_bar(verbose)
   inp
 }

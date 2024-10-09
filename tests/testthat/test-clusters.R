@@ -13,7 +13,7 @@ test_that("get_cluster_centroids() works", {
     ),
     tolerance = 1e-9
   )
-  
+ 
   expect_equal(
     get_cluster_centroids(test_pbmc, "tsne", ident_levels = c("0", "1")),
     list(
@@ -31,7 +31,7 @@ test_that("trans_coord() works withOUT new_coord", {
   expect_equal(
     trans_coord(c1_new), c1_shifted_by_4_5, tolerance = 1e-9
   )
-  
+ 
 })
 
 test_that("trans_coord() works WITH new_coord", {

@@ -50,7 +50,7 @@ test_that("getting shared clones works", {
     )
 
     # check everything = Inf doesnt do anything
-    
+   
     expect_mapequal(
         object = getSharedClones(
             combined_pbmc,

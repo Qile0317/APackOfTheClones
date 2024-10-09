@@ -144,7 +144,7 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function() {
-    
+   
     args <- get_parent_func_args()
 
     check_is_apotc_ggplot(args$apotc_ggplot)

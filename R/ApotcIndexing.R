@@ -283,7 +283,7 @@ col_cond_vec_to_filter_str <- function(condition_vector, colname) {
         colname = colname,
         insert_char = insertchar
     )
-    
+   
 }
 
 col_conds_to_str_w_insert <- function(
@@ -316,7 +316,7 @@ convert_to_string_if_expr <- function(deparsed_metadata_filter) {
 # stored under under @misc[["APackOfTheClones"]][[id]]
 infer_object_id_if_needed <- function(args, varargs_list) {
     if (!should_compute(args$run_id)) return(args$run_id)
-    
+   
     if (
         is.null(args$reduction_base) &&
             is.null(args$clonecall) &&
