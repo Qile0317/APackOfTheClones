@@ -5,6 +5,7 @@
 #include <cmath>
 
 #define TAU 6.28318530717958647692
+#define DOUBLE_PRECISION 1.11e-16
 
 inline double sqr(double x) {
     return x * x;
@@ -25,6 +26,10 @@ inline double normalizeAngleAtan2(double radianAngle) {
     radianAngle = normalizeAngle(radianAngle);
     if (std::abs(radianAngle) <= M_PI) return radianAngle;
     return std::abs(radianAngle) - ((1 + (radianAngle > 0)) * M_PI);
+}
+
+inline bool isFirstNumLarger(double a, double b) {
+    return a - b > DOUBLE_PRECISION;
 }
 
 // representation of vector in R^2. getMagnitude is guaranteed to be

@@ -1,25 +1,25 @@
-# test_that("vdiffr test of showCloneHighlight works", {
+test_that("vdiffr test of showCloneHighlight works", {
 
-#     skip_on_ci() # there is no visually distinguishable difference in the artifact
+    skip_on_ci() # there is no visually distinguishable difference in the artifact
 
-#     test_cl_5_9_highlighted_ggplot <- get(data("combined_pbmc")) %>%
-#         vizAPOTC(
-#             clonecall = "aa",
-#             seurat_clusters = c(5, 9),
-#             retain_axis_scales = TRUE,
-#             add_size_legend = FALSE,
-#             verbose = FALSE
-#         ) %>%
-#         showCloneHighlight(c(
-#             "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
-#         ))
+    test_cl_5_9_highlighted_ggplot <- get(data("combined_pbmc")) %>%
+        vizAPOTC(
+            clonecall = "aa",
+            seurat_clusters = c(5, 9),
+            retain_axis_scales = TRUE,
+            add_size_legend = FALSE,
+            verbose = FALSE
+        ) %>%
+        showCloneHighlight(c(
+            "CASLSGSARQLTF_CASSPTVAGEQFF", "CAELNQAGTALIF_CASSQAPFSTSGELFF"
+        ))
 
-#     expect_doppelganger(
-#         "showCloneHighlight_only_clusters_5_9",
-#         test_cl_5_9_highlighted_ggplot
-#     )
+    expect_doppelganger(
+        "showCloneHighlight_only_clusters_5_9",
+        test_cl_5_9_highlighted_ggplot
+    )
 
-# })
+})
 
 test_that("showCloneHighlight works", {
 
