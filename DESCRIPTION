@@ -23,7 +23,6 @@ Suggests:
     cowplot,
     covr,
     knitr,
-    lintr,
     rmarkdown,
     sf,
     spelling,
@@ -31,6 +30,7 @@ Suggests:
     vdiffr
 Config/testthat/edition: 3
 Imports:
+    assertthat,
     dplyr,
     ggforce,
     ggplot2,

@@ -419,7 +419,7 @@ process_link_width <- function(apotc_obj, link_width, verbose) {
 }
 
 estimate_link_width <- function(apotc_obj) {
-    3 * get_clone_scale_factor(apotc_obj) #TODO improve
+    3 * get_clone_scale_factor(apotc_obj) # TODO improve
 }
 
 # internal dispatch function to get a dataframe of line connections

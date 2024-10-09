@@ -12,7 +12,7 @@
 #' on the number of rows containing NA for that column of that ident if it
 #' isn't the active ident.
 #'
-#' @param seurat_obj a seurat object combined with a VDJ library with the
+#' @param seurat_obj a seurat object combined with a VDJ library with
 #' `scRepertoire`.
 #' @inheritParams RunAPOTC
 #' @param by_cluster Logical or Character. If `TRUE`, will output a list of
@@ -49,7 +49,7 @@ countCloneSizes <- function(
     by_cluster = TRUE,
     sort_decreasing = NULL
 ) {
-    countCloneSizes_arg_checker() # TODO check by_cluster with .theCall
+    countCloneSizes_arg_checker()
 
     # setup variables
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)

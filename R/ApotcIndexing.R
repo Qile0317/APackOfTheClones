@@ -251,9 +251,6 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     filter_string <- sort_and_join_conds_by_and(filter_strings)
 
-    # TODO FIXME - this will allow symbolic filtering as well
-    #metadata_filter <- convert_to_string_if_expr(deparse(substitute(metadata_filter)))
-
     if (is_valid_filter_str(metadata_filter)) {
         filter_string <- paste(
             "(", filter_string, ")&(", metadata_filter, ")", sep = ""

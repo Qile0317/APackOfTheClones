@@ -250,7 +250,7 @@ match_index <- function(apotc_obj, index) {
 			return(index)
 		}
 		stop(call. = FALSE,
-			"Some or all indices in `", varname, "` ", #FIXME likely wrong varname
+			"Some or all indices in `", varname, "` ",
 			"are out of bounds of the APackOfTheClones Run."
 		)
 	}

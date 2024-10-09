@@ -131,7 +131,8 @@
 #' ident levels themselves.
 #'
 #' @return A modified version of the input seurat object, which harbors data
-#' necessary for visualizing the clonal expansion of the cells with [APOTCPlot()]
+#' necessary for visualizing the clonal expansion of the cells with
+#' [APOTCPlot()]
 #' and has a friendly user interface to modify certain attributes with
 #' [AdjustAPOTC].
 #' @export
@@ -167,7 +168,7 @@ RunAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
-    alt_ident = NULL, # TODO check
+    alt_ident = NULL,
     run_id = NULL,
 
     clone_scale_factor = "auto",
@@ -192,7 +193,9 @@ RunAPOTC <- function(
     # compute/check inputs
     reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-    # TODO check alt_ident
+    assert_that(
+        is.null(alt_ident) || alt_ident %in% colnames(seurat_obj@meta.data)
+    )
    
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)

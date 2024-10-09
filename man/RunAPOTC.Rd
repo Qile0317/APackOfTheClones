@@ -117,7 +117,8 @@ of the progress.}
 }
 \value{
 A modified version of the input seurat object, which harbors data
-necessary for visualizing the clonal expansion of the cells with \code{\link[=APOTCPlot]{APOTCPlot()}}
+necessary for visualizing the clonal expansion of the cells with
+\code{\link[=APOTCPlot]{APOTCPlot()}}
 and has a friendly user interface to modify certain attributes with
 \link{AdjustAPOTC}.
 }
