@@ -1,111 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-install.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-runs.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-shared.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-utils.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/archive/v0-main.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/APOTCPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/APackOfTheClones-package.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/AdjustAPOTC.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/RunAPOTC.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/clonal_expansion_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/combined_pbmc.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/containsApotcRun.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/countCloneSizes.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/count_clone_sizes.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/deleteApotcData.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getApotcDataIds.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getLastApotcDataId.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getReductionCentroids.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getSharedClones.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/integrate_tcr.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/mergeCloneSizes.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/overlayLegend.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/removeLegend.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/renameApotcRun.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/showCloneHighlight.html</loc>
-  </url>
-  <url>
-    <loc>https://qile0317.github.io/APackOfTheClones/dev/reference/vizAPOTC.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/CONTRIBUTING.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/LICENSE-text.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/LICENSE.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-install.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-runs.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-shared.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones-utils.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/APackOfTheClones.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/archive/v0-main.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/articles/index.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/authors.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/index.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/news/index.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/APOTCPlot.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/APackOfTheClones-package.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/AdjustAPOTC.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/RunAPOTC.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/clonal_expansion_plot.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/combined_pbmc.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/containsApotcRun.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/countCloneSizes.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/count_clone_sizes.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/deleteApotcData.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getApotcDataIds.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getLastApotcDataId.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getReductionCentroids.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/getSharedClones.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/index.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/integrate_tcr.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/mergeCloneSizes.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/overlayLegend.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/removeLegend.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/renameApotcRun.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/showCloneHighlight.html</loc></url>
+<url><loc>https://qile0317.github.io/APackOfTheClones/dev/reference/vizAPOTC.html</loc></url>
 </urlset>
+
