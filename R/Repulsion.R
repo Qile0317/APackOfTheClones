@@ -35,7 +35,6 @@ get_repulsed_clusterlists <- function(
 
 # iterative repulsion. inp is a list of clusterlists.
 # returns the modified clusterlist
-# TODO rewrite in Rcpp
 repulse_cluster <- function(
   inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
 ) {

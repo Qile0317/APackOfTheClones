@@ -87,8 +87,6 @@ countCloneSizes <- function(
     clustered_clone_sizes
 }
 
-# TODO create S4 generic to allow getting it from run_id, as an Apotc Getter
-
 countCloneSizes_arg_checker <- function() {
     args <- get_parent_func_args()
 

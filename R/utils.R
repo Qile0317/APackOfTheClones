@@ -569,21 +569,21 @@ to_string_rep_with_insert <- function(v, insert) {
 subsetSeuratMetaData <- function(
     seurat_obj, filter_string, error_param = "extra_filter"
 ) {
-	seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
+    seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
 
-	if (nrow(seurat_obj@meta.data) == 0) {
-		stop(call. = FALSE, paste(
-			"please check `", error_param, "`, ",
+    if (nrow(seurat_obj@meta.data) == 0) {
+	    stop(call. = FALSE, paste(
+		    "please check `", error_param, "`, ",
 			"no rows in the seurat metadata match the filter condition",
             sep = ""
-		))
-	}
+	    ))
+    }
 
 	seurat_obj
 }
 
 count_clones <- function(seurat_obj, clonecall) {
-  sum(!is.na(seurat_obj@meta.data[[clonecall]]))
+    sum(!is.na(seurat_obj@meta.data[[clonecall]]))
 }
 
 # TODO check if identical with ApotcData order
@@ -601,7 +601,7 @@ get_ident_levels <- function(seurat_obj, custom_ident = NULL) {
 }
 
 get_num_total_clusters <- function(seurat_obj) {
-  length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
+    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 # seurat reduction related functions
@@ -634,8 +634,8 @@ attempt_correction <- function(seurat_obj, reduction) {
     }
 
     user_attempt_correction(
-      reduction,
-      strset = curr_reductions,
-      stop_msg_start = "Invalid reduction"
+        reduction,
+        strset = curr_reductions,
+        stop_msg_start = "Invalid reduction"
     )
 }

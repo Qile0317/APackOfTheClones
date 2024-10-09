@@ -223,8 +223,6 @@ getLastApotcDataId <- function(seurat_obj) {
     getlast(getApotcDataIds(seurat_obj))
 }
 
-# TODO change object ids-make it all nonempty arguments
-
 # object id generation:
 
 # from the input of RunAPOTC, convert the condition to a call to be put in

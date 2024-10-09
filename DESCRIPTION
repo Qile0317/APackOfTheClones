@@ -23,6 +23,7 @@ Suggests:
     cowplot,
     covr,
     knitr,
+    lintr,
     rmarkdown,
     sf,
     spelling,

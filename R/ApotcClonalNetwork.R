@@ -1,6 +1,3 @@
-# TODO matrix/heatmap visualization for number of shared clones
-# TODO somehow take into account sizes of shared clones
-
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
@@ -196,19 +193,6 @@ filter_top_by_cluster <- function(clone_sizes, top_clones) {
         as_table(x[x >= clonesize_lowerbound])
     })
 }
-
-# # TODO - there needs to be a 4 way intersection
-# filter_min_clones_if_needed <- function(
-#     clone_sizes, min_size, min_size_per_cluster
-# ) {
-#     clone_sizes %>% filter_clonesize_2way_if_need(
-
-#     )
-# }
-
-# filter_min_clones <- function(clone_sizes, min_size) { # integer or float in (0,1)
-
-# }
 
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 

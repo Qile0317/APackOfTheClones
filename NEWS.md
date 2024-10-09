@@ -6,10 +6,10 @@
 
 ## Changes
 
+- Added a check within an internal function to ensure that certain columns are not present in the metadata of the seurat object before proceeding with the clonal expansion plot.
 - Spelling fixes to function documentation and vignettes.
 - Removed package startup deprecation message for returning users of version `0.1.x`.
 - Removed `magrittr` from `imports` in `DESCRIPTION`.
-- General internal code cleanup and conformity to `lintr` standards.
 
 # APackOfTheClones 1.2.0
 
