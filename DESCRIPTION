@@ -36,6 +36,7 @@ Imports:
     ggplot2,
     hash,
     lifecycle,
+    methods,
     Rcpp,
     rlang,
     Seurat,

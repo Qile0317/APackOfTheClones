@@ -1,4 +1,4 @@
-quietly_test_that("the default plot for all methods", {
+test_that("the default plot for all methods", {
 
   data("combined_pbmc")
   .defaultApotcPlot <- "default_apotcplot"
