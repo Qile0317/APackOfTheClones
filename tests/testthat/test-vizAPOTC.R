@@ -9,6 +9,11 @@ test_that("subsetting vizAPOTC works", {
 			verbose = FALSE
 		)
 	)
+})
+
+test_that("subsetting vizAPOTC with different options works", {
+
+	testthat::skip_on_os("mac") # diffs in fp precision leads to different packings
 
 	set.seed(829)
 	expect_doppelganger(

@@ -16,3 +16,4 @@
 ^.idea$
 [.]md$
 [.]yml$
+^\.lintr$
