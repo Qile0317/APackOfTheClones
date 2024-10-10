@@ -352,17 +352,6 @@ getElementDiff <- function(x, y) {
     x[!(x %in% y)]
 }
 
-# formatting
-
-getDiffAsListInStr <- function(a, b, a_name = "a", b_name = "b") {
-    glue(
-        "elementDiff({a_name}, {b_name}):\n",
-        "- {paste(getElementDiff(a, b), collapse = '\n -')}\n\n",
-        "elementDiff({b_name}, {a_name}):\n",
-        "- {paste(getElementDiff(b, a), collapse = '\n -')}"
-    )
-}
-
 # special mutation operators from StackOverflow
 
 create_mutator <- function(binary_operator) {
