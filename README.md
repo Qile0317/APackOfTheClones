@@ -8,7 +8,7 @@
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Developmental Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://qile0317.github.io/APackOfTheClones/dev/)
-[![DOI](https://zenodo.org/badge/551699219.svg)](https://doi.org/10.5281/zenodo.13916956)
+[![DOI](https://zenodo.org/badge/551699219.svg)](https://doi.org/10.5281/zenodo.13916955)
 [![R Universe APackOfTheClones status badge](https://qile0317.r-universe.dev/badges/APackOfTheClones)](https://qile0317.r-universe.dev/APackOfTheClones)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md)
 <!-- badges: end -->
