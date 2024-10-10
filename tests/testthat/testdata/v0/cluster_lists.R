@@ -1,5 +1,6 @@
 # test data, three cluster lists. c1 and c2 overlap while c3 is far away
 # every single cluster is made with try_place = FALSE
+# these are legacy clusterlists without clonotypes
 
 c1 <- list(x = c(-1.3, 1.3, -1.48029736616688e-16, -1.97727239868245,
                  -0.728260708834882, 1.24901168984757, 2.54351675296717, 2.22044604925031e-16,

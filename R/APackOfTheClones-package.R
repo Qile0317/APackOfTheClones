@@ -2,7 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that validate_that
 #' @importFrom dplyr %>%
 #' @importFrom glue glue
 #' @importFrom Rcpp sourceCpp

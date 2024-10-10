@@ -333,6 +333,7 @@ get_unique_clonotypes <- function(x) {
 	unique(unlist(lapply(unname(get_raw_clone_sizes(x)), names)))
 }
 
+# assumes raw clone sizes are not empty
 get_processed_clone_sizes <- function(apotc_obj) {
   raw_tabled_clone_sizes <- get_raw_clone_sizes(apotc_obj)
   processed_sizes <- init_list(get_num_clusters(apotc_obj), list())
@@ -432,12 +433,12 @@ set_labels <- function(apotc_obj, x) {
 
 # functions for testing
 
-does_apotc_data_clusterlist_equal_expected <- function(
-    apotc_obj, expected_clusterlist, tolerance = 1e-6, verbose = FALSE
-) {
-    areGeometricallyEqualClusterLists(
+does_apotc_listof_clusterlist_equal_expected <- function(
+    apotc_obj, expected, tolerance = 1e-6, verbose = FALSE
+) {	
+    areGeometricallyEqualListsOfClusterLists(
         a = get_clusterlists(apotc_obj),
-        b = expected_clusterlist,
+        b = expected,
         rad_decrease = get_rad_decrease(apotc_obj),
         clone_scale_factor = get_clone_scale_factor(apotc_obj),
         tolerance = tolerance,

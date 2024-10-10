@@ -9,14 +9,19 @@
 # [["clonotype"]] clonotype based on original clonecall
 
 # getters for a single clusterlist
+# does not handle the case of empty clusterlists
 
-get_x_coords <- function(l) l[[1]]
-get_y_coords <- function(l) l[[2]]
-get_radii <- function(l) l[[3]]
-get_centroid <- function(l) l[[4]]
+makeGetter <- function(key) {
+    function(obj) if (isnt_empty(obj)) obj[[key]]
+}
+
+get_x_coords <- makeGetter(1)
+get_y_coords <- makeGetter(2)
+get_radii <- makeGetter(3)
+get_centroid <- makeGetter(4)
 get_centroid_x <- function(l) get_centroid(l)[1]
 get_centroid_y <- function(l) get_centroid(l)[2]
-get_cluster_radius <- function(l) l[[5]]
+get_cluster_radius <- makeGetter(5)
 get_clonotypes <- function(l) l$clonotype # not index due to legacy clusterlists
 
 get_num_clones <- function(l) length(get_x_coords(l))
@@ -24,12 +29,20 @@ get_num_clones <- function(l) length(get_x_coords(l))
 contains_clonotypes <- function(x) !is.null(get_clonotypes(x))
 
 # setters for a single clusterlist
-set_x_coords <- function(l, v) {l$x <- v; l}
-set_y_coords <- function(l, v) {l$y <- v; l}
-set_radii <- function(l, v) {l$rad <- v; l}
-set_centroid <- function(l, v) {l$centroid <- v; l}
-set_cluster_radius <- function(l, v) {l$clRad <- v; l}
-set_clonotypes <- function(l, v) {l$clonotype <- v; l}
+
+makeSetter <- function(key) {
+    function(obj, value) {
+        if (isnt_empty(obj)) obj[[key]] <- value
+        obj
+    }
+}
+
+set_x_coords <- makeSetter(1)
+set_y_coords <- makeSetter(2)
+set_radii <- makeSetter(3)
+set_centroid <- makeSetter(4)
+set_cluster_radius <- makeSetter(5)
+set_clonotypes <- makeSetter("clonotype")
 
 # convert clusterlist to dataframe, assuming its ***valid***
 # returns a dataframe with columns:
@@ -150,14 +163,104 @@ read_centroids <- function(list_of_clusterlists) {
   })
 }
 
+# clusterlist checkers below
+
+isValidClusterList <- function(x, legacy = FALSE) {
+
+    if (identical(x, list())) return(TRUE)
+
+    basicChecks <- validate_that(
+        is.list(x),
+        (length(x) >= (6 - legacy)),
+        is.numeric(x[[1]]),
+        is.numeric(x[[2]]),
+        is.numeric(x[[3]]),
+        is.numeric(x[[4]]),
+        is.numeric(x[[5]]),
+        (legacy || is.character(x[[6]]))
+    )
+
+    if (!isTRUE(basicChecks)) {message(basicChecks); return(FALSE)}
+
+    lengthChecks <- validate_that(
+        length(unique(sapply(x[c(1, 2, 3, if (legacy) NULL else 6)], length))) == 1,
+        length(x[[4]]) == 2,
+        length(x[[5]]) == 1
+    )
+    
+    if (!isTRUE(lengthChecks)) {message(lengthChecks); return(FALSE)}
+
+    nameChecks <- identical(
+        names(x)[1:5],
+        c("x", "y", "rad", "centroid", "clRad")
+    )
+    if (!legacy) {
+        nameChecks <- nameChecks && identical(names(x)[6], "clonotype")
+    }
+
+    if (isFALSE(nameChecks)) {
+        message("names don't match: ", paste(names(x), collapse = ", "))
+    }
+    return(nameChecks)
+}
+
+isValidListOfClusterLists <- function(x, legacy = FALSE, verbose = FALSE) {
+    for (i in seq_along(x)) {
+        if (isValidClusterList(x[[i]], legacy)) next
+        if (verbose) {
+            message("clusterlist ", i, " is invalid")
+        }
+        #print(summary(x[[i]]))
+        return(FALSE)
+    }
+    return(TRUE)
+}
+
+areGeometricallyEqualListsOfClusterLists <- function(
+    a, b, rad_decrease, clone_scale_factor,
+    legacy = TRUE, tolerance = 1e-6, verbose = FALSE
+) {
+
+    if (!isValidListOfClusterLists(a, legacy, verbose)) {
+        if (verbose) message("first list of clusterlists is invalid")
+        return(FALSE)
+    }
+
+    if (!isValidListOfClusterLists(b, legacy, verbose)) {
+        if (verbose) message("second list of clusterlists is invalid")
+        return(FALSE)
+    }
+
+    if (length(a) != length(b)) {
+        if (verbose) message("length of clusterlists unequal")
+        return(FALSE)
+    }
+    
+    for (i in seq_along(a)) {
+        if (!areGeometricallyEqualClusterLists(
+            a[[i]], b[[i]], rad_decrease, clone_scale_factor, tolerance, verbose
+        )) {
+            if (verbose) {
+                message("clusterlists at ", i, " is not equal")
+            }
+            return(FALSE)
+        }
+    }
+
+    return(TRUE)
+}
+
 areGeometricallyEqualClusterLists <- function(
-    a, b, rad_decrease, clone_scale_factor, tolerance = 1e-6, verbose = FALSE
+    a, b, rad_decrease, clone_scale_factor,
+    legacy = TRUE, tolerance = 1e-6, verbose = FALSE
 ) {
 
     logIfVerbose <- function(...) if (verbose) message(glue(...))
-    logSetDiffIfVerbose <- function(...) {
-        logIfVerbose(getSetDiffAsListInStr(...))
+    logDiffIfVerbose <- function(...) {
+        logIfVerbose(getDiffAsListInStr(...))
     }
+
+    if (is_empty(a) && is_empty(b)) return(TRUE)
 
     if (get_num_clones(a) != get_num_clones(b)) {
         logIfVerbose(
@@ -167,17 +270,18 @@ areGeometricallyEqualClusterLists <- function(
         return(FALSE)
     }
 
-    if (!setequal(get_radii(a), get_radii(b))) {
-        logIfVerbose("radii are not set-equal")
-        logSetDiffIfVerbose(
+
+    if (!haveSameElements(get_radii(a), get_radii(b))) {
+        logIfVerbose("radii don't contain the same elements")
+        logDiffIfVerbose(
             get_radii(a), get_radii(b),
             deparse(substitute(a)), deparse(substitute(b))
         )
         return(FALSE)
     }
 
-    if (!setequal(get_clonotypes(a), get_clonotypes(b))) {
-        logSetDiffIfVerbose(
+    if (!legacy && !haveSameElements(get_clonotypes(a), get_clonotypes(b))) {
+        logDiffIfVerbose(
             get_clonotypes(a), get_clonotypes(b),
             deparse(substitute(a)), deparse(substitute(b))
         )
@@ -190,7 +294,9 @@ areGeometricallyEqualClusterLists <- function(
         )
     
     list_of_normed_ab %>%
-        append(list("threshold" = tolerance, "verbose" = verbose)) %>%
+        append(list(
+            "legacy" = legacy, "threshold" = tolerance, "verbose" = verbose
+        )) %>%
         applyListAsArgsTo(areGeometricallyEqualNormalizedClusterLists)
 
 }
@@ -198,9 +304,8 @@ areGeometricallyEqualClusterLists <- function(
 normalizeClusterListRadii <- function(
     clusterlist, rad_decrease, clone_scale_factor
 ) {
-    set_radii(
-        clusterlist,
-        ((get_radii(clusterlist) + rad_decrease)^2) / clone_scale_factor
+    clusterlist %>% set_radii(
+        ((get_radii(clusterlist) + rad_decrease) / clone_scale_factor)^2
     )
 }
 
@@ -218,6 +323,7 @@ areGeometricallyEqualNormalizedClusterLists <- function(
     a,
     b,
     threshold = 1e-6,
+    legacy = TRUE,
     verbose = FALSE,
     left_name = "object",
     right_name = "expected"
@@ -244,38 +350,45 @@ areGeometricallyEqualNormalizedClusterLists <- function(
 
         if (!are_dim_equal) {
             logIfVerbose(
-                "dimensions (clones, slots) unequal: ",
+                "dimensions of (clones, slots) unequal: ",
                 "({nrow(a)}, {ncol(a)}), ({nrow(b), ncol(b)})"
             )
             return(FALSE)
         }
 
-        clonotypes_list <- clusterlist_dfs_filtered_by_curr_rad %>%
-                lapply(function(x) x[["clonotype"]])
-        
-        are_clonotypes_setequal <- clonotypes_list %>%
-            applyListAsArgsTo(setequal)
-
-        if (!are_clonotypes_setequal) {
-            logIfVerbose(
-                "clonotypes are not set-equal.\n\n",
-                getSetDiffAsListInStr(
-                    clonotypes_list[1], clonotypes_list[2],
-                    left_name, right_name
-                ),
+        if (!legacy) {
+            clonotypes_list <- lapply(
+                clusterlist_dfs_filtered_by_curr_rad, get_clonotypes
             )
-            return(FALSE)
+            
+            are_clonotypes_equal <- clonotypes_list %>%
+                applyListAsArgsTo(haveSameElements)
+
+            if (!are_clonotypes_equal) {
+                logIfVerbose(
+                    "clonotypes don't have the same elements.\n\n",
+                    getDiffAsListInStr(
+                        clonotypes_list[1], clonotypes_list[2],
+                        left_name, right_name
+                    ),
+                )
+                return(FALSE)
+            }
         }
 
-        xy_are_setequal <- clusterlist_dfs_filtered_by_curr_rad %>%
-            lapply(function(a) dplyr::arrange(a, x, y)) %>%
+        xy_are_equal <- clusterlist_dfs_filtered_by_curr_rad %>%
+            lapply(function(a) {
+                a %>%
+                    dplyr::select(x, y, r) %>%
+                    dplyr::arrange(x, y)
+            }) %>%
             applyListAsArgsTo(function(df1, df2) {
-                if (nrow(df1) + nrow(df2) == 0) return(TRUE)
+                if ((nrow(df1) + nrow(df2)) == 0) return(TRUE)
                 sum(df1 - df2) < (ncol(df1) * nrow(df1) * threshold)
             })
 
-        if (!xy_are_setequal) {
-            logIfVerbose("x, y coordinates are not set-equal")
+        if (!xy_are_equal) {
+            logIfVerbose("x, y coord pairs don't contain the same elements")
             return(FALSE)
         }
     }

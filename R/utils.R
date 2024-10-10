@@ -265,17 +265,6 @@ subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
-# formatting
-
-getSetDiffAsListInStr <- function(a, b, a_name = "a", b_name = "b") {
-    glue(
-        "Setdiff({a_name}, {b_name}):\n",
-        "- {paste(setdiff(a, b), collapse = '\n -')}\n\n",
-        "Setdiff({b_name}, {a_name}):\n",
-        "- {paste(setdiff(b, a), collapse = '\n -')}"
-    )
-}
-
 # ggplot2 utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
@@ -351,6 +340,28 @@ divide <- function(x, y) x / y
 
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
+
+haveSameElements <- function(x, y) {
+    if (xor(is_empty(x), is_empty(y))) return(FALSE)
+    if (length(x) != length(y)) return(FALSE)
+    all(sort(x) == sort(y))
+}
+
+getElementDiff <- function(x, y) {
+    if (is_empty(y)) return(x)
+    x[!(x %in% y)]
+}
+
+# formatting
+
+getDiffAsListInStr <- function(a, b, a_name = "a", b_name = "b") {
+    glue(
+        "elementDiff({a_name}, {b_name}):\n",
+        "- {paste(getElementDiff(a, b), collapse = '\n -')}\n\n",
+        "elementDiff({b_name}, {a_name}):\n",
+        "- {paste(getElementDiff(b, a), collapse = '\n -')}"
+    )
+}
 
 # special mutation operators from StackOverflow
 
