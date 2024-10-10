@@ -185,8 +185,8 @@ test_that("circlepackClones packs right for the default case", {
 		verbose = FALSE
 	)
 
-	expect_equal(
-		test_apotc_data@clusters, getdata("combined_pbmc", "expected_clusterlists")
+	expect_apotc_data_clusterlist_equals_expected(
+		test_apotc_data, getdata("combined_pbmc", "expected_clusterlists")
 	)
 })
 
@@ -253,7 +253,9 @@ test_that("circlepackClones packs right for the subset case", {
 
 	expected_clusterlists <- getdata("combined_pbmc", "expected_clusterlists")
 	expected_clusterlists[[1]] <- list()
-	expect_equal(test_apotc_data@clusters, expected_clusterlists)
+	expect_apotc_data_clusterlist_equals_expected(
+		test_apotc_data, expected_clusterlists
+	)
 })
 
 # TODO test the repulsion API
