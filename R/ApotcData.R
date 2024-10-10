@@ -430,18 +430,3 @@ set_labels <- function(apotc_obj, x) {
 	apotc_obj@labels <- x
 	apotc_obj
 }
-
-# functions for testing
-
-does_apotc_listof_clusterlist_equal_expected <- function(
-    apotc_obj, expected, tolerance = 1e-6, verbose = FALSE
-) {	
-    areGeometricallyEqualListsOfClusterLists(
-        a = get_clusterlists(apotc_obj),
-        b = expected,
-        rad_decrease = get_rad_decrease(apotc_obj),
-        clone_scale_factor = get_clone_scale_factor(apotc_obj),
-        tolerance = tolerance,
-        verbose = verbose
-    )
-}
