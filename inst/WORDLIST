@@ -50,7 +50,6 @@ barcode
 barcodes
 barebones
 berkeley
-bioconductor
 biosample
 cdot
 centroid
@@ -60,7 +59,6 @@ cloneCall
 clonecall
 clonotype
 clonotypes
-codechunk
 combineExpression
 combineTCR
 contig
@@ -93,6 +91,7 @@ linetype
 multimeric
 nt
 nucleotides
+packings
 pca
 pixelated
 pkgdown

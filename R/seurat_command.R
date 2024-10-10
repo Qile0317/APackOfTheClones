@@ -37,7 +37,7 @@ get_command_name <- function(command, id = NULL) {
 # originally "auto" during the input.
 #
 make_apotc_command <- function(call_time, assay = "RNA") {
-    
+   
     if (as.character(x = sys.calls()[[1]])[1] == "do.call") {
         call_string <- deparse(expr = sys.calls()[[1]])
         command_name <- as.character(x = sys.calls()[[1]])[2]

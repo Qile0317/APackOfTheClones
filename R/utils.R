@@ -176,7 +176,7 @@ sort_each_table <- function(x, desc = FALSE) {
 
 init_empty_table_list <- function(x) {
     init_list(x, create_empty_table())
-} 
+}
 
 is_list_of_empty_tables <- function(x) is_empty(x) || all(sapply(x, is_empty))
 
@@ -341,6 +341,17 @@ divide <- function(x, y) x / y
 is_even <- function(x) x %% 2 == 0
 is_odd <- function(x) x %% 2 == 1
 
+haveSameElements <- function(x, y) {
+    if (xor(is_empty(x), is_empty(y))) return(FALSE)
+    if (length(x) != length(y)) return(FALSE)
+    all(sort(x) == sort(y))
+}
+
+getElementDiff <- function(x, y) {
+    if (is_empty(y)) return(x)
+    x[!(x %in% y)]
+}
+
 # special mutation operators from StackOverflow
 
 create_mutator <- function(binary_operator) {
@@ -446,7 +457,7 @@ user_attempt_correction <- function(
             return(potential_unique_similar_word)
         }
     }
-    
+   
     stop(
         stop_msg_start, " `", s, "`, did you mean: `",
         closest_word(s, strset), "`?",
@@ -519,6 +530,8 @@ move_coord_list_by_same_amount <- function(
     )
 }
 
+applyListAsArgsTo <- function(arglist, f, ...) do.call(f, arglist, ...)
+
 #' Take a list of character vectors and join each element of the vectors
 #' together, separating each character by sep. Currently recursive which
 #' will be bad for larger inputs :P
@@ -569,21 +582,21 @@ to_string_rep_with_insert <- function(v, insert) {
 subsetSeuratMetaData <- function(
     seurat_obj, filter_string, error_param = "extra_filter"
 ) {
-	seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
+    seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
 
-	if (nrow(seurat_obj@meta.data) == 0) {
-		stop(call. = FALSE, paste(
-			"please check `", error_param, "`, ",
+    if (nrow(seurat_obj@meta.data) == 0) {
+	    stop(call. = FALSE, paste(
+		    "please check `", error_param, "`, ",
 			"no rows in the seurat metadata match the filter condition",
             sep = ""
-		))
-	}
+	    ))
+    }
 
 	seurat_obj
 }
 
 count_clones <- function(seurat_obj, clonecall) {
-  sum(!is.na(seurat_obj@meta.data[[clonecall]]))
+    sum(!is.na(seurat_obj@meta.data[[clonecall]]))
 }
 
 # TODO check if identical with ApotcData order
@@ -601,7 +614,7 @@ get_ident_levels <- function(seurat_obj, custom_ident = NULL) {
 }
 
 get_num_total_clusters <- function(seurat_obj) {
-  length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
+    length(levels(seurat_obj@meta.data[["seurat_clusters"]]))
 }
 
 # seurat reduction related functions
@@ -634,8 +647,8 @@ attempt_correction <- function(seurat_obj, reduction) {
     }
 
     user_attempt_correction(
-      reduction,
-      strset = curr_reductions,
-      stop_msg_start = "Invalid reduction"
+        reduction,
+        strset = curr_reductions,
+        stop_msg_start = "Invalid reduction"
     )
 }

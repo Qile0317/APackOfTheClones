@@ -97,7 +97,7 @@ showCloneHighlight <- function(
 
     clone_color_vector <- gen_clone_color_vector(
         color_each, clonotype, highlighted_ggplot_data
-    ) # TODO be able to color by individual clone (not clonotype) for stuff like other parameters in the metadata
+    )
 
     num_matches <- 0
 
@@ -130,10 +130,8 @@ showCloneHighlight <- function(
 
     apotc_ggplot <- set_ggplot_data(apotc_ggplot, highlighted_ggplot_data)
 
-    # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
     if (identical(color_each, FALSE) || !fill_legend) return(apotc_ggplot)
 
-    # FIXME fill colors doesnt show up on pkgdown though legend show up
     suppressMessages(apotc_ggplot + ggplot2::scale_fill_identity(
         guide = "legend",
         name = "clonotype",
@@ -144,7 +142,7 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function() {
-    
+   
     args <- get_parent_func_args()
 
     check_is_apotc_ggplot(args$apotc_ggplot)

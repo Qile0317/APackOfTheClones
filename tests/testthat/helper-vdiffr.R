@@ -3,13 +3,13 @@
 # a GitHub Actions CI runner with stable version of R.
 
 if (requireNamespace("vdiffr", quietly = TRUE) && utils::packageVersion('testthat') >= '3.0.3') {
-  expect_doppelganger <- vdiffr::expect_doppelganger
+    expect_doppelganger <- vdiffr::expect_doppelganger
 } else {
-  # If vdiffr is not available and visual tests are explicitly required, raise error.
-  if (identical(Sys.getenv("VDIFFR_RUN_TESTS"), "true")) {
-    rlang::abort("vdiffr is not installed")
-  }
+    # If vdiffr is not available and visual tests are explicitly required, raise error.
+    if (identical(Sys.getenv("VDIFFR_RUN_TESTS"), "true")) {
+        rlang::abort("vdiffr is not installed")
+    }
 
-  # Otherwise, assign a dummy function
-  expect_doppelganger <- function(...) skip("vdiffr is not installed.")
+    # Otherwise, assign a dummy function
+    expect_doppelganger <- function(...) skip("vdiffr is not installed.")
 }

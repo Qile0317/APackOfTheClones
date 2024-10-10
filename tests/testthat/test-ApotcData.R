@@ -177,6 +177,7 @@ test_that("circlepackClones works for the default case", {
 
 test_that("circlepackClones packs right for the default case", {
 	skip_on_cran()
+	skip_on_os("mac") # diffs in fp precision leads to different packings
 
 	test_apotc_data <- circlepackClones(
 		non_subset_apotc_data,
@@ -233,6 +234,7 @@ test_that("circlepackClones works for the subset case", {
 
 test_that("circlepackClones packs right for the subset case", {
 	skip_on_cran()
+	skip_on_os("mac") # diffs in fp precision leads to different packings
 	
 	test_apotc_data <- ApotcData(
 		seurat_obj = combined_pbmc,
@@ -253,7 +255,9 @@ test_that("circlepackClones packs right for the subset case", {
 
 	expected_clusterlists <- getdata("combined_pbmc", "expected_clusterlists")
 	expected_clusterlists[[1]] <- list()
-	expect_equal(test_apotc_data@clusters, expected_clusterlists)
+	expect_equal(
+		test_apotc_data@clusters, expected_clusterlists
+	)
 })
 
 # TODO test the repulsion API
