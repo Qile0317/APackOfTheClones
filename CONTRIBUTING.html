@@ -46,7 +46,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Contributing to APackOfTheClones Development</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/v1.2.1/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-apackoftheclones-development" class="section level1">
@@ -98,7 +98,7 @@
 <p>Each PR corresponds to a git branch, so if you expect to submit multiple changes make sure to create multiple branches. If you have multiple changes that depend on each other, start with the first one and don’t submit any others until the first one has been processed.</p>
 </li>
 <li><p><strong>Use the coding style of this package</strong>. Maintaining a consistent style across the whole code base makes it much easier to jump into the code. If you’re modifying existing code, a separate pull request to change the style would be greatly appreciated. In general, this would be a breaking change if it is an externally exported function, which ideally should be avoided.</p></li>
-<li><p>If you’re adding new parameters or a new function, you’ll also need to document them with <a href="https://github.com/klutometis/roxygen" class="external-link">roxygen</a>. Make sure to re-run <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> on the code before submitting.</p></li>
+<li><p>If you’re adding new parameters or a new function, you’ll also need to document them with <a href="https://github.com/klutometis/roxygen" class="external-link">roxygen</a>. Make sure to re-run <code>devtools::document()</code> on the code before submitting.</p></li>
 <li><p>If fixing a bug or adding a new feature to a non-graphical function, please add a <a href="https://github.com/r-lib/testthat" class="external-link">testthat</a> unit test.</p></li>
 <li><p>If fixing a bug in the visual output, please add a visual test with <code>expect_doppelganger()</code>, but try as much as possible to reduce the svg snapshot size by minimizing the number of individual polygons displayed.</p></li>
 <li><p>If you’re adding a new graphical feature, please add a short example to the appropriate function.</p></li>
