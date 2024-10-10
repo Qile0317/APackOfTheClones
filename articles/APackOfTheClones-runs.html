@@ -17,12 +17,12 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Storing and Fine-Tuning APackOfTheClones Runs">
-<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=%7BG-TSDH5XEN3S%7D"></script><script>
+<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-TSDH5XEN3S"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{G-TSDH5XEN3S}');
+  gtag('config', 'G-TSDH5XEN3S');
 </script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,12 +42,14 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../articles/APackOfTheClones-install.html">Install</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/APackOfTheClones.html">Get started</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Vignettes</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-<li><a class="dropdown-item" href="../articles/APackOfTheClones.html">APackOfTheClones Essentials</a></li>
-    <li><a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a></li>
+<li><a class="dropdown-item" href="../articles/APackOfTheClones-runs.html">Storing and Fine-Tuning APackOfTheClones Runs</a></li>
+    <li><a class="dropdown-item" href="../articles/APackOfTheClones-shared.html">Working With Clonotypes Shared Across Clusters</a></li>
+    <li><a class="dropdown-item" href="../articles/APackOfTheClones-utils.html">Clonal Analysis Utilities in APackOfTheClones</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -55,7 +57,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-archive" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Archive</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-archive">
-<li><a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x</a></li>
+<li><a class="dropdown-item" href="../articles/archive/v0-main.html">v0.1.x main vignette</a></li>
   </ul>
 </li>
       </ul>
@@ -79,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Storing and Fine-Tuning APackOfTheClones Runs</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/unstable/vignettes/APackOfTheClones-runs.Rmd" class="external-link"><code>vignettes/APackOfTheClones-runs.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/dev/vignettes/APackOfTheClones-runs.Rmd" class="external-link"><code>vignettes/APackOfTheClones-runs.Rmd</code></a></small>
       <div class="d-none name"><code>APackOfTheClones-runs.Rmd</code></div>
     </div>
 
@@ -90,12 +92,12 @@
 </h2>
 <p>As demonstrated in <code><a href="../articles/APackOfTheClones.html">vignette("APackOfTheClones")</a></code>, after
 processing the seurat &amp; clonotype data properly with
-<code>scRepertoire</code>, <code>vizAPOTC</code> provides a direct way
+<code>scRepertoire</code>, <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> provides a direct way
 to produce the ball-packing clonal expansion visualization, though for
 select users it may be somewhat clunky, if certain parameters need to be
 readjusted constantly. In this vignette, more details about how
 APackOfTheClones runs can be stored and re-adjusted will be covered -
-mainly through <code>RunAPOTC</code>, <code>APOTCPlot</code>, and
+mainly through <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code>, <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>, and
 <code>AdjustAPOTC</code>. Ensure to read the aforementioned vignette
 before this one.</p>
 <details><summary><strong>As a reminder, here’s how to set up the seurat object and
@@ -126,30 +128,30 @@ clonotype data</strong>
 </details><div class="section level3">
 <h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h3>
-<p>All of <code>vizAPOTC</code>’s arguments are actually derived from
-<code>RunAPOTC</code> and <code>APOTCPlot</code>. The former is
+<p>All of <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>’s arguments are actually derived from
+<code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> and <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>. The former is
 responsible for storing data of the S4 class <code>ApotcData</code> in
 the seurat object under a named list in
 <code>@misc$APackOfTheClones</code> under some character run ID, and the
 latter allows the visualization of these data objects with some
 customization. <code>AdjustAPOTC</code> has many arguments for adjusting
 the data associated with some APackOfTheClones run stored by
-<code>RunAPOTC</code>, including adjusting cluster positions, colors,
+<code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code>, including adjusting cluster positions, colors,
 repulsion, etc. which can be visualized again with
-<code>APOTCPlot</code>.</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="managing-apackoftheclones-run-data">Managing APackOfTheClones run data<a class="anchor" aria-label="anchor" href="#managing-apackoftheclones-run-data"></a>
 </h2>
-<p><code>RunAPOTC</code> has approximate the first half of
-<code>vizAPOTC</code>’s arguments until <code>max_repulsion_iter</code>,
-meaning it has all the data subsetting, circle size scaling, and cluster
-repulsion capabilities covered in the previous vignette. The most
-essential difference is the presence of the argument
-<code>run_id</code>, which corresponds to an id for the
-<code>ApotcData</code> object. If left blank, one will be automatically
-generated in the following format:</p>
+<p><code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> has approximate the first half of
+<code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>’s arguments until
+<code>max_repulsion_iter</code>, meaning it has all the data subsetting,
+circle size scaling, and cluster repulsion capabilities covered in the
+previous vignette. The most essential difference is the presence of the
+argument <code>run_id</code>, which corresponds to an id for the
+<code>ApotcData</code> object associated with some run. If left blank,
+one will be automatically generated in the following format:</p>
 <blockquote>
 <p><code>reduction_base;clonecall;keyword_arguments;extra_filter</code></p>
 </blockquote>
@@ -166,7 +168,7 @@ generated in the following format:</p>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Packing clones into clusters</span></span>
 <span><span class="co">#&gt; [==================================================] 100%</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; repulsing all clusters | max iterations = 20</span></span>
 <span><span class="co">#&gt; [==================================================] 100%</span></span>
 <span><span class="co">#&gt;</span></span>
@@ -179,6 +181,17 @@ set. Here’s it ran again but with more optional arguments and a custom
 <code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
 <span>    <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"sample17"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="important-note">Important Note<a class="anchor" aria-label="anchor" href="#important-note"></a>
+</h3>
+<p>Practically speaking, most users probably only really need to ever
+work with visualizations from one run and mainly want to just adjust its
+parameters or the aesthetics of the plot - or they already will have
+several subsetted seurat objects. In these cases, feel free to
+completely ignore any of the parameters related to <code>run_id</code>
+or any other filtering parameter, as all functions default to using the
+latest run if no identifying parameters are passed in.</p>
+</div>
 <div class="section level3">
 <h3 id="utilities-for-managing-apackoftheclones-runs">Utilities for Managing APackOfTheClones Runs<a class="anchor" aria-label="anchor" href="#utilities-for-managing-apackoftheclones-runs"></a>
 </h3>
@@ -198,6 +211,9 @@ Instead, here is a collection of functions that may be useful:</p>
 <code>containsApotcRun(pbmc, run_id = "foo")</code> returns whether
 a <code>run_id</code> exists in the seurat object.</li>
 <li>
+<code>renameApotcRun(pbmc, old_run_id = "foo", new_run_id = "bar")</code>
+renames runs.</li>
+<li>
 <code>deleteApotcData(pbmc, run_id = "foo")</code> deletes <em>all
 data</em> associated with a certain <code>run_id</code>.</li>
 </ul>
@@ -206,21 +222,21 @@ data</em> associated with a certain <code>run_id</code>.</li>
 <div class="section level2">
 <h2 id="apotcplot">APOTCPlot<a class="anchor" aria-label="anchor" href="#apotcplot"></a>
 </h2>
-<p>To visualize stored APackOfTheClones runs, <code>APOTCPlot</code>
+<p>To visualize stored APackOfTheClones runs, <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code>
 takes in a seurat object and the <code>run_id</code>. If no
 <code>run_id</code> is provided, it defaults to using the latest run.
 All other parameters are same as in the second half of
-<code>vizAPOTC</code>. Although it is noteworthy that if the user had
+<code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>. Although it is noteworthy that if the user had
 always relied on auto-generated <code>run_id</code>’s then
-<code>APOTCPlot</code> also has these subsetting arguments:</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> also has these subsetting arguments:</p>
 <p>And putting in identical arguments to generate the original
 <code>ApotcData</code> would work too, but this approach is less
 recommended as its a lot more (unnecessarily) verbose. Here is
-<code>APOTCPlot</code> in action:</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> in action:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, plots for samples 17 - 20 as seen in the previous vignette are made, where</span></span>
 <span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
-<span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). </span></span>
+<span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L").</span></span>
 <span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -245,7 +261,11 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 <span>  <span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>, add_size_legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># defaults to latest</span></span>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"17"</span>, <span class="st">"18"</span>, <span class="st">"19"</span>, <span class="st">"20"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span></code></pre></div>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: P20</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
 <p><img src="APackOfTheClones-runs_files/figure-html/apotcplot-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -253,12 +273,108 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 </h2>
 <p>This function’s parameters help modify certain attributes about
 APackOfTheClones runs, and has the exact same first six parameters as
-<code>APOTCPlot</code> for managing which run to modify. It also
-possesses the same four repulsion arguments in <code>vizAPOTC</code> and
-<code>RunAPOTC</code> if a run is to be repulsed again. See the function
-level documentation for the following parameters that can modify cluster
-locations, colors, and the adjustment of the
-<code>clone_scale_factor</code> and <code>rad_scale_factor</code>.</p>
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> for managing which run to modify. It also
+possesses the same four repulsion arguments in <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code>
+and <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> if a run is to be repulsed again. See the
+function level documentation for the following parameters that can
+modify cluster locations, colors, and the adjustment of the
+<code>clone_scale_factor</code> and <code>rad_scale_factor</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>new_rad_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>new_clone_scale_factor <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>relocate_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>relocation_coord <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>nudge_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>recolor_cluster <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>new_color <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>rename_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>new_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>relocate_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>label_relocation_coord <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>nudge_label <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>label_nudge_vector <span class="ot">=</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>verbose <span class="ot">=</span> <span class="cn">TRUE</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="tip-to-speeding-up-adjustments">Tip to Speeding up Adjustments<a class="anchor" aria-label="anchor" href="#tip-to-speeding-up-adjustments"></a>
+</h3>
+<p>While the <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> and <code><a href="../reference/RunAPOTC.html">RunAPOTC()</a></code> /
+<code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> functions to do APackOfTheClones runs and
+generate the ggplot object are relatively fast even for very large
+seurat objects, plot display times can get quite long the more circles
+there are. <code>AdjustAPOTC</code> is meant to be used in an
+incremental/iterative manner, where the user can adjust one aspect,
+inspect the plot, and adjust again if necessary, and repeat - the long
+plot display times may pose as a large inconvenience.</p>
+<p>Setting the argument <code>detail</code> to <code>FALSE</code> when
+using <code><a href="../reference/APOTCPlot.html">APOTCPlot()</a></code> or <code><a href="../reference/vizAPOTC.html">vizAPOTC()</a></code> can help -
+this will plot entire clusters as one large circle - speeding up
+plotting times significantly. The details of the individual clonotype
+circles will be lost but the inspection of other aspects like label
+locations will be a much more pleasant process.</p>
+</div>
+<div class="section level3">
+<h3 id="usage-examples">Usage Examples<a class="anchor" aria-label="anchor" href="#usage-examples"></a>
+</h3>
+<div class="section level4">
+<h4 id="renaming-cluster-labels">Renaming Cluster Labels<a class="anchor" aria-label="anchor" href="#renaming-cluster-labels"></a>
+</h4>
+<p>After identification of the cell identity of each seurat cluster, it
+may be useful to rename each cluster label to the actual identity of the
+cells of each cluster. here is a minimal example of how this process is
+intended to be done:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Do a run with just the first 4 seurat clusters, and rename labels</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    run_id <span class="op">=</span> <span class="st">"first_four"</span>,</span>
+<span>    seurat_clusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    run_id <span class="op">=</span> <span class="st">"first_four"</span>,</span>
+<span>    rename_label <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>    new_label <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
+<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    run_id <span class="op">=</span> <span class="st">"first_four"</span>,</span>
+<span>    show_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
+<p><img src="APackOfTheClones-runs_files/figure-html/first_four_labeled-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="extra-cluster-repulsion">Extra Cluster Repulsion<a class="anchor" aria-label="anchor" href="#extra-cluster-repulsion"></a>
+</h4>
+<p>Another possibility is that the default repulsion may have left the
+clusters too close - here this is corrected - and the labels are moved
+as well. Note the use of the pipe operator may also be useful.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="va">pbmc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span>run_id <span class="op">=</span> <span class="st">"foo"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
+<span>        run_id <span class="op">=</span> <span class="st">"foo"</span>,</span>
+<span>        repulse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>        repulsion_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>        verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    show_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    retain_axis_scales <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    add_size_legend <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: foo</span></span>
+<span><span class="co">#&gt; * generated ggplot object</span></span></code></pre></div>
+<p><img src="APackOfTheClones-runs_files/figure-html/repulse_again-1.png" width="700"></p>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
