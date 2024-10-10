@@ -82,7 +82,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Storing and Fine-Tuning APackOfTheClones Runs</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/unstable/vignettes/APackOfTheClones-runs.Rmd" class="external-link"><code>vignettes/APackOfTheClones-runs.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Qile0317/APackOfTheClones/blob/dev/vignettes/APackOfTheClones-runs.Rmd" class="external-link"><code>vignettes/APackOfTheClones-runs.Rmd</code></a></small>
       <div class="d-none name"><code>APackOfTheClones-runs.Rmd</code></div>
     </div>
 
@@ -169,7 +169,7 @@ one will be automatically generated in the following format:</p>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Packing clones into clusters</span></span>
 <span><span class="co">#&gt; [==================================================] 100%</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; repulsing all clusters | max iterations = 20</span></span>
 <span><span class="co">#&gt; [==================================================] 100%</span></span>
 <span><span class="co">#&gt;</span></span>
@@ -237,7 +237,7 @@ recommended as its a lot more (unnecessarily) verbose. Here is
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, plots for samples 17 - 20 as seen in the previous vignette are made, where</span></span>
 <span><span class="co"># `orig.ident` is a custom column in the example data with levels corresponding to sample ids:</span></span>
-<span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). </span></span>
+<span><span class="co"># ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L").</span></span>
 <span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"P17"</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
