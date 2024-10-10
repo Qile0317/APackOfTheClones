@@ -265,6 +265,17 @@ subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
+# formatting
+
+getSetDiffAsListInStr <- function(a, b, a_name = "a", b_name = "b") {
+    glue(
+        "Setdiff({a_name}, {b_name}):\n",
+        "- {paste(setdiff(a, b), collapse = '\n -')}\n\n",
+        "Setdiff({b_name}, {a_name}):\n",
+        "- {paste(setdiff(b, a), collapse = '\n -')}"
+    )
+}
+
 # ggplot2 utils
 
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
@@ -518,6 +529,8 @@ move_coord_list_by_same_amount <- function(
         )
     )
 }
+
+applyListAsArgsTo <- function(arglist, f, ...) do.call(f, arglist, ...)
 
 #' Take a list of character vectors and join each element of the vectors
 #' together, separating each character by sep. Currently recursive which

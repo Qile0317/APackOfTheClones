@@ -46,13 +46,13 @@ test_that("showCloneHighlight works", {
     expect_equal(
         object = test_cl_5_9_highlighted_data %>%
             dplyr::select(label, x, y, r) %>%
-            dplyr::arrange(x),
+            dplyr::arrange(x, y),
         expected =
             getdata(
                 "showCloneHighlight", "cl_5_9_highlighted_data"
             ) %>%
             dplyr::select(label, x, y, r) %>%
-            dplyr::arrange(x),
+            dplyr::arrange(x, y),
         tolerance = 1e-5
     )
 

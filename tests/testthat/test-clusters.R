@@ -35,12 +35,26 @@ test_that("trans_coord() works withOUT new_coord", {
 })
 
 test_that("trans_coord() works WITH new_coord", {
-  expect_equal(trans_coord(c1, c(9, 0)), c1_shifted_to_9_0, tolerance = 1e-9)
+    expect_equal(trans_coord(c1, c(9, 0)), c1_shifted_to_9_0, tolerance = 1e-9)
 })
 
 # need to test if it doesn't work when the input is null/na!
 
 test_that("move_cluster() works", {
-  expect_equal(move_cluster(c1, c(4, 5)), c1_shifted_by_4_5, tolerance = 1e-9)
-  expect_equal(move_cluster(c1, c(9, 0)), c1_shifted_to_9_0, tolerance = 1e-9)
+    expect_equal(move_cluster(c1, c(4, 5)), c1_shifted_by_4_5, tolerance = 1e-9)
+    expect_equal(move_cluster(c1, c(9, 0)), c1_shifted_to_9_0, tolerance = 1e-9)
+})
+
+test_that("the cluster list equality checker works", {
+
+    expect_true(areGeometricallyEqualClusterLists(c1, c1, 0, 1))
+    expect_true(areGeometricallyEqualClusterLists(c2, c2, 0.05, 1))
+    expect_true(areGeometricallyEqualClusterLists(c3, c3, 0.05, 1))
+
+    # TODO cases with shuffled inputs
+
+    expect_false(areGeometricallyEqualClusterLists(c1, c2, 0.05, 1))
+    expect_false(areGeometricallyEqualClusterLists(c1, c1_shifted_by_4_5, 0.05, 1))
+    expect_false(areGeometricallyEqualClusterLists(c1, c1_shifted_to_9_0, 0.05, 1))
+
 })

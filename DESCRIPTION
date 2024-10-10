@@ -34,6 +34,7 @@ Imports:
     dplyr,
     ggforce,
     ggplot2,
+    glue,
     hash,
     lifecycle,
     methods,
