@@ -9,8 +9,8 @@
 #' combinations of the arguments, there will be a ggplot fill legend on the
 #' right side that correspond to each (existing) clonotype.
 #'
-#' @param apotc_ggplot A ggplot object that is the output of [APOTCPlot] or
-#' [vizAPOTC] of an APackOfTheClones plot to be highlighted on.
+#' @param apotc_ggplot A ggplot object that is the output of [APOTCPlot()] or
+#' [vizAPOTC()] of an APackOfTheClones plot to be highlighted on.
 #' @param clonotype character vector of the sequence(s) to highlight. Note
 #' that it must be of the clonecall of the code that created the plot. A
 #' warning will be shown if any of the sequences are not present.
@@ -30,7 +30,7 @@
 #' of non-highlighted clones. If `NULL`, all un-highlighted sequences will
 #' retain their original color in `sc.data`. Else, if it is a character, it
 #' should be a valid color that all un-highlighted clones are. Defaults to the
-#' hexcode for gray.
+#' hex code for gray.
 #' @param scale_bg A positive numeric. Scales the brightness value of each color
 #' of the non-highlighted clones by itself as a scaling factor. Defaults to 1
 #' which will not alter the current brightness. Note that if
@@ -41,7 +41,7 @@
 #' of each clonotype should be displayed.
 #'
 #' @details
-#' Under the hood, this function simply mutates the plotting dataframe under
+#' Under the hood, this function simply mutates the plotting data.frame under
 #' `$data` in the ggplot object, and operates on a column named `color`.
 #'
 #' Note that if `color_each = FALSE` and `default_color = NULL`, this is
@@ -51,10 +51,10 @@
 #' @export
 #'
 #' @examples
-#' library(magrittr)
+#' library(dplyr)
 #' data("combined_pbmc")
 #'
-#' # piping the plot can be nice to read syntatically -
+#' # piping the plot can be nice to read syntactically -
 #' # By default, assigns unique colors to highlights and everything else is gray
 #' vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) %>%
 #'     showCloneHighlight("CASLSGSARQLTF_CASSSTVAGEQYF")
@@ -97,7 +97,7 @@ showCloneHighlight <- function(
 
     clone_color_vector <- gen_clone_color_vector(
         color_each, clonotype, highlighted_ggplot_data
-    ) # TODO be able to color by individual clone (not clonotype) for stuff like other parameters in the metadata
+    )
 
     num_matches <- 0
 
@@ -130,10 +130,8 @@ showCloneHighlight <- function(
 
     apotc_ggplot <- set_ggplot_data(apotc_ggplot, highlighted_ggplot_data)
 
-    # TODO technically probably possible to have seperate colors for each seq if color_each=FALSE
     if (identical(color_each, FALSE) || !fill_legend) return(apotc_ggplot)
 
-    # FIXME fill colors doesnt show up on pkgdown though legend show up
     suppressMessages(apotc_ggplot + ggplot2::scale_fill_identity(
         guide = "legend",
         name = "clonotype",
@@ -144,7 +142,7 @@ showCloneHighlight <- function(
 }
 
 apotc_highlight_clones_error_handler <- function() {
-    
+   
     args <- get_parent_func_args()
 
     check_is_apotc_ggplot(args$apotc_ggplot)

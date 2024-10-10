@@ -4,7 +4,7 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' 
+#'
 #' Removes the clone size legend on an APackOfTheClones plot, if
 #' one is present. Will preserve any additional ggplot layers.
 #'
@@ -40,15 +40,15 @@ removeLegend <- function(apotc_ggplot) {
 #' `r lifecycle::badge("stable")`
 #'
 #' This function has most of the parameters related to legend in
-#' [APOTCPlot], and can plot a new / override the current legend.
+#' [APOTCPlot()], and can plot a new / override the current legend.
 #' However, it is very important that the input plot to the function
-#' is a plot generated solely by [APOTCPlot] or [vizAPOTC] due to it
+#' is a plot generated solely by [APOTCPlot()] or [vizAPOTC()] due to it
 #' being a custom ggplot object. It will not override or erase any
 #' additional layers that the user/other functions have added. To just
 #' remove the legend, see [removeLegend].
 #'
-#' @param apotc_ggplot a ggplot object that is the output of [APOTCPlot] or
-#' [vizAPOTC]
+#' @param apotc_ggplot a ggplot object that is the output of [APOTCPlot()] or
+#' [vizAPOTC()]
 #' @inheritParams APOTCPlot
 #'
 #' @details
@@ -66,7 +66,7 @@ removeLegend <- function(apotc_ggplot) {
 #' @seealso [removeLegend]
 #'
 #' @examples
-#' library(magrittr)
+#' library(dplyr)
 #'
 #' # create a plot with a legend
 #' apotc_plot <- vizAPOTC(get(data("combined_pbmc")), verbose = FALSE)
@@ -94,7 +94,7 @@ overlayLegend <- function(
     linetype = "blank",
     res = 360L
 ) {
-    
+   
     overlayLegend_error_handler()
 
     layers_after_legend_present <- FALSE
@@ -272,7 +272,7 @@ insert_legend <- function(
     if (do_add_legend_border) {
         plt <- add_legend_backing(plt, legend_df) %>% name_latest_legend_layer()
     }
-    
+   
     # add the side number labels
     plt <- (plt + ggplot2::annotate(
         "text", x = legend_df[, "label_x"], y = legend_df[, "y"],
@@ -355,7 +355,7 @@ estimate_best_legend_df <- function(
     best_legend_df <- data.frame()
 
     for (pos in c("top_left", "top_right", "bottom_left", "bottom_right")) {
-        
+       
         curr_legend_df <- generate_legend_df(
             pos, unpositioned_legend_df, legend_dims, plt_dims, buffer
         )
@@ -485,7 +485,7 @@ estimate_top_left_circ_coord <- function(
 
     xr <- get_xr(plt_dims)
     yr <- get_yr(plt_dims)
-    
+   
     if (identical(destination_str, "top_left")) {
         return(c(xr[1] + max_rad(unpositioned_legend_df) + buffer, yr[2]))
     }
@@ -543,7 +543,7 @@ add_legend_backing <- function(plt, legend_df) {
 get_legend_backing_minmax_dims <- function(legend_df) {
     spacing <- 0.15
     max_radius <- max_rad(legend_df)
-    
+   
     xmin <- get_circle_x(legend_df) - max_radius - spacing
     xmax <- get_label_x(legend_df) + max_radius + spacing
 

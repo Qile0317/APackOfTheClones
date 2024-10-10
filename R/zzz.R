@@ -7,11 +7,4 @@
         "`citation('APackOfTheClones')`\n",
         sep = ""
     ))
-
-    # new deprecation note for the release
-    packageStartupMessage(paste(
-        "*** DEPRECATION NOTICE TO RETURNING USERS OF VERSION 0.1.x *** \n",
-        deprecation_docstring(), "\n",
-        sep = ""
-    ))
 }

@@ -30,7 +30,7 @@ quiet_load_all_CRAN <- function(...) {
 }
 
 # load packages
-quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "magrittr")
+quiet_load_all_CRAN("ggplot2", "cowplot", "Seurat", "dplyr")
 ```
 
 ```{r setup}
@@ -41,7 +41,7 @@ pbmc <- get(data("combined_pbmc"))
 
 ## Introduction
 
-As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC` provides a direct way to produce the ball-packing clonal expansion visualization, though for select users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC`, `APOTCPlot`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
+As demonstrated in `vignette("APackOfTheClones")`, after processing the seurat & clonotype data properly with `scRepertoire`, `vizAPOTC()` provides a direct way to produce the ball-packing clonal expansion visualization, though for select users it may be somewhat clunky, if certain parameters need to be readjusted constantly. In this vignette, more details about how APackOfTheClones runs can be stored and re-adjusted will be covered - mainly through `RunAPOTC()`, `APOTCPlot()`, and `AdjustAPOTC`. Ensure to read the aforementioned vignette before this one.
 
 <details>
 
@@ -79,11 +79,11 @@ print(pbmc)
 
 ### Overview
 
-All of `vizAPOTC`'s arguments are actually derived from `RunAPOTC` and `APOTCPlot`. The former is responsible for storing data of the S4 class `ApotcData` in the seurat object under a named list in `@misc$APackOfTheClones` under some character run ID, and the latter allows the visualization of these data objects with some customization. `AdjustAPOTC` has many arguments for adjusting the data associated with some APackOfTheClones run stored by `RunAPOTC`, including adjusting cluster positions, colors, repulsion, etc. which can be visualized again with `APOTCPlot`.
+All of `vizAPOTC()`'s arguments are actually derived from `RunAPOTC()` and `APOTCPlot()`. The former is responsible for storing data of the S4 class `ApotcData` in the seurat object under a named list in `@misc$APackOfTheClones` under some character run ID, and the latter allows the visualization of these data objects with some customization. `AdjustAPOTC` has many arguments for adjusting the data associated with some APackOfTheClones run stored by `RunAPOTC()`, including adjusting cluster positions, colors, repulsion, etc. which can be visualized again with `APOTCPlot()`.
 
 ## Managing APackOfTheClones run data
 
-`RunAPOTC` has approximate the first half of `vizAPOTC`'s arguments until `max_repulsion_iter`, meaning it has all the data subsetting, circle size scaling, and cluster repulsion capabilities covered in the previous vignette. The most essential difference is the presence of the argument `run_id`, which corresponds to an id for the `ApotcData` object associated with some run. If left blank, one will be automatically generated in the following format:
+`RunAPOTC()` has approximate the first half of `vizAPOTC()`'s arguments until `max_repulsion_iter`, meaning it has all the data subsetting, circle size scaling, and cluster repulsion capabilities covered in the previous vignette. The most essential difference is the presence of the argument `run_id`, which corresponds to an id for the `ApotcData` object associated with some run. If left blank, one will be automatically generated in the following format:
 
 > `reduction_base;clonecall;keyword_arguments;extra_filter`
 
@@ -99,7 +99,7 @@ pbmc <- RunAPOTC(pbmc)
 #>
 #> Packing clones into clusters
 #> [==================================================] 100%
-#> 
+#>
 #> repulsing all clusters | max iterations = 20
 #> [==================================================] 100%
 #>
@@ -135,7 +135,7 @@ It is to note that the data abstraction here with a `run_id` is intentional, and
 
 ## APOTCPlot
 
-To visualize stored APackOfTheClones runs, `APOTCPlot` takes in a seurat object and the `run_id`. If no `run_id` is provided, it defaults to using the latest run. All other parameters are same as in the second half of `vizAPOTC`. Although it is noteworthy that if the user had always relied on auto-generated `run_id`'s then `APOTCPlot` also has these subsetting arguments:
+To visualize stored APackOfTheClones runs, `APOTCPlot()` takes in a seurat object and the `run_id`. If no `run_id` is provided, it defaults to using the latest run. All other parameters are same as in the second half of `vizAPOTC()`. Although it is noteworthy that if the user had always relied on auto-generated `run_id`'s then `APOTCPlot()` also has these subsetting arguments:
 
 ```{r, apotcplot_subset_params, eval = FALSE}
 reduction_base = NULL,
@@ -145,12 +145,12 @@ extra_filter = NULL,
 alt_ident = NULL
 ```
 
-And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot` in action:
+And putting in identical arguments to generate the original `ApotcData` would work too, but this approach is less recommended as its a lot more (unnecessarily) verbose. Here is `APOTCPlot()` in action:
 
 ```{r, apotcplot, echo = TRUE}
 # Here, plots for samples 17 - 20 as seen in the previous vignette are made, where
 # `orig.ident` is a custom column in the example data with levels corresponding to sample ids:
-# ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L"). 
+# ("P17B" "P17L" "P18B" "P18L" "P19B" "P19L" "P20B" "P20L").
 
 pbmc <- RunAPOTC(
   pbmc, run_id = "P17", orig.ident = c("P17B", "P17L"), verbose = FALSE
@@ -179,7 +179,7 @@ cowplot::plot_grid(
 
 ## AdjustAPOTC
 
-This function's parameters help modify certain attributes about APackOfTheClones runs, and has the exact same first six parameters as `APOTCPlot` for managing which run to modify. It also possesses the same four repulsion arguments in `vizAPOTC` and `RunAPOTC` if a run is to be repulsed again. See the function level documentation for the following parameters that can modify cluster locations, colors, and the adjustment of the `clone_scale_factor` and `rad_scale_factor`:
+This function's parameters help modify certain attributes about APackOfTheClones runs, and has the exact same first six parameters as `APOTCPlot()` for managing which run to modify. It also possesses the same four repulsion arguments in `vizAPOTC()` and `RunAPOTC()` if a run is to be repulsed again. See the function level documentation for the following parameters that can modify cluster locations, colors, and the adjustment of the `clone_scale_factor` and `rad_scale_factor`:
 
 ```{r, echo = TRUE, eval = FALSE}
 new_rad_scale_factor = NULL,
@@ -201,9 +201,9 @@ verbose = TRUE
 
 ### Tip to Speeding up Adjustments
 
-While the `vizAPOTC` and `RunAPOTC` / `APOTCPlot` functions to do APackOfTheClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if necessary, and repeat - the long plot display times may pose as a large inconvenience.
+While the `vizAPOTC()` and `RunAPOTC()` / `APOTCPlot()` functions to do APackOfTheClones runs and generate the ggplot object are relatively fast even for very large seurat objects, plot display times can get quite long the more circles there are. `AdjustAPOTC` is meant to be used in an incremental/iterative manner, where the user can adjust one aspect, inspect the plot, and adjust again if necessary, and repeat - the long plot display times may pose as a large inconvenience.
 
-Setting the argument `detail` to `FALSE` when using `APOTCPlot` or `vizAPOTC` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more pleasant process.
+Setting the argument `detail` to `FALSE` when using `APOTCPlot()` or `vizAPOTC()` can help - this will plot entire clusters as one large circle - speeding up plotting times significantly. The details of the individual clonotype circles will be lost but the inspection of other aspects like label locations will be a much more pleasant process.
 
 ### Usage Examples
 

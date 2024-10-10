@@ -12,7 +12,7 @@
 #' on the number of rows containing NA for that column of that ident if it
 #' isn't the active ident.
 #'
-#' @param seurat_obj a seurat object combined with a VDJ library with the
+#' @param seurat_obj a seurat object combined with a VDJ library with
 #' `scRepertoire`.
 #' @inheritParams RunAPOTC
 #' @param by_cluster Logical or Character. If `TRUE`, will output a list of
@@ -31,7 +31,7 @@
 #'
 #' @return A list of tables or a single table depending on `by_cluster`
 #' @export
-#' 
+#'
 #' @seealso [mergeCloneSizes]
 #'
 #' @examples
@@ -49,7 +49,7 @@ countCloneSizes <- function(
     by_cluster = TRUE,
     sort_decreasing = NULL
 ) {
-    countCloneSizes_arg_checker() # TODO check by_cluster with .theCall
+    countCloneSizes_arg_checker()
 
     # setup variables
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
@@ -86,8 +86,6 @@ countCloneSizes <- function(
 
     clustered_clone_sizes
 }
-
-# TODO create S4 generic to allow getting it from run_id, as an Apotc Getter
 
 countCloneSizes_arg_checker <- function() {
     args <- get_parent_func_args()
@@ -173,7 +171,7 @@ count_raw_clone_sizes <- function(
 #' clustered_clone_sizes <- countCloneSizes(get(data("combined_pbmc")))
 #' mergeCloneSizes(clustered_clone_sizes)
 #'
-mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) { 
+mergeCloneSizes <- function(clustered_clone_sizes, sort_decreasing = TRUE) {
 
     typecheck(clustered_clone_sizes, is_output_of_countCloneSizes)
     typecheck(sort_decreasing, is_a_logical, is.null)
@@ -206,7 +204,7 @@ aggregate_clone_sizes <- function(
     if (is.null(top_clones) || is_empty(union_clone_sizes)) {
         return(union_clone_sizes)
     }
-    
+   
     filter_top_clonesize(union_clone_sizes, top_clones)
 }
 
@@ -225,7 +223,7 @@ filter_top_clonesize <- function(union_clone_sizes, top_clones) {
             no = min(top_clones, num_unique_sizes)
         )
     ]
-    
+   
     union_clone_sizes[union_clone_sizes >= clonesize_lowerbound]
 }
 

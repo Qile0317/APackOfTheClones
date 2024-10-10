@@ -45,7 +45,7 @@ public:
 };
 
 class CirclePacker {
-private: 
+private:
     // class variables
     std::vector<CircleNode> data;
     int num_nodes;
@@ -196,11 +196,16 @@ private:
 
     // finds the closest circle to the origin in the linked list containing c.
     int closest(int c) {
+    
         int closest_c = c;
+        double closest_c_dist = centre_dist(data[closest_c]);
+    
         int circ = data[c].nxt;
         while (circ != c) {
-            if (centre_dist(data[closest_c]) > centre_dist(data[circ])) {
+            double curr_dist = centre_dist(data[circ]);
+            if (isFirstNumLarger(closest_c_dist, curr_dist)) {
                 closest_c = circ;
+                closest_c_dist = curr_dist;
             }
             circ = data[circ].nxt;
         }
@@ -225,15 +230,16 @@ private:
             );
             double dist_circ = tang_circle_dist(circ, data[circ].nxt, d);
 
-            if (dist_closest > dist_circ) {
+            if (isFirstNumLarger(dist_closest, dist_circ)) {
                 closest = circ;
             }
+
             circ = data[circ].nxt;
         }
         return closest;
     }
 
-    // convenience function
+    // place the j-th circle depending on the try_place strategy
     int place_circle(int j) {
         return (try_place) ? closest_place(j - 1, j) : closest(j - 1);
     }

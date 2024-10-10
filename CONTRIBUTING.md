@@ -5,42 +5,42 @@ The goal of this guide is to help you get up and contributing to APackOfTheClone
 1. Filing a bug report in an issue.
 2. Suggesting a change via a pull request.
 
-Please note that ggplot2 is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, 
+Please note that APackOfTheClones is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project,
 you agree to abide by its terms.
 
 ## Bug Reports
 
-When filing a bug report via [github issues](https://github.com/Qile0317/APackOfTheClones/issues), the most important thing is to include a minimal 
+When filing a bug report via [github issues](https://github.com/Qile0317/APackOfTheClones/issues), the most important thing is to include a minimal
 reproducible example if possible, so that the problem can be verified quickly, and then figure out how to fix it. There are three things you need to include to make your example reproducible: required packages, data, code.
 
 1.  **Packages** should be loaded at the top of the script, so it's easy to
     see which ones the example needs.
-  
-2.  The easiest way to include **data** is to use `dput()` to generate the R code 
+ 
+2.  The easiest way to include **data** is to use `dput()` to generate the R code
     to recreate it. For example, to recreate the `mtcars` dataset in R,
     I'd perform the following steps:
-  
+ 
        1. Run `dput(mtcars)` in R
        2. Copy the output
        3. In my reproducible script, type `mtcars <- ` then paste.
-       
+      
     However, as this package intends to work with Seurat objects that tend to get massive, and the data privacy may be an issue, it is recommended to try and reproduce the bug on a potentially modified version of the example seurat object included in this package with ```data("combined_pbmc")```.
-  
+ 
 3.  Spend a little bit of time ensuring that your **code** is easy for others to
     read:
-  
+ 
     - make sure you've used spaces and your variable names are concise, but
       informative
-  
+ 
     - use comments to indicate where your problem lies
-  
-    - do your best to remove everything that is not related to the problem.  
+ 
+    - do your best to remove everything that is not related to the problem. 
      The shorter your code is, the easier it is to understand.
 
-You can check you have actually made a reproducible example by starting up a 
+You can check you have actually made a reproducible example by starting up a
 fresh R session and pasting your script in.
 
-(Unless you've been specifically asked for it, please don't include the output 
+(Unless you've been specifically asked for it, please don't include the output
 of `sessionInfo()`. Although if you feel the issue is for sure related to versioning, go ahead.)
 
 ## Pure Feature Requests
@@ -57,8 +57,8 @@ To contribute a change, you follow these steps:
 4. Iterate until either the PR is accepted or decided that it's not
    a good fit.
 
-Each of these steps are described in more detail below. This might feel 
-overwhelming the first time you get set up, but it gets easier with practice. 
+Each of these steps are described in more detail below. This might feel
+overwhelming the first time you get set up, but it gets easier with practice.
 If you get stuck at any point, please reach out for help to the contributors.
 
 If you're not familiar with git or github, please start by reading <http://r-pkgs.had.co.nz/git.html>
@@ -69,7 +69,7 @@ Pull requests will be evaluated against a seven point checklist:
     need for change.
 
     Also include this motivation in `NEWS` so that when a new release of
-    ggplot2 comes out it's easy for users to see what's changed. Add your
+    APackOfTheClones comes out it's easy for users to see what's changed. Add your
     item at the top of the file and use markdown for formatting. The
     news item should end with `(@yourGithubUsername, #the_issue_number)`.
 

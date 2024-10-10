@@ -173,7 +173,7 @@ private:
                     circles[i], circles[j], extraSpacing
                 );
 
-                int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j); 
+                int leftCircleIndex = linkLine.matchLeftCircleIndex(circles, i, j);
                 int rightCircleIndex = linkLine.matchRightCircleIndex(circles, i, j);
 
                 int leftCircleClusterIndex = currOneIndexedClusterindices[leftCircleIndex];

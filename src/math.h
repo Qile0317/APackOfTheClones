@@ -5,6 +5,7 @@
 #include <cmath>
 
 #define TAU 6.28318530717958647692
+#define DOUBLE_PRECISION 1.11e-16
 
 inline double sqr(double x) {
     return x * x;
@@ -27,6 +28,10 @@ inline double normalizeAngleAtan2(double radianAngle) {
     return std::abs(radianAngle) - ((1 + (radianAngle > 0)) * M_PI);
 }
 
+inline bool isFirstNumLarger(double a, double b) {
+    return a - b > DOUBLE_PRECISION;
+}
+
 // representation of vector in R^2. getMagnitude is guaranteed to be
 // always positive, and getDirection is guaranteed to be in (-pi, pi)
 class TwoDVector {
@@ -40,9 +45,9 @@ public:
     // constructors
 
     TwoDVector() : magnitude(0), direction(0) {}
-    
+   
     TwoDVector(double mag, double dir) : magnitude(mag), direction(dir) {}
-    
+   
     TwoDVector(const TwoDVector& v) :
         magnitude(v.getMagnitude()), direction(v.getDirection()) {}
 
@@ -118,7 +123,7 @@ public:
     TwoDVector& scaleMagnitude(double val) {
         return setMagnitude(getMagnitude() * val);
     }
- 
+
     TwoDVector& reverseDirection() {
         return setDirection(direction + M_PI);
     }

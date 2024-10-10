@@ -223,11 +223,11 @@ interfere with any other ggplot functionality. (As far as currently known)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-This function combines the functionality of both \link{RunAPOTC} and \link{APOTCPlot}.
-Given a Seurat object, it first runs the APackOfTheClones method (\link{RunAPOTC})
-to compute clonal expansion information, and then generates a customizable
-ggplot2 object of the clonal expansion plot with a circle size legend
-(\link{APOTCPlot}).
+This function combines the functionality of both \code{\link[=RunAPOTC]{RunAPOTC()}} and
+\code{\link[=APOTCPlot]{APOTCPlot()}}. Given a Seurat object, it first runs the APackOfTheClones
+method (\code{\link[=RunAPOTC]{RunAPOTC()}}) to compute clonal expansion information, and then
+generates a ggplot2 object of the clonal expansion plot with
+a circle size legend. (\code{\link[=APOTCPlot]{APOTCPlot()}})
 }
 \details{
 Note that the subsetting arguments \code{...} and \code{extra_filter} are only a
