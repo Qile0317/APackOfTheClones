@@ -4,11 +4,11 @@
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
-#' This function combines the functionality of both [RunAPOTC] and [APOTCPlot].
-#' Given a Seurat object, it first runs the APackOfTheClones method ([RunAPOTC])
-#' to compute clonal expansion information, and then generates a customizable
-#' ggplot2 object of the clonal expansion plot with a circle size legend
-#' ([APOTCPlot]).
+#' This function combines the functionality of both [RunAPOTC()] and
+#' [APOTCPlot()]. Given a Seurat object, it first runs the APackOfTheClones
+#' method ([RunAPOTC()]) to compute clonal expansion information, and then
+#' generates a ggplot2 object of the clonal expansion plot with
+#' a circle size legend. ([APOTCPlot()])
 #'
 #' @inheritParams RunAPOTC
 #' @inheritParams APOTCPlot
@@ -52,7 +52,7 @@ vizAPOTC <- function(
     rad_scale_factor = 0.95,
     order_clones = TRUE,
     try_place = FALSE,
-    
+   
     repulse = TRUE,
     repulsion_threshold = 1,
     repulsion_strength = 1,
@@ -61,8 +61,8 @@ vizAPOTC <- function(
     show_shared = NULL,
     only_link = NULL,
     clone_link_width = "auto",
-	clone_link_color = "black",
-	clone_link_alpha = 0.5,
+    clone_link_color = "black",
+    clone_link_alpha = 0.5,
 
     res = 360L,
     linetype = "blank",
@@ -115,7 +115,6 @@ vizAPOTC <- function(
         run_id = "vizAPOTC",
         show_shared = show_shared,
         only_link = only_link,
-        #linked_clonesize_range = linked_clonesize_range,
         clone_link_width = clone_link_width,
         clone_link_color = clone_link_color,
         clone_link_alpha = clone_link_alpha,

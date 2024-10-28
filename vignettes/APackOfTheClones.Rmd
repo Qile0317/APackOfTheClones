@@ -74,8 +74,8 @@ contig_list <- get(data("contig_list", package = "scRepertoire"))
 combined_contig_list <- scRepertoire::combineTCR(
   contig_list,
   samples = c("P17B", "P17L", "P18B", "P18L", "P19B", "P19L", "P20B", "P20L"),
-  removeNA = FALSE, 
-  removeMulti = FALSE, 
+  removeNA = FALSE,
+  removeMulti = FALSE,
   filterMulti = FALSE
 )
 ```
@@ -108,7 +108,7 @@ pbmc_umap_plot + coord_fixed()
 
 ## Simple ball packing visualization
 
-```vizAPOTC``` (short for "visualize APackOfTheClones") is the main convenience function of the package to directly produce the ball packing clonal expansion plot. It takes in a main argument of a combined seurat object (with a long list of optional arguments which will be covered in later sections), and outputs a ggplot object:
+```vizAPOTC()``` (short for "visualize APackOfTheClones") is the main convenience function of the package to directly produce the ball packing clonal expansion plot. It takes in a main argument of a combined seurat object (with a long list of optional arguments which will be covered in later sections), and outputs a ggplot object:
 
 ```{r, initial_vizapotc, echo = TRUE}
 default_apotc_plot <- vizAPOTC(pbmc, verbose = FALSE)
@@ -214,7 +214,7 @@ $$
 r_{ij} = C \cdot (\sqrt{s_{ij}} - (1 - R))
 $$
 
-Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC`.
+Intuitively, $C$ represents how much to enlarge/shrink each radius geometrically relative to the clone size, whereas $R$ represents the scaled size of the smallest clone's radius, and all circles will have their radii decreased by that amount. $R$ defaults to 0.95, whereas $C$ defaults to an approximated factor based on the number of clones that the package computes. The corresponding arguments are `clone_scale_factor` and `rad_scale_factor` in `vizAPOTC()`.
 
 ### Cluster Repulsion
 
@@ -227,7 +227,7 @@ repulsion_strength = 1,
 max_repulsion_iter = 10
 ```
 
-- `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusters are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders. 
+- `repulsion_threshold` indicates the amount of `ggplot2` units of overlap between clusters that are acceptable. It defaults to `1`, meaning that two clusters that overlap by about 1 unit are considered by the repulsion algorithm to not be overlapping. Increasing this number will increase the amount of overlap between clusters, and decreasing this number will do the opposite, while decreasing it to negative values will incur additional spacing between clusters. Note that as of the current version, two clusters are considered overlapping by comparing their approximated radii, which is computed from the right-most x coordinate. This isn't a very accurate approximation for smaller clusters with non-circular borders.
 - `repulsion_strength` relates to how much the clusters should repel each other. The repulsion algorithm works in iterations, where for each iteration, each cluster "pushes" each other away from eachother by some amount. Increasing this value will cause extra "pushing" during each iteration. However, increasing this factor too much may result once again in a very visually unpleasant plot.
 - `max_repulsion_iter` indicates the number of iterations where clusters should repel eachother. Increasing this number would ensure that clusters will (almost always) for sure not be overlapping. A trick with this parameter to make more pleasant plots is to decrease `repulsion_strength` and increase `max_repulsion_iter` to possibly make a more pleasant arrangement of clusters.
 

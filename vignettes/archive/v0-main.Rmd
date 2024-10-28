@@ -187,7 +187,7 @@ repulsion_threshold = 1,
 repulsion_strength = 1,
 max_repulsion_iter = 10
 ```
-For more details on them, read the "Arguments" section in the function documentation (`?clonal_expansion_plot`). But to summarize, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form, please make an issue on the github page.) 
+For more details on them, read the "Arguments" section in the function documentation (`?clonal_expansion_plot`). But to summarize, first, to make the circle clusters move away from eachother, `repulse` should be set to `TRUE`, and the function should be ran AGAIN. (If you feel this excessive re-running takes too long or is inefficient for your workflow in its current form, please make an issue on the github page.)
 
 Setting repulse to TRUE with those default parameters should probably yield something like the following:
 ```{r, repulse, echo = TRUE}
@@ -195,7 +195,7 @@ pbmc_expansion_plot <- clonal_expansion_plot(pbmc, repulse = TRUE, verbose = FAL
 pbmc_expansion_plot
 ```
 
-As we can see, the red and green clusters have "moved away" from each other, and there is very little overlap remaining. All other clusters which were not touching remain in their original positions. 
+As we can see, the red and green clusters have "moved away" from each other, and there is very little overlap remaining. All other clusters which were not touching remain in their original positions.
 
 <details>
   <summary>**Do I HAVE to re-run `clonal_expansion_plot` each time I want to modify a parameter?**</summary>
@@ -255,9 +255,9 @@ More details about these arguments can be read in the function documentation.
 
 ## Adjusting and customizing circle size and scaling
 
-So far, the sizes of the individual circles (clones) have seemed to look quite pleasant, fitting roughly into their UMAP cluster centroids snugly. However, this may not always be the case. A likely very common issue upon the initialization of the plot with default arguments is that the circles may be too small or too large. 
+So far, the sizes of the individual circles (clones) have seemed to look quite pleasant, fitting roughly into their UMAP cluster centroids snugly. However, this may not always be the case. A likely very common issue upon the initialization of the plot with default arguments is that the circles may be too small or too large.
 
-In these cases, the argument `clone_scale_factor` should be changed. The argument defaults to 0.1, which is the multiplicative scale factor for the square root radius of a clone. So if a clone size is four, and the factor is 0.1, then the actual radius of the circle on the plot would be `sqrt(4) * 0.1` which equates to 0.2. 
+In these cases, the argument `clone_scale_factor` should be changed. The argument defaults to 0.1, which is the multiplicative scale factor for the square root radius of a clone. So if a clone size is four, and the factor is 0.1, then the actual radius of the circle on the plot would be `sqrt(4) * 0.1` which equates to 0.2.
 
 Additionally, `rad_scale_factor` can optionally be changed to adjust the intra-circular spacing. The factor defaults to 0.95 and indicates the multiplicative amount to adjust the radius of the circles after they have been placed. decreasing this value (slightly) will basically make each circle smaller in place, increasing the spacing between then,
 
@@ -323,7 +323,7 @@ devtools::install_github("Qile0317/SCIPData")
 # load the package data directly into R objects in memory
 data("pbmc", "tcr_dataframe")
 ```
-And the rest of the code can be copied and used accordingly. 
+And the rest of the code can be copied and used accordingly.
 
-Alternatively, there are two smaller, minimal, artificial versions of the seurat object and clonotype data that can be loaded in `APackOfTheClones`, run `?mini_seurat_obj` and `?mini_clonotype_data` for more details. 
+Alternatively, there are two smaller, minimal, artificial versions of the seurat object and clonotype data that can be loaded in `APackOfTheClones`, run `?mini_seurat_obj` and `?mini_clonotype_data` for more details.
 </details>

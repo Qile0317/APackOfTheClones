@@ -18,7 +18,7 @@ Rcpp::NumericMatrix rcppFilterReductionCoords(
     std::vector<std::string> reductionBarcodes = Rcpp::as<std::vector<std::string>>(
         Rcpp::rownames(reductionCoords)
     );
-    
+   
     int outputRowIndex = 0;
     for (int i = 0; i < (int) reductionBarcodes.size(); i++) {
         if (seuratBarcodeSet.find(reductionBarcodes[i]) == seuratBarcodeSet.end()) {

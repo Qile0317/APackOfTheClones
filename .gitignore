@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+..Rcheck
 inst/doc
 /loc_tesdat
 devnotes.txt
@@ -19,3 +20,6 @@ a.exe
 .RDataTmp
 .RDataTmp1
 .idea
+
+# remove in future
+.lintr

@@ -14,8 +14,8 @@ showCloneHighlight(
 )
 }
 \arguments{
-\item{apotc_ggplot}{A ggplot object that is the output of \link{APOTCPlot} or
-\link{vizAPOTC} of an APackOfTheClones plot to be highlighted on.}
+\item{apotc_ggplot}{A ggplot object that is the output of \code{\link[=APOTCPlot]{APOTCPlot()}} or
+\code{\link[=vizAPOTC]{vizAPOTC()}} of an APackOfTheClones plot to be highlighted on.}
 
 \item{clonotype}{character vector of the sequence(s) to highlight. Note
 that it must be of the clonecall of the code that created the plot. A
@@ -38,7 +38,7 @@ ensure \code{clonotype} contains only unique characters.}
 of non-highlighted clones. If \code{NULL}, all un-highlighted sequences will
 retain their original color in \code{sc.data}. Else, if it is a character, it
 should be a valid color that all un-highlighted clones are. Defaults to the
-hexcode for gray.}
+hex code for gray.}
 
 \item{scale_bg}{A positive numeric. Scales the brightness value of each color
 of the non-highlighted clones by itself as a scaling factor. Defaults to 1
@@ -62,17 +62,17 @@ combinations of the arguments, there will be a ggplot fill legend on the
 right side that correspond to each (existing) clonotype.
 }
 \details{
-Under the hood, this function simply mutates the plotting dataframe under
+Under the hood, this function simply mutates the plotting data.frame under
 \verb{$data} in the ggplot object, and operates on a column named \code{color}.
 
 Note that if \code{color_each = FALSE} and \code{default_color = NULL}, this is
 equivalent to simply not highlighting anything and a warning will be shown.
 }
 \examples{
-library(magrittr)
+library(dplyr)
 data("combined_pbmc")
 
-# piping the plot can be nice to read syntatically -
+# piping the plot can be nice to read syntactically -
 # By default, assigns unique colors to highlights and everything else is gray
 vizAPOTC(combined_pbmc, clonecall = "aa", verbose = FALSE) \%>\%
     showCloneHighlight("CASLSGSARQLTF_CASSSTVAGEQYF")

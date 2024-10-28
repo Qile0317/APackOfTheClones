@@ -83,6 +83,14 @@ initializeApotcData <- function(
 # __active.ident__ that is guaranteed to be a factor with unguaranteed level type
 set_meta_ident_col <- function(seurat_obj, alt_ident) {
 
+    if ("__active.ident__" %in% colnames(seurat_obj@meta.data)) {
+		stop(
+			"Due to the current implementation of APackOfTheClones, ",
+			"it uses a temporary column in the metadata called ",
+			"'__active.ident__'. Please rename or remove this column."
+		)
+	}
+
     if (is.null(alt_ident)) {
         seurat_obj@meta.data[["__active.ident__"]] <- seurat_obj@active.ident
         return(seurat_obj)
@@ -117,6 +125,7 @@ addIdentsLabelsColors <- function(apotc_obj, seurat_obj) {
 
 # important function to be ran after setting meta ident col
 # to merge that temporary column into seurat_clusters column
+# removes the __active.ident__ metadata column
 ident_into_seurat_clusters <- function(seurat_obj) {
     idents <- seurat_obj@meta.data[["__active.ident__"]]
     seurat_obj@meta.data[["__active.ident__"]] <- NULL
@@ -241,7 +250,7 @@ match_index <- function(apotc_obj, index) {
 			return(index)
 		}
 		stop(call. = FALSE,
-			"Some or all indices in `", varname, "` ", #FIXME likely wrong varname
+			"Some or all indices in `", varname, "` ",
 			"are out of bounds of the APackOfTheClones Run."
 		)
 	}
@@ -324,6 +333,7 @@ get_unique_clonotypes <- function(x) {
 	unique(unlist(lapply(unname(get_raw_clone_sizes(x)), names)))
 }
 
+# assumes raw clone sizes are not empty
 get_processed_clone_sizes <- function(apotc_obj) {
   raw_tabled_clone_sizes <- get_raw_clone_sizes(apotc_obj)
   processed_sizes <- init_list(get_num_clusters(apotc_obj), list())

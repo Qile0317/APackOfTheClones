@@ -2,7 +2,7 @@
 create_initial_apotc_plot <- function(
 	apotc_obj, res, linetype, alpha, detail = TRUE
 ) {
-  
+ 
   if (!detail) {
     plt_df <- make_undetailed_df(apotc_obj)
   } else {
@@ -153,6 +153,6 @@ get_retain_scale_dims <- function(
 
 check_is_apotc_ggplot <- function(x) {
   if (!isApotcGGPlot(x)) {
-    stop(call. = FALSE, "not an output of `APOTCPlot` or `vizAPOTC`")
+    stop(call. = FALSE, "not an output of `APOTCPlot()` or `vizAPOTC()`")
   }
 }

@@ -1,8 +1,15 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization of Clonal Expansion for Single Cell Immune Profiles
-Version: 1.2.0
-Authors@R: c(person("Qile", "Yang", email = "qile.yang@berkeley.edu", role = c("cre","aut","cph")))
+Version: 1.2.1
+Authors@R: c(
+    person(
+        "Qile",
+        "Yang",
+        email = "qile.yang@berkeley.edu",
+        role = c("cre","aut","cph"),
+        comment = c(ORCID = "0009-0005-0148-2499")
+    ))
 Maintainer: Qile Yang <qile.yang@berkeley.edu>
 Description: Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
 BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
@@ -12,7 +19,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: false
-Suggests: 
+Suggests:
     cowplot,
     covr,
     knitr,
@@ -23,21 +30,20 @@ Suggests:
     vdiffr
 Config/testthat/edition: 3
 Imports:
+    assertthat,
     dplyr,
     ggforce,
     ggplot2,
-    grDevices,
     hash,
     lifecycle,
-    magrittr,
     methods,
     Rcpp,
     rlang,
     Seurat,
     SeuratObject
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 URL: https://qile0317.github.io/APackOfTheClones/
-LinkingTo: 
+LinkingTo:
     Rcpp
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

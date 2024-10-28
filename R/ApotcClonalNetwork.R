@@ -1,6 +1,3 @@
-# TODO matrix/heatmap visualization for number of shared clones
-# TODO somehow take into account sizes of shared clones
-
 #' @title Compute a list of clonotypes that are shared between seurat clusters
 #'
 #' @description
@@ -15,7 +12,7 @@
 #'
 #' If `run_id` is inputted, then the function will attempt to get the shared
 #' clonotypes from the corresponding APackOfTheClones run generated from
-#' [RunAPOTC]. Otherwise, it will use the filtering / subsetting parameters
+#' [RunAPOTC()]. Otherwise, it will use the filtering / subsetting parameters
 #' to generate the shared clones.
 #'
 #' @inheritParams RunAPOTC
@@ -197,19 +194,6 @@ filter_top_by_cluster <- function(clone_sizes, top_clones) {
     })
 }
 
-# # TODO - there needs to be a 4 way intersection
-# filter_min_clones_if_needed <- function(
-#     clone_sizes, min_size, min_size_per_cluster
-# ) {
-#     clone_sizes %>% filter_clonesize_2way_if_need(
-
-#     )
-# }
-
-# filter_min_clones <- function(clone_sizes, min_size) { # integer or float in (0,1)
-
-# }
-
 get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 
     if (is_list_of_empty_tables(clustered_clone_sizes)) return(list())
@@ -263,7 +247,7 @@ filter_shared_if_needed <- function(
 }
 
 filter_top_shared <- function(shared_clones, raw_clone_sizes, top) {
-    
+   
     if (is.null(top) || is_empty(shared_clones)) return(shared_clones)
 
     filter_top_shared_w_clone_table(
@@ -435,7 +419,7 @@ process_link_width <- function(apotc_obj, link_width, verbose) {
 }
 
 estimate_link_width <- function(apotc_obj) {
-    3 * get_clone_scale_factor(apotc_obj) #TODO improve
+    3 * get_clone_scale_factor(apotc_obj) # TODO improve
 }
 
 # internal dispatch function to get a dataframe of line connections

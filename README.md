@@ -1,17 +1,19 @@
 # APackOfTheClones <img src="man/figures/logo.png" width="20%" align="right" />
 
 <!-- badges: start -->
+[![JOSS status](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71/status.svg)](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71)
 [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://qile0317.github.io/APackOfTheClones/)
 [![Developmental Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://qile0317.github.io/APackOfTheClones/dev/)
-[![APackOfTheClones status badge](https://qile0317.r-universe.dev/badges/APackOfTheClones)](https://qile0317.r-universe.dev/APackOfTheClones)
+[![DOI](https://zenodo.org/badge/551699219.svg)](https://doi.org/10.5281/zenodo.13916955)
+[![R Universe APackOfTheClones status badge](https://qile0317.r-universe.dev/badges/APackOfTheClones)](https://qile0317.r-universe.dev/APackOfTheClones)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md)
 <!-- badges: end -->
 
-```APackOfTheClones``` is an R package that extends the bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
+```APackOfTheClones``` is an R package that extends the Bioconductor ```scRepertoire``` package to produce easily customizable "ball-packing" visualizations of the clonal expansion of T-cells/B-cells in a `Seurat` object, based on its receptor library and single cell RNA sequencing data (for example outputs from 10X genomics' single-cell immune profiling).
 
 The baseline concept was first implemented in a study Ma et al.[[1]](#1) by Murray Christian and Ben Murrell (@Murrellb) for nasal polyp $T_{H}$ cells. `APackOfTheClones` counts the clonotype frequencies for each seurat/umap cluster and produces a circle packing of the frequencies to intuitively represent clonal expansion. The packing for each cluster are then plotted with roughly the same coordinates as the original dimensional reduction and color. Below is an example of `APackOfTheClones` being used on an [example seurat object for scRepertoire](https://drive.google.com/file/d/1_YuRraDyg8UgF3oasjF0-jgPnwox-B24/view?usp=share_link) with its corresponding VDJ library:
 
@@ -31,7 +33,7 @@ For more details on installation methods and information on alternative/developm
 
 The package extends the functionality of `scRepertoire` ***v2*** by working with a seurat object's corresponding T/B cell receptor library. To do this, read the [scRepertoire vignette](borch.dev/uploads/screpertoire). Briefly, an scTCR-seq/scBCR-seq experiment (e.g. from a 10X genomics single cell immune profiling run) should be processed with ```scRepertoire::combineTCR``` / ```scRepertoire::combineBCR``` first. Then, it should be integrated into the corresponding seurat object either with ```scRepertoire::combineExpression```.
 
-To quickly produce the visualization, the ```vizAPOTC(your_combined_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following codechunk is an example of how it can be done:
+To quickly produce the visualization, the ```vizAPOTC(your_combined_seurat_object)``` should give a reasonable visualization. There is an example seurat object included in the package which can be used with ```data("combined_pbmc")```. The following code chunk is an example of how it can be done:
 
 ```R
 library(Seurat)
@@ -56,7 +58,7 @@ vizAPOTC(pbmc)
 vizAPOTC(pbmc, orig.ident = c("P17B", "P17L"), seurat_clusters = c(1, 3, 4))
 ```
 
-For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot```, like so:
+For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with ```RunAPOTC()``` and ```AdjustAPOTC```, then visualized with ```APOTCPlot()```, like so:
 
 ```R
 # using the same seurat object as before, run and store associated data,

@@ -6,10 +6,10 @@
 #' `r lifecycle::badge("stable")`
 #'
 #' Computes necessary information for an APackOfTheClones
-#' clonal expansion plot ([APOTCPlot]) and stores it in the seurat object.
+#' clonal expansion plot ([APOTCPlot()]) and stores it in the seurat object.
 #' Gets sizes of unique clones and utilizes a circle-packing algorithm to
 #' pack circles representing individual clones in approximately the same
-#' dimensional reduction (`reduction_base`) coordinates based on some cell 
+#' dimensional reduction (`reduction_base`) coordinates based on some cell
 #' ident (defaults to the active ident).
 #'
 #' The parameter `extra_filter` along with an unlimited number of additional
@@ -68,7 +68,7 @@
 #' meta data of the seurat object to be grouped by. This column is meant to have
 #' been a product of `Seurat::StashIdent` or manually added.
 #' @param run_id character. This will be the ID associated with the data of a
-#' run, and will be used by other important functions like [APOTCPlot] and
+#' run, and will be used by other important functions like [APOTCPlot()] and
 #' [AdjustAPOTC]. Defaults to `NULL`, in which case the ID will be generated
 #' in the following format:
 #'
@@ -131,12 +131,13 @@
 #' ident levels themselves.
 #'
 #' @return A modified version of the input seurat object, which harbors data
-#' necessary for visualizing the clonal expansion of the cells with [APOTCPlot]
+#' necessary for visualizing the clonal expansion of the cells with
+#' [APOTCPlot()]
 #' and has a friendly user interface to modify certain attributes with
 #' [AdjustAPOTC].
 #' @export
 #'
-#' @seealso [APOTCPlot], [AdjustAPOTC], [getApotcDataIds]
+#' @seealso [APOTCPlot()], [AdjustAPOTC], [getApotcDataIds]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -146,7 +147,7 @@
 #'
 #' # here's a seperate run with some filters to the meta data, where
 #' # `orig.ident` is a custom column in the example data. Notice that it is not
-#' # a `RunAPOTC` parameter but a user keyword argument
+#' # a `RunAPOTC()` parameter but a user keyword argument
 #' combined_pbmc <- RunAPOTC(
 #'     combined_pbmc, run_id = "sample17", orig.ident = c("P17B", "P17L"),
 #'     verbose = FALSE
@@ -167,7 +168,7 @@ RunAPOTC <- function(
     clonecall = "strict",
     ...,
     extra_filter = NULL,
-    alt_ident = NULL, # TODO check
+    alt_ident = NULL,
     run_id = NULL,
 
     clone_scale_factor = "auto",
@@ -192,8 +193,10 @@ RunAPOTC <- function(
     # compute/check inputs
     reduction_base <- attempt_correction(seurat_obj, reduction_base)
     clonecall <- .theCall(seurat_obj@meta.data, clonecall)
-    # TODO check alt_ident
-    
+    assert_that(
+        is.null(alt_ident) || alt_ident %in% colnames(seurat_obj@meta.data)
+    )
+   
     if (should_estimate(clone_scale_factor)) {
         clone_scale_factor <- estimate_clone_scale_factor(seurat_obj, clonecall)
         if (verbose) message(paste(
@@ -265,7 +268,7 @@ RunAPOTC <- function(
 
 # # a super simple regression of manually determined clone scale based on cell
 # # count a much more complicated model can use other facts about the seurat
-# # obj to improve how visually plesant is it. Some overlap factor could 
+# # obj to improve how visually plesant is it. Some overlap factor could
 # # probably be eestimated with the raw clone counts
 # cell_count <- c(80, 365, 2500)
 # desirable_factor <- c(1, 0.3, 0.2)

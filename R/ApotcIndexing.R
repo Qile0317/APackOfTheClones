@@ -50,7 +50,7 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #' a Seurat object.
 #'
 #' @param seurat_obj A Seurat object containing APackOfTheClones data - the
-#' output of [RunAPOTC]
+#' output of [RunAPOTC()]
 #' @param old_run_id Character. The current id of the APackOfTheClones run to
 #' be renamed.
 #' @param new_run_id Character. The new id to assign to the APackOfTheClones
@@ -188,12 +188,12 @@ getApotcDataIds <- function(seurat_obj) {
 #' `r lifecycle::badge("stable")`
 #'
 #' A convenience function to get the object id of the most recent valid
-#' [RunAPOTC] run, to be used by [APOTCPlot] and [AdjustAPOTC]
+#' [RunAPOTC()] run, to be used by [APOTCPlot()] and [AdjustAPOTC]
 #'
 #' @param seurat_obj a seurat object that has had RunAPOTC ran on it before in
 #' order of the functions being called.
 #'
-#' @return a character of the object id of the last [RunAPOTC] call
+#' @return a character of the object id of the last [RunAPOTC()] call
 #' @export
 #'
 #' @examples
@@ -223,8 +223,6 @@ getLastApotcDataId <- function(seurat_obj) {
     getlast(getApotcDataIds(seurat_obj))
 }
 
-# TODO change object ids-make it all nonempty arguments
-
 # object id generation:
 
 # from the input of RunAPOTC, convert the condition to a call to be put in
@@ -253,9 +251,6 @@ parse_to_metadata_filter_str <- function(metadata_filter, varargs_list) {
 
     filter_string <- sort_and_join_conds_by_and(filter_strings)
 
-    # TODO FIXME - this will allow symbolic filtering as well
-    #metadata_filter <- convert_to_string_if_expr(deparse(substitute(metadata_filter)))
-
     if (is_valid_filter_str(metadata_filter)) {
         filter_string <- paste(
             "(", filter_string, ")&(", metadata_filter, ")", sep = ""
@@ -283,7 +278,7 @@ col_cond_vec_to_filter_str <- function(condition_vector, colname) {
         colname = colname,
         insert_char = insertchar
     )
-    
+   
 }
 
 col_conds_to_str_w_insert <- function(
@@ -316,7 +311,7 @@ convert_to_string_if_expr <- function(deparsed_metadata_filter) {
 # stored under under @misc[["APackOfTheClones"]][[id]]
 infer_object_id_if_needed <- function(args, varargs_list) {
     if (!should_compute(args$run_id)) return(args$run_id)
-    
+   
     if (
         is.null(args$reduction_base) &&
             is.null(args$clonecall) &&

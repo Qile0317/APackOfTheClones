@@ -15,7 +15,7 @@ countCloneSizes(
 )
 }
 \arguments{
-\item{seurat_obj}{a seurat object combined with a VDJ library with the
+\item{seurat_obj}{a seurat object combined with a VDJ library with
 \code{scRepertoire}.}
 
 \item{clonecall}{character. The column name in the seurat object metadata to

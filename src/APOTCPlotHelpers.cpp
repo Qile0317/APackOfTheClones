@@ -13,7 +13,7 @@ std::vector<int> rcppGetEdgeCircleindices(Rcpp::DataFrame apotcPlotDataFrame) {
     Rcpp::NumericVector r = apotcPlotDataFrame["r"];
 
     for (int i = 0; i < (int) x.size(); i++) {
-        
+       
         if (x[i] - r[i] < x[xmin] - r[xmin]) {
             xmin = i;
         }

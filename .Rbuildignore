@@ -16,3 +16,5 @@
 ^.idea$
 [.]md$
 [.]yml$
+^\.lintr$
+^cran-comments\.md$
