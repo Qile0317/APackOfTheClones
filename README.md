@@ -1,7 +1,7 @@
 # APackOfTheClones <img src="man/figures/logo.png" width="20%" align="right" />
 
 <!-- badges: start -->
-[![JOSS status](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71/status.svg)](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06868/status.svg)](https://doi.org/10.21105/joss.06868)
 [![CRAN status](https://www.r-pkg.org/badges/version/APackOfTheClones)](https://CRAN.R-project.org/package=APackOfTheClones)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen)](https://www.r-pkg.org/pkg/APackOfTheClones)
 [![R-CMD-check](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml)
@@ -57,7 +57,7 @@ vizAPOTC(pbmc)
 vizAPOTC(pbmc, orig.ident = c("P17B", "P17L"), seurat_clusters = c(1, 3, 4))
 ```
 
-Additional features and use-cases are covered in the vignettes and documentation, including options to store seperate runs with different parameters on the same seurat object, highlighting clonotypes, getting shared clonotypes across clusters, displaying links between them, and more.
+Additional features and use-cases are covered in the vignettes and documentation, including options to store separate runs with different parameters on the same seurat object, highlighting clonotypes, getting shared clonotypes across clusters, displaying links between them, and more.
 
 ### Package conventions
 
@@ -65,9 +65,9 @@ Most exported functions are named with `camelCase` with the exception of those t
 
 ## Please Cite
 
-If you use `APackOfTheClones` in your work, please cite the corresponding [publication](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71) with the output of `citation("APackOfTheClones")`:
+If you use `APackOfTheClones` in your work, please cite the corresponding [publication](https://doi.org/10.21105/joss.06868) with the output of `citation("APackOfTheClones")`:
 
-> Yang, Q., (2024). APackOfTheClones: Visualization of clonal expansion with circle packing. Journal of Open Source Software, 9(103), 6868, https://doi.org/10.21105/joss.06868
+> Yang, Q., (2024). APackOfTheClones: Visualization of clonal expansion with circle packing. Journal of Open Source Software, 9(103), 6868, <https://doi.org/10.21105/joss.06868>
 
 ## Documentation
 
