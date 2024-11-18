@@ -18,3 +18,4 @@
 [.]yml$
 ^\.lintr$
 ^cran-comments\.md$
+^CITATION.cff$
