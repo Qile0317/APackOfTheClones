@@ -1,7 +1,7 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization of Clonal Expansion for Single Cell Immune Profiles
-Version: 1.2.1
+Version: 1.2.4
 Authors@R: c(
     person(
         "Qile",
@@ -12,7 +12,7 @@ Authors@R: c(
     ))
 Maintainer: Qile Yang <qile.yang@berkeley.edu>
 Description: Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRepertoire' to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) <doi:10.1126/sciimmunol.abg6356>.
-BugReports: https://github.com/Qile0317/APackOfTheClones/issues/
+BugReports: https://github.com/Qile0317/APackOfTheClones/issues
 Depends:
     R (>= 4.1.0)
 License: MIT + file LICENSE
@@ -42,7 +42,7 @@ Imports:
     Seurat,
     SeuratObject
 RoxygenNote: 7.3.2
-URL: https://qile0317.github.io/APackOfTheClones/
+URL: https://qile0317.github.io/APackOfTheClones/, https://github.com/Qile0317/APackOfTheClones, https://joss.theoj.org/papers/10.21105/joss.06868
 LinkingTo:
     Rcpp
 Roxygen: list(markdown = TRUE)

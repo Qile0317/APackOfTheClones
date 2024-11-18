@@ -1,3 +1,14 @@
+# APackOfTheClones 1.2.4
+
+## Additions
+
+- Update citation information as the tool has been published.
+
+## Changes
+
+- slightly improve README
+- Ensured all irrelevant files are not included in the package build to address CRAN submissions failures for the previous 2 patches.
+
 # APackOfTheClones 1.2.1
 
 ## Additions
@@ -8,7 +19,7 @@
 ## Changes
 
 - The main change in this patch is a minor alteration in the circle packing algorithm that should result in packings acting slightly more consistent across different physical systems. This may result in slightly different circle placements in the clonal expansion plot, but the overall structure should remain the same. This is pretty much only noticeable in the case of extremely small testing datasets, which is why this is a patch version. However, it is very possible that the same seurat object will produce a slightly different packing than before.
-- updated citation information upon calling `citation("APackOfTheClones")`: the package as of this patch version is undergoing review in the [journal of open source software](https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71).
+- updated citation information
 - Updated the `combined_pbmc` dataset to be up-to-date with the latest version of `Seurat`.
 - Spelling & minor fixes / updates to various functions, documentation.
 - Removed package startup deprecation message for returning users of version `0.1.x`.
