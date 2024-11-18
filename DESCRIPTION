@@ -1,7 +1,7 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization of Clonal Expansion for Single Cell Immune Profiles
-Version: 1.2.1
+Version: 1.2.2
 Authors@R: c(
     person(
         "Qile",
