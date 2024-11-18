@@ -1,4 +1,4 @@
-# APackOfTheClones 1.2.2
+# APackOfTheClones 1.2.3
 
 ## Additions
 
@@ -7,6 +7,7 @@
 ## Changes
 
 - slightly improve README
+- fixed invalid citation.cff by removing from RBuildignore when submitting v1.2.2 to CRAN
 
 # APackOfTheClones 1.2.1
 
