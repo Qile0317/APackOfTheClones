@@ -1,3 +1,13 @@
+# APackOfTheClones 1.2.2
+
+## Additions
+
+- Update citation information as the tool has been published.
+
+## Changes
+
+- slightly improve README
+
 # APackOfTheClones 1.2.1
 
 ## Additions
