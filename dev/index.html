@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Visualization of Clonal Expansion for Single Cell Immune Profiles">
 <meta name="description" content="Visualize clonal expansion via circle-packing. APackOfTheClones extends scRepertoire to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
 <meta property="og:description" content="Visualize clonal expansion via circle-packing. APackOfTheClones extends scRepertoire to produce a publication-ready visualization of clonal expansion at a single cell resolution, by representing expanded clones as differently sized circles. The method was originally implemented by Murray Christian and Ben Murrell in the following immunology study: Ma et al. (2021) &lt;doi:10.1126/sciimmunol.abg6356&gt;.">
@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="index.html">APackOfTheClones</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.4.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,37 +121,20 @@
 <span><span class="co"># only the clones of the sample "P17" in a column named "orig.ident" that are only</span></span>
 <span><span class="co"># in seurat clusters 1, 3, and 4.</span></span>
 <span><span class="fu"><a href="reference/vizAPOTC.html">vizAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, orig.ident <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P17B"</span>, <span class="st">"P17L"</span><span class="op">)</span>, seurat_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>For finer control of the visualization / other parameters, the data for a run can be stored and adjusted with <code><a href="reference/RunAPOTC.html">RunAPOTC()</a></code> and <code>AdjustAPOTC</code>, then visualized with <code><a href="reference/APOTCPlot.html">APOTCPlot()</a></code>, like so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># using the same seurat object as before, run and store associated data,</span></span>
-<span><span class="co"># identifying it with a run id. If not, one will be generated.</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># plot the corresponding data with the run_id. If not provided, will use the latest run.</span></span>
-<span><span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># adjust the sizes of the clones and move the 2nd cluster to (0, 0). Run id this time was</span></span>
-<span><span class="co"># left empty for no particular reason, but it will use "default_run_1" since its the latest</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/AdjustAPOTC.html">AdjustAPOTC</a></span><span class="op">(</span></span>
-<span>    <span class="va">pbmc</span>,</span>
-<span>    new_clone_scale_factor <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>    relocate_cluster <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>    relocation_coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># one can also do another run with different parameters and a different id.</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RunAPOTC.html">RunAPOTC</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"run2"</span>, try_place <span class="op">=</span> <span class="cn">TRUE</span>, repulse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># plot both runs side by side</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
-<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"default_run_1"</span><span class="op">)</span>, <span class="fu"><a href="reference/APOTCPlot.html">APOTCPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, run_id <span class="op">=</span> <span class="st">"run2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p>Additional features and use-cases are covered in the vignettes and documentation, including options to store separate runs with different parameters on the same seurat object, highlighting clonotypes, getting shared clonotypes across clusters, displaying links between them, and more.</p>
 <div class="section level3">
 <h3 id="package-conventions">Package conventions<a class="anchor" aria-label="anchor" href="#package-conventions"></a>
 </h3>
 <p>Most exported functions are named with <code>camelCase</code> with the exception of those that modify Seurat objects having <code>PascalCase</code> to mimic their conventions. All function arguments follow <code>snake_case</code>.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="please-cite">Please Cite<a class="anchor" aria-label="anchor" href="#please-cite"></a>
+</h2>
+<p>If you use <code>APackOfTheClones</code> in your work, please cite the corresponding <a href="https://doi.org/10.21105/joss.06868" class="external-link">publication</a> with the output of <code>citation("APackOfTheClones")</code>:</p>
+<blockquote>
+<p>Yang, Q., (2024). APackOfTheClones: Visualization of clonal expansion with circle packing. Journal of Open Source Software, 9(103), 6868, <a href="https://doi.org/10.21105/joss.06868" class="external-link uri">https://doi.org/10.21105/joss.06868</a></p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -170,12 +153,11 @@
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
 <p>Github pull requests from forked branches are more than welcome as it is mostly a solo-project at the moment. For major changes, please open an issue first to discuss what you would like to change. Please also make sure to update tests as appropriate.</p>
-<p>An explanation of the algorithms will eventually be made publicly available in a either a pre-print or developer vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
 </h2>
-<p>Qile Yang - qile.yang [at] berkeley.edu</p>
+<p>Qile Yang - qile [dot] yang [at] berkeley.edu</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -193,7 +175,7 @@
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=APackOfTheClones" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/Qile0317/APackOfTheClones/issues/" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/Qile0317/APackOfTheClones/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -230,12 +212,12 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://doi.org/10.21105/joss.06868" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.06868/status.svg" alt="DOI"></a></li>
 <li><a href="https://CRAN.R-project.org/package=APackOfTheClones" class="external-link"><img src="https://www.r-pkg.org/badges/version/APackOfTheClones" alt="CRAN status"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/APackOfTheClones" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/APackOfTheClones?color=brightgreen" alt="Downloads"></a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Qile0317/APackOfTheClones/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/Qile0317/APackOfTheClones?branch=main" class="external-link"><img src="https://codecov.io/gh/Qile0317/APackOfTheClones/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation"></a></li>
-<li><a href="https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71" class="external-link"><img src="https://joss.theoj.org/papers/eb9d2b2fc3ffb1d440bd7120b66f1f71/status.svg" alt="JOSS status"></a></li>
 <li><a href="https://qile0317.github.io/APackOfTheClones/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Developmental Documentation"></a></li>
 <li><a href="https://qile0317.r-universe.dev/APackOfTheClones" class="external-link"><img src="https://qile0317.r-universe.dev/badges/APackOfTheClones" alt="R Universe APackOfTheClones status badge"></a></li>
 <li><a href="https://github.com/Qile0317/APackOfTheClones/blob/main/LICENSE.md" class="external-link"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license"></a></li>
