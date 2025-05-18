@@ -1,6 +1,6 @@
 # main apotc plot initializer
 create_initial_apotc_plot <- function(
-	apotc_obj, res, linetype, alpha, detail = TRUE
+  apotc_obj, res, linetype, alpha, detail = TRUE
 ) {
  
   if (!detail) {
@@ -9,7 +9,7 @@ create_initial_apotc_plot <- function(
     plt_df <- get_plottable_df_with_color(apotc_obj)
   }
 
-	plot_clusters(
+  plot_clusters(
     clusters = plt_df,
     n = res,
     linetype = linetype,
@@ -18,26 +18,26 @@ create_initial_apotc_plot <- function(
 }
 
 plot_clusters <- function(
-	clusters, # is a df
-	n = 360,
-	linetype = "blank",
-	alpha = 1
+  clusters, # is a df
+  n = 360,
+  linetype = "blank",
+  alpha = 1
 ) {
-	clusters %>%
-		ggplot2::ggplot() +
-		ggforce::geom_circle(
-			apotc_aes_string(
-				x0 = "x",
-				y0 = "y",
-				r = "r",
-				fill = "color"
-			),
-			n = n,
-			linetype = linetype,
-			alpha = alpha
-		) +
-		ggplot2::coord_fixed() +
-		ggplot2::scale_fill_identity()
+  clusters %>%
+    ggplot2::ggplot() +
+    ggforce::geom_circle(
+      apotc_aes_string(
+        x0 = "x",
+        y0 = "y",
+        r = "r",
+        fill = "color"
+      ),
+      n = n,
+      linetype = linetype,
+      alpha = alpha
+    ) +
+    ggplot2::coord_fixed() +
+    ggplot2::scale_fill_identity()
 }
 
 get_plottable_df_with_color <- function(apotc_data) {
@@ -83,16 +83,16 @@ df_full_join <- function(clstr_list, detail = TRUE) {
 
 make_undetailed_df <- function(apotc_obj) {
 
-	df <- data.frame(
-		label = character(0),
+  df <- data.frame(
+    label = character(0),
     x = numeric(0),
     y = numeric(0),
     r = numeric(0),
     color = character(0),
     clonotype = character(0)
-	)
+  )
 
-	for (el in enumerate(get_clusterlists(apotc_obj))) {
+  for (el in enumerate(get_clusterlists(apotc_obj))) {
     if (is_empty(val1(el))) next
     df <- df %>% dplyr::full_join(
       convert_to_dataframe(val1(el), ind(el) - 1, detail = FALSE) %>%
@@ -102,7 +102,7 @@ make_undetailed_df <- function(apotc_obj) {
         ),
       by = dplyr::join_by("label", "x", "y", "r", "clonotype", "color")
     )
-	}
+  }
 
   df
 }
@@ -114,13 +114,13 @@ is_undetailed <- function(apotc_ggplot) {
 }
 
 add_default_theme <- function(plt, reduction) {
-	label_hashmap <- hash::hash(
-		  c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
-	)
-	label <- label_hashmap[[reduction]]
+  label_hashmap <- hash::hash(
+      c("umap", "tsne", "pca"), c("UMAP", "tSNE", "PC")
+  )
+  label <- label_hashmap[[reduction]]
   if (is.null(label)) label <- reduction
 
-	plt +
+  plt +
       ggplot2::theme_classic() +
       ggplot2::xlab(paste(label, 1, sep = "_")) +
       ggplot2::ylab(paste(label, 2, sep = "_"))

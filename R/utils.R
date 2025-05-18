@@ -26,11 +26,11 @@
 #' getReductionCentroids(combined_pbmc, reduction = "umap")
 #'
 getReductionCentroids <- function(seurat_obj, reduction) {
-  get_cluster_centroids(
-    seurat_obj = seurat_obj,
-    reduction = user_get_reduc_obj(seurat_obj, reduction),
-    get_ident_levels(seurat_obj)
-  )
+    get_cluster_centroids(
+        seurat_obj = seurat_obj,
+        reduction = user_get_reduc_obj(seurat_obj, reduction),
+        get_ident_levels(seurat_obj)
+    )
 }
 
 user_get_reduc_obj <- function(seurat_obj, reduction) {
@@ -156,10 +156,10 @@ union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
         lapply(convert_table_to_named_numeric) %>%
         union_list_of_named_numerics()
 
-	if (!is.null(sort_decreasing)) {
+    if (!is.null(sort_decreasing)) {
         x <- sort(x, decreasing = sort_decreasing, method = "radix")
     }
-	if (as_table) x <- convert_named_numeric_to_table(x)
+    if (as_table) x <- convert_named_numeric_to_table(x)
     x
 }
 
@@ -585,14 +585,14 @@ subsetSeuratMetaData <- function(
     seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
 
     if (nrow(seurat_obj@meta.data) == 0) {
-	    stop(call. = FALSE, paste(
-		    "please check `", error_param, "`, ",
-			"no rows in the seurat metadata match the filter condition",
+        stop(call. = FALSE, paste(
+            "please check `", error_param, "`, ",
+            "no rows in the seurat metadata match the filter condition",
             sep = ""
-	    ))
+        ))
     }
 
-	seurat_obj
+    seurat_obj
 }
 
 count_clones <- function(seurat_obj, clonecall) {

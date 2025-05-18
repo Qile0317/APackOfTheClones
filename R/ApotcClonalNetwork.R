@@ -221,7 +221,7 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 }
 
 # takes in a named list of clonotypes as names, the elements are numeric vectors
-# indicating the seurat_cluster(s) they are in. If the numericvector is of length
+# indicating the seurat_cluster(s) they are in. If the numericvector is of len
 # 1, remove the element. This is done in Rcpp to achieve true linear runtime.
 remove_unique_clones_if <- function(shared_clonotypes, should_actually_remove) {
 
@@ -432,8 +432,9 @@ overlay_links <- function(
             link_dataframe,
             link_alpha,
             link_width
-        ) %>% return()
-        # should not get to any other case, this is just here for future extensions
+        ) %>%
+        return()
+        # shouldnt get to any other case, this is here for future extensions
     )
 }
 

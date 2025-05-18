@@ -83,14 +83,14 @@ removeLegend <- function(apotc_ggplot) {
 overlayLegend <- function(
     apotc_ggplot,
     legend_sizes = "auto",
-	legend_position = "auto",
-	legend_buffer = 0.2,
-	legend_color = "#808080",
-	legend_spacing = "auto",
-	legend_label = "Clone sizes",
-	legend_text_size = 5,
-	add_legend_background = TRUE,
-	add_legend_centerspace = 0,
+    legend_position = "auto",
+    legend_buffer = 0.2,
+    legend_color = "#808080",
+    legend_spacing = "auto",
+    legend_label = "Clone sizes",
+    legend_text_size = 5,
+    add_legend_background = TRUE,
+    add_legend_centerspace = 0,
     linetype = "blank",
     res = 360L
 ) {

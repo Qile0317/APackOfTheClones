@@ -98,238 +98,240 @@
 #' APOTCPlot(pbmc, show_labels = TRUE, verbose = FALSE)
 #'
 AdjustAPOTC <- function(
-	seurat_obj,
-	reduction_base = NULL,
-	clonecall = NULL,
-	...,
-	extra_filter = NULL,
-	run_id = NULL,
+    seurat_obj,
+    reduction_base = NULL,
+    clonecall = NULL,
+    ...,
+    extra_filter = NULL,
+    run_id = NULL,
 
-	new_rad_scale_factor = NULL,
-	new_clone_scale_factor = NULL,
+    new_rad_scale_factor = NULL,
+    new_clone_scale_factor = NULL,
 
-	repulse = FALSE,
-	repulsion_threshold = 1,
-	repulsion_strength = 1,
-	max_repulsion_iter = 10L,
+    repulse = FALSE,
+    repulsion_threshold = 1,
+    repulsion_strength = 1,
+    max_repulsion_iter = 10L,
 
-	relocate_cluster = NULL,
-	relocation_coord = NULL,
-	nudge_cluster = NULL,
-	nudge_vector = NULL,
-	recolor_cluster = NULL,
-	new_color = NULL,
+    relocate_cluster = NULL,
+    relocation_coord = NULL,
+    nudge_cluster = NULL,
+    nudge_vector = NULL,
+    recolor_cluster = NULL,
+    new_color = NULL,
 
-	rename_label = NULL,
-	new_label = NULL,
-	relocate_label = NULL,
-	label_relocation_coord = NULL,
-	nudge_label = NULL,
-	label_nudge_vector = NULL,
-	verbose = TRUE
+    rename_label = NULL,
+    new_label = NULL,
+    relocate_label = NULL,
+    label_relocation_coord = NULL,
+    nudge_label = NULL,
+    label_nudge_vector = NULL,
+    verbose = TRUE
 ) {
-	varargs_list <- list(...)
-	args <- environment()
-	AdjustAPOTC_error_handler(args)
+    varargs_list <- list(...)
+    args <- environment()
+    AdjustAPOTC_error_handler(args)
 
-	args$object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
-	apotc_obj <- getApotcData(seurat_obj, args$object_id)
-	
-	if (should_change(new_clone_scale_factor)) {
-		apotc_obj <- change_clone_scale(apotc_obj, new_clone_scale_factor)
-		# maybe change the params in the seurat object itself?
-	}
+    args$object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+    apotc_obj <- getApotcData(seurat_obj, args$object_id)
+    
+    if (should_change(new_clone_scale_factor)) {
+        apotc_obj <- change_clone_scale(apotc_obj, new_clone_scale_factor)
+        # maybe change the params in the seurat object itself?
+    }
 
-	if (should_change(new_rad_scale_factor)) {
-		apotc_obj <- change_rad_scale(apotc_obj, new_rad_scale_factor)
-		# maybe change the params in the seurat object itself?
-	}
+    if (should_change(new_rad_scale_factor)) {
+        apotc_obj <- change_rad_scale(apotc_obj, new_rad_scale_factor)
+        # maybe change the params in the seurat object itself?
+    }
 
-	if (should_change(recolor_cluster)) {
-		apotc_obj <- recolor_clusters(apotc_obj, recolor_cluster, new_color)
-	}
+    if (should_change(recolor_cluster)) {
+        apotc_obj <- recolor_clusters(apotc_obj, recolor_cluster, new_color)
+    }
 
-	if (should_change(relocate_cluster)) {
-		apotc_obj <- relocate_clusters(
-			apotc_obj, relocate_cluster, relocation_coord
-		)
-	}
+    if (should_change(relocate_cluster)) {
+        apotc_obj <- relocate_clusters(
+            apotc_obj, relocate_cluster, relocation_coord
+        )
+    }
 
-	if (should_change(nudge_cluster)) {
-		apotc_obj <- nudge_clusters(apotc_obj, nudge_cluster, nudge_vector)
-	}
+    if (should_change(nudge_cluster)) {
+        apotc_obj <- nudge_clusters(apotc_obj, nudge_cluster, nudge_vector)
+    }
 
-	if (repulse) {
-		apotc_obj <- repulseClusters(
-			apotc_obj, repulsion_threshold, repulsion_strength,
-			max_repulsion_iter, verbose
-		)
-		if (verbose) message()
-	}
+    if (repulse) {
+        apotc_obj <- repulseClusters(
+            apotc_obj, repulsion_threshold, repulsion_strength,
+            max_repulsion_iter, verbose
+        )
+        if (verbose) message()
+    }
 
-	if (should_change(rename_label)) {
-		apotc_obj <- rename_labels(apotc_obj, rename_label, new_label)
-	}
+    if (should_change(rename_label)) {
+        apotc_obj <- rename_labels(apotc_obj, rename_label, new_label)
+    }
 
-	if (should_change(relocate_label)) {
-		apotc_obj <- relocate_labels(
-			apotc_obj, relocate_label, label_relocation_coord
-		)
-	}
+    if (should_change(relocate_label)) {
+        apotc_obj <- relocate_labels(
+            apotc_obj, relocate_label, label_relocation_coord
+        )
+    }
 
-	if (should_change(nudge_label)) {
-		apotc_obj <- nudge_labels(apotc_obj, nudge_label, label_nudge_vector)
-	}
+    if (should_change(nudge_label)) {
+        apotc_obj <- nudge_labels(apotc_obj, nudge_label, label_nudge_vector)
+    }
 
-	setApotcData(seurat_obj, args$object_id, apotc_obj)
+    setApotcData(seurat_obj, args$object_id, apotc_obj)
 }
 
 AdjustAPOTC_error_handler <- function(args) {
 
-	check_apotc_identifiers(args)
+    check_apotc_identifiers(args)
 
-	typecheck(args$new_rad_scale_factor, is_a_positive_numeric, is.null)
-	typecheck(args$new_clone_scale_factor, is_a_positive_numeric, is.null)
+    typecheck(args$new_rad_scale_factor, is_a_positive_numeric, is.null)
+    typecheck(args$new_clone_scale_factor, is_a_positive_numeric, is.null)
 
-	check_repulsion_params(args)
+    check_repulsion_params(args)
 
-	check_coord_args(args$relocate_cluster, args$relocation_coord)
-	check_coord_args(args$nudge_cluster, args$nudge_vector)
+    check_coord_args(args$relocate_cluster, args$relocation_coord)
+    check_coord_args(args$nudge_cluster, args$nudge_vector)
 
-	typecheck(args$recolor_cluster, is_integer, is.null)
-	typecheck(args$new_color, is_character, is.null)
-	lengthcheck_ifnotnull(args$recolor_cluster, args$new_color)
+    typecheck(args$recolor_cluster, is_integer, is.null)
+    typecheck(args$new_color, is_character, is.null)
+    lengthcheck_ifnotnull(args$recolor_cluster, args$new_color)
 
-	typecheck(args$rename_label, is_integer, is_character, is.null)
-	typecheck(args$new_label, is_vector, is.null)
-	lengthcheck_ifnotnull(args$rename_label, args$new_label)
+    typecheck(args$rename_label, is_integer, is_character, is.null)
+    typecheck(args$new_label, is_vector, is.null)
+    lengthcheck_ifnotnull(args$rename_label, args$new_label)
 
-	check_coord_args(args$relocate_label, args$label_relocation_coord)
-	check_coord_args(args$nudge_label, args$label_nudge_vector)
+    check_coord_args(args$relocate_label, args$label_relocation_coord)
+    check_coord_args(args$nudge_label, args$label_nudge_vector)
 
-	typecheck(args$verbose, is_a_logical)
+    typecheck(args$verbose, is_a_logical)
 
 }
 
 change_clone_scale <- function(apotc_obj, new_factor) {
 
-	apotc_obj %>%
-		lapply_clusterlists(function(x) {
-			rcppRescaleClones(
-				rClusterlist = x,
-				newCloneScale = new_factor,
-				prevCloneScale = get_clone_scale_factor(apotc_obj),
-				prevRadScale = get_rad_scale_factor(apotc_obj)
-			)
-		}) %>%
-		set_clone_scale_factor(new_factor)
+    apotc_obj %>%
+        lapply_clusterlists(function(x) {
+            rcppRescaleClones(
+                rClusterlist = x,
+                newCloneScale = new_factor,
+                prevCloneScale = get_clone_scale_factor(apotc_obj),
+                prevRadScale = get_rad_scale_factor(apotc_obj)
+            )
+        }) %>%
+        set_clone_scale_factor(new_factor)
 
 }
 
 change_rad_scale <- function(apotc_obj, new_factor) {
 
-	old_factor <- get_rad_scale_factor(apotc_obj)
-	conversion_num <- get_clone_scale_factor(apotc_obj) *
-		(new_factor - old_factor)
+    old_factor <- get_rad_scale_factor(apotc_obj)
+    conversion_num <- get_clone_scale_factor(apotc_obj) *
+        (new_factor - old_factor)
 
-	for (i in seq_len(get_num_clusters(apotc_obj))) {
-		curr <- apotc_obj@clusters[[i]]
-    	if (isnt_empty(curr)) {
-    		apotc_obj@clusters[[i]]$rad <- curr$rad + conversion_num
-    	}
-	}
+    for (i in seq_len(get_num_clusters(apotc_obj))) {
+        curr <- apotc_obj@clusters[[i]]
+        if (isnt_empty(curr)) {
+            apotc_obj@clusters[[i]]$rad <- curr$rad + conversion_num
+        }
+    }
 
-	apotc_obj@rad_scale_factor <- new_factor
-	apotc_obj
+    apotc_obj@rad_scale_factor <- new_factor
+    apotc_obj
 }
 
 recolor_clusters <- function(apotc_obj, recolor_cluster, new_color) {
-	recolor_indices <- match_index(apotc_obj, recolor_cluster)
-	for (i in seq_along(recolor_cluster)) {
-		apotc_obj@cluster_colors[recolor_indices[i]] <- new_color[[i]]
-	}
-	apotc_obj
+    recolor_indices <- match_index(apotc_obj, recolor_cluster)
+    for (i in seq_along(recolor_cluster)) {
+        apotc_obj@cluster_colors[recolor_indices[i]] <- new_color[[i]]
+    }
+    apotc_obj
 }
 
 relocate_clusters <- function(apotc_obj, relocate_cluster, relocation_coord) {
 
-	relocate_cluster <- match_index(apotc_obj, relocate_cluster)
+    relocate_cluster <- match_index(apotc_obj, relocate_cluster)
 
-	if (is_numeric_pair(relocation_coord)) {
-		relocation_coord <- init_list(length(relocate_cluster), relocation_coord)
-	}
+    if (is_numeric_pair(relocation_coord)) {
+        relocation_coord <- init_list(
+            length(relocate_cluster), relocation_coord
+        )
+    }
 
-	new_clusterlists <- get_clusterlists(apotc_obj)
+    new_clusterlists <- get_clusterlists(apotc_obj)
 
-	for (i in seq_along(relocate_cluster)) {
-		cl_ind <- relocate_cluster[i]
-		if (!is_valid_nonempty_cluster(apotc_obj, cl_ind)) next
-		new_clusterlists[[cl_ind]] <- move_cluster(
-	    	cluster = new_clusterlists[[cl_ind]],
-	    	new_coord = relocation_coord[[i]]
-	    )
-	}
+    for (i in seq_along(relocate_cluster)) {
+        cl_ind <- relocate_cluster[i]
+        if (!is_valid_nonempty_cluster(apotc_obj, cl_ind)) next
+        new_clusterlists[[cl_ind]] <- move_cluster(
+            cluster = new_clusterlists[[cl_ind]],
+            new_coord = relocation_coord[[i]]
+        )
+    }
 
-	setModifiedClusterlists(apotc_obj, new_clusterlists)
+    setModifiedClusterlists(apotc_obj, new_clusterlists)
 }
 
 nudge_clusters <- function(apotc_obj, nudge_cluster, nudge_vector) {
 
-	nudge_cluster <- match_index(apotc_obj, nudge_cluster)
+    nudge_cluster <- match_index(apotc_obj, nudge_cluster)
 
-	if (is_numeric_pair(nudge_vector)) {
-		nudge_vector <- init_list(length(nudge_cluster), nudge_vector)
-	}
+    if (is_numeric_pair(nudge_vector)) {
+        nudge_vector <- init_list(length(nudge_cluster), nudge_vector)
+    }
 
-	relocate_clusters(
-		apotc_obj,
-		relocate_cluster = nudge_cluster,
-		relocation_coord = operate_on_same_length_lists(
-			func = add,
-			l1 = nudge_vector,
-			l2 = get_centroids(apotc_obj)[nudge_cluster]
-		)
-	)
+    relocate_clusters(
+        apotc_obj,
+        relocate_cluster = nudge_cluster,
+        relocation_coord = operate_on_same_length_lists(
+            func = add,
+            l1 = nudge_vector,
+            l2 = get_centroids(apotc_obj)[nudge_cluster]
+        )
+    )
 }
 
 # label modification stuff - maybe should be in seperate function(s)?
 
 rename_labels <- function(apotc_obj, rename_label, new_label) {
-	rename_label <- match_index(apotc_obj, rename_label)
-	for (i in seq_along(rename_label)) {
-		apotc_obj@labels[rename_label[i]] <- new_label[i]
-	}
-	apotc_obj
+    rename_label <- match_index(apotc_obj, rename_label)
+    for (i in seq_along(rename_label)) {
+        apotc_obj@labels[rename_label[i]] <- new_label[i]
+    }
+    apotc_obj
 }
 
 relocate_labels <- function(apotc_obj, relocate_label, label_relocation_coord) {
-	operate_on_label_locations(
-		apotc_obj, relocate_label, label_relocation_coord, function(a, b) b
-	)
+    operate_on_label_locations(
+        apotc_obj, relocate_label, label_relocation_coord, function(a, b) b
+    )
 }
 
 nudge_labels <- function(apotc_obj, nudge_label, label_nudge_vector) {
-	operate_on_label_locations(
-		apotc_obj, nudge_label, label_nudge_vector, add
-	)
+    operate_on_label_locations(
+        apotc_obj, nudge_label, label_nudge_vector, add
+    )
 }
 
 operate_on_label_locations <- function(apotc_obj, labels, two_d_vectors, func) {
 
-	labels <- match_index(apotc_obj, labels)
+    labels <- match_index(apotc_obj, labels)
 
-	if (is_numeric_pair(two_d_vectors)) {
-		two_d_vectors <- init_list(length(labels), two_d_vectors)
-	}
+    if (is_numeric_pair(two_d_vectors)) {
+        two_d_vectors <- init_list(length(labels), two_d_vectors)
+    }
 
-	for (i in seq_along(labels)) {
-		index <- labels[i]
-		if (!is_valid_nonempty_cluster(apotc_obj, index)) next
-		apotc_obj@label_coords[[index]] <- func(
-			apotc_obj@label_coords[[index]],
-			two_d_vectors[[i]]
-		)
-	}
+    for (i in seq_along(labels)) {
+        index <- labels[i]
+        if (!is_valid_nonempty_cluster(apotc_obj, index)) next
+        apotc_obj@label_coords[[index]] <- func(
+            apotc_obj@label_coords[[index]],
+            two_d_vectors[[i]]
+        )
+    }
 
-	apotc_obj
+    apotc_obj
 }

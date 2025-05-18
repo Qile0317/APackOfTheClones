@@ -111,212 +111,212 @@
 #' clonal_packing_plot <- APOTCPlot(combined_pbmc)
 #'
 APOTCPlot <- function(
-	seurat_obj,
-	reduction_base = NULL,
-	clonecall = NULL,
-	...,
-	extra_filter = NULL,
-	run_id = NULL,
+    seurat_obj,
+    reduction_base = NULL,
+    clonecall = NULL,
+    ...,
+    extra_filter = NULL,
+    run_id = NULL,
 
-	show_shared = NULL,
-	only_link = NULL,
-	clone_link_width = "auto",
-	clone_link_color = "black",
-	clone_link_alpha = 0.5,
+    show_shared = NULL,
+    only_link = NULL,
+    clone_link_width = "auto",
+    clone_link_color = "black",
+    clone_link_alpha = 0.5,
 
-	res = 360L,
-	linetype = "blank",
-	use_default_theme = TRUE,
-	retain_axis_scales = FALSE,
-	alpha = 1,
+    res = 360L,
+    linetype = "blank",
+    use_default_theme = TRUE,
+    retain_axis_scales = FALSE,
+    alpha = 1,
 
-	show_labels = FALSE,
-	label_size = 5,
+    show_labels = FALSE,
+    label_size = 5,
 
-	add_size_legend = TRUE,
-	legend_sizes = "auto",
-	legend_position = "auto",
-	legend_buffer = 0.2,
-	legend_color = "#808080",
-	legend_spacing = "auto",
-	legend_label = "Clone sizes",
-	legend_text_size = 5,
-	add_legend_background = TRUE,
-	add_legend_centerspace = 0,
+    add_size_legend = TRUE,
+    legend_sizes = "auto",
+    legend_position = "auto",
+    legend_buffer = 0.2,
+    legend_color = "#808080",
+    legend_spacing = "auto",
+    legend_label = "Clone sizes",
+    legend_text_size = 5,
+    add_legend_background = TRUE,
+    add_legend_centerspace = 0,
 
-	detail = TRUE,
+    detail = TRUE,
 
-	verbose = TRUE
+    verbose = TRUE
 ) {
-	# handle varargs, run_id, and typecheck
-	varargs_list <- list(...)
-	args <- environment()
-	args$run_id <- infer_object_id_if_needed(args, varargs_list)
-	APOTCPlot_error_handler(args)
+    # handle varargs, run_id, and typecheck
+    varargs_list <- list(...)
+    args <- environment()
+    args$run_id <- infer_object_id_if_needed(args, varargs_list)
+    APOTCPlot_error_handler(args)
 
-	# get the apotc object
-	apotc_obj <- getApotcData(seurat_obj, args$run_id)
+    # get the apotc object
+    apotc_obj <- getApotcData(seurat_obj, args$run_id)
 
-	# initialize plot
-	result_plot <- create_initial_apotc_plot(
-		apotc_obj, res, linetype, alpha, detail
-	)
-	result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
+    # initialize plot
+    result_plot <- create_initial_apotc_plot(
+        apotc_obj, res, linetype, alpha, detail
+    )
+    result_plot_dimensions <- get_apotc_plot_dims(apotc_obj)
 
-	#set theme
-	if (use_default_theme) {
-		result_plot <- add_default_theme(
-			plt = result_plot,
-			reduction = get_reduction_base(apotc_obj)
-		)
-	} else {
-		result_plot <- result_plot + ggplot2::theme_void()
-	}
+    #set theme
+    if (use_default_theme) {
+        result_plot <- add_default_theme(
+            plt = result_plot,
+            reduction = get_reduction_base(apotc_obj)
+        )
+    } else {
+        result_plot <- result_plot + ggplot2::theme_void()
+    }
 
-	# retain axis scales on the resulting plot.
-	if (retain_axis_scales) {
-		result_plot_dimensions <- get_retain_scale_dims(
-			seurat_obj,
-			reduction = get_reduction_base(apotc_obj),
-			ball_pack_plt = result_plot,
-			plot_dims = result_plot_dimensions
-		)
+    # retain axis scales on the resulting plot.
+    if (retain_axis_scales) {
+        result_plot_dimensions <- get_retain_scale_dims(
+            seurat_obj,
+            reduction = get_reduction_base(apotc_obj),
+            ball_pack_plt = result_plot,
+            plot_dims = result_plot_dimensions
+        )
 
-		result_plot <- result_plot + ggplot2::expand_limits(
-			x = get_xr(result_plot_dimensions),
-			y = get_yr(result_plot_dimensions)
-		)
-	}
+        result_plot <- result_plot + ggplot2::expand_limits(
+            x = get_xr(result_plot_dimensions),
+            y = get_yr(result_plot_dimensions)
+        )
+    }
 
-	if (isnt_empty(show_shared)) {
+    if (isnt_empty(show_shared)) {
 
-		# check only_link indexing
-		if (!is.null(only_link) &&
-			!is_valid_nonempty_cluster(apotc_obj, only_link)) {
-			warning(call. = FALSE,
-				"* The cluster at index `only_link` = ", only_link,
-				" is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
-			)
-			only_link <- NULL
-		}
+        # check only_link indexing
+        if (!is.null(only_link) &&
+            !is_valid_nonempty_cluster(apotc_obj, only_link)) {
+            warning(call. = FALSE,
+                "* The cluster at index `only_link` = ", only_link,
+                " is empty or isn't between 1 ~ ", get_num_clusters(apotc_obj)
+            )
+            only_link <- NULL
+        }
 
-		result_plot <- overlay_shared_clone_links(
-			apotc_obj = apotc_obj,
-			shared_clones = show_shared,
-			result_plot = result_plot,
-			only_cluster = only_link,
-			link_color_mode = clone_link_color,
-			link_width = clone_link_width,
-			link_alpha = clone_link_alpha,
-			verbose = verbose
-			# TODO other params in the future
-		)
-	}
+        result_plot <- overlay_shared_clone_links(
+            apotc_obj = apotc_obj,
+            shared_clones = show_shared,
+            result_plot = result_plot,
+            only_cluster = only_link,
+            link_color_mode = clone_link_color,
+            link_width = clone_link_width,
+            link_alpha = clone_link_alpha,
+            verbose = verbose
+            # TODO other params in the future
+        )
+    }
 
-	if (show_labels) {
-		result_plot <- insert_labels(result_plot, apotc_obj, label_size)
-	}
+    if (show_labels) {
+        result_plot <- insert_labels(result_plot, apotc_obj, label_size)
+    }
 
-	if (add_size_legend) {
-		result_plot <- insert_legend(
-			plt = result_plot,
-			plt_dims = result_plot_dimensions,
-			apotc_obj = apotc_obj,
-			sizes = legend_sizes,
-			pos = legend_position,
-			buffer = legend_buffer,
-			additional_middle_spacing = add_legend_centerspace,
-			color = legend_color,
-			n = res,
-			spacing = legend_spacing,
-			legend_label = legend_label,
-			legend_textsize = legend_text_size,
-			do_add_legend_border = add_legend_background,
-			linetype = linetype
-		)
-	}
+    if (add_size_legend) {
+        result_plot <- insert_legend(
+            plt = result_plot,
+            plt_dims = result_plot_dimensions,
+            apotc_obj = apotc_obj,
+            sizes = legend_sizes,
+            pos = legend_position,
+            buffer = legend_buffer,
+            additional_middle_spacing = add_legend_centerspace,
+            color = legend_color,
+            n = res,
+            spacing = legend_spacing,
+            legend_label = legend_label,
+            legend_textsize = legend_text_size,
+            do_add_legend_border = add_legend_background,
+            linetype = linetype
+        )
+    }
 
-	result_plot <- ApotcGGPlot(result_plot, apotc_obj)
+    result_plot <- ApotcGGPlot(result_plot, apotc_obj)
 
-	if (verbose) message("* generated ggplot object")
-	result_plot
+    if (verbose) message("* generated ggplot object")
+    result_plot
 }
 
 APOTCPlot_error_handler <- function(args) {
 
-	check_apotc_identifiers(args)
-	check_filtering_conditions(args)
+    check_apotc_identifiers(args)
+    check_filtering_conditions(args)
 
-	# check object_id validity
-	if (!containsApotcRun(args$seurat_obj, args$run_id)) {
-		stop(call. = FALSE, paste(
-			"APackOfTheClones object with id", args$run_id,
-			"does not exist in the seurat object"
-		))
-	}
+    # check object_id validity
+    if (!containsApotcRun(args$seurat_obj, args$run_id)) {
+        stop(call. = FALSE, paste(
+            "APackOfTheClones object with id", args$run_id,
+            "does not exist in the seurat object"
+        ))
+    }
 
-	# typecheck clone link args
-	typecheck(args$show_shared, is_output_of_getSharedClones, is.null)
-	typecheck(args$only_link, is_an_integer, is.null)
-	if (!should_estimate(args$clone_link_width))
-		typecheck(args$clone_link_width, is_a_positive_numeric)
-	typecheck(args$clone_link_color, is_a_character)
-	typecheck(args$clone_link_alpha, is_a_numeric)
+    # typecheck clone link args
+    typecheck(args$show_shared, is_output_of_getSharedClones, is.null)
+    typecheck(args$only_link, is_an_integer, is.null)
+    if (!should_estimate(args$clone_link_width))
+        typecheck(args$clone_link_width, is_a_positive_numeric)
+    typecheck(args$clone_link_color, is_a_character)
+    typecheck(args$clone_link_alpha, is_a_numeric)
 
-	# typecheck visualization args
-	typecheck(args$res, is_an_integer)
-	typecheck(args$linetype, is_a_character)
-	typecheck(args$use_default_theme, is_a_logical)
-	typecheck(args$retain_axis_scales, is_a_logical)
-	typecheck(args$show_labels, is_a_logical)
-	typecheck(args$label_size, is_a_positive_numeric)
+    # typecheck visualization args
+    typecheck(args$res, is_an_integer)
+    typecheck(args$linetype, is_a_character)
+    typecheck(args$use_default_theme, is_a_logical)
+    typecheck(args$retain_axis_scales, is_a_logical)
+    typecheck(args$show_labels, is_a_logical)
+    typecheck(args$label_size, is_a_positive_numeric)
 
-	# check legend args
-	typecheck(args$add_size_legend, is_a_logical)
-	check_legend_params(args)
+    # check legend args
+    typecheck(args$add_size_legend, is_a_logical)
+    check_legend_params(args)
 
-	typecheck(args$detail, is_a_logical)
+    typecheck(args$detail, is_a_logical)
 
 }
 
 # helpers for getting plot dimensions quickly
 
 get_apotc_plot_dims <- function(apotc_obj) {
-	apotc_obj %>%
-		get_plottable_df_with_color() %>%
-		get_apotc_plot_dims_from_df()
+    apotc_obj %>%
+        get_plottable_df_with_color() %>%
+        get_apotc_plot_dims_from_df()
 }
 
 get_apotc_plot_dims_from_df <- function(plot_dataframe) {
-	plot_dataframe %>%
-		subset_to_only_edge_circles() %>%
-		plot_clusters() %>%
-		get_plot_dims()
+    plot_dataframe %>%
+        subset_to_only_edge_circles() %>%
+        plot_clusters() %>%
+        get_plot_dims()
 }
 
 subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
-	apotc_plot_dataframe[unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)), ]
+    apotc_plot_dataframe[unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)), ]
 }
 
 # Produce modified ggplot object of an APackOfTheClones plot with an extra slot
 # hack fix - the clone size slot stores the autogenerated legend sizes
 ApotcGGPlot <- function(ggplot_obj, apotc_obj) {
-	apotc_obj@clusters <- list()
-	apotc_obj@clone_sizes <- list(estimate_legend_sizes(apotc_obj))
-	ggplot_obj$APackOfTheClones <- apotc_obj
-	ggplot_obj
+    apotc_obj@clusters <- list()
+    apotc_obj@clone_sizes <- list(estimate_legend_sizes(apotc_obj))
+    ggplot_obj$APackOfTheClones <- apotc_obj
+    ggplot_obj
 }
 
 isApotcGGPlot <- function(ggplot_obj) {
-	inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
+    inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
 }
 
 # getter
 get_apotcdata <- function(apotc_ggplot_obj) {
-	apotc_ggplot_obj$APackOfTheClones
+    apotc_ggplot_obj$APackOfTheClones
 }
 
 # based on the hack fix - get the estimated legend sizes in a apot ggplot
 get_estimated_legend_sizes <- function(apotc_ggplot_obj) {
-	get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
+    get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
 }
