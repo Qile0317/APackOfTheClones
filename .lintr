@@ -1,0 +1,5 @@
+linters: linters_with_defaults(
+    indentation_linter(indent = 4L),
+    object_name_linter(styles = c("camelCase", "CamelCase", "snake_case")),
+    trailing_whitespace_linter(allow_empty_lines = TRUE))
+encoding: "UTF-8"

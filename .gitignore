@@ -20,6 +20,3 @@ a.exe
 .RDataTmp
 .RDataTmp1
 .idea
-
-# remove in future
-.lintr

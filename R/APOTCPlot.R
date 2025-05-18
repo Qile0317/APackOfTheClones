@@ -320,4 +320,3 @@ get_apotcdata <- function(apotc_ggplot_obj) {
 get_estimated_legend_sizes <- function(apotc_ggplot_obj) {
 	get_raw_clone_sizes(get_apotcdata(apotc_ggplot_obj))[[1]]
 }
-
