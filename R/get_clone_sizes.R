@@ -150,6 +150,8 @@ count_raw_clone_sizes <- function(
 #' Merge a list of Clustered Clonotype Frequency Tables
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' The list of clustered clonotype frequencies from [countCloneSizes]
 #' can be merged by this function to a frequency table of all clonotypes
 #' similar to the data that can be seen in the seurat object metadata.
