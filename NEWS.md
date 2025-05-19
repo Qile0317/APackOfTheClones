@@ -1,5 +1,11 @@
 # APackOfTheClones (development version)
 
+## Additions
+
+## Changes
+
+- minor documentation cleanup
+
 # APackOfTheClones 1.2.4
 
 ## Additions
@@ -9,7 +15,7 @@
 ## Changes
 
 - slightly improve README
-- Ensured all irrelevant files are not included in the package build to address CRAN submissions failures for the previous 2 patches.
+- Ensured all irrelevant files are not included in the package build to address CRAN submissions failures for 2 previous unreleased patches (1.2.2, 1.2.3).
 
 # APackOfTheClones 1.2.1
 
