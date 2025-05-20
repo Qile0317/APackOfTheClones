@@ -2,6 +2,8 @@
 
 ## Additions
 
+- Add argument `show_all_links` in `APOTCPlot()` and `vizAPOTC()` to allow plotting of all shared clone links. Addresses GitHub issue [#23](https://github.com/Qile0317/APackOfTheClones/issues/23).
+
 ## Changes
 
 - minor documentation cleanup
@@ -10,12 +12,12 @@
 
 ## Additions
 
-- Update citation information as the tool has been published.
+- Update citation information as the tool has been published on the *Journal of Open Source Software*.
 
 ## Changes
 
 - slightly improve README
-- Ensured all irrelevant files are not included in the package build to address CRAN submissions failures for 2 previous unreleased patches (1.2.2, 1.2.3).
+- Ensured all irrelevant files are not included in the package build to address CRAN submission failures for 2 previous unreleased patches (1.2.2, 1.2.3).
 
 # APackOfTheClones 1.2.1
 

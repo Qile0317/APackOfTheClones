@@ -29,6 +29,9 @@
 #' aesthetic customization of these line links.
 #' @param only_link Optional integer indicating to only display clone
 #' links originating from this cluster if showing shared clones.
+#' @param show_all_links logical. If `TRUE`, will show all links between
+#' clusters. Defaults to `FALSE` which only shows links between some clusters
+#' without overlapping, although there is currently no way to control which.
 #' @param clone_link_width numeric. The width of the lines that connect shared
 #' clones. Defaults to `"auto"` which will estimate a reasonable value depending
 #' on circle sizes.
@@ -119,7 +122,8 @@ APOTCPlot <- function(
     run_id = NULL,
 
     show_shared = NULL,
-    only_link = NULL,
+    only_link = NULL, # TODO this should work with a string cluster name! Perhaps inferred from Ident.
+    show_all_links = FALSE,
     clone_link_width = "auto",
     clone_link_color = "black",
     clone_link_alpha = 0.5,
@@ -208,6 +212,7 @@ APOTCPlot <- function(
             link_color_mode = clone_link_color,
             link_width = clone_link_width,
             link_alpha = clone_link_alpha,
+            show_all_links = show_all_links, # TODO
             verbose = verbose
             # TODO other params in the future
         )

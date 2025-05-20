@@ -325,12 +325,18 @@ overlay_shared_clone_links <- function(
     link_width = "auto",
     verbose = TRUE,
     link_mode = "default",
-    extra_spacing = "auto" # not very relevant atm
+    extra_spacing = "auto", # not very relevant atm
+    show_all_links = FALSE
 ) {
 
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
-            apotc_obj, shared_clones, extra_spacing, link_mode, only_cluster
+            apotc_obj,
+            shared_clones,
+            extra_spacing,
+            link_mode,
+            only_cluster,
+            show_all_links
         )
     } else {
         stop(call. = FALSE, "no other link types are implemented yet")
@@ -350,7 +356,12 @@ overlay_shared_clone_links <- function(
 }
 
 compute_line_link_df <- function(
-    apotc_obj, shared_clones, extra_spacing, link_mode, only_cluster
+    apotc_obj,
+    shared_clones,
+    extra_spacing,
+    link_mode,
+    only_cluster,
+    show_all_links
 ) {
 
     if (link_mode != "default") {
@@ -368,7 +379,8 @@ compute_line_link_df <- function(
         oneIndexedSourceClusterIndex = ifelse(
             is.null(only_cluster), -1, only_cluster
         ),
-        extraSpacing = extra_spacing - get_rad_decrease(apotc_obj)
+        extraSpacing = extra_spacing - get_rad_decrease(apotc_obj),
+        showAllLinks = show_all_links
     )
 }
 
@@ -381,7 +393,7 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
     colors <- get_cluster_colors(apotc_obj)
-    # extremeley cursed hack fix to pass R CMD check:
+    # extremely cursed hack fix to pass R CMD check:
     eval(as_expression(
         "link_dataframe %>% dplyr::mutate(",
             "color = get_average_hex(colors[c1], colors[c2])",
