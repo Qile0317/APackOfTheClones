@@ -88,6 +88,7 @@ a circle size legend. (<code><a href="APOTCPlot.html">APOTCPlot()</a></code>)</p
 <span>  max_repulsion_iter <span class="op">=</span> <span class="fl">20L</span>,</span>
 <span>  show_shared <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  only_link <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_all_links <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  clone_link_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  clone_link_color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  clone_link_alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -229,6 +230,12 @@ aesthetic customization of these line links.</p></dd>
 <dt id="arg-only-link">only_link<a class="anchor" aria-label="anchor" href="#arg-only-link"></a></dt>
 <dd><p>Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.</p></dd>
+
+
+<dt id="arg-show-all-links">show_all_links<a class="anchor" aria-label="anchor" href="#arg-show-all-links"></a></dt>
+<dd><p>logical. If <code>TRUE</code>, will show all links between
+clusters. Defaults to <code>FALSE</code> which only shows links between some clusters
+without overlapping, although there is currently no way to control which.</p></dd>
 
 
 <dt id="arg-clone-link-width">clone_link_width<a class="anchor" aria-label="anchor" href="#arg-clone-link-width"></a></dt>
