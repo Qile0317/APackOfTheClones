@@ -90,7 +90,6 @@ getSharedClones <- function(
 
     publicity = c(2L, Inf)
 ) {
-    # handle inputs
     varargs_list <- list(...)
     getSharedClones_error_handler()
 
@@ -319,24 +318,25 @@ overlay_shared_clone_links <- function(
     shared_clones,
     result_plot,
     only_cluster, # TODO allow between pairs
+    show_all_links,
     link_type = "line",
     link_color_mode = "blend",
     link_alpha = 1,
     link_width = "auto",
     verbose = TRUE,
+
     link_mode = "default",
-    extra_spacing = "auto", # not very relevant atm
-    show_all_links = FALSE
+    extra_spacing = "auto" # not very relevant atm
 ) {
 
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
-            apotc_obj,
-            shared_clones,
-            extra_spacing,
-            link_mode,
-            only_cluster,
-            show_all_links
+            apotc_obj = apotc_obj,
+            shared_clones = shared_clones,
+            extra_spacing = extra_spacing,
+            link_mode = link_mode,
+            only_cluster = only_cluster,
+            show_all_links = show_all_links
         )
     } else {
         stop(call. = FALSE, "no other link types are implemented yet")
@@ -363,7 +363,7 @@ compute_line_link_df <- function(
     only_cluster,
     show_all_links
 ) {
-
+    
     if (link_mode != "default") {
         stop(call. = FALSE, "dev error: no other link modes are implemented")
     }
@@ -371,6 +371,13 @@ compute_line_link_df <- function(
     if (should_estimate(extra_spacing)) {
         extra_spacing <- 0 # TODO make better in future
     }
+
+    assert_that(
+        is.list(shared_clones) & all(unname(sapply(shared_clones, is.numeric))),
+        is_a_numeric(extra_spacing),
+        is.null(only_cluster) || is_a_numeric(only_cluster),
+        is.flag(show_all_links)
+    )
 
     rcppConstructLineLinkDf(
         clusterLists = get_clusterlists(apotc_obj),

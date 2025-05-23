@@ -14,13 +14,13 @@ sourcedata <- function(dir, name) {
 quietly <- function(e) suppressMessages(capture.output(e))
 
 quietly_test_that <- function(desc, code) {
-    test_that(desc, {quietly(code)})
+    testthat::test_that(desc, {quietly(code)})
 }
 
 # skippers
 
 skip_if_r_version_leq <- function(version) {
-    skip_if(is_curr_r_version_leq(version))
+    testthat::skip_if(is_curr_r_version_leq(version))
 }
 
 is_curr_r_version_leq <- function(version) {

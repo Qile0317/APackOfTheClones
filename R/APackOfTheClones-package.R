@@ -2,7 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom assertthat assert_that validate_that
+#' @importFrom assertthat assert_that validate_that is.flag
 #' @importFrom magrittr %>% %<>%
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib APackOfTheClones, .registration = TRUE
