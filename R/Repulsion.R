@@ -14,111 +14,115 @@
 #     check if two clusterlists overlap in c++
 
 get_repulsed_clusterlists <- function(
-  packed_clusters,
-  repulsion_threshold,
-  repulsion_strength,
-  max_repulsion_iter,
-  verbose
+    packed_clusters,
+    repulsion_threshold,
+    repulsion_strength,
+    max_repulsion_iter,
+    verbose
 ) {
-  if (verbose) {
-    message(paste(
-      "\nrepulsing all clusters | max iterations =", max_repulsion_iter
-    ))
-  }
-  packed_clusters <- repulse_cluster(
-    packed_clusters, repulsion_threshold, repulsion_strength,
-    max_repulsion_iter, verbose
-  )
+    if (verbose) {
+        message(paste(
+            "\nrepulsing all clusters | max iterations =", max_repulsion_iter
+        ))
+    }
+    packed_clusters <- repulse_cluster(
+        packed_clusters, repulsion_threshold, repulsion_strength,
+        max_repulsion_iter, verbose
+    )
 
-  packed_clusters
+    packed_clusters
 }
 
 # iterative repulsion. inp is a list of clusterlists.
 # returns the modified clusterlist
 repulse_cluster <- function(
-  inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
+    inp, thr = 1, G = 1, max_iter = 20, verbose = TRUE
 ) {
-  start_progress_bar(verbose)
+    start_progress_bar(verbose)
 
-  num_clusters <- length(inp)
-  transformation_vectors <- initialize_direction_vectors(num_clusters) # variable naming is confusing here; this is a list of the transformations for each cluster at the end of each iteration.
-  overall_repulsion_vec <- initialize_list_of_transformation_vectors(
-    transformation_vectors, num_clusters
-  ) # this one is for storing all repulsion vectors for all pairwise comparisons that are yet to be averaged for each iteration
+    num_clusters <- length(inp)
 
-  for (curr_iteration in 1:max_iter){
-    overall_repulsion_vec <- calculate_repulsion_vectors(
-      overall_repulsion_vec, inp, num_clusters, G, thr
-    )
-    transformation_vectors <- calculate_transformation_vectors(
-      transformation_vectors, overall_repulsion_vec, num_clusters
+    # list of the transformations for each cluster at the end of each iteration.
+    transformation_vectors <- initialize_direction_vectors(num_clusters)
+
+    # repulsion vectors for all pairwise comparisons to be averaged/iteration
+    overall_repulsion_vec <- init_transformation_vectors(
+        transformation_vectors, num_clusters
     )
 
-    #transformation vectors is an empty list() if everything was c(0,0)
-    if (!isnt_empty(transformation_vectors)) {
-      end_progress_bar(verbose)
-      return(inp)
-    }
+    for (curr_iteration in 1:max_iter){
 
-    # with the transformation vectors established, each cluster is moved
-    for (i in 1:num_clusters) {
-      if (isnt_empty(inp[[i]])) {
-        inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
-      }
-    }
+        transformation_vectors %<>% calculate_transformation_vectors(
+            calculate_repulsion_vectors(
+                overall_repulsion_vec, inp, num_clusters, G, thr
+            ),
+            num_clusters
+        )
 
-    if (verbose) progress_bar(curr_iteration, max_iter)
-  }
- 
-  end_progress_bar(verbose)
-  inp
+        # transformation vectors is an empty list() if everything was c(0,0)
+        if (!isnt_empty(transformation_vectors)) {
+            end_progress_bar(verbose)
+            return(inp)
+        }
+
+        # with the transformation vectors established, each cluster is moved
+        for (i in 1:num_clusters) {
+            if (is_empty(inp[[i]])) next
+            inp[[i]] <- trans_coord(inp[[i]], transformation_vectors[[i]])
+        }
+
+        if (verbose) progress_bar(curr_iteration, max_iter)
+    }
+    
+    end_progress_bar(verbose)
+    inp
 }
 
 # Alias to initialize direction vectors in a list
 initialize_direction_vectors <- function(num_clusters) {
-  init_list(num_clusters, c(0, 0))
+    init_list(num_clusters, c(0, 0))
 }
 
 # Alias to initialize the overall repulsion vec
-initialize_list_of_transformation_vectors <- function(
-  blank_vectors, num_clusters
+init_transformation_vectors <- function(
+    blank_vectors, num_clusters
 ) {
-  output <- vector("list", num_clusters)
-  for (i in 1:num_clusters) {
-    output[[i]] <- blank_vectors
-  }
-  output
+    output <- vector("list", num_clusters)
+    for (i in 1:num_clusters) {
+        output[[i]] <- blank_vectors
+    }
+    output
 }
 
 # check in current iteration if two clusters are worth repulsing
 do_proceed <- function(inp, i, j, thr) {
-  if ((i == j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
-    return(FALSE)
-  }
-  do_cl_intersect(inp[[i]], inp[[j]], thr)
+    if ((i == j) || (!(isnt_empty(inp[[i]]) && isnt_empty(inp[[j]])))) {
+        return(FALSE)
+    }
+    do_cl_intersect(inp[[i]], inp[[j]], thr)
 }
 
 do_cl_intersect <- function(Cn, Cm, thr = 1) {
-  do_cluster_intersect(
-    Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
-  )
+    do_cluster_intersect(
+        Cn[[4]], Cn[[5]], Cm[[4]], Cm[[5]], thr
+    )
 }
 
 # O(N^2) operation to calculate all repulsion vectors for each cluster
 calculate_repulsion_vectors <- function(
-  overall_repulsion_vec, inp,
-  num_clusters, G = 1, thr = 0
+    overall_repulsion_vec, inp,
+    num_clusters, G = 1, thr = 0
 ) {
-  for (i in 1:num_clusters) {
-    for (j in 1:num_clusters) {
-      if (!do_proceed(inp,i,j,thr)) {
-        overall_repulsion_vec[[i]][[j]] <- c(0, 0)
-        next
-      }
-      overall_repulsion_vec[[i]][[j]] <- get_component_repulsion_vector(
-        inp, i, j, G
-      )
+    for (i in 1:num_clusters) {
+        for (j in 1:num_clusters) {
+            if (!do_proceed(inp,i,j,thr)) {
+                overall_repulsion_vec[[i]][[j]] <- c(0, 0)
+                next
+            }
+            overall_repulsion_vec[[i]][[j]] <- get_component_repulsion_vector(
+                inp, i, j, G
+            )
+        }
     }
-  }
-  overall_repulsion_vec
+    overall_repulsion_vec
 }

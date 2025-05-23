@@ -6,6 +6,7 @@
 
 ## Changes
 
+- add `magrittr` to imports
 - minor documentation cleanup
 
 # APackOfTheClones 1.2.4

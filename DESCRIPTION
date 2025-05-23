@@ -37,6 +37,7 @@ Imports:
     ggplot2,
     hash,
     lifecycle,
+    magrittr,
     methods,
     Rcpp,
     rlang,
