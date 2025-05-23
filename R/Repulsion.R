@@ -2,6 +2,7 @@
 # FIXME the repulsion is too aggressive when clusters are super close, put upper bound on force based on clone scale
 # time complexity is O(mn^2) where m is the max number of iterations and n is the number of clusters(circles). n will never be that high so the timing isnt a problem
 
+# nolint start: commented_code_linter
 # Functions defined in src/repulsion.cpp
 # - get_average_vector(vec_list)
 #     avg vector of a list of vectors
@@ -12,6 +13,7 @@
 #     returns `list()` if all zeros
 # - do_cluster_intersect(cn_c,cn_r,cm_c,cm_r,thr):
 #     check if two clusterlists overlap in c++
+# nolint end
 
 get_repulsed_clusterlists <- function(
     packed_clusters,
