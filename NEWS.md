@@ -7,7 +7,8 @@
 ## Changes
 
 - add `magrittr` to imports
-- minor documentation cleanup
+- add `.lintr` and `.markdownlint.json` files to the package source code
+- minor documentation & sourcecode styling cleanup
 
 # APackOfTheClones 1.2.4
 
