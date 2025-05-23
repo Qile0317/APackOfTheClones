@@ -11,7 +11,7 @@ test_that("do_cl_intersect() = TRUE for overlapping lists", {
   expect_true(do_cl_intersect(c1, c1_shifted_by_4_5))
 })
 
-test_that("do_cl_intersect() = FALSE for overlapping lists with high threshold", {
+test_that("do_cl_intersect=FALSE for overlapping lists with high threshold", {
   expect_false(do_cl_intersect(c1, c2, 100))
 })
 
