@@ -363,21 +363,20 @@ compute_line_link_df <- function(
     only_cluster,
     show_all_links
 ) {
+
+    assert_that(
+        is.list(shared_clones) & all(unname(sapply(shared_clones, is.numeric))),
+        is.null(only_cluster) || is_a_numeric(only_cluster),
+        is.flag(show_all_links)
+    )
     
-    if (link_mode != "default") {
+    if (!identical(link_mode, "default")) {
         stop(call. = FALSE, "dev error: no other link modes are implemented")
     }
 
     if (should_estimate(extra_spacing)) {
         extra_spacing <- 0 # TODO make better in future
     }
-
-    assert_that(
-        is.list(shared_clones) & all(unname(sapply(shared_clones, is.numeric))),
-        is_a_numeric(extra_spacing),
-        is.null(only_cluster) || is_a_numeric(only_cluster),
-        is.flag(show_all_links)
-    )
 
     rcppConstructLineLinkDf(
         clusterLists = get_clusterlists(apotc_obj),
@@ -399,13 +398,18 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 }
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
+    # nolint start: indentation_linter object_usage_linter
+
     colors <- get_cluster_colors(apotc_obj)
-    # extremely cursed hack fix to pass R CMD check:
+
+    # extremely cursed hack fix to pass R CMD check
     eval(as_expression(
-        "link_dataframe %>% dplyr::mutate(",
-            "color = get_average_hex(colors[c1], colors[c2])",
-        ")"
+    "link_dataframe %>% dplyr::mutate(",
+        "color = get_average_hex(colors[c1], colors[c2])",
+    ")"
     ))
+
+    # nolint end
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {

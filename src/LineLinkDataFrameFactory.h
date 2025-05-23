@@ -11,8 +11,6 @@ private:
     std::vector<ClusterList> clusterListVector;
     int numClusters;
 
-    std::vector<std::unordered_map<std::string, int>> clusteredClonotypeIndex;
-
     std::vector<double> x1, x2, y1, y2;
     std::vector<int> cluster1, cluster2;
 
@@ -50,7 +48,6 @@ private:
     ) {
 
         clusterListVector = convertToClusterListVector(clusterLists);
-        clusteredClonotypeIndex = createClusteredClonotypeIndex(rawCloneSizes);
 
         std::vector<std::string> clonotypes = sharedClonotypeClusters.names();
         std::vector<std::vector<int>> clusterIndices = getZeroIndexedClusterIndices(
@@ -59,17 +56,17 @@ private:
 
         for (int i = 0; i < (int) clonotypes.size(); i++) {
 
-            std::vector<Circle> currCircles;
+            std::vector<Circle> circlesForCurrClonotype;
             std::vector<int> currOneIndexedClusterIndices;
 
             for (int clusterIndex : clusterIndices[i]) {
                 ClusterList& currSharedCluster = clusterListVector[clusterIndex];
-                currCircles.push_back(currSharedCluster.getClonotypeCircle(clonotypes[i]));
+                circlesForCurrClonotype.push_back(currSharedCluster.getClonotypeCircle(clonotypes[i]));
                 currOneIndexedClusterIndices.push_back(clusterIndex);
             }
 
             addSharedCircleLinkInfo(
-                currCircles,
+                circlesForCurrClonotype,
                 currOneIndexedClusterIndices,
                 extraSpacing,
                 oneIndexedSourceClusterIndex,
@@ -89,32 +86,6 @@ private:
             outputClusterListVector.push_back(ClusterList(currRClusterList));
         }
         return outputClusterListVector;
-    }
-    
-    // given the R list of raw clone size tables, construct an index which maps each clonotype
-    std::vector<std::unordered_map<std::string, int>> createClusteredClonotypeIndex(
-        Rcpp::List rawCloneSizes
-    ) {
-
-        numClusters = rawCloneSizes.size();
-        std::vector<std::unordered_map<std::string, int>> outputIndex (
-            numClusters, std::unordered_map<std::string, int>()
-        );
-
-        for (int i = 0; i < numClusters; i++) {
-            Rcpp::NumericVector currentClonotypeTable = rawCloneSizes[i];
-            if (currentClonotypeTable.size() == 0) {
-                continue;
-            }
-
-            addElementsToHashMap(
-                outputIndex[i],
-                Rcpp::as<std::vector<std::string>>(currentClonotypeTable.names()),
-                Rcpp::as<std::vector<int>>(currentClonotypeTable)
-            );
-        }
-
-        return outputIndex;
     }
 
     std::vector<std::vector<int>> getZeroIndexedClusterIndices(
