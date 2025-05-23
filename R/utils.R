@@ -279,14 +279,14 @@ get_plot_dims <- function(plt) {
 }
 
 get_xr <- function(p) {
-    if (ggplot2::is.ggplot(p)) {
+    if (ggplot2::is_ggplot(p)) {
         return(ggplot2::ggplot_build(p)$layout$panel_scales_x[[1]]$range$range)
     }
     p[[1]]
 }
 
 get_yr <- function(p) {
-    if (ggplot2::is.ggplot(p)) {
+    if (ggplot2::is_ggplot(p)) {
         return(ggplot2::ggplot_build(p)$layout$panel_scales_y[[1]]$range$range)
     }
     p[[2]]

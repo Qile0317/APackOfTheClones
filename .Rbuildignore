@@ -19,4 +19,4 @@
 ^\.lintr$
 ^cran-comments\.md$
 ^CITATION.cff$
-^\.lintr$
+^\.markdownlint\.json$

@@ -34,7 +34,7 @@ plot_clusters <- function(
     clusters %>%
         ggplot2::ggplot() +
         ggforce::geom_circle(
-            aes = apotc_aes_string(
+            mapping = apotc_aes_string(
                 x0 = "x",
                 y0 = "y",
                 r = "r",
