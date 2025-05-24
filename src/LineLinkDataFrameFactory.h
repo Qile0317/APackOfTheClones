@@ -9,8 +9,6 @@
 class LineLinkDataFrameFactory {
 private:
     std::vector<ClusterList> clusterListVector;
-    int numClusters;
-
     std::vector<double> x1, x2, y1, y2;
     std::vector<int> cluster1, cluster2;
 
@@ -65,6 +63,8 @@ private:
                 currOneIndexedClusterIndices.push_back(clusterIndex);
             }
 
+            Rcpp::Rcout << "i: " << i << ", clonotype: " << clonotypes[i] << std::endl;
+
             addSharedCircleLinkInfo(
                 circlesForCurrClonotype,
                 currOneIndexedClusterIndices,
@@ -75,9 +75,9 @@ private:
         }
     }
 
-    std::vector<ClusterList> convertToClusterListVector(Rcpp::List clusterLists) {
+    static std::vector<ClusterList> convertToClusterListVector(Rcpp::List clusterLists) {
 
-        numClusters = clusterLists.size();
+        int numClusters = clusterLists.size();
         std::vector<ClusterList> outputClusterListVector;
         outputClusterListVector.reserve(numClusters);
 
@@ -114,7 +114,6 @@ private:
         }
     }
 
-    // this is dependent on if the user wants to show every link
     void addSharedCircleLinkInfo(
         std::vector<Circle>& circles,
         std::vector<int>& currOneIndexedClusterIndices,
@@ -150,9 +149,11 @@ private:
         };
         
         const int n = static_cast<int>(circles.size());
-        for (int i = 0; i < n; i++) {
-            for (int j = showAllLinks ? 0 : i + 1; j < n; j++) {
+        // if showalllinks is true, we want to connect all circles with eachother but without overlapping
+        for (int i = 0; i < (n - 1); i++) {
+            for (int j = i + 1; j < n; j++) {
                 if (i != j) {
+                    Rcpp::Rcout << "i: " << i << ", j: " << j << std::endl;
                     processCirclePair(i, j);
                 }
             }
