@@ -190,7 +190,27 @@ details in the function level docs.</p>
 <span>    clonecall <span class="op">=</span> <span class="st">"aa"</span>,</span>
 <span>    show_shared <span class="op">=</span> <span class="va">shared_clones_aa</span>,</span>
 <span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; i: 0, clonotype: CASLSGSARQLTF_CASSPTVAGEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 1, clonotype: CVVSDFGNEKLTF_CASSLGSGGTGNEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 2, clonotype: CVVSDNTGGFKTIF_CASSVRRERANTGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 3, clonotype: CAVGEKGYGGSQGNLIF_CASSFRPPGSPLHF;CASHGARGDGFCEKLFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 4, clonotype: CARKVRDSSYKLIF_CASSDSGYNEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 5, clonotype: CASLSGSARQLTF_CASSSTVAGEQYF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 6, clonotype: CAVTFHYNTDKLIF_CASSQDRTGLDYEQYF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 7, clonotype: CALSGSRDDKIIF_NA</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 8, clonotype: CAELNQAGTALIF_CASSQAPFSTSGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 0, j: 2</span></span>
+<span><span class="co">#&gt; i: 1, j: 2</span></span></code></pre></div>
 <p><img src="APackOfTheClones-shared_files/figure-html/shared_clones_links-1.png" width="700"></p>
 <p>A more useful visualization may be to overlay the links from one
 cluster, and setting <code>clone_link_color</code> to
@@ -207,7 +227,27 @@ average color of two clusters, for even more intuitiveness:</p>
 <span>    clone_link_alpha <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span>    show_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; i: 0, clonotype: CASLSGSARQLTF_CASSPTVAGEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 1, clonotype: CVVSDFGNEKLTF_CASSLGSGGTGNEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 2, clonotype: CVVSDNTGGFKTIF_CASSVRRERANTGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 3, clonotype: CAVGEKGYGGSQGNLIF_CASSFRPPGSPLHF;CASHGARGDGFCEKLFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 4, clonotype: CARKVRDSSYKLIF_CASSDSGYNEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 5, clonotype: CASLSGSARQLTF_CASSSTVAGEQYF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 6, clonotype: CAVTFHYNTDKLIF_CASSQDRTGLDYEQYF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 7, clonotype: CALSGSRDDKIIF_NA</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 8, clonotype: CAELNQAGTALIF_CASSQAPFSTSGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 0, j: 2</span></span>
+<span><span class="co">#&gt; i: 1, j: 2</span></span></code></pre></div>
 <p><img src="APackOfTheClones-shared_files/figure-html/shared_clones_links_from_1_blend-1.png" width="700"></p>
 <div class="section level3">
 <h3 id="synergy-with-showclonehighlight">Synergy with <code>showCloneHighlight()</code><a class="anchor" aria-label="anchor" href="#synergy-with-showclonehighlight"></a>
@@ -248,7 +288,17 @@ highlighting and linking the top 4 most expanded clonotypes in
 <span>    default_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    scale_bg <span class="op">=</span> <span class="fl">0.95</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: umap;CTaa;_;_</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; * using the latest APackOfTheClones Run Data with object id: umap;CTaa;_;_</span></span>
+<span><span class="co">#&gt; i: 0, clonotype: CASLSGSARQLTF_CASSPTVAGEQFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 1, clonotype: CVVSDNTGGFKTIF_CASSVRRERANTGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 2, clonotype: CASLSGSARQLTF_CASSSTVAGEQYF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 3, clonotype: CAELNQAGTALIF_CASSQAPFSTSGELFF</span></span>
+<span><span class="co">#&gt; i: 0, j: 1</span></span>
+<span><span class="co">#&gt; i: 0, j: 2</span></span>
+<span><span class="co">#&gt; i: 1, j: 2</span></span></code></pre>
 <p><img src="APackOfTheClones-shared_files/figure-html/shared_clones_links_highlight-1.png" width="700"></p>
 <p>Note that to actually get the frequencies of those top clones, one
 can use the <code>countCloneSizes</code> function.</p>
