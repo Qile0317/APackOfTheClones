@@ -63,7 +63,7 @@ private:
                 currOneIndexedClusterIndices.push_back(clusterIndex);
             }
 
-            Rcpp::Rcout << "i: " << i << ", clonotype: " << clonotypes[i] << std::endl;
+            // Rcpp::Rcout << "i: " << i << ", clonotype: " << clonotypes[i] << std::endl;
 
             addSharedCircleLinkInfo(
                 circlesForCurrClonotype,
@@ -153,7 +153,7 @@ private:
         for (int i = 0; i < (n - 1); i++) {
             for (int j = i + 1; j < n; j++) {
                 if (i != j) {
-                    Rcpp::Rcout << "i: " << i << ", j: " << j << std::endl;
+                    // Rcpp::Rcout << "i: " << i << ", j: " << j << std::endl;
                     processCirclePair(i, j);
                 }
             }
