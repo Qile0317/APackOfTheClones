@@ -1,0 +1,11 @@
+{
+    "name": "APackOfTheClones devcontainer",
+    "shutdownAction": "none",
+    "build": {
+        "context": "..",
+        "dockerfile": "../Dockerfile"
+    },
+    "runArgs": [
+        "--name=apotc-devbox"
+    ]
+}

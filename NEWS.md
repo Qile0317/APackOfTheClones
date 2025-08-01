@@ -8,6 +8,7 @@
 
 - add `magrittr` to imports
 - add `.lintr` and `.markdownlint.json` files to the package source code
+- add `Dockerfile` and `devcontainer/devcontainer.json` to the package source code for reproducibility
 - minor documentation & sourcecode styling cleanup
 
 # APackOfTheClones 1.2.4
