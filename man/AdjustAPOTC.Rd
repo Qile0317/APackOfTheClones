@@ -160,8 +160,8 @@ The adjusted \code{seurat_obj}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 If the user is unsatisfied with the clonal expansion plot that
-was generated from \code{\link[=RunAPOTC]{RunAPOTC()}} and \code{\link[=APOTCPlot]{APOTCPlot()}}, this function has a range of
-arguments to modify the data and/or parameters of the visualization. Note
+was generated from \code{\link[=RunAPOTC]{RunAPOTC()}} and \code{\link[=APOTCPlot]{APOTCPlot()}}, this function has a range
+of arguments to modify the data and/or parameters of the visualization. Note
 that some of the arguments may conflict with each other.
 }
 \examples{

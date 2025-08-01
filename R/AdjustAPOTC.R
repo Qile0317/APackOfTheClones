@@ -6,8 +6,8 @@
 #' `r lifecycle::badge("stable")`
 #'
 #' If the user is unsatisfied with the clonal expansion plot that
-#' was generated from [RunAPOTC()] and [APOTCPlot()], this function has a range of
-#' arguments to modify the data and/or parameters of the visualization. Note
+#' was generated from [RunAPOTC()] and [APOTCPlot()], this function has a range
+#' of arguments to modify the data and/or parameters of the visualization. Note
 #' that some of the arguments may conflict with each other.
 #'
 #' @inheritParams RunAPOTC
@@ -128,11 +128,18 @@ AdjustAPOTC <- function(
     label_nudge_vector = NULL,
     verbose = TRUE
 ) {
+
+    assert_that(
+        
+    )
+
     varargs_list <- list(...)
     args <- environment()
     AdjustAPOTC_error_handler(args)
 
-    args$object_id <- infer_object_id_if_needed(args, varargs_list = varargs_list)
+    args$object_id <- infer_object_id_if_needed(
+        args, varargs_list = varargs_list
+    )
     apotc_obj <- getApotcData(seurat_obj, args$object_id)
     
     if (should_change(new_clone_scale_factor)) {
