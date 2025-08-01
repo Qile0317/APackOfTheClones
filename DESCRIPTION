@@ -24,7 +24,6 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    sf,
     spelling,
     testthat (>= 3.0.0),
     vdiffr,
@@ -34,7 +33,7 @@ Imports:
     assertthat,
     dplyr,
     ggforce,
-    ggplot2,
+    ggplot2 (>= 3.5.2.9002),
     hash,
     lifecycle,
     magrittr,
@@ -43,6 +42,7 @@ Imports:
     rlang,
     Seurat,
     SeuratObject
+Remotes: github::tidyverse/ggplot2
 RoxygenNote: 7.3.2
 URL: https://qile0317.github.io/APackOfTheClones/, https://github.com/Qile0317/APackOfTheClones, https://joss.theoj.org/papers/10.21105/joss.06868
 LinkingTo:
