@@ -156,6 +156,8 @@ check_is_list_and_elements <- function(
 
 # all formatting typechecking functions below
 
+is_character <- is.character
+
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.character(x)
