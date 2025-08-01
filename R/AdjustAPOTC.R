@@ -130,7 +130,8 @@ AdjustAPOTC <- function(
 ) {
 
     assert_that(
-        
+        is_a_positive_numeric(new_rad_scale_factor) ||
+            is.null(new_rad_scale_factor)
     )
 
     varargs_list <- list(...)
