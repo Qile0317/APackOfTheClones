@@ -130,7 +130,11 @@ AdjustAPOTC <- function(
 ) {
 
     assert_that(
-        is_a_positive_numeric_or_null(new_rad_scale_factor)
+        # TODO apotc identifiers
+        is_a_positive_numeric_or_null(new_rad_scale_factor),
+        is_a_positive_numeric_or_null(new_clone_scale_factor),
+        # TODO all other args
+        is_a_logical(verbose)
     )
 
     varargs_list <- list(...)
@@ -194,10 +198,6 @@ AdjustAPOTC <- function(
 AdjustAPOTC_error_handler <- function(args) {
 
     check_apotc_identifiers(args)
-
-    typecheck(args$new_rad_scale_factor, is_a_positive_numeric, is.null)
-    typecheck(args$new_clone_scale_factor, is_a_positive_numeric, is.null)
-
     check_repulsion_params(args)
 
     check_coord_args(args$relocate_cluster, args$relocation_coord)
@@ -213,8 +213,6 @@ AdjustAPOTC_error_handler <- function(args) {
 
     check_coord_args(args$relocate_label, args$label_relocation_coord)
     check_coord_args(args$nudge_label, args$label_nudge_vector)
-
-    typecheck(args$verbose, is_a_logical)
 
 }
 
