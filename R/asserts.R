@@ -200,6 +200,13 @@ on_failure(is_a_positive_numeric) <- function(call, env) {
     paste0(deparse(call$x), " is not a positive numeric of length 1")
 }
 
+is_a_positive_numeric_or_null <- function(x) {
+    is_a_positive_numeric(x) || is.null(x)
+}
+on_failure(is_a_positive_numeric_or_null) <- function(call, env) {
+    paste0(deparse(call$x), "is not a positive numeric of length 1 nor NULL")
+}
+
 is_positive_numeric <- function(x) {
     if (!is_vector(x)) return(FALSE)
     if (length(x) < 1L) return(FALSE)
