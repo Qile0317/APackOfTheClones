@@ -264,5 +264,5 @@ vizAPOTC(
 
 }
 \seealso{
-\link{AdjustAPOTC}
+\code{\link[=AdjustAPOTC]{AdjustAPOTC()}}
 }

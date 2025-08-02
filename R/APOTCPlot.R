@@ -300,5 +300,7 @@ get_apotc_plot_dims_from_df <- function(plot_dataframe) {
 }
 
 subset_to_only_edge_circles <- function(apotc_plot_dataframe) {
-    apotc_plot_dataframe[unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)), ]
+    apotc_plot_dataframe[
+        unique(rcppGetEdgeCircleindices(apotc_plot_dataframe)),
+    ]
 }

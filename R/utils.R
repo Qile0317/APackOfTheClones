@@ -267,11 +267,6 @@ subset_dataframe <- function(df, filter_string) {
 
 # naming utils
 
-secretly_init_name <- function(x) {
-    names(x) <- rep("", length(x))
-    x
-}
-
 unname_if_empty <- function(l) if (is_empty(l)) unname(l) else l
 
 unname_if <- function(x, do_unname) if (do_unname) unname(x) else x
