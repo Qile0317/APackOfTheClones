@@ -330,3 +330,15 @@ check_coord_args <- function(indices, coords) {
         is_numeric_pair, is_list_of_numeric_pair, is.null, name = varnames[2])
     lengthcheck_coord_args(indices, coords, varnames)
 }
+
+is_top_selector <- function(x, nullable = TRUE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is_a_positive_integer(x) || is_a_numeric_in_0_1(x)
+}
+on_failure(is_top_selector) <- function(call, env) {
+    if (!is.null(call$nullable) && call$nullable) {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1) nor NULL")
+    } else {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1)")
+    }
+}

@@ -78,7 +78,7 @@ showCloneHighlight <- function(
     assert_that(
         is_an_apotc_ggplot(apotc_ggplot, detail = TRUE),
         is.character(clonotype),
-        is.flag(color_each) || is_a_character(color_each),
+        is.flag(color_each) || is_character(color_each),
         is_a_character(default_color) || is.null(default_color),
         is_a_positive_numeric(scale_bg),
         is.flag(fill_legend)
