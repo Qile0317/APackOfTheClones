@@ -29,14 +29,8 @@
 #' #> [1] FALSE
 #'
 containsApotcRun <- function(seurat_obj, run_id) {
-
-    assert_that(is_seurat_object(seurat_obj))
-    typecheck(run_id, is_a_character)
-
-    if (!containsAnyApotcData(seurat_obj)) {
-        return(FALSE)
-    }
-
+    assert_that(is_seurat_object(seurat_obj), is_a_character(run_id))
+    if (!containsAnyApotcData(seurat_obj)) return(FALSE)
     any(getApotcDataIds(seurat_obj) == run_id)
 }
 
@@ -73,9 +67,11 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #'
 renameApotcRun <- function(seurat_obj, old_run_id, new_run_id) {
 
-    assert_that(is_seurat_object(seurat_obj))
-    typecheck(old_run_id, is_a_character)
-    typecheck(new_run_id, is_a_character)
+    assert_that(
+        is_seurat_object(seurat_obj),
+        is_a_character(old_run_id),
+        is_a_character(new_run_id)
+    )
 
     if (!containsApotcRun(seurat_obj, old_run_id))
         stop("There's no run named `", old_run_id, "`")
@@ -125,13 +121,10 @@ renameApotcRun <- function(seurat_obj, old_run_id, new_run_id) {
 #' #> NULL
 #'
 deleteApotcData <- function(seurat_obj, run_id) {
-
-    assert_that(is_seurat_object(seurat_obj))
-    if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
+    assert_that(is_seurat_object(seurat_obj), is_a_character(run_id))
     if (!containsApotcRun(seurat_obj, run_id)) {
         stop(paste("no run with id:", run_id, "is present"))
     }
-
     seurat_obj <- setApotcData(seurat_obj, run_id, NULL)
     seurat_obj@commands[[get_command_name("RunAPOTC", run_id)]] <- NULL
     seurat_obj
@@ -181,6 +174,10 @@ getApotcDataIds <- function(seurat_obj) {
     ids
 }
 
+#' @rdname getApotcDataIds
+#' @export
+getApotcRunIds <- getApotcDataIds
+
 #' @title
 #' Get the object id of the most recent RunAPOTC run on a seurat object
 #'
@@ -222,6 +219,10 @@ getApotcDataIds <- function(seurat_obj) {
 getLastApotcDataId <- function(seurat_obj) {
     getlast(getApotcDataIds(seurat_obj))
 }
+
+#' @rdname getLastApotcDataId
+#' @export
+getLastApotcRunId <- getLastApotcDataId
 
 # object id generation:
 

@@ -2,9 +2,12 @@
 % Please edit documentation in R/ApotcIndexing.R
 \name{getApotcDataIds}
 \alias{getApotcDataIds}
+\alias{getApotcRunIds}
 \title{Get all run ids of previous RunAPOTC runs on a seurat object}
 \usage{
 getApotcDataIds(seurat_obj)
+
+getApotcRunIds(seurat_obj)
 }
 \arguments{
 \item{seurat_obj}{a seurat object that has had RunAPOTC ran on it before in
