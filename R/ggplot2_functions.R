@@ -53,8 +53,9 @@ get_yr <- function(p) {
 # - after v1.2.4 this will add but also ensure the name is unique
 name_latest_layer <- function(plt, new_name) {
     N <- length(plt$layers)
-    if (is.null(names(plt$layers))) { # FIXME: probably invalid after ggplot 3.5.2
-        names(plt$layers) <- rep("", N)
+    # for backwards compatibility
+    if (is.null(names(plt$layers))) {
+        names(plt$layers) <- paste0("ggplot2_layer_", as.character(seq_len(N)))
     }
     new_name <- make.unique(c(names(plt$layers)[-N], new_name))[N]
     names(plt$layers)[N] <- new_name
