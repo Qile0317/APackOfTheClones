@@ -7,35 +7,25 @@ ApotcGGPlot <- function(ggplot_obj, apotc_obj) {
     ggplot_obj
 }
 
-is_an_apotc_ggplot <- function(ggplot_obj, detail = NA) {
-    is_apotc <- inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
+is_an_apotc_ggplot <- function(x, detail = NA) {
+    is_apotc <- inherits(x, "ggplot") &&
+        !is.null(x$APackOfTheClones)
     if (is.na(detail)) {
         return(is_apotc)
     } else {
-        undetailed <- is_undetailed(ggplot_obj)
-        return(is_apotc && undetailed == detail)
+        undetailed <- is_undetailed(x)
+        return(is_apotc && undetailed != detail)
     }
 }
 on_failure(is_an_apotc_ggplot) <- function(call, env) {
-    detail <- call$detail
-    ggplot_obj <- call$x
-    is_apotc <- inherits(ggplot_obj, "ggplot") && !is.null(ggplot_obj$APackOfTheClones)
-    if (is.na(detail)) {
-        if (!is_apotc) {
-            paste0(deparse(call$x), " is not an APackOfTheClones ggplot")
-        } else {
-            paste0(deparse(call$x), " is an APackOfTheClones ggplot, but failed for unknown reason.")
-        }
-    } else {
-        undetailed <- is_undetailed(ggplot_obj)
-        if (!is_apotc) {
-            paste0(deparse(call$x), " is not an APackOfTheClones ggplot")
-        } else if (undetailed != detail) {
-            paste0(deparse(call$x), " is an APackOfTheClones ggplot, but detail does not match: expected detail=", detail, ", got detail=", undetailed)
-        } else {
-            paste0(deparse(call$x), " is an APackOfTheClones ggplot, but failed for unknown reason.")
-        }
+    if (is.na(call$detail)) {
+        return(paste0(deparse(call$x), " is not an APackOfTheClones ggplot"))
     }
+    paste0(
+        deparse(call$x),
+        " is not an APackOfTheClones ggplot with detail = ",
+        call$detail
+    )
 }
 
 # getter
