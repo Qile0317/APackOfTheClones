@@ -134,6 +134,8 @@ AdjustAPOTC <- function(
         is_a_positive_numeric_or_null(new_rad_scale_factor),
         is_a_positive_numeric_or_null(new_clone_scale_factor),
         # TODO all other args
+        is_integer(recolor_cluster, nullable = TRUE),
+        is_character(new_color, nullable = TRUE),
         is_a_logical(verbose)
     )
 
@@ -203,8 +205,6 @@ AdjustAPOTC_error_handler <- function(args) {
     check_coord_args(args$relocate_cluster, args$relocation_coord)
     check_coord_args(args$nudge_cluster, args$nudge_vector)
 
-    typecheck(args$recolor_cluster, is_integer, is.null)
-    typecheck(args$new_color, is_character, is.null)
     lengthcheck_ifnotnull(args$recolor_cluster, args$new_color)
 
     typecheck(args$rename_label, is_integer, is_character, is.null)

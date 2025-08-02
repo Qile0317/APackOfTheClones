@@ -157,7 +157,10 @@ check_is_list_and_elements <- function(
 
 # all formatting typechecking functions below
 
-is_character <- is.character
+is_character <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is.character(x)
+}
 
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
@@ -241,12 +244,16 @@ on_failure(is_integer_pair) <- function(call, env) {
     paste0(deparse(call$x), " is not an integer pair")
 }
 
-is_integer <- function(x) {
+is_integer <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
     if (!is_vector(x)) return(FALSE)
     all(sapply(x, is_an_integer))
 }
 on_failure(is_integer) <- function(call, env) {
-    paste0(deparse(call$x), " is not an integer vector")
+    if (!call$nullable) return(
+        paste0(deparse(call$x), " is not an integer vector")
+    )
+    paste0(deparse(call$x), " is not an integer vector or NULL")
 }
 
 is_a_positive_integer <- function(x) {
