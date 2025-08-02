@@ -46,7 +46,7 @@ updateApotc.ggplot <- function(x, verbose = TRUE, ...) {
         return(x)
     }
 
-    if (any(duplicated(names(x$layers)))) {
+    if (!is.null(names(x$layers)) && any(duplicated(names(x$layers)))) {
         message(
             "Detected ggplot with duplicated layer names (likely generated before/on APackOfTheClones 1.2.4). ",
             "Updating ggplot layer names by deduplicating."
