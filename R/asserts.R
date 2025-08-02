@@ -134,8 +134,9 @@ get_parent_func_args <- function(dn = 1L) {
 # specific object typecheckers
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
-
-is_an_apotc_ggplot <- isApotcGGPlot
+on_failure(is_seurat_object) <- function(call, env) {
+    paste0(deparse(call$x), " is not a Seurat Object")
+}
 
 # abstract typecheckers
 

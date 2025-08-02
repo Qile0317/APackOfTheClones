@@ -49,7 +49,7 @@ reference:
   - RunAPOTC
   - APOTCPlot
   - AdjustAPOTC
-- title: Working with RunAPOTC runs
+- title: Working with `RunAPOTC()` runs
 - contents:
   - getApotcDataIds
   - getLastApotcDataId
@@ -67,6 +67,9 @@ reference:
   - mergeCloneSizes
   - getSharedClones
   - getReductionCentroids
+- title: Updating outputs from previous versions
+- contents:
+  - updateApotc
 - title: Data
 - contents:
   - combined_pbmc

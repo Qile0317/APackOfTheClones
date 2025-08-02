@@ -73,13 +73,20 @@ showCloneHighlight <- function(
     scale_bg = 1,
     fill_legend = TRUE
 ) {
-    apotc_highlight_clones_error_handler()
+
+    apotc_ggplot %<>% updateApotc(verbose = FALSE)
+    assert_that(
+        is_an_apotc_ggplot(apotc_ggplot, detail = TRUE),
+        is.character(clonotype),
+        is.flag(color_each) || is_a_character(color_each),
+        is_a_character(default_color) || is.null(default_color),
+        is_a_positive_numeric(scale_bg),
+        is.flag(fill_legend)
+    )
 
     if (contains_duplicates(clonotype)) {
-        warning(
-            "`clonotype` contains duplicates - ",
-            "this probably will result in erroneous outputs"
-        )
+        warning("`clonotype` contains duplicates - deduplicating.")
+        clonotype <- unique(clonotype)
     }
 
     if (is_false(color_each) && is.null(default_color) && scale_bg == 1) {
@@ -139,24 +146,6 @@ showCloneHighlight <- function(
         breaks = clone_color_vector
     ))
 
-}
-
-apotc_highlight_clones_error_handler <- function() {
-   
-    args <- get_parent_func_args()
-
-    check_is_apotc_ggplot(args$apotc_ggplot)
-    if (is_undetailed(args$apotc_ggplot)) {
-        stop(call. = FALSE,
-            "`apotc_ggplot` must be generated with `detail = TRUE`"
-        )
-    }
-
-    typecheck(args$clonotype, is_character)
-    typecheck(args$color_each, is_a_logical, is_a_character, is_character)
-    typecheck(args$default_color, is_a_character, is.null)
-    typecheck(args$scale_bg, is_a_positive_numeric)
-    typecheck(args$fill_legend, is_a_logical)
 }
 
 gen_clone_color_vector <- function(color_each, sequence, plot_data) {

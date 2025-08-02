@@ -22,6 +22,8 @@ apotc_aes_string <- function(x, y, ...) {
     structure(apotc_rename_aes(mapping), class = "uneval")
 }
 
+# some utils
+
 #' @title Get the xmin, xmax, ymin, ymax of a ggplot object
 #' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
 #' @noRd
@@ -47,11 +49,15 @@ get_yr <- function(p) {
     p[[2]]
 }
 
+# - <= v1.2.4 this adds the name without checking for duplicates
+# - after v1.2.4 this will add but also ensure the name is unique
 name_latest_layer <- function(plt, new_name) {
-    if (is.null(names(plt$layers))) {
-        names(plt$layers) <- rep("", length(plt$layers))
+    N <- length(plt$layers)
+    if (is.null(names(plt$layers))) { # FIXME: probably invalid after ggplot 3.5.2
+        names(plt$layers) <- rep("", N)
     }
-    names(plt$layers)[length(plt$layers)] <- new_name
+    new_name <- make.unique(c(names(plt$layers)[-N], new_name))[N]
+    names(plt$layers)[N] <- new_name
     plt
 }
 
