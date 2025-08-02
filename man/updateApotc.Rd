@@ -29,3 +29,10 @@ The current possible changes made by the function are:
 names will be made unique.
 }
 }
+\examples{
+data("combined_pbmc")
+apotc_plot <- vizAPOTC(combined_pbmc)
+apotc_plot <- updateApotc(apotc_plot, verbose = TRUE)
+apotc_plot
+
+}

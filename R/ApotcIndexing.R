@@ -30,7 +30,7 @@
 #'
 containsApotcRun <- function(seurat_obj, run_id) {
 
-    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    assert_that(is_seurat_object(seurat_obj))
     typecheck(run_id, is_a_character)
 
     if (!containsAnyApotcData(seurat_obj)) {
@@ -73,7 +73,7 @@ containsApotcRun <- function(seurat_obj, run_id) {
 #'
 renameApotcRun <- function(seurat_obj, old_run_id, new_run_id) {
 
-    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    assert_that(is_seurat_object(seurat_obj))
     typecheck(old_run_id, is_a_character)
     typecheck(new_run_id, is_a_character)
 
@@ -126,7 +126,7 @@ renameApotcRun <- function(seurat_obj, old_run_id, new_run_id) {
 #'
 deleteApotcData <- function(seurat_obj, run_id) {
 
-    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    assert_that(is_seurat_object(seurat_obj))
     if (length(run_id) != 1) stop("the `run_id` argument must be of length 1")
     if (!containsApotcRun(seurat_obj, run_id)) {
         stop(paste("no run with id:", run_id, "is present"))
@@ -175,7 +175,7 @@ deleteApotcData <- function(seurat_obj, run_id) {
 #' #> [1] "umap;CTstrict;_;_" "umap;CTgene;_;_"
 #'
 getApotcDataIds <- function(seurat_obj) {
-    if (!is_seurat_object(seurat_obj)) stop("input must be a seurat object")
+    assert_that(is_seurat_object(seurat_obj))
     ids <- names(seurat_obj@misc[["APackOfTheClones"]])
     if (identical(ids, character(0)) || is.null(ids)) return(NULL)
     ids

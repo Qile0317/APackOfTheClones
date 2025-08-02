@@ -18,6 +18,12 @@
 #'
 #' @return The updated object, or the original object if no update is required.
 #' @export
+#' @examples
+#' data("combined_pbmc")
+#' apotc_plot <- vizAPOTC(combined_pbmc)
+#' apotc_plot <- updateApotc(apotc_plot, verbose = TRUE)
+#' apotc_plot
+#'
 updateApotc <- function(x, verbose = TRUE, ...) {
     UseMethod("updateApotc")
 }

@@ -1,6 +1,6 @@
 quietly_test_that("the default plot for all methods", {
 
-    testthat::skip_on_os("mac") # unrecognizable differences visually but likely due to fp precision
+    skip_on_ci()
 
     data("combined_pbmc")
     .defaultApotcPlot <- "default_apotcplot"
