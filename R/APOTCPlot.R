@@ -29,7 +29,8 @@
 #' aesthetic customization of these line links.
 #' @param only_link Optional integer indicating to only display clone
 #' links originating from this cluster if showing shared clones.
-#' @param show_all_links logical. If `TRUE`, will show all links between
+#' @param show_all_links `r lifecycle::badge("experimental")` logical. If
+#' `TRUE`, will show all links between
 #' clusters. Defaults to `FALSE` which only shows links between some clusters
 #' without overlapping, although there is currently no way to control which.
 #' @param clone_link_width numeric. The width of the lines that connect shared

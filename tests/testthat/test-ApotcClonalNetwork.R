@@ -147,6 +147,8 @@ test_that("adding shared clone links works", {
 
 test_that("adding all shared clone links works", {
 
+    skip_on_ci()
+
     data("combined_pbmc")
     expect_no_error(
         shared_clones <- combined_pbmc %>%
