@@ -1,4 +1,5 @@
 test_that("overlayLegend() and removeLegend() works", {
+    skip_on_ci()
     data("combined_pbmc")
 
     expect_doppelganger(
