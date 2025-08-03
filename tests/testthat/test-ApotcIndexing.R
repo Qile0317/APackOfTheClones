@@ -239,3 +239,28 @@ test_that("parse_to_object_id works with all args changed", {
     )
 
 })
+
+test_that("public apotc id managers work", {
+
+    seurat_obj <- get(data("combined_pbmc")) %>%
+        RunAPOTC(run_id = "run1", verbose = FALSE) %>%
+        RunAPOTC(run_id = "run2", verbose = FALSE)
+    
+    expect_true(containsApotcRun(seurat_obj, "run1"))
+    expect_true(containsApotcRun(seurat_obj, "run2"))
+    expect_false(containsApotcRun(seurat_obj, "run3"))
+
+    expect_error(renameApotcRun(seurat_obj, "run1", "run2"))
+    expect_error(renameApotcRun(seurat_obj, "run2", "run1"))
+    expect_no_error(renameApotcRun(seurat_obj, "run2", "run3"))
+
+    expect_no_error(deleteApotcData(seurat_obj, "run1"))
+    expect_false(
+        containsApotcRun(
+            deleteApotcData(seurat_obj, "run1"), "run1"
+        )
+    )
+    expect_setequal(getApotcRunIds(seurat_obj), c("run1", "run2"))
+
+    expect_identical(getLastApotcRunId(seurat_obj), "run2")
+})

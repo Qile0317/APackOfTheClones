@@ -161,7 +161,7 @@ get_retain_scale_dims <- function(
 }
 
 check_is_apotc_ggplot <- function(x) {
-    if (!isApotcGGPlot(x)) {
+    if (!is_an_apotc_ggplot(x)) {
         stop(call. = FALSE, "not an output of `APOTCPlot()` or `vizAPOTC()`")
     }
 }

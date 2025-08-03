@@ -2,9 +2,12 @@
 % Please edit documentation in R/ApotcIndexing.R
 \name{getLastApotcDataId}
 \alias{getLastApotcDataId}
+\alias{getLastApotcRunId}
 \title{Get the object id of the most recent RunAPOTC run on a seurat object}
 \usage{
 getLastApotcDataId(seurat_obj)
+
+getLastApotcRunId(seurat_obj)
 }
 \arguments{
 \item{seurat_obj}{a seurat object that has had RunAPOTC ran on it before in
