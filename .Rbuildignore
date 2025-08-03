@@ -22,3 +22,6 @@
 ^cran-comments\.md$
 ^CITATION.cff$
 ^\.markdownlint\.json$
+^\.devcontainer
+^Dockerfile$
+^tests/testthat/_snaps
