@@ -13,8 +13,7 @@ runTestShowCloneHighlight <- function() {
 }
 
 test_that("vdiffr test of showCloneHighlight works", {
-
-    #skip_on_ci() # there is no visually distinguishable difference in the artifact
+    skip_on_ci()
 
     expect_doppelganger(
         "showCloneHighlight_only_clusters_5_9",

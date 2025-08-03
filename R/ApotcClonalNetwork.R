@@ -93,6 +93,14 @@ getSharedClones <- function(
     varargs_list <- list(...)
     getSharedClones_error_handler()
 
+    assert_that(
+        is_top_selector(intop),
+        is_top_selector(intop_per_cl),
+        is_top_selector(top),
+        is_top_selector(top_per_cl),
+        is_numeric_pair(publicity)
+    )
+
     get_shared_clones(
         apotc_obj = getApotcDataIfExistsElseCreate(
             seurat_obj, run_id, environment(), ...
@@ -110,15 +118,6 @@ getSharedClones <- function(
 getSharedClones_error_handler <- function() {
     args <- get_parent_func_args()
     check_apotc_identifiers(args)
-    typecheck(args$intop,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$intop_per_cl,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top_per_cl,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$publicity, is_numeric_pair)
 }
 
 # input: an ApotcData object

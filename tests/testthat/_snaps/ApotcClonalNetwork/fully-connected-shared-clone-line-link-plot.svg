@@ -392,20 +392,20 @@
 <line x1='261.14' y1='467.53' x2='358.67' y2='306.65' style='stroke-width: 1.92; stroke: #000000; stroke-opacity: 0.50; stroke-linecap: butt;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<polyline points='30.83,536.56 30.83,31.34 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<text x='25.90' y='415.55' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='7.82px' lengthAdjust='spacingAndGlyphs'>-5</text>
-<text x='25.90' y='277.62' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='25.90' y='139.69' text-anchor='end' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
-<polyline points='28.09,412.53 30.83,412.53 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='28.09,274.60 30.83,274.60 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='28.09,136.67 30.83,136.67 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='30.83,536.56 498.65,536.56 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<polyline points='120.20,539.30 120.20,536.56 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='258.13,539.30 258.13,536.56 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='396.06,539.30 396.06,536.56 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<text x='120.20' y='547.54' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='7.82px' lengthAdjust='spacingAndGlyphs'>-5</text>
-<text x='258.13' y='547.54' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='396.06' y='547.54' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
+<polyline points='30.83,536.56 30.83,31.34 ' style='stroke-width: 1.07; stroke-linecap: square;' />
+<text x='25.90' y='415.55' text-anchor='end' style='font-size: 8.80px; font-family: sans;' textLength='7.82px' lengthAdjust='spacingAndGlyphs'>-5</text>
+<text x='25.90' y='277.62' text-anchor='end' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='25.90' y='139.69' text-anchor='end' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
+<polyline points='28.09,412.53 30.83,412.53 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<polyline points='28.09,274.60 30.83,274.60 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<polyline points='28.09,136.67 30.83,136.67 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<polyline points='30.83,536.56 498.65,536.56 ' style='stroke-width: 1.07; stroke-linecap: square;' />
+<polyline points='120.20,539.30 120.20,536.56 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<polyline points='258.13,539.30 258.13,536.56 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<polyline points='396.06,539.30 396.06,536.56 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<text x='120.20' y='547.54' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='7.82px' lengthAdjust='spacingAndGlyphs'>-5</text>
+<text x='258.13' y='547.54' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='396.06' y='547.54' text-anchor='middle' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
 <text x='264.74' y='559.68' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='44.03px' lengthAdjust='spacingAndGlyphs'>UMAP_1</text>
 <text transform='translate(13.05,283.95) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='44.03px' lengthAdjust='spacingAndGlyphs'>UMAP_2</text>
 <rect x='509.61' y='262.16' width='204.91' height='43.57' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />

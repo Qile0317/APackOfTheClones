@@ -27,7 +27,7 @@
 #' @inherit APOTCPlot return
 #' @export
 #'
-#' @seealso [AdjustAPOTC]
+#' @seealso [AdjustAPOTC()]
 #'
 #' @examples
 #' data("combined_pbmc")

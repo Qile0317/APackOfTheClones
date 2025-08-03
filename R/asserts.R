@@ -134,8 +134,9 @@ get_parent_func_args <- function(dn = 1L) {
 # specific object typecheckers
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
-
-is_an_apotc_ggplot <- isApotcGGPlot
+on_failure(is_seurat_object) <- function(call, env) {
+    paste0(deparse(call$x), " is not a Seurat Object")
+}
 
 # abstract typecheckers
 
@@ -156,7 +157,10 @@ check_is_list_and_elements <- function(
 
 # all formatting typechecking functions below
 
-is_character <- is.character
+is_character <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is.character(x)
+}
 
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
@@ -240,12 +244,16 @@ on_failure(is_integer_pair) <- function(call, env) {
     paste0(deparse(call$x), " is not an integer pair")
 }
 
-is_integer <- function(x) {
+is_integer <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
     if (!is_vector(x)) return(FALSE)
     all(sapply(x, is_an_integer))
 }
 on_failure(is_integer) <- function(call, env) {
-    paste0(deparse(call$x), " is not an integer vector")
+    if (!call$nullable) return(
+        paste0(deparse(call$x), " is not an integer vector")
+    )
+    paste0(deparse(call$x), " is not an integer vector or NULL")
 }
 
 is_a_positive_integer <- function(x) {
@@ -321,4 +329,16 @@ check_coord_args <- function(indices, coords) {
     typecheck(coords,
         is_numeric_pair, is_list_of_numeric_pair, is.null, name = varnames[2])
     lengthcheck_coord_args(indices, coords, varnames)
+}
+
+is_top_selector <- function(x, nullable = TRUE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is_a_positive_integer(x) || is_a_numeric_in_0_1(x)
+}
+on_failure(is_top_selector) <- function(call, env) {
+    if (!is.null(call$nullable) && call$nullable) {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1) nor NULL")
+    } else {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1)")
+    }
 }

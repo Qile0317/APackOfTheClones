@@ -129,7 +129,8 @@ aesthetic customization of these line links.}
 \item{only_link}{Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.}
 
-\item{show_all_links}{logical. If \code{TRUE}, will show all links between
+\item{show_all_links}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} logical. If
+\code{TRUE}, will show all links between
 clusters. Defaults to \code{FALSE} which only shows links between some clusters
 without overlapping, although there is currently no way to control which.}
 
@@ -264,5 +265,5 @@ vizAPOTC(
 
 }
 \seealso{
-\link{AdjustAPOTC}
+\code{\link[=AdjustAPOTC]{AdjustAPOTC()}}
 }
