@@ -14,6 +14,9 @@ a.exe
 /Meta/
 .RDataTmp1
 .idea
+renv/
+.Rprofile
+renv.lock
 
 # R gitignore
 
