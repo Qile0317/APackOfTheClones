@@ -11,7 +11,7 @@ test_that("do_cl_intersect() = TRUE for overlapping lists", {
   expect_true(do_cl_intersect(c1, c1_shifted_by_4_5))
 })
 
-test_that("do_cl_intersect() = FALSE for overlapping lists with high threshold", {
+test_that("do_cl_intersect=FALSE for overlapping lists with high threshold", {
   expect_false(do_cl_intersect(c1, c2, 100))
 })
 
@@ -41,16 +41,16 @@ test_that("initialize_direction_vectors() works", {
   expect_equal(initialize_direction_vectors(2), list(c(0,0),c(0,0)))
 })
 
-test_that("initialize_list_of_transformation_vectors() works", {
+test_that("init_transformation_vectors() works", {
   blank_vecs <- initialize_direction_vectors(2)
   expect_equal(
-    initialize_list_of_transformation_vectors(blank_vecs,2),
+    init_transformation_vectors(blank_vecs,2),
     list(blank_vecs,blank_vecs))
 })
 
 # need to test more edgecases!
 test_that("calculate_repulsion_vectors() works", {
-  overall_repulsion_vec <- initialize_list_of_transformation_vectors(
+  overall_repulsion_vec <- init_transformation_vectors(
     initialize_direction_vectors(3),3
   )
   inp <- list(c1, c1_shifted_by_4_5, c2)

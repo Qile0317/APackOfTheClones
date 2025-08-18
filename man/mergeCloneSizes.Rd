@@ -17,6 +17,8 @@ NULL, no order is guaranteed but the output is deterministic.}
 a table object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 The list of clustered clonotype frequencies from \link{countCloneSizes}
 can be merged by this function to a frequency table of all clonotypes
 similar to the data that can be seen in the seurat object metadata.

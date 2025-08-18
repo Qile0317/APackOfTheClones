@@ -1,16 +1,16 @@
 md_deprecation_docstring <- function() {
-	paste(
-		'***ALL v0.1.x functions are deprecated***, and the workflow has been ',
-		'completely revamped - now depending on the scRepertoire v2 package - ',
-		'which allows for the processing of multi-sampled single cell data. ',
-		'Please read the vignettes with `browseVignettes("APackOfTheClones")`',
-		'or visit https://qile0317.github.io/APackOfTheClones/',
-		sep = ""
-	)
+    paste(
+        "***ALL v0.1.x functions are deprecated***, and the workflow has been ",
+        "completely revamped - now depending on the scRepertoire v2 package - ",
+        "which allows for the processing of multi-sampled single cell data. ",
+        "Please read the vignettes with `browseVignettes('APackOfTheClones')`",
+        "or visit https://qile0317.github.io/APackOfTheClones/",
+        sep = ""
+    )
 }
 
 deprecation_docstring <- function() {
-	gsub("*", "", md_deprecation_docstring(), fixed = TRUE)
+    gsub("*", "", md_deprecation_docstring(), fixed = TRUE)
 }
 
 #' DEFUNCT: Integrate a single TCR library into Seurat object metadata
@@ -28,11 +28,11 @@ deprecation_docstring <- function() {
 #' @export
 #'
 integrate_tcr <- function(...) {
-	lifecycle::deprecate_stop(
-		when = "1.0.0",
-		what = I("integrate_tcr"),
-		with = I("scRepertoire::combineExpression")
-	)
+    lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I("integrate_tcr"),
+        with = I("scRepertoire::combineExpression")
+    )
 }
 
 #' @title
@@ -52,11 +52,11 @@ integrate_tcr <- function(...) {
 #' @export
 #'
 count_clone_sizes <- function(...) {
-	lifecycle::deprecate_stop(
-		when = "1.0.0",
-		what = I("`count_clone_sizes`"),
-		with = I("countCloneSizes")
-	)
+    lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I("`count_clone_sizes`"),
+        with = I("countCloneSizes")
+    )
 }
 
 #' @title
@@ -75,11 +75,11 @@ count_clone_sizes <- function(...) {
 #' @export
 #'
 clonal_expansion_plot <- function(...) {
-	lifecycle::deprecate_stop(
-		when = "1.0.0",
-		what = I(
-			"visualizing clonal expansion with `clonal_expansion_plot`"
-		),
-		with = I("vizAPOTC")
-	)
+    lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I(
+            "visualizing clonal expansion with `clonal_expansion_plot`"
+        ),
+        with = I("vizAPOTC")
+    )
 }

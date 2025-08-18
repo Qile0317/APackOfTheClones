@@ -1,7 +1,7 @@
 Package: APackOfTheClones
 Type: Package
 Title: Visualization of Clonal Expansion for Single Cell Immune Profiles
-Version: 1.2.4
+Version: 1.3.0
 Authors@R: c(
     person(
         "Qile",
@@ -24,10 +24,10 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    sf,
     spelling,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    colorspace
 Config/testthat/edition: 3
 Imports:
     assertthat,
@@ -36,6 +36,7 @@ Imports:
     ggplot2,
     hash,
     lifecycle,
+    magrittr,
     methods,
     Rcpp,
     rlang,

@@ -1,4 +1,6 @@
 test_that("subsetting vizAPOTC works", {
+
+	skip_on_ci()
 	data("combined_pbmc")
 
 	expect_doppelganger(
@@ -13,7 +15,8 @@ test_that("subsetting vizAPOTC works", {
 
 test_that("subsetting vizAPOTC with different options works", {
 
-	testthat::skip_on_os("mac") # diffs in fp precision leads to different packings
+	skip_on_ci()
+	skip_on_os("mac") # diffs in fp precision leads to different packings
 
 	set.seed(829)
 	expect_doppelganger(

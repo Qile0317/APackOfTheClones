@@ -121,7 +121,7 @@ pbmc <- RunAPOTC(
 
 ### Important Note
 
-Practically speaking, most users probably only really need to ever work with visualizations from one run and mainly want to just adjust its parameters or the aesthetics of the plot - or they already will have several subsetted seurat objects. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
+Practically speaking, most users probably are only working with visualizations from one run and just adjust its parameters - else they already will have several subsetted seurat objects. In these cases, feel free to completely ignore any of the parameters related to `run_id` or any other filtering parameter, as all functions default to using the latest run if no identifying parameters are passed in.
 
 ### Utilities for Managing APackOfTheClones Runs
 

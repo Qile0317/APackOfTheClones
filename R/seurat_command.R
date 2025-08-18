@@ -13,7 +13,7 @@ find_seurat_command <- function(seurat_obj, func_name, id = NULL) {
 }
 
 utils::globalVariables(c(".commandIdSepStr"))
-.commandIdSepStr = "."
+.commandIdSepStr <- "."
 
 get_command_name <- function(command, id = NULL) {
     command_name <- ifelse(
