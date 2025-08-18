@@ -21,6 +21,7 @@ vizAPOTC(
   max_repulsion_iter = 20L,
   show_shared = NULL,
   only_link = NULL,
+  show_all_links = FALSE,
   clone_link_width = "auto",
   clone_link_color = "black",
   clone_link_alpha = 0.5,
@@ -127,6 +128,11 @@ aesthetic customization of these line links.}
 
 \item{only_link}{Optional integer indicating to only display clone
 links originating from this cluster if showing shared clones.}
+
+\item{show_all_links}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} logical. If
+\code{TRUE}, will show all links between
+clusters. Defaults to \code{FALSE} which only shows links between some clusters
+without overlapping, although there is currently no way to control which.}
 
 \item{clone_link_width}{numeric. The width of the lines that connect shared
 clones. Defaults to \code{"auto"} which will estimate a reasonable value depending
@@ -259,5 +265,5 @@ vizAPOTC(
 
 }
 \seealso{
-\link{AdjustAPOTC}
+\code{\link[=AdjustAPOTC]{AdjustAPOTC()}}
 }

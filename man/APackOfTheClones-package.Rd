@@ -14,7 +14,9 @@ Visualize clonal expansion via circle-packing. 'APackOfTheClones' extends 'scRep
 Useful links:
 \itemize{
   \item \url{https://qile0317.github.io/APackOfTheClones/}
-  \item Report bugs at \url{https://github.com/Qile0317/APackOfTheClones/issues/}
+  \item \url{https://github.com/Qile0317/APackOfTheClones}
+  \item \url{https://joss.theoj.org/papers/10.21105/joss.06868}
+  \item Report bugs at \url{https://github.com/Qile0317/APackOfTheClones/issues}
 }
 
 }

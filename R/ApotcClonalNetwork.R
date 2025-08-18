@@ -90,9 +90,16 @@ getSharedClones <- function(
 
     publicity = c(2L, Inf)
 ) {
-    # handle inputs
     varargs_list <- list(...)
     getSharedClones_error_handler()
+
+    assert_that(
+        is_top_selector(intop),
+        is_top_selector(intop_per_cl),
+        is_top_selector(top),
+        is_top_selector(top_per_cl),
+        is_numeric_pair(publicity)
+    )
 
     get_shared_clones(
         apotc_obj = getApotcDataIfExistsElseCreate(
@@ -111,15 +118,6 @@ getSharedClones <- function(
 getSharedClones_error_handler <- function() {
     args <- get_parent_func_args()
     check_apotc_identifiers(args)
-    typecheck(args$intop,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$intop_per_cl,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$top_per_cl,
-        is_a_positive_integer, is_a_numeric_in_0_1, is.null)
-    typecheck(args$publicity, is_numeric_pair)
 }
 
 # input: an ApotcData object
@@ -221,7 +219,7 @@ get_raw_shared_clones <- function(clustered_clone_sizes, zero_indexed = FALSE) {
 }
 
 # takes in a named list of clonotypes as names, the elements are numeric vectors
-# indicating the seurat_cluster(s) they are in. If the numericvector is of length
+# indicating the seurat_cluster(s) they are in. If the numericvector is of len
 # 1, remove the element. This is done in Rcpp to achieve true linear runtime.
 remove_unique_clones_if <- function(shared_clonotypes, should_actually_remove) {
 
@@ -319,18 +317,25 @@ overlay_shared_clone_links <- function(
     shared_clones,
     result_plot,
     only_cluster, # TODO allow between pairs
+    show_all_links,
     link_type = "line",
     link_color_mode = "blend",
     link_alpha = 1,
     link_width = "auto",
     verbose = TRUE,
+
     link_mode = "default",
     extra_spacing = "auto" # not very relevant atm
 ) {
 
     if (identical(link_type, "line")) {
         link_dataframe <- compute_line_link_df(
-            apotc_obj, shared_clones, extra_spacing, link_mode, only_cluster
+            apotc_obj = apotc_obj,
+            shared_clones = shared_clones,
+            extra_spacing = extra_spacing,
+            link_mode = link_mode,
+            only_cluster = only_cluster,
+            show_all_links = show_all_links
         )
     } else {
         stop(call. = FALSE, "no other link types are implemented yet")
@@ -350,10 +355,21 @@ overlay_shared_clone_links <- function(
 }
 
 compute_line_link_df <- function(
-    apotc_obj, shared_clones, extra_spacing, link_mode, only_cluster
+    apotc_obj,
+    shared_clones,
+    extra_spacing,
+    link_mode,
+    only_cluster,
+    show_all_links
 ) {
 
-    if (link_mode != "default") {
+    assert_that(
+        is.list(shared_clones) & all(unname(sapply(shared_clones, is.numeric))),
+        is.null(only_cluster) || is_a_numeric(only_cluster),
+        is.flag(show_all_links)
+    )
+    
+    if (!identical(link_mode, "default")) {
         stop(call. = FALSE, "dev error: no other link modes are implemented")
     }
 
@@ -368,7 +384,8 @@ compute_line_link_df <- function(
         oneIndexedSourceClusterIndex = ifelse(
             is.null(only_cluster), -1, only_cluster
         ),
-        extraSpacing = extra_spacing - get_rad_decrease(apotc_obj)
+        extraSpacing = extra_spacing - get_rad_decrease(apotc_obj),
+        showAllLinks = show_all_links
     )
 }
 
@@ -380,13 +397,18 @@ add_link_colors <- function(apotc_obj, link_dataframe, link_color_mode) {
 }
 
 add_blend_link_colors <- function(apotc_obj, link_dataframe) {
+    # nolint start: indentation_linter object_usage_linter
+
     colors <- get_cluster_colors(apotc_obj)
-    # extremeley cursed hack fix to pass R CMD check:
+
+    # extremely cursed hack fix to pass R CMD check
     eval(as_expression(
-        "link_dataframe %>% dplyr::mutate(",
-            "color = get_average_hex(colors[c1], colors[c2])",
-        ")"
+    "link_dataframe %>% dplyr::mutate(",
+        "color = get_average_hex(colors[c1], colors[c2])",
+    ")"
     ))
+
+    # nolint end
 }
 
 add_plain_link_colors <- function(link_dataframe, link_color) {
@@ -432,8 +454,9 @@ overlay_links <- function(
             link_dataframe,
             link_alpha,
             link_width
-        ) %>% return()
-        # should not get to any other case, this is just here for future extensions
+        ) %>%
+        return()
+        # shouldnt get to any other case, this is here for future extensions
     )
 }
 

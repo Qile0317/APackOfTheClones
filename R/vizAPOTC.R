@@ -27,7 +27,7 @@
 #' @inherit APOTCPlot return
 #' @export
 #'
-#' @seealso [AdjustAPOTC]
+#' @seealso [AdjustAPOTC()]
 #'
 #' @examples
 #' data("combined_pbmc")
@@ -60,6 +60,7 @@ vizAPOTC <- function(
 
     show_shared = NULL,
     only_link = NULL,
+    show_all_links = FALSE,
     clone_link_width = "auto",
     clone_link_color = "black",
     clone_link_alpha = 0.5,
@@ -115,6 +116,7 @@ vizAPOTC <- function(
         run_id = "vizAPOTC",
         show_shared = show_shared,
         only_link = only_link,
+        show_all_links = show_all_links,
         clone_link_width = clone_link_width,
         clone_link_color = clone_link_color,
         clone_link_alpha = clone_link_alpha,

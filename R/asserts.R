@@ -134,8 +134,9 @@ get_parent_func_args <- function(dn = 1L) {
 # specific object typecheckers
 
 is_seurat_object <- function(obj) inherits(obj, "Seurat")
-
-is_an_apotc_ggplot <- isApotcGGPlot
+on_failure(is_seurat_object) <- function(call, env) {
+    paste0(deparse(call$x), " is not a Seurat Object")
+}
 
 # abstract typecheckers
 
@@ -156,32 +157,60 @@ check_is_list_and_elements <- function(
 
 # all formatting typechecking functions below
 
+is_character <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is.character(x)
+}
+
 is_a_character <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.character(x)
 }
-
-is_character <- is.character
+on_failure(is_a_character) <- function(call, env) {
+    paste0(deparse(call$x), " is not a character of length 1")
+}
 
 is_a_logical <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.logical(x)
+}
+on_failure(is_a_logical) <- function(call, env) {
+    paste0(deparse(call$x), " is not a logical of length 1")
 }
 
 is_a_numeric <- function(x) {
     if (length(x) != 1) return(FALSE)
     is.numeric(x)
 }
+on_failure(is_a_numeric) <- function(call, env) {
+    paste0(deparse(call$x), " is not a numeric of length 1")
+}
 
 is_numeric_pair <- function(x) is_pair(x, is_a_numeric) && is.numeric(x)
+on_failure(is_numeric_pair) <- function(call, env) {
+    paste0(deparse(call$x), " is not a numeric pair")
+}
 
 is_list_of_numeric_pair <- function(x) {
     check_is_list_and_elements(x, is_numeric_pair)
+}
+on_failure(is_list_of_numeric_pair) <- function(call, env) {
+    paste0(deparse(call$x), " is not a list of numeric pairs")
 }
 
 is_a_positive_numeric <- function(x) {
     if (!is_a_numeric(x)) return(FALSE)
     x > 0
+}
+on_failure(is_a_positive_numeric) <- function(call, env) {
+    paste0(deparse(call$x), " is not a positive numeric of length 1")
+}
+
+is_a_positive_numeric_or_null <- function(x) {
+    is_a_positive_numeric(x) || is.null(x)
+}
+on_failure(is_a_positive_numeric_or_null) <- function(call, env) {
+    paste0(deparse(call$x), "is not a positive numeric of length 1 nor NULL")
 }
 
 is_positive_numeric <- function(x) {
@@ -189,10 +218,16 @@ is_positive_numeric <- function(x) {
     if (length(x) < 1L) return(FALSE)
     all(sapply(x, is_a_positive_numeric))
 }
+on_failure(is_positive_numeric) <- function(call, env) {
+    paste0(deparse(call$x), " is not a vector of positive numerics")
+}
 
 is_a_numeric_in_0_1 <- function(x) {
-    if(!is_a_numeric(x)) return(FALSE)
+    if (!is_a_numeric(x)) return(FALSE)
     x > 0 && x < 1L
+}
+on_failure(is_a_numeric_in_0_1) <- function(call, env) {
+    paste0(deparse(call$x), " is not a numeric in (0, 1)")
 }
 
 is_an_integer <- function(x) {
@@ -200,22 +235,41 @@ is_an_integer <- function(x) {
     if (!is_a_numeric(x)) return(FALSE)
     as.numeric(x) == as.numeric(as.integer(x))
 }
+on_failure(is_an_integer) <- function(call, env) {
+    paste0(deparse(call$x), " is not an integer")
+}
 
 is_integer_pair <- function(x) is_pair(x, is_an_integer) && is.numeric(x)
+on_failure(is_integer_pair) <- function(call, env) {
+    paste0(deparse(call$x), " is not an integer pair")
+}
 
-is_integer <- function(x) {
+is_integer <- function(x, nullable = FALSE) {
+    if (nullable && is.null(x)) return(TRUE)
     if (!is_vector(x)) return(FALSE)
     all(sapply(x, is_an_integer))
+}
+on_failure(is_integer) <- function(call, env) {
+    if (!call$nullable) return(
+        paste0(deparse(call$x), " is not an integer vector")
+    )
+    paste0(deparse(call$x), " is not an integer vector or NULL")
 }
 
 is_a_positive_integer <- function(x) {
     if (!is_an_integer(x)) return(FALSE)
     x > 0L
 }
+on_failure(is_a_positive_integer) <- function(call, env) {
+    paste0(deparse(call$x), " is not a positive integer of length 1")
+}
 
 is_positive_integer <- function(x) {
     if (!is_integer(x)) return(FALSE)
     all(sapply(x, function(x) x > 0L))
+}
+on_failure(is_positive_integer) <- function(call, env) {
+    paste0(deparse(call$x), " is not a vector of positive integers")
 }
 
 # output checkers
@@ -275,4 +329,16 @@ check_coord_args <- function(indices, coords) {
     typecheck(coords,
         is_numeric_pair, is_list_of_numeric_pair, is.null, name = varnames[2])
     lengthcheck_coord_args(indices, coords, varnames)
+}
+
+is_top_selector <- function(x, nullable = TRUE) {
+    if (nullable && is.null(x)) return(TRUE)
+    is_a_positive_integer(x) || is_a_numeric_in_0_1(x)
+}
+on_failure(is_top_selector) <- function(call, env) {
+    if (!is.null(call$nullable) && call$nullable) {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1) nor NULL")
+    } else {
+        paste0(deparse(call$x), " is not a positive integer or a numeric in (0, 1)")
+    }
 }

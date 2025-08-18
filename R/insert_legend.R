@@ -29,7 +29,8 @@
 #' apotc_plot
 #'
 removeLegend <- function(apotc_ggplot) {
-    check_is_apotc_ggplot(apotc_ggplot)
+    assert_that(is_an_apotc_ggplot(apotc_ggplot))
+    apotc_ggplot %<>% updateApotc(verbose = FALSE)
     if (!has_legend(apotc_ggplot)) return(apotc_ggplot)
     remove_ggplot_layers(apotc_ggplot, get_legend_layer_indices(apotc_ggplot))
 }
@@ -83,18 +84,22 @@ removeLegend <- function(apotc_ggplot) {
 overlayLegend <- function(
     apotc_ggplot,
     legend_sizes = "auto",
-	legend_position = "auto",
-	legend_buffer = 0.2,
-	legend_color = "#808080",
-	legend_spacing = "auto",
-	legend_label = "Clone sizes",
-	legend_text_size = 5,
-	add_legend_background = TRUE,
-	add_legend_centerspace = 0,
+    legend_position = "auto",
+    legend_buffer = 0.2,
+    legend_color = "#808080",
+    legend_spacing = "auto",
+    legend_label = "Clone sizes",
+    legend_text_size = 5,
+    add_legend_background = TRUE,
+    add_legend_centerspace = 0,
     linetype = "blank",
     res = 360L
 ) {
-   
+
+    assert_that(
+        is_an_apotc_ggplot(apotc_ggplot), is_a_positive_integer(res)
+    )
+    apotc_ggplot %<>% updateApotc()
     overlayLegend_error_handler()
 
     layers_after_legend_present <- FALSE
@@ -136,8 +141,6 @@ overlayLegend <- function(
 overlayLegend_error_handler <- function() {
     args <- get_parent_func_args()
     check_legend_params(args)
-    check_is_apotc_ggplot(args$apotc_ggplot)
-    typecheck(args$res, is_a_positive_integer)
 }
 
 check_legend_params <- function(args) {
@@ -175,6 +178,9 @@ check_legend_params <- function(args) {
 .ApotcLegendLayerName <- "ApotcLegendLayer"
 utils::globalVariables(".ApotcLegendLayerName")
 
+# - <= v1.2.4 this adds .ApotcLegendLayerName to each layer of
+# the ggplot that is for the legend
+# - after v1.2.4 this will add but also ensure the name is unique
 name_latest_legend_layer <- function(plt) {
     plt %>% name_latest_layer(.ApotcLegendLayerName)
 }
@@ -194,7 +200,8 @@ get_layers_after_legend <- function(apotc_ggplot) {
 }
 
 get_legend_layer_indices <- function(apotc_ggplot) {
-    which(names(apotc_ggplot$layers) == .ApotcLegendLayerName)
+    legend_layer_regex <- paste0("^", .ApotcLegendLayerName, "(\\.[0-9]+)?$")
+    which(grepl(legend_layer_regex, names(apotc_ggplot$layers)))
 }
 
 get_first_legend_layer_index <- function(apotc_ggplot) {

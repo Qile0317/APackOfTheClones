@@ -26,11 +26,11 @@
 #' getReductionCentroids(combined_pbmc, reduction = "umap")
 #'
 getReductionCentroids <- function(seurat_obj, reduction) {
-  get_cluster_centroids(
-    seurat_obj = seurat_obj,
-    reduction = user_get_reduc_obj(seurat_obj, reduction),
-    get_ident_levels(seurat_obj)
-  )
+    get_cluster_centroids(
+        seurat_obj = seurat_obj,
+        reduction = user_get_reduc_obj(seurat_obj, reduction),
+        get_ident_levels(seurat_obj)
+    )
 }
 
 user_get_reduc_obj <- function(seurat_obj, reduction) {
@@ -156,10 +156,10 @@ union_list_of_tables <- function(x, sort_decreasing = NULL, as_table = FALSE) {
         lapply(convert_table_to_named_numeric) %>%
         union_list_of_named_numerics()
 
-	if (!is.null(sort_decreasing)) {
+    if (!is.null(sort_decreasing)) {
         x <- sort(x, decreasing = sort_decreasing, method = "radix")
     }
-	if (as_table) x <- convert_named_numeric_to_table(x)
+    if (as_table) x <- convert_named_numeric_to_table(x)
     x
 }
 
@@ -265,59 +265,7 @@ subset_dataframe <- function(df, filter_string) {
     df %>% dplyr::filter(eval(as_expression(filter_string)))
 }
 
-# ggplot2 utils
-
-#' @title Get the xmin, xmax, ymin, ymax of a ggplot object
-#' @return list(xr = c(xmin, xmax), yr = c(ymin, ymax))
-#' @noRd
-get_plot_dims <- function(plt) {
-    built_plt_layout <- ggplot2::ggplot_build(plt)$layout
-    list(
-        xr = built_plt_layout$panel_scales_x[[1]]$range$range,
-        yr = built_plt_layout$panel_scales_y[[1]]$range$range
-    )
-}
-
-get_xr <- function(p) {
-    if (ggplot2::is.ggplot(p)) {
-        return(ggplot2::ggplot_build(p)$layout$panel_scales_x[[1]]$range$range)
-    }
-    p[[1]]
-}
-
-get_yr <- function(p) {
-    if (ggplot2::is.ggplot(p)) {
-        return(ggplot2::ggplot_build(p)$layout$panel_scales_y[[1]]$range$range)
-    }
-    p[[2]]
-}
-
-name_latest_layer <- function(plt, new_name) {
-    if (is.null(names(plt$layers))) {
-        names(plt$layers) <- rep("", length(plt$layers))
-    }
-    names(plt$layers)[length(plt$layers)] <- new_name
-    plt
-}
-
-remove_ggplot_layers <- function(ggplot_obj, layer_indices) {
-  ggplot_obj$layers[layer_indices] <- NULL
-  ggplot_obj
-}
-
-get_ggplot_data <- function(x) x$data
-
-set_ggplot_data <- function(ggplot_obj, new_data) {
-  ggplot_obj$data <- new_data
-  ggplot_obj
-}
-
 # naming utils
-
-secretly_init_name <- function(x) {
-    names(x) <- rep("", length(x))
-    x
-}
 
 unname_if_empty <- function(l) if (is_empty(l)) unname(l) else l
 
@@ -585,14 +533,14 @@ subsetSeuratMetaData <- function(
     seurat_obj@meta.data <- subset_dataframe(seurat_obj@meta.data, filter_string)
 
     if (nrow(seurat_obj@meta.data) == 0) {
-	    stop(call. = FALSE, paste(
-		    "please check `", error_param, "`, ",
-			"no rows in the seurat metadata match the filter condition",
+        stop(call. = FALSE, paste(
+            "please check `", error_param, "`, ",
+            "no rows in the seurat metadata match the filter condition",
             sep = ""
-	    ))
+        ))
     }
 
-	seurat_obj
+    seurat_obj
 }
 
 count_clones <- function(seurat_obj, clonecall) {

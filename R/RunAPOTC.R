@@ -275,15 +275,15 @@ RunAPOTC <- function(
 # plot(cell_count, desirable_factor)
 
 estimate_clone_scale_factor <- function(seurat_obj, clonecall) {
-	num_clones <- count_clones(seurat_obj, clonecall)
+    num_clones <- count_clones(seurat_obj, clonecall)
 
-	if (num_clones <= 365) {
-		approx_clone_scale_factor <- (-0.002456 * num_clones) + 1.196491
-	} else {
-		approx_clone_scale_factor <- (-4.684e-05 * num_clones) + 3.171e-01
-	}
-	
-	bound_num(approx_clone_scale_factor, lowerbound = 0.05, upperbound = 1)
+    if (num_clones <= 365) {
+        approx_clone_scale_factor <- (-0.002456 * num_clones) + 1.196491
+    } else {
+        approx_clone_scale_factor <- (-4.684e-05 * num_clones) + 3.171e-01
+    }
+    
+    bound_num(approx_clone_scale_factor, lowerbound = 0.05, upperbound = 1)
 }
 
 RunAPOTC_partial_arg_checker <- function(varargs_list = list()) {
@@ -360,5 +360,5 @@ RunAPOTC_parameter_checker <- function() {
         ))
     }
 
-	# TODO more checks
+    # TODO more checks
 }
